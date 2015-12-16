@@ -9,7 +9,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
     }
     buildTypes {
         release {
@@ -24,6 +24,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
 
-    compile 'org.xdty.phone.number:phone-number:0.0.2'
+    compile 'org.xdty.phone.number:phone-number:0.0.3'
     compile 'com.github.sherpya:standout:1.0.3'
 }

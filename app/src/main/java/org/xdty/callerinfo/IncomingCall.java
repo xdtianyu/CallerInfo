@@ -3,14 +3,13 @@ package org.xdty.callerinfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import org.xdty.phone.number.PhoneNumber;
+import org.xdty.phone.number.model.NumberInfo;
 
 import wei.mark.standout.StandOutWindow;
 
@@ -40,20 +39,6 @@ public class IncomingCall extends BroadcastReceiver {
             this.context = context;
         }
 
-        public String getMetadata(String name) {
-            try {
-                ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(
-                        context.getPackageName(), PackageManager.GET_META_DATA);
-                if (appInfo.metaData != null) {
-                    return appInfo.metaData.getString(name);
-                }
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
 
@@ -72,24 +57,21 @@ public class IncomingCall extends BroadcastReceiver {
             }
         }
 
-        void show(final String incomingNumber) {
+        void show(String incomingNumber) {
 
             if (!isShowing) {
                 isShowing = true;
-                new Thread(new Runnable() {
+                new PhoneNumber(context, new PhoneNumber.Callback() {
                     @Override
-                    public void run() {
-                        String API_KEY = getMetadata("org.xdty.phone.number.API_KEY");
-                        PhoneNumber phoneNumber = PhoneNumber.key(API_KEY);
-                        String text = phoneNumber.get(incomingNumber);
+                    public void onResponse(NumberInfo numberInfo) {
+                        String text = numberInfo.toString();
                         Bundle bundle = new Bundle();
                         bundle.putString(LOCATION, text);
                         StandOutWindow.show(context, FloatWindow.class, StandOutWindow.DEFAULT_ID);
                         StandOutWindow.sendData(context, FloatWindow.class,
-                                StandOutWindow.DEFAULT_ID,
-                                0, bundle, FloatWindow.class, 0);
+                                StandOutWindow.DEFAULT_ID, 0, bundle, FloatWindow.class, 0);
                     }
-                }).start();
+                }).fetch(incomingNumber);
             }
         }
 
