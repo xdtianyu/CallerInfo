@@ -17,8 +17,6 @@ public class IncomingCall extends BroadcastReceiver {
 
     public final static String TAG = IncomingCall.class.getSimpleName();
 
-    public final static String LOCATION = "location";
-
     @Override
     public void onReceive(Context context, Intent intent) {
         TelephonyManager telephonyManager = (TelephonyManager) context
@@ -66,10 +64,10 @@ public class IncomingCall extends BroadcastReceiver {
                     public void onResponse(NumberInfo numberInfo) {
                         String text = numberInfo.toString();
                         Bundle bundle = new Bundle();
-                        bundle.putString(LOCATION, text);
-                        StandOutWindow.show(context, FloatWindow.class, StandOutWindow.DEFAULT_ID);
+                        bundle.putString(FloatWindow.LOCATION, text);
+                        StandOutWindow.show(context, FloatWindow.class, FloatWindow.CALLER_FRONT);
                         StandOutWindow.sendData(context, FloatWindow.class,
-                                StandOutWindow.DEFAULT_ID, 0, bundle, FloatWindow.class, 0);
+                                FloatWindow.CALLER_FRONT, 0, bundle, FloatWindow.class, 0);
                     }
                 }).fetch(incomingNumber);
             }
