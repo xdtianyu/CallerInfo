@@ -29,4 +29,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }).fetch("10086");
     }
+
+    @Override
+    protected void onStop() {
+        StandOutWindow.closeAll(this, FloatWindow.class);
+        super.onStop();
+    }
 }
