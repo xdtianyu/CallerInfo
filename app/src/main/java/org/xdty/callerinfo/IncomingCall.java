@@ -62,12 +62,15 @@ public class IncomingCall extends BroadcastReceiver {
                 new PhoneNumber(context, new PhoneNumber.Callback() {
                     @Override
                     public void onResponse(NumberInfo numberInfo) {
-                        String text = numberInfo.toString();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(FloatWindow.LOCATION, text);
-                        StandOutWindow.show(context, FloatWindow.class, FloatWindow.CALLER_FRONT);
-                        StandOutWindow.sendData(context, FloatWindow.class,
-                                FloatWindow.CALLER_FRONT, 0, bundle, FloatWindow.class, 0);
+                        if (isShowing && numberInfo != null) {
+                            String text = numberInfo.toString();
+                            Bundle bundle = new Bundle();
+                            bundle.putString(FloatWindow.LOCATION, text);
+                            StandOutWindow.show(context, FloatWindow.class,
+                                    FloatWindow.CALLER_FRONT);
+                            StandOutWindow.sendData(context, FloatWindow.class,
+                                    FloatWindow.CALLER_FRONT, 0, bundle, FloatWindow.class, 0);
+                        }
                     }
                 }).fetch(incomingNumber);
             }
