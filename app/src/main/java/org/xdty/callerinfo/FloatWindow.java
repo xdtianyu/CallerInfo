@@ -53,7 +53,9 @@ public class FloatWindow extends StandOutWindow {
         Point point = new Point();
         display.getSize(point);
 
-        StandOutLayoutParams standOutLayoutParams = new StandOutLayoutParams(id, point.x, 200,
+        int height = point.y/10;
+
+        StandOutLayoutParams standOutLayoutParams = new StandOutLayoutParams(id, point.x, height,
                 StandOutLayoutParams.CENTER, StandOutLayoutParams.CENTER);
 
         sharedPreferences = getSharedPreferences(WINDOW, Context.MODE_PRIVATE);
@@ -68,7 +70,7 @@ public class FloatWindow extends StandOutWindow {
 
         standOutLayoutParams.minWidth = point.x;
         standOutLayoutParams.maxWidth = point.x;
-        standOutLayoutParams.minHeight = 200;
+        standOutLayoutParams.minHeight = height;
         if (id == CALLER_FRONT) {
             standOutLayoutParams.type = StandOutLayoutParams.TYPE_SYSTEM_OVERLAY;
         }
