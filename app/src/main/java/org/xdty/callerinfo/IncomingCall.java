@@ -72,6 +72,11 @@ public class IncomingCall extends BroadcastReceiver {
                                     FloatWindow.CALLER_FRONT, 0, bundle, FloatWindow.class, 0);
                         }
                     }
+
+                    @Override
+                    public void onResponseFailed(NumberInfo numberInfo) {
+
+                    }
                 }).fetch(incomingNumber);
             }
         }
