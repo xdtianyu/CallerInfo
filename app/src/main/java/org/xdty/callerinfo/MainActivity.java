@@ -27,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
                 StandOutWindow.sendData(MainActivity.this, FloatWindow.class,
                         FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
             }
+
+            @Override
+            public void onResponseFailed(NumberInfo numberInfo) {
+
+            }
         }).fetch("10086");
     }
 
