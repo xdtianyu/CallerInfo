@@ -29,12 +29,12 @@ public class FloatWindow extends StandOutWindow {
 
     @Override
     public String getAppName() {
-        return "FloatWindow";
+        return getResources().getString(R.string.app_name);
     }
 
     @Override
     public int getAppIcon() {
-        return android.R.drawable.ic_menu_close_clear_cancel;
+        return R.drawable.status_icon;
     }
 
     @Override
