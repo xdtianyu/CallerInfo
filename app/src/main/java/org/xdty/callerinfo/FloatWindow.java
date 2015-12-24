@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import wei.mark.standout.StandOutWindow;
@@ -19,7 +21,8 @@ import wei.mark.standout.ui.Window;
 
 public class FloatWindow extends StandOutWindow {
 
-    public final static String LOCATION = "location";
+    public final static String NUMBER_INFO = "number_info";
+    public final static String WINDOW_COLOR = "window_color";
     public final static String WINDOW = "window";
 
     public final static int CALLER_FRONT = 1000;
@@ -90,8 +93,13 @@ public class FloatWindow extends StandOutWindow {
     }
 
     @Override
+    public String getPersistentNotificationTitle(int id) {
+        return getAppName();
+    }
+
+    @Override
     public String getPersistentNotificationMessage(int id) {
-        return "Click to close the FloatWindow";
+        return getString(R.string.close_float_window);
     }
 
     @Override
@@ -111,9 +119,12 @@ public class FloatWindow extends StandOutWindow {
     @Override
     public void onReceiveData(int id, int requestCode, Bundle data,
             Class<? extends StandOutWindow> fromCls, int fromId) {
-        String text = data.getString(LOCATION);
+        int color = data.getInt(WINDOW_COLOR);
+        String text = data.getString(NUMBER_INFO);
         Window window = getWindow(id);
-        TextView textView = (TextView) window.findViewById(R.id.location);
+        LinearLayout layout = (LinearLayout) window.findViewById(R.id.window_layout);
+        layout.setBackgroundColor(ContextCompat.getColor(this, color));
+        TextView textView = (TextView) window.findViewById(R.id.number_info);
         textView.setText(text);
     }
 }

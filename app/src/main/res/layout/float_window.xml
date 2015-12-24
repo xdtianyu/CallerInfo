@@ -2,25 +2,20 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <LinearLayout
+        android:id="@+id/window_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#aaff0000"
         android:orientation="vertical"
         android:layout_gravity="center">
 
         <TextView
-            android:id="@+id/location"
+            android:id="@+id/number_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColor="#ffffff"
+            android:textSize="25sp"
             android:gravity="center"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/report"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#ffffff" />
     </LinearLayout>
 
 </merge>

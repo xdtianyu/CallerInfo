@@ -14,15 +14,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
         StandOutWindow.closeAll(this, FloatWindow.class);
-
         new PhoneNumber(this, new PhoneNumber.Callback() {
             @Override
             public void onResponse(NumberInfo numberInfo) {
                 String text = numberInfo.toString();
                 Bundle bundle = new Bundle();
-                bundle.putString(FloatWindow.LOCATION, text);
+                bundle.putString(FloatWindow.NUMBER_INFO, text);
+                bundle.putInt(FloatWindow.WINDOW_COLOR, android.R.color.holo_blue_light);
                 StandOutWindow.show(MainActivity.this, FloatWindow.class, FloatWindow.VIEWER_FRONT);
                 StandOutWindow.sendData(MainActivity.this, FloatWindow.class,
                         FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);

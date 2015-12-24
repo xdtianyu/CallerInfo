@@ -9,7 +9,11 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import org.xdty.phone.number.PhoneNumber;
+import org.xdty.phone.number.model.Location;
+import org.xdty.phone.number.model.Number;
 import org.xdty.phone.number.model.NumberInfo;
+
+import java.util.List;
 
 import wei.mark.standout.StandOutWindow;
 
@@ -63,13 +67,49 @@ public class IncomingCall extends BroadcastReceiver {
                     @Override
                     public void onResponse(NumberInfo numberInfo) {
                         if (isShowing && numberInfo != null) {
-                            String text = numberInfo.toString();
-                            Bundle bundle = new Bundle();
-                            bundle.putString(FloatWindow.LOCATION, text);
-                            StandOutWindow.show(context, FloatWindow.class,
-                                    FloatWindow.CALLER_FRONT);
-                            StandOutWindow.sendData(context, FloatWindow.class,
-                                    FloatWindow.CALLER_FRONT, 0, bundle, FloatWindow.class, 0);
+                            List<Number> numbers = numberInfo.getNumbers();
+                            if (numbers.size() > 0) {
+                                Number number = numbers.get(0);
+                                Location location = number.getLocation();
+
+                                String province = "";
+                                String city = "";
+                                String operators = "";
+                                if (location != null) {
+                                    province = location.getProvince();
+                                    city = location.getCity();
+                                    operators = location.getOperators();
+                                }
+
+                                String text = "";
+                                int color = android.R.color.holo_green_dark;
+
+                                switch (number.getType()) {
+                                    case NORMAL:
+                                        text = context.getResources().getString(
+                                                R.string.text_normal, province, city, operators);
+                                        break;
+                                    case POI:
+                                        color = android.R.color.holo_blue_light;
+                                        text = context.getResources().getString(
+                                                R.string.text_poi, number.getName());
+                                        break;
+                                    case REPORT:
+                                        color = android.R.color.holo_red_light;
+                                        text = context.getResources().getString(
+                                                R.string.text_report, province, city, operators,
+                                                number.getCount(), number.getName());
+                                        break;
+                                }
+
+                                Bundle bundle = new Bundle();
+                                bundle.putString(FloatWindow.NUMBER_INFO, text);
+                                bundle.putInt(FloatWindow.WINDOW_COLOR, color);
+                                StandOutWindow.show(context, FloatWindow.class,
+                                        FloatWindow.CALLER_FRONT);
+                                StandOutWindow.sendData(context, FloatWindow.class,
+                                        FloatWindow.CALLER_FRONT, 0, bundle, FloatWindow.class, 0);
+                            }
                         }
                     }
 
