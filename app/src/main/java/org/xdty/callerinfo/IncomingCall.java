@@ -82,7 +82,7 @@ public class IncomingCall extends BroadcastReceiver {
                                 }
 
                                 String text = "";
-                                int color = android.R.color.holo_green_dark;
+                                int color = android.R.color.holo_blue_light;
 
                                 switch (number.getType()) {
                                     case NORMAL:
@@ -90,7 +90,7 @@ public class IncomingCall extends BroadcastReceiver {
                                                 R.string.text_normal, province, city, operators);
                                         break;
                                     case POI:
-                                        color = android.R.color.holo_blue_light;
+                                        color = android.R.color.holo_orange_dark;
                                         text = context.getResources().getString(
                                                 R.string.text_poi, number.getName());
                                         break;
