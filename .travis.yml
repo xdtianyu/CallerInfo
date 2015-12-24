@@ -24,4 +24,4 @@ before_install:
    - touch local.properties
 
 script:
-  - ./gradlew install
+  - ./gradlew clean assembleDebug
