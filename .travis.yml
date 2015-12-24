@@ -1,0 +1,27 @@
+language: android
+
+addons:
+    apt:
+        packages:
+        - libgd2-xpm
+        - ia32-libs
+        - ia32-libs-multiarch
+
+android:
+   components:
+   - tools
+   - platform-tools
+   - android-23
+   - build-tools-23.0.2
+   - extra
+
+jdk: oraclejdk7
+
+notifications:
+  email: false
+
+before_install:
+   - touch local.properties
+
+script:
+  - ./gradlew install
