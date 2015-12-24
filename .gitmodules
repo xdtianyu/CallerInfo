@@ -1,0 +1,3 @@
+[submodule "standOut"]
+	path = standOut
+	url = git@github.com:xdtianyu/StandOut.git
