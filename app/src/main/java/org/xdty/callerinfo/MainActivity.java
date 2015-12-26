@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
                 String text = numberInfo.toString();
                 Bundle bundle = new Bundle();
                 bundle.putString(FloatWindow.NUMBER_INFO, text);
-                bundle.putInt(FloatWindow.WINDOW_COLOR, android.R.color.holo_orange_dark);
+                bundle.putInt(FloatWindow.WINDOW_COLOR, R.color.orange_dark);
                 StandOutWindow.show(MainActivity.this, FloatWindow.class, FloatWindow.VIEWER_FRONT);
                 StandOutWindow.sendData(MainActivity.this, FloatWindow.class,
                         FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
