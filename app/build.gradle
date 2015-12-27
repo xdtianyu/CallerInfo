@@ -28,4 +28,6 @@ dependencies {
     compile 'org.xdty.phone.number:phone-number:0.0.6'
     compile project(':standOut')
 //    compile 'com.github.sherpya:standout:1.0.3'
+
+    compile 'com.github.satyan:sugar:1.4'
 }

@@ -3,13 +3,14 @@ package org.xdty.callerinfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import org.xdty.callerinfo.Utils.Utils;
+import org.xdty.callerinfo.model.db.Caller;
+import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.phone.number.PhoneNumber;
-import org.xdty.phone.number.model.Location;
 import org.xdty.phone.number.model.Number;
 import org.xdty.phone.number.model.NumberInfo;
 
@@ -37,6 +38,13 @@ public class IncomingCall extends BroadcastReceiver {
 
         private boolean isShowing = false;
 
+        private long ringStartTime = -1;
+        private long hookStartTime = -1;
+        private long idleStartTime = -1;
+
+        private long lastInCallSaveTime = -1;
+        private long lastCallerSaveTime = -1;
+
         public IncomingCallListener(Context context) {
             this.context = context;
         }
@@ -48,13 +56,16 @@ public class IncomingCall extends BroadcastReceiver {
                 case TelephonyManager.CALL_STATE_RINGING:
                     show(incomingNumber);
                     Log.d(TAG, "CALL_STATE_RINGING");
+                    ringStartTime = System.currentTimeMillis();
                     break;
                 case TelephonyManager.CALL_STATE_OFFHOOK:
                     Log.d(TAG, "CALL_STATE_OFFHOOK");
+                    hookStartTime = System.currentTimeMillis();
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:
                     Log.d(TAG, "CALL_STATE_IDLE");
-                    close();
+                    idleStartTime = System.currentTimeMillis();
+                    close(incomingNumber);
                     break;
             }
         }
@@ -63,6 +74,19 @@ public class IncomingCall extends BroadcastReceiver {
 
             if (!isShowing) {
                 isShowing = true;
+
+                List<Caller> callers = Caller.find(Caller.class, "number=?", incomingNumber);
+
+                if (callers.size() > 0) {
+                    Caller caller = callers.get(0);
+                    if (caller.getLastUpdate() - System.currentTimeMillis() < 7 * 24 * 3600 * 1000) {
+                        Utils.showWindow(context, caller);
+                        return;
+                    } else {
+                        caller.delete();
+                    }
+                }
+
                 new PhoneNumber(context, new PhoneNumber.Callback() {
                     @Override
                     public void onResponse(NumberInfo numberInfo) {
@@ -70,45 +94,13 @@ public class IncomingCall extends BroadcastReceiver {
                             List<Number> numbers = numberInfo.getNumbers();
                             if (numbers.size() > 0) {
                                 Number number = numbers.get(0);
-                                Location location = number.getLocation();
 
-                                String province = "";
-                                String city = "";
-                                String operators = "";
-                                if (location != null) {
-                                    province = location.getProvince();
-                                    city = location.getCity();
-                                    operators = location.getOperators();
+                                if (System.currentTimeMillis() - lastCallerSaveTime > 10000) {
+                                    new Caller(number).save();
+                                    lastCallerSaveTime = System.currentTimeMillis();
                                 }
 
-                                String text = "";
-                                int color = R.color.blue_light;
-
-                                switch (number.getType()) {
-                                    case NORMAL:
-                                        text = context.getResources().getString(
-                                                R.string.text_normal, province, city, operators);
-                                        break;
-                                    case POI:
-                                        color = R.color.orange_dark;
-                                        text = context.getResources().getString(
-                                                R.string.text_poi, number.getName());
-                                        break;
-                                    case REPORT:
-                                        color = R.color.red_light;
-                                        text = context.getResources().getString(
-                                                R.string.text_report, province, city, operators,
-                                                number.getCount(), number.getName());
-                                        break;
-                                }
-
-                                Bundle bundle = new Bundle();
-                                bundle.putString(FloatWindow.NUMBER_INFO, text);
-                                bundle.putInt(FloatWindow.WINDOW_COLOR, color);
-                                StandOutWindow.show(context, FloatWindow.class,
-                                        FloatWindow.CALLER_FRONT);
-                                StandOutWindow.sendData(context, FloatWindow.class,
-                                        FloatWindow.CALLER_FRONT, 0, bundle, FloatWindow.class, 0);
+                                Utils.showWindow(context, number);
                             }
                         }
                     }
@@ -121,7 +113,17 @@ public class IncomingCall extends BroadcastReceiver {
             }
         }
 
-        void close() {
+        void close(String incomingNumber) {
+
+            long ringTime = hookStartTime - ringStartTime;
+            long duration = idleStartTime - hookStartTime;
+            long time = ringStartTime;
+
+            if (System.currentTimeMillis() - lastInCallSaveTime > 10000) {
+                new InCall(incomingNumber, time, ringTime, duration).save();
+                lastInCallSaveTime = System.currentTimeMillis();
+            }
+
             if (isShowing) {
                 isShowing = false;
                 StandOutWindow.closeAll(context, FloatWindow.class);

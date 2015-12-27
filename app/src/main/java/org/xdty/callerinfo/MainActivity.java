@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -22,10 +23,16 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import org.xdty.callerinfo.Utils.Utils;
+import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.phone.number.PhoneNumber;
+import org.xdty.phone.number.model.Number;
 import org.xdty.phone.number.model.NumberInfo;
+
+import java.util.List;
 
 import wei.mark.standout.StandOutWindow;
 
@@ -38,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     private int mScreenWidth;
+
+    private TextView mEmptyText;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
         display.getSize(point);
 
         mScreenWidth = point.x;
+
+        mEmptyText = (TextView) findViewById(R.id.empty_text);
+        mRecyclerView = (RecyclerView) findViewById(R.id.history_list);
     }
 
     @Override
@@ -121,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: " + query);
-                showFloatWindow(query);
+                showNumberInfo(query);
                 return false;
             }
 
@@ -141,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 break;
             case R.id.action_float_window:
-                showFloatWindow("10086");
+                showNumberInfo("10086");
                 Snackbar.make(toolbar, R.string.float_window_hint, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 break;
@@ -150,18 +163,29 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void showFloatWindow(String phoneNumber) {
+    private void showNumberInfo(String phoneNumber) {
         StandOutWindow.closeAll(this, FloatWindow.class);
+
+        List<Caller> callers = Caller.find(Caller.class, "number=?", phoneNumber);
+
+        if (callers.size() > 0) {
+            Caller caller = callers.get(0);
+            if (caller.getLastUpdate() - System.currentTimeMillis() < 7 * 24 * 3600 * 1000) {
+                Utils.showMovableWindow(MainActivity.this, caller);
+                return;
+            } else {
+                caller.delete();
+            }
+        }
+
         new PhoneNumber(this, new PhoneNumber.Callback() {
             @Override
             public void onResponse(NumberInfo numberInfo) {
-                String text = numberInfo.toString();
-                Bundle bundle = new Bundle();
-                bundle.putString(FloatWindow.NUMBER_INFO, text);
-                bundle.putInt(FloatWindow.WINDOW_COLOR, R.color.orange_dark);
-                StandOutWindow.show(MainActivity.this, FloatWindow.class, FloatWindow.VIEWER_FRONT);
-                StandOutWindow.sendData(MainActivity.this, FloatWindow.class,
-                        FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
+
+                for (Number number : numberInfo.getNumbers()) {
+                    new Caller(number).save();
+                    Utils.showMovableWindow(MainActivity.this, number);
+                }
             }
 
             @Override
