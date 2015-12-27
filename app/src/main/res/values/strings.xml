@@ -8,4 +8,5 @@
     <string name="action_float_window">Float window position</string>
     <string name="float_window_hint">Drag up and down to set the position</string>
     <string name="action_search">Search</string>
+    <string name="search_hint">Search phone number&#8230;</string>
 </resources>

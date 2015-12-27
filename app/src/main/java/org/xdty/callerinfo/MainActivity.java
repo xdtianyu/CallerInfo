@@ -106,18 +106,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private SearchView mSearchView;
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(
+                menu.findItem(R.id.action_search));
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        mSearchView.setMaxWidth(mScreenWidth);
-        mSearchView.setInputType(InputType.TYPE_CLASS_NUMBER);
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setMaxWidth(mScreenWidth);
+        searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
+        searchView.setQueryHint(getString(R.string.search_hint));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: " + query);
