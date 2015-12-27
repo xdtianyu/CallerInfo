@@ -5,4 +5,8 @@
     <string name="text_poi">%1$s</string>
     <string name="text_report">%1$s %2$s %3$s, 已被%4$s个用户标记为%5$s</string>
     <string name="close_float_window">点击以关闭悬浮窗</string>
+    <string name="action_float_window">悬浮窗位置</string>
+    <string name="action_settings">设置</string>
+    <string name="float_window_hint">上下拖动以更改位置</string>
+    <string name="action_search">搜索</string>
 </resources>

@@ -4,4 +4,8 @@
     <string name="text_poi">%1$s</string>
     <string name="text_report">%1$s %2$s %3$s, been tagged by %4$s users as %5$s</string>
     <string name="close_float_window">Click to close the FloatWindow</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_float_window">Float window position</string>
+    <string name="float_window_hint">Drag up and down to set the position</string>
+    <string name="action_search">Search</string>
 </resources>
