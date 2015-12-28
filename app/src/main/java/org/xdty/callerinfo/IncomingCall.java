@@ -22,12 +22,16 @@ public class IncomingCall extends BroadcastReceiver {
 
     public final static String TAG = IncomingCall.class.getSimpleName();
 
+    private static IncomingCallListener mIncomingCallListener;
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        TelephonyManager telephonyManager = (TelephonyManager) context
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        IncomingCallListener incomingCallListener = new IncomingCallListener(context);
-        telephonyManager.listen(incomingCallListener, PhoneStateListener.LISTEN_CALL_STATE);
+        if (mIncomingCallListener == null) {
+            TelephonyManager telephonyManager = (TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+            mIncomingCallListener = new IncomingCallListener(context);
+            telephonyManager.listen(mIncomingCallListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
     }
 
     public static class IncomingCallListener extends PhoneStateListener {
@@ -42,8 +46,8 @@ public class IncomingCall extends BroadcastReceiver {
         private long hookStartTime = -1;
         private long idleStartTime = -1;
 
-        private long lastInCallSaveTime = -1;
-        private long lastCallerSaveTime = -1;
+        private long ringTime = -1;
+        private long duration = -1;
 
         public IncomingCallListener(Context context) {
             this.context = context;
@@ -54,23 +58,40 @@ public class IncomingCall extends BroadcastReceiver {
 
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
-                    show(incomingNumber);
-                    Log.d(TAG, "CALL_STATE_RINGING");
                     ringStartTime = System.currentTimeMillis();
+                    Log.d(TAG, "CALL_STATE_RINGING: " + ringStartTime);
+
+                    show(incomingNumber);
                     break;
                 case TelephonyManager.CALL_STATE_OFFHOOK:
-                    Log.d(TAG, "CALL_STATE_OFFHOOK");
                     hookStartTime = System.currentTimeMillis();
+                    Log.d(TAG, "CALL_STATE_OFFHOOK: " + hookStartTime);
+
+                    if (ringStartTime != -1) {
+                        ringTime = hookStartTime - ringStartTime;
+                    }
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:
-                    Log.d(TAG, "CALL_STATE_IDLE");
                     idleStartTime = System.currentTimeMillis();
+                    Log.d(TAG, "CALL_STATE_IDLE: " + idleStartTime);
+
+                    if (ringTime == -1) {
+                        ringTime = idleStartTime - ringStartTime;
+                        duration = 0;
+                    } else {
+                        duration = idleStartTime - hookStartTime;
+                    }
+
                     close(incomingNumber);
                     break;
             }
         }
 
         void show(String incomingNumber) {
+
+            if (incomingNumber.isEmpty()) {
+                return;
+            }
 
             if (!isShowing) {
                 isShowing = true;
@@ -94,12 +115,7 @@ public class IncomingCall extends BroadcastReceiver {
                             List<Number> numbers = numberInfo.getNumbers();
                             if (numbers.size() > 0) {
                                 Number number = numbers.get(0);
-
-                                if (System.currentTimeMillis() - lastCallerSaveTime > 10000) {
-                                    new Caller(number).save();
-                                    lastCallerSaveTime = System.currentTimeMillis();
-                                }
-
+                                new Caller(number).save();
                                 Utils.showWindow(context, number);
                             }
                         }
@@ -115,19 +131,26 @@ public class IncomingCall extends BroadcastReceiver {
 
         void close(String incomingNumber) {
 
-            long ringTime = hookStartTime - ringStartTime;
-            long duration = idleStartTime - hookStartTime;
-            long time = ringStartTime;
+            if (incomingNumber.isEmpty()) {
+                return;
+            }
+            Log.d(TAG, "ringStartTime:" + ringStartTime +
+                    ", ringTime: " + ringTime + ", duration: " + duration);
 
-            if (System.currentTimeMillis() - lastInCallSaveTime > 10000) {
-                new InCall(incomingNumber, time, ringTime, duration).save();
-                lastInCallSaveTime = System.currentTimeMillis();
+            if (ringStartTime!=-1) {
+                new InCall(incomingNumber, ringStartTime, ringTime, duration).save();
             }
 
             if (isShowing) {
                 isShowing = false;
                 StandOutWindow.closeAll(context, FloatWindow.class);
             }
+
+            ringStartTime = -1;
+            hookStartTime = -1;
+            idleStartTime = -1;
+            ringTime = -1;
+            duration = -1;
         }
     }
 }
