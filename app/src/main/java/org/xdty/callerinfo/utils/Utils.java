@@ -1,4 +1,4 @@
-package org.xdty.callerinfo.Utils;
+package org.xdty.callerinfo.utils;
 
 import android.content.Context;
 import android.os.Bundle;

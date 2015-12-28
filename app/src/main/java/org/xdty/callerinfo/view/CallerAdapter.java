@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.xdty.callerinfo.R;
-import org.xdty.callerinfo.Utils.Utils;
+import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;

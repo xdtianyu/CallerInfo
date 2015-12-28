@@ -7,7 +7,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import org.xdty.callerinfo.Utils.Utils;
+import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.phone.number.PhoneNumber;

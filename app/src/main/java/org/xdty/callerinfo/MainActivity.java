@@ -28,7 +28,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.xdty.callerinfo.Utils.Utils;
+import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.view.CallerAdapter;
