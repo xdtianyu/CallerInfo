@@ -14,6 +14,8 @@ import org.xdty.callerinfo.Utils.Utils;
 import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.phone.number.PhoneNumber;
+import org.xdty.phone.number.model.NumberInfo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,21 +25,14 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
     private Context mContext;
     private List<InCall> mList;
-    private Map<String, Caller> callerMap = new HashMap<>();
+    private static Map<String, Caller> callerMap = new HashMap<>();
 
     private CardView cardView;
 
     public CallerAdapter(Context context, List<InCall> list) {
         mContext = context;
         mList = list;
-
-        List<Caller> callers = Caller.listAll(Caller.class);
-        for (Caller caller : callers) {
-            String number = caller.getNumber();
-            if (number != null && !number.isEmpty()) {
-                callerMap.put(caller.getNumber(), caller);
-            }
-        }
+        updateCallerMap();
     }
 
     @Override
@@ -57,6 +52,17 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return mList.size();
+    }
+
+    private static void updateCallerMap() {
+        callerMap.clear();
+        List<Caller> callers = Caller.listAll(Caller.class);
+        for (Caller caller : callers) {
+            String number = caller.getNumber();
+            if (number != null && !number.isEmpty()) {
+                callerMap.put(caller.getNumber(), caller);
+            }
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -80,6 +86,22 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                 text.setText(t.text);
                 cardView.setCardBackgroundColor(ContextCompat.getColor(context, t.color));
                 number.setText(caller.getNumber());
+            } else {
+                new PhoneNumber(context, new PhoneNumber.Callback() {
+                    @Override
+                    public void onResponse(NumberInfo numberInfo) {
+
+                        for (org.xdty.phone.number.model.Number number : numberInfo.getNumbers()) {
+                            new Caller(number).save();
+                            updateCallerMap();
+                        }
+                    }
+
+                    @Override
+                    public void onResponseFailed(NumberInfo numberInfo) {
+
+                    }
+                }).fetch(inCall.getNumber());
             }
         }
     }
