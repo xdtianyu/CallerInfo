@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -22,16 +23,19 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.xdty.callerinfo.Utils.Utils;
 import org.xdty.callerinfo.model.db.Caller;
+import org.xdty.callerinfo.view.CallerAdapter;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.Number;
 import org.xdty.phone.number.model.NumberInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import wei.mark.standout.StandOutWindow;
@@ -43,11 +47,12 @@ public class MainActivity extends AppCompatActivity {
     public final static int REQUEST_CODE_ASK_PERMISSIONS = 1002;
 
     Toolbar toolbar;
-
+    List<Caller> callerList = new ArrayList<>();
     private int mScreenWidth;
-
     private TextView mEmptyText;
     private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLayoutManager;
+    private CallerAdapter mCallerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,16 @@ public class MainActivity extends AppCompatActivity {
 
         mEmptyText = (TextView) findViewById(R.id.empty_text);
         mRecyclerView = (RecyclerView) findViewById(R.id.history_list);
+
+        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        callerList.addAll(Caller.listAll(Caller.class));
+        mCallerAdapter = new CallerAdapter(this, callerList);
+        mRecyclerView.setAdapter(mCallerAdapter);
+
+        if (callerList.size() > 0) {
+            mEmptyText.setVisibility(View.GONE);
+        }
     }
 
     @Override
