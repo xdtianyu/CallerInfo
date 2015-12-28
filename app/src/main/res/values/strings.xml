@@ -10,4 +10,5 @@
     <string name="action_search">Search</string>
     <string name="search_hint">Search phone number&#8230;</string>
     <string name="no_history">No incoming call history</string>
+    <string name="unknown">Unknown</string>
 </resources>

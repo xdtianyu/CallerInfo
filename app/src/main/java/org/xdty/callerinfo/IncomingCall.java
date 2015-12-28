@@ -137,7 +137,7 @@ public class IncomingCall extends BroadcastReceiver {
             Log.d(TAG, "ringStartTime:" + ringStartTime +
                     ", ringTime: " + ringTime + ", duration: " + duration);
 
-            if (ringStartTime!=-1) {
+            if (ringStartTime != -1) {
                 new InCall(incomingNumber, ringStartTime, ringTime, duration).save();
             }
 

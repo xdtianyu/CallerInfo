@@ -10,6 +10,10 @@ import org.xdty.phone.number.model.Location;
 import org.xdty.phone.number.model.Number;
 import org.xdty.phone.number.model.Type;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
+
 import wei.mark.standout.StandOutWindow;
 
 public class Utils {
@@ -36,7 +40,7 @@ public class Utils {
                 frontType, 0, bundle, FloatWindow.class, 0);
     }
 
-    private static TextColorPair getTextColorPair(Context context, Number number) {
+    public static TextColorPair getTextColorPair(Context context, Number number) {
         Location location = number.getLocation();
 
         String province = "";
@@ -53,6 +57,13 @@ public class Utils {
 
     private static TextColorPair getTextColorPair(Context context, String type, String province,
             String city, String operators, String name, int count) {
+
+        if (province == null && city == null && operators == null) {
+            province = context.getResources().getString(R.string.unknown);
+            city = "";
+            operators = "";
+        }
+
         TextColorPair t = new TextColorPair();
         switch (Type.fromString(type)) {
             case NORMAL:
@@ -72,6 +83,15 @@ public class Utils {
                 break;
         }
         return t;
+    }
+
+    public static String getDate(long time) {
+        Calendar calendar = Calendar.getInstance();
+        TimeZone tz = TimeZone.getDefault();
+        calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        java.util.Date currentTimeZone=new java.util.Date(time);
+        return sdf.format(currentTimeZone);
     }
 
 }

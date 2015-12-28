@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.view;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.Utils.Utils;
+import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 
@@ -41,7 +44,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_item, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(mContext, view);
     }
 
     @Override
@@ -58,16 +61,25 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textView;
+        Context context;
+        CardView cardView;
+        TextView text;
+        TextView number;
 
-        public ViewHolder(View view) {
+        public ViewHolder(Context context, View view) {
             super(view);
-            textView = (TextView) view.findViewById(R.id.text);
+            this.context = context;
+            cardView = (CardView) view.findViewById(R.id.card_view);
+            text = (TextView) view.findViewById(R.id.text);
+            number = (TextView) view.findViewById(R.id.number);
         }
 
         public void bind(InCall inCall, Caller caller) {
             if (caller != null) {
-                textView.setText(caller.toString());
+                TextColorPair t = Utils.getTextColorPair(context, caller.toNumber());
+                text.setText(t.text);
+                cardView.setCardBackgroundColor(ContextCompat.getColor(context, t.color));
+                number.setText(caller.getNumber());
             }
         }
     }
