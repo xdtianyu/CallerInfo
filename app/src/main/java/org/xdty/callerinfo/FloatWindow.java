@@ -56,7 +56,7 @@ public class FloatWindow extends StandOutWindow {
         Point point = new Point();
         display.getSize(point);
 
-        int height = point.y/10;
+        int height = point.y/8;
 
         StandOutLayoutParams standOutLayoutParams = new StandOutLayoutParams(id, point.x, height,
                 StandOutLayoutParams.CENTER, StandOutLayoutParams.CENTER);
