@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import org.xdty.callerinfo.Utils.Utils;
 import org.xdty.callerinfo.model.db.Caller;
+import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.view.CallerAdapter;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.Number;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     public final static int REQUEST_CODE_ASK_PERMISSIONS = 1002;
 
     Toolbar toolbar;
-    List<Caller> callerList = new ArrayList<>();
+    List<InCall> inCallList = new ArrayList<>();
     private int mScreenWidth;
     private TextView mEmptyText;
     private RecyclerView mRecyclerView;
@@ -73,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
 
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        callerList.addAll(Caller.listAll(Caller.class));
-        mCallerAdapter = new CallerAdapter(this, callerList);
+        inCallList.addAll(InCall.listAll(InCall.class, "time DESC"));
+        mCallerAdapter = new CallerAdapter(this, inCallList);
         mRecyclerView.setAdapter(mCallerAdapter);
 
-        if (callerList.size() > 0) {
+        if (inCallList.size() > 0) {
             mEmptyText.setVisibility(View.GONE);
         }
     }
@@ -181,12 +182,16 @@ public class MainActivity extends AppCompatActivity {
     private void showNumberInfo(String phoneNumber) {
         StandOutWindow.closeAll(this, FloatWindow.class);
 
+        if (phoneNumber.isEmpty()) {
+            return;
+        }
+
         List<Caller> callers = Caller.find(Caller.class, "number=?", phoneNumber);
 
         if (callers.size() > 0) {
             Caller caller = callers.get(0);
             if (caller.getLastUpdate() - System.currentTimeMillis() < 7 * 24 * 3600 * 1000) {
-                Utils.showMovableWindow(MainActivity.this, caller);
+                Utils.showMovableWindow(MainActivity.this, caller.toNumber());
                 return;
             } else {
                 caller.delete();

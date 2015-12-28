@@ -6,7 +6,6 @@ import android.os.Bundle;
 import org.xdty.callerinfo.FloatWindow;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.TextColorPair;
-import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.phone.number.model.Location;
 import org.xdty.phone.number.model.Number;
 import org.xdty.phone.number.model.Type;
@@ -15,16 +14,8 @@ import wei.mark.standout.StandOutWindow;
 
 public class Utils {
 
-    public static void showWindow(Context context, Caller caller) {
-        showWindow(context, Utils.getTextColorPair(context, caller), false);
-    }
-
     public static void showWindow(Context context, Number number) {
         showWindow(context, Utils.getTextColorPair(context, number), false);
-    }
-
-    public static void showMovableWindow(Context context, Caller caller) {
-        showWindow(context, Utils.getTextColorPair(context, caller), true);
     }
 
     public static void showMovableWindow(Context context, Number number) {
@@ -43,24 +34,6 @@ public class Utils {
                 frontType);
         StandOutWindow.sendData(context, FloatWindow.class,
                 frontType, 0, bundle, FloatWindow.class, 0);
-    }
-
-    private static TextColorPair getTextColorPair(Context context, Caller caller) {
-        String province = "";
-        String city = "";
-        String operators = "";
-        if (caller.getProvince() != null) {
-            province = caller.getProvince();
-
-        }
-        if (caller.getCity() != null) {
-            city = caller.getCity();
-        }
-        if (caller.getOperators() != null) {
-            operators = caller.getOperators();
-        }
-        return Utils.getTextColorPair(context, caller.getType(), province, city,
-                operators, caller.getName(), caller.getCount());
     }
 
     private static TextColorPair getTextColorPair(Context context, Number number) {

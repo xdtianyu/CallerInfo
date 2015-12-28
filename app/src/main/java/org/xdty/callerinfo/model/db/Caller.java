@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.model.db;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
 import org.xdty.phone.number.model.Location;
 import org.xdty.phone.number.model.Number;
@@ -15,10 +16,14 @@ public class Caller extends SugarRecord {
     String city;
     long lastUpdate;
 
+    @Ignore
+    Number phoneNumber;
+
     public Caller() {
     }
 
     public Caller(Number number) {
+        this.phoneNumber = number;
         this.number = number.getNumber();
         this.name = number.getName();
         this.type = number.getType().getText();
@@ -62,6 +67,22 @@ public class Caller extends SugarRecord {
 
     public long getLastUpdate() {
         return lastUpdate;
+    }
+
+    public Number toNumber() {
+        if (phoneNumber == null) {
+            phoneNumber = new Number();
+            phoneNumber.setNumber(number);
+            phoneNumber.setCount(count);
+            phoneNumber.setName(name);
+            phoneNumber.setType(type);
+            Location location = new Location();
+            location.setCity(city);
+            location.setOperators(operators);
+            location.setProvince(province);
+            phoneNumber.setLocation(location);
+        }
+        return phoneNumber;
     }
 
     public String toString() {

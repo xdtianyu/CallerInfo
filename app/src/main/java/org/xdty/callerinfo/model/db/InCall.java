@@ -17,4 +17,36 @@ public class InCall extends SugarRecord {
         this.ringTime = ringTime;
         this.duration = duration;
     }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public long getRingTime() {
+        return ringTime;
+    }
+
+    public void setRingTime(long ringTime) {
+        this.ringTime = ringTime;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
 }

@@ -101,7 +101,7 @@ public class IncomingCall extends BroadcastReceiver {
                 if (callers.size() > 0) {
                     Caller caller = callers.get(0);
                     if (caller.getLastUpdate() - System.currentTimeMillis() < 7 * 24 * 3600 * 1000) {
-                        Utils.showWindow(context, caller);
+                        Utils.showWindow(context, caller.toNumber());
                         return;
                     } else {
                         caller.delete();
