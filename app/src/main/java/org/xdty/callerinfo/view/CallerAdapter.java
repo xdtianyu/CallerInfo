@@ -54,7 +54,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         return mList.size();
     }
 
-    private static void updateCallerMap() {
+    private void updateCallerMap() {
         callerMap.clear();
         List<Caller> callers = Caller.listAll(Caller.class);
         for (Caller caller : callers) {
@@ -65,7 +65,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         }
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         Context context;
         CardView cardView;
@@ -94,6 +94,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                         for (org.xdty.phone.number.model.Number number : numberInfo.getNumbers()) {
                             new Caller(number).save();
                             updateCallerMap();
+                            notifyDataSetChanged();
                         }
                     }
 
