@@ -3,6 +3,8 @@ An android app to get phone number location and other info. [中文](https://git
 
 [![Build Status](https://travis-ci.org/xdtianyu/CallerInfo.svg?branch=master)](https://travis-ci.org/xdtianyu/CallerInfo)
 
+[Download (github release)](https://github.com/xdtianyu/CallerInfo/releases)
+
 ##Features
 
 1\. Query incoming phone number and show float window with location and extra info.
