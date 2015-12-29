@@ -157,12 +157,14 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: " + query);
                 showNumberInfo(query);
+                mRecyclerView.setVisibility(View.INVISIBLE);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 StandOutWindow.closeAll(MainActivity.this, FloatWindow.class);
+                mRecyclerView.setVisibility(View.VISIBLE);
                 return false;
             }
         });
