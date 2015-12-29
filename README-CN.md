@@ -1,22 +1,22 @@
-# CallerInfo
-An android app to get phone number location and other info. [中文](https://github.com/xdtianyu/CallerInfo/blob/master/README-CN.md)
+# 来电信息
+一个获取来电位置和其他信息(如推销、诈骗)的安卓应用。
 
 [![Build Status](https://travis-ci.org/xdtianyu/CallerInfo.svg?branch=master)](https://travis-ci.org/xdtianyu/CallerInfo)
 
-##Features
+##功能
 
-1\. Query incoming phone number and show float window with location and extra info.
+1\. 查询来电号码并显示悬浮窗，显示位置和其他号码信息。
 
-2\. List recently incoming calls.
+2\. 主界面显示最近来电列表。
 
-3\. Search phone number's information.
+3\. 在主界面可以查询电话号码信息。
 
-4\. Setting colors of cards and float window.
+4\. 在设置界面可以自定义设置卡片及悬浮窗的颜色。
 
-##Contributors
+##贡献者
 [tianyu](https://www.xdty.org)
 
-##Screenshots
+##屏幕截图
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/2.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/3.png" alt="screenshot" width="300">
@@ -28,7 +28,7 @@ An android app to get phone number location and other info. [中文](https://git
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-2.png" alt="screenshot" width="300">
 
-##Thanks to
+##感谢
 
 [PhoneNumber](https://github.com/xdtianyu/PhoneNumber): A library to get phone number location and other info from baidu api.
 
@@ -41,7 +41,7 @@ An android app to get phone number location and other info. [中文](https://git
 [StandOut](https://github.com/pingpongboss/StandOut): A library to let you easily create floating windows in your Android app.
 
 
-##[License](https://github.com/xdtianyu/CallerInfo/blob/master/LICENSE.md)
+##[许可证](https://github.com/xdtianyu/CallerInfo/blob/master/LICENSE.md)
 
 ```
                     GNU GENERAL PUBLIC LICENSE
