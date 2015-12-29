@@ -3,6 +3,8 @@
 
 [![Build Status](https://travis-ci.org/xdtianyu/CallerInfo.svg?branch=master)](https://travis-ci.org/xdtianyu/CallerInfo)
 
+[下载地址 (github release)](https://github.com/xdtianyu/CallerInfo/releases)
+
 ##功能
 
 1\. 查询来电号码并显示悬浮窗，显示位置和其他号码信息。
