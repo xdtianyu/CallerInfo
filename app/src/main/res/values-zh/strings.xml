@@ -12,4 +12,5 @@
     <string name="search_hint">搜索电话号码&#8230;</string>
     <string name="no_history">没有来电历史记录</string>
     <string name="unknown">未知</string>
+    <string name="loading">获取中…</string>
 </resources>

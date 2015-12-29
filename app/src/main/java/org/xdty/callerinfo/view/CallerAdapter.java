@@ -102,6 +102,10 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
                     }
                 }).fetch(inCall.getNumber());
+
+                text.setText(inCall.getNumber());
+                number.setText(R.string.loading);
+                cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.blue_light));
             }
         }
     }
