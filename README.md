@@ -17,16 +17,16 @@ An android app to get phone number location and other info.
 [tianyu](https://www.xdty.org)
 
 ##Screenshots
-<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/1.jpg" alt="screenshot" width="300">
-<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/2.jpg" alt="screenshot" width="300">
-<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/3.jpg" alt="screenshot" width="300">
-<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/4.jpg" alt="screenshot" width="300">
-<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/5.jpg" alt="screenshot" width="300">
-<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/5.jpg" alt="screenshot" width="300">
-<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/6.jpg" alt="screenshot" width="300">
+<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/1.png" alt="screenshot" width="300">
+<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/2.png" alt="screenshot" width="300">
+<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/3.png" alt="screenshot" width="300">
+<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/4.png" alt="screenshot" width="300">
+<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/5.png" alt="screenshot" width="300">
+<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/5.png" alt="screenshot" width="300">
+<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/6.png" alt="screenshot" width="300">
 
-<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-1.jpg" alt="screenshot" width="300">
-<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-2.jpg" alt="screenshot" width="300">
+<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-1.png" alt="screenshot" width="300">
+<img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-2.png" alt="screenshot" width="300">
 
 ##Thanks to
 
