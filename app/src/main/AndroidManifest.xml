@@ -23,7 +23,21 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/action_settings">
+        </activity>
+        <activity
+            android:name=".LicensesActivity"
+            android:label="@string/license">
+            <intent-filter>
+                <action android:name="org.xdty.callerinfo.action.VIEW_LICENSES"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <service android:name=".FloatWindow"/>
+
         <receiver android:name=".IncomingCall">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"/>

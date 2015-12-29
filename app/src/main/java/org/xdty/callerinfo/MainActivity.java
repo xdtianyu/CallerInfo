@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.action_float_window:
                 showNumberInfo("10086");

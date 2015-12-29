@@ -12,4 +12,15 @@
     <string name="no_history">No incoming call history</string>
     <string name="unknown">Unknown</string>
     <string name="loading">Loading&#8230;</string>
+    <string name="color">Color</string>
+    <string name="color_normal">Normal number</string>
+    <string name="color_poi">Enterprise number</string>
+    <string name="color_report">Reported number</string>
+    <string name="about">About</string>
+    <string name="author">Author</string>
+    <string name="version_key" translatable="false">version</string>
+    <string name="version">Version</string>
+    <string name="license">License</string>
+    <string name="developer">Developer</string>
+    <string name="developer_summary" translatable="false">tianyu &lt;xdtianyu@gmail.com&gt;</string>
 </resources>

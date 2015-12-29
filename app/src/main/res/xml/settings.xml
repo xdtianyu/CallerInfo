@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/apk/res-auto">
+    <com.jenzz.materialpreference.PreferenceCategory
+        android:title="@string/color">
+        <org.xdty.preference.ColorPreference
+            android:defaultValue="@color/peacock"
+            android:key="color_normal"
+            android:title="@string/color_normal"
+            tools:columns="5"/>
+        <org.xdty.preference.ColorPreference
+            android:defaultValue="@color/orange"
+            android:key="color_poi"
+            android:title="@string/color_poi"
+            tools:columns="5"/>
+        <org.xdty.preference.ColorPreference
+            android:defaultValue="@color/tomato"
+            android:key="color_report"
+            android:title="@string/color_report"
+            tools:columns="5"/>
+    </com.jenzz.materialpreference.PreferenceCategory>
+    <com.jenzz.materialpreference.PreferenceCategory
+        android:title="@string/about">
+
+        <com.jenzz.materialpreference.Preference
+            android:summary="@string/developer_summary"
+            android:title="@string/developer"/>
+
+        <com.jenzz.materialpreference.Preference
+            android:key="license"
+            android:title="@string/license">
+            <intent android:action="org.xdty.callerinfo.action.VIEW_LICENSES"/>
+        </com.jenzz.materialpreference.Preference>
+
+        <com.jenzz.materialpreference.Preference
+            android:key="@string/version_key"
+            android:title="@string/version"/>
+
+    </com.jenzz.materialpreference.PreferenceCategory>
+</PreferenceScreen>

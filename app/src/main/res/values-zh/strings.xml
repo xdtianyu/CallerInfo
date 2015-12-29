@@ -13,4 +13,13 @@
     <string name="no_history">没有来电历史记录</string>
     <string name="unknown">未知</string>
     <string name="loading">获取中…</string>
+    <string name="color">颜色</string>
+    <string name="color_normal">普通号码</string>
+    <string name="color_poi">企业号码</string>
+    <string name="color_report">被标记号码</string>
+    <string name="about">关于</string>
+    <string name="developer">开发者</string>
+    <string name="license">开放源代码许可</string>
+    <string name="author">作者</string>
+    <string name="version">版本</string>
 </resources>
