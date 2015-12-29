@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -123,7 +122,7 @@ public class FloatWindow extends StandOutWindow {
         String text = data.getString(NUMBER_INFO);
         Window window = getWindow(id);
         LinearLayout layout = (LinearLayout) window.findViewById(R.id.window_layout);
-        layout.setBackgroundColor(ContextCompat.getColor(this, color));
+        layout.setBackgroundColor(color);
         TextView textView = (TextView) window.findViewById(R.id.number_info);
         textView.setText(text);
     }

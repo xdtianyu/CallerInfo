@@ -84,7 +84,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
             if (caller != null) {
                 TextColorPair t = Utils.getTextColorPair(context, caller.toNumber());
                 text.setText(t.text);
-                cardView.setCardBackgroundColor(ContextCompat.getColor(context, t.color));
+                cardView.setCardBackgroundColor(t.color);
                 number.setText(caller.getNumber());
             } else {
                 new PhoneNumber(context, new PhoneNumber.Callback() {

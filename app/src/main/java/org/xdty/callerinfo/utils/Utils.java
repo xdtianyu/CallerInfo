@@ -1,7 +1,10 @@
 package org.xdty.callerinfo.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 
 import org.xdty.callerinfo.FloatWindow;
 import org.xdty.callerinfo.R;
@@ -58,6 +61,8 @@ public class Utils {
     private static TextColorPair getTextColorPair(Context context, String type, String province,
             String city, String operators, String name, int count) {
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
         if (province == null && city == null && operators == null) {
             province = context.getResources().getString(R.string.unknown);
             city = "";
@@ -69,14 +74,18 @@ public class Utils {
             case NORMAL:
                 t.text = context.getResources().getString(
                         R.string.text_normal, province, city, operators);
+                t.color = preferences.getInt("color_normal",
+                        ContextCompat.getColor(context, R.color.blue_light));
                 break;
             case POI:
-                t.color = R.color.orange_dark;
+                t.color = preferences.getInt("color_poi",
+                        ContextCompat.getColor(context, R.color.orange_dark));
                 t.text = context.getResources().getString(
                         R.string.text_poi, name);
                 break;
             case REPORT:
-                t.color = R.color.red_light;
+                t.color = preferences.getInt("color_report",
+                        ContextCompat.getColor(context, R.color.red_light));
                 t.text = context.getResources().getString(
                         R.string.text_report, province, city, operators,
                         count, name);
@@ -90,7 +99,7 @@ public class Utils {
         TimeZone tz = TimeZone.getDefault();
         calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        java.util.Date currentTimeZone=new java.util.Date(time);
+        java.util.Date currentTimeZone = new java.util.Date(time);
         return sdf.format(currentTimeZone);
     }
 

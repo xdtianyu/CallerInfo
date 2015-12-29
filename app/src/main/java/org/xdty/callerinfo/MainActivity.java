@@ -84,6 +84,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mCallerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
 
