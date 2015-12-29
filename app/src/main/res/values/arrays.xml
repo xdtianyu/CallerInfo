@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="rainbow">
+        <item>@color/tomato</item>
+        <item>@color/red_light</item>
+        <item>@color/tangerine</item>
+        <item>@color/orange_dark</item>
+        <item>@color/banana</item>
+        <item>@color/basil</item>
+        <item>@color/sage</item>
+        <item>@color/blue_light</item>
+        <item>@color/peacock</item>
+        <item>@color/blueberry</item>
+        <item>@color/lavender</item>
+        <item>@color/grape</item>
+        <item>@color/flamingo</item>
+        <item>@color/graphite</item>
+    </array>
+</resources>
