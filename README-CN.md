@@ -2,8 +2,7 @@
 一个获取来电归属地和其他信息(如推销、诈骗)的安卓应用。
 
 [![Build Status](https://travis-ci.org/xdtianyu/CallerInfo.svg?branch=master)](https://travis-ci.org/xdtianyu/CallerInfo)
-
-[下载地址 (github release)](https://github.com/xdtianyu/CallerInfo/releases)
+[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.0.0-beta/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.0.0-beta/callerinfo-v1.0.0-beta.apk)
 
 ##功能
 
