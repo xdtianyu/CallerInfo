@@ -8,13 +8,26 @@ android {
         applicationId "org.xdty.callerinfo"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0.0"
+        versionCode project.VERSION_CODE.toInteger()
+        versionName project.VERSION_NAME
+        setProperty("archivesBaseName", "CallerInfo-v$versionName")
+        manifestPlaceholders = [API_KEY: "${System.env.API_KEY}"]
     }
+
+    signingConfigs {
+        release {
+            storeFile rootProject.file("release.jks")
+            storePassword "${System.env.KEYSTORE_PASSWORD}"
+            keyAlias "${System.env.ALIAS}"
+            keyPassword "${System.env.ALIAS_PASSWORD}"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }

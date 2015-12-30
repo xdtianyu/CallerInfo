@@ -46,7 +46,7 @@
 
         <meta-data
             android:name="org.xdty.phone.number.API_KEY"
-            android:value="YOUR_API_KEY"/>
+            android:value="${API_KEY}"/>
         <meta-data
             android:name="DATABASE"
             android:value="phone_number.db"/>

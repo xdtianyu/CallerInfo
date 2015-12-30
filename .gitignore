@@ -42,3 +42,6 @@ obj/
 *.ipr
 *~
 *.swp
+
+# release key file
+release.jks
