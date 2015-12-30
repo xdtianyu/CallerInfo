@@ -1,5 +1,5 @@
 # 来电信息
-一个获取来电位置和其他信息(如推销、诈骗)的安卓应用。
+一个获取来电归属地和其他信息(如推销、诈骗)的安卓应用。
 
 [![Build Status](https://travis-ci.org/xdtianyu/CallerInfo.svg?branch=master)](https://travis-ci.org/xdtianyu/CallerInfo)
 
