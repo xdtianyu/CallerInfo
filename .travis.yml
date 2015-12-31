@@ -30,6 +30,10 @@ script:
   - cp app/build/outputs/apk/CallerInfo-v$VERSION_NAME-debug.apk $HOME
   - ./gradlew clean assembleRelease
   - cp app/build/outputs/apk/CallerInfo-v$VERSION_NAME-release.apk $HOME
+  - md5sum CallerInfo-v$VERSION_NAME-debug.apk
+  - sha1sum CallerInfo-v$VERSION_NAME-debug.apk
+  - md5sum CallerInfo-v$VERSION_NAME-release.apk
+  - sha1sum CallerInfo-v$VERSION_NAME-release.apk
 
 deploy:
   provider: releases
