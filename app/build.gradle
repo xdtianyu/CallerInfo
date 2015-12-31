@@ -45,6 +45,6 @@ dependencies {
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.github.satyan:sugar:1.4'
     compile 'org.xdty.phone.number:phone-number:0.0.7'
-    compile 'org.xdty.preference:color-picker:0.0.2'
+    compile 'org.xdty.preference:color-picker:0.0.3'
     compile 'com.jenzz:materialpreference:1.3'
 }
