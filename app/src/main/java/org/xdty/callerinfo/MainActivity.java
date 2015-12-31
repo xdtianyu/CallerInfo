@@ -3,16 +3,20 @@ package org.xdty.callerinfo;
 import android.Manifest;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,9 +32,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.view.CallerAdapter;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.Number;
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     List<InCall> inCallList = new ArrayList<>();
+    SharedPreferences sharedPreferences;
     private int mScreenWidth;
     private TextView mEmptyText;
     private RecyclerView mRecyclerView;
@@ -61,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        checkEula();
 
         WindowManager mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = mWindowManager.getDefaultDisplay();
@@ -222,5 +229,38 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }).fetch(phoneNumber);
+    }
+
+    private void checkEula() {
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean eula = sharedPreferences.getBoolean("eula", false);
+
+        if (!eula) {
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.eula_title));
+            builder.setMessage(getString(R.string.eula_message));
+            builder.setCancelable(false);
+            builder.setPositiveButton(getString(R.string.agree),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean("eula", true);
+                            editor.putInt("eula_version", 1);
+                            editor.putInt("version", BuildConfig.VERSION_CODE);
+                            editor.apply();
+                        }
+                    });
+            builder.setNegativeButton(getString(R.string.disagree),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+            builder.show();
+        }
     }
 }

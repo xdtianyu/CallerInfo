@@ -31,6 +31,9 @@ public class SettingsActivity extends AppCompatActivity {
                 PackageManager packageManager = getActivity().getPackageManager();
                 String versionString = packageManager.getPackageInfo(getActivity().getPackageName(),
                         0).versionName;
+                if (BuildConfig.DEBUG) {
+                    versionString += "." + BuildConfig.BUILD_TYPE;
+                }
                 version.setSummary(versionString);
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();

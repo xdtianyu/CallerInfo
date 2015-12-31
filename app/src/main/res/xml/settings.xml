@@ -26,18 +26,27 @@
         android:title="@string/about">
 
         <com.jenzz.materialpreference.Preference
+            android:key="@string/version_key"
+            android:title="@string/version"/>
+
+        <com.jenzz.materialpreference.Preference
             android:summary="@string/developer_summary"
             android:title="@string/developer"/>
+
+        <com.jenzz.materialpreference.Preference
+            android:key="project"
+            android:summary="@string/project_url"
+            android:title="@string/project_title">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/project_url"/>
+        </com.jenzz.materialpreference.Preference>
 
         <com.jenzz.materialpreference.Preference
             android:key="license"
             android:title="@string/license">
             <intent android:action="org.xdty.callerinfo.action.VIEW_LICENSES"/>
         </com.jenzz.materialpreference.Preference>
-
-        <com.jenzz.materialpreference.Preference
-            android:key="@string/version_key"
-            android:title="@string/version"/>
 
     </com.jenzz.materialpreference.PreferenceCategory>
 </PreferenceScreen>
