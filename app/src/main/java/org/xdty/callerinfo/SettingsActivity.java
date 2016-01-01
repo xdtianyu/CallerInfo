@@ -15,7 +15,7 @@ import app.minimize.com.seek_bar_compat.SeekBarCompat;
 
 import static org.xdty.callerinfo.utils.Utils.closeWindow;
 import static org.xdty.callerinfo.utils.Utils.mask;
-import static org.xdty.callerinfo.utils.Utils.sendTextSize;
+import static org.xdty.callerinfo.utils.Utils.sendData;
 import static org.xdty.callerinfo.utils.Utils.showTextWindow;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -38,8 +38,10 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences sharedPrefs;
         Preference apiPreference;
         Preference textSizePref;
+        Preference winTransPref;
         String baiduApiKey;
         String textSizeKey;
+        String windowTransKey;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -75,27 +77,40 @@ public class SettingsActivity extends AppCompatActivity {
             textSizePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    showTextSizeDialog();
+                    showSeekBarDialog(textSizeKey, FloatWindow.TEXT_SIZE, 25, 60,
+                            R.string.window_text_size, R.string.text_size);
+                    return true;
+                }
+            });
+
+            windowTransKey = getString(R.string.window_transparent_key);
+            winTransPref = findPreference(windowTransKey);
+            winTransPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    showSeekBarDialog(windowTransKey, FloatWindow.WINDOW_TRANS, 100, 100,
+                            R.string.window_transparent, R.string.text_transparent);
                     return true;
                 }
             });
         }
 
-        private void showTextSizeDialog() {
-            int textSize = sharedPrefs.getInt(textSizeKey, 25);
+        private void showSeekBarDialog(final String key, final String bundleKey, int defaultValue,
+                int max, int title, int textRes) {
+            int value = sharedPrefs.getInt(key, defaultValue);
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
-            builder.setTitle(getString(R.string.window_text_size));
+            builder.setTitle(getString(title));
             View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_seek, null);
             builder.setView(layout);
 
             final SeekBarCompat seekBar = (SeekBarCompat) layout.findViewById(R.id.seek_bar);
-            seekBar.setProgress(textSize);
-            seekBar.setMax(60);
+            seekBar.setProgress(value);
+            seekBar.setMax(max);
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    sendTextSize(getActivity(), progress);
+                    sendData(getActivity(), bundleKey, progress);
                 }
 
                 @Override
@@ -114,12 +129,11 @@ public class SettingsActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     int value = seekBar.getProgress();
                     SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putInt(textSizeKey, value);
+                    editor.putInt(key, value);
                     editor.apply();
                 }
             });
             builder.setNegativeButton(android.R.string.cancel, null);
-            builder.setCancelable(false);
             builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
@@ -128,7 +142,7 @@ public class SettingsActivity extends AppCompatActivity {
             });
             builder.show();
 
-            showTextWindow(getActivity(), R.string.text_size);
+            showTextWindow(getActivity(), textRes);
         }
 
         private void showApiDialog() {

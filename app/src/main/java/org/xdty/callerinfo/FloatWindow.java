@@ -25,6 +25,7 @@ public class FloatWindow extends StandOutWindow {
 
     public final static String NUMBER_INFO = "number_info";
     public final static String TEXT_SIZE = "text_size";
+    public final static String WINDOW_TRANS = "window_trans";
     public final static String WINDOW_COLOR = "window_color";
     public final static String WINDOW = "window";
 
@@ -53,6 +54,10 @@ public class FloatWindow extends StandOutWindow {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int size = preferences.getInt(getString(R.string.window_text_size_key), 25);
         textView.setTextSize(size);
+
+        LinearLayout layout = (LinearLayout) frame.findViewById(R.id.window_layout);
+        int trans = preferences.getInt(getString(R.string.window_transparent_key), 100);
+        layout.setAlpha(trans / 100f);
     }
 
     // the window will be centered
@@ -142,6 +147,7 @@ public class FloatWindow extends StandOutWindow {
         int color = data.getInt(WINDOW_COLOR);
         String text = data.getString(NUMBER_INFO);
         int size = data.getInt(TEXT_SIZE);
+        int trans = data.getInt(WINDOW_TRANS);
         Window window = getWindow(id);
         LinearLayout layout = (LinearLayout) window.findViewById(R.id.window_layout);
         TextView textView = (TextView) window.findViewById(R.id.number_info);
@@ -156,6 +162,10 @@ public class FloatWindow extends StandOutWindow {
 
         if (size != 0) {
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+        }
+
+        if (trans != 0) {
+            layout.setAlpha(trans / 100f);
         }
     }
 }

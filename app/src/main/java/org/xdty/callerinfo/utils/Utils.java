@@ -47,6 +47,13 @@ public class Utils {
                 FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
     }
 
+    public static void sendData(Context context, String key, int value) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(key, value);
+        StandOutWindow.sendData(context, FloatWindow.class,
+                FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
+    }
+
     public static void closeWindow(Context context) {
         StandOutWindow.closeAll(context, FloatWindow.class);
     }
