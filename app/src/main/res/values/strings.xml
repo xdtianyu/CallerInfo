@@ -42,4 +42,6 @@
     <string name="window_close_anim">Window close animation</string>
     <string name="text_size">Drag seek bar to set this text\'s size.</string>
     <string name="text_transparent">Drag seek bar to set window transparent.</string>
+    <string name="window_trans_back_only_key" translatable="false">window_trans_back_only_key</string>
+    <string name="window_trans_back_only">Transparent only for background</string>
 </resources>

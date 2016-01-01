@@ -38,6 +38,12 @@
 
         <com.jenzz.materialpreference.SwitchPreference
             android:defaultValue="true"
+            android:key="@string/window_trans_back_only_key"
+            android:title="@string/window_trans_back_only">
+        </com.jenzz.materialpreference.SwitchPreference>
+
+        <com.jenzz.materialpreference.SwitchPreference
+            android:defaultValue="true"
             android:key="@string/window_close_anim_key"
             android:title="@string/window_close_anim">
         </com.jenzz.materialpreference.SwitchPreference>

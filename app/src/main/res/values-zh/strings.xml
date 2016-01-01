@@ -35,4 +35,5 @@
     <string name="window_close_anim">窗口关闭动画</string>
     <string name="text_size">拖动滑块以调整文字大小</string>
     <string name="text_transparent">拖动滑块以调整悬浮窗透明度</string>
+    <string name="window_trans_back_only">透明仅应用于背景</string>
 </resources>

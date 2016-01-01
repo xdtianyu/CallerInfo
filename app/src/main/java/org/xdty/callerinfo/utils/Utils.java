@@ -40,13 +40,6 @@ public class Utils {
                 FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
     }
 
-    public static void sendTextSize(Context context, int size) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(FloatWindow.TEXT_SIZE, size);
-        StandOutWindow.sendData(context, FloatWindow.class,
-                FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
-    }
-
     public static void sendData(Context context, String key, int value) {
         Bundle bundle = new Bundle();
         bundle.putInt(key, value);

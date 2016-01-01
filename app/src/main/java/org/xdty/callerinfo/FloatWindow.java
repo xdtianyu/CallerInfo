@@ -49,15 +49,6 @@ public class FloatWindow extends StandOutWindow {
         // create a new layout from body.xml
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.float_window, frame, true);
-
-        TextView textView = (TextView) frame.findViewById(R.id.number_info);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int size = preferences.getInt(getString(R.string.window_text_size_key), 25);
-        textView.setTextSize(size);
-
-        LinearLayout layout = (LinearLayout) frame.findViewById(R.id.window_layout);
-        int trans = preferences.getInt(getString(R.string.window_transparent_key), 100);
-        layout.setAlpha(trans / 100f);
     }
 
     // the window will be centered
@@ -151,6 +142,18 @@ public class FloatWindow extends StandOutWindow {
         Window window = getWindow(id);
         LinearLayout layout = (LinearLayout) window.findViewById(R.id.window_layout);
         TextView textView = (TextView) window.findViewById(R.id.number_info);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        boolean isTransBackOnly = preferences.getBoolean(
+                getString(R.string.window_trans_back_only_key), true);
+
+        if (size == 0) {
+            size = preferences.getInt(getString(R.string.window_text_size_key), 25);
+        }
+
+        if (trans == 0) {
+            trans = preferences.getInt(getString(R.string.window_transparent_key), 100);
+        }
 
         if (color != 0) {
             layout.setBackgroundColor(color);
@@ -160,12 +163,13 @@ public class FloatWindow extends StandOutWindow {
             textView.setText(text);
         }
 
-        if (size != 0) {
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
-        }
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
 
-        if (trans != 0) {
+        if (isTransBackOnly) {
+            layout.getBackground().setAlpha((int) (trans / 100.0 * 255));
+        } else {
             layout.setAlpha(trans / 100f);
         }
+
     }
 }
