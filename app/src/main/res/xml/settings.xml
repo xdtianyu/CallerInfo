@@ -22,6 +22,16 @@
             tools:colors="@array/rainbow"
             tools:columns="5"/>
     </com.jenzz.materialpreference.PreferenceCategory>
+
+    <com.jenzz.materialpreference.PreferenceCategory
+        android:title="@string/advanced">
+        <com.jenzz.materialpreference.Preference
+            android:title="@string/custom_api_key"
+            android:key="@string/baidu_api_key">
+        </com.jenzz.materialpreference.Preference>
+
+    </com.jenzz.materialpreference.PreferenceCategory>
+
     <com.jenzz.materialpreference.PreferenceCategory
         android:title="@string/about">
 

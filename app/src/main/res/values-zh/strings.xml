@@ -27,4 +27,6 @@
     <string name="agree">同意</string>
     <string name="disagree">不同意</string>
     <string name="project_title">开放源代码项目</string>
+    <string name="advanced">高级</string>
+    <string name="custom_api_key">自定义API密钥</string>
 </resources>

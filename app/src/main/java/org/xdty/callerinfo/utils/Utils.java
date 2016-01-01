@@ -103,4 +103,8 @@ public class Utils {
         return sdf.format(currentTimeZone);
     }
 
+    public static String mask(String s) {
+        return s.replaceAll("([0-9]|[a-f])", "*");
+    }
+
 }

@@ -30,4 +30,7 @@
     <string name="project_url" translatable="false">https://github.com/xdtianyu/CallerInfo</string>
     <string name="project_title">Open source project</string>
     <string name="app_package_name" translatable="false">org.xdty.callerinfo</string>
+    <string name="advanced">Advanced</string>
+    <string name="custom_api_key">Custom API key</string>
+    <string name="baidu_api_key" translatable="false">baidu_api_key</string>
 </resources>
