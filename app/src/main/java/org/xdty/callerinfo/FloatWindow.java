@@ -23,6 +23,8 @@ import wei.mark.standout.ui.Window;
 
 public class FloatWindow extends StandOutWindow {
 
+    public final static String TAG = FloatWindow.class.getSimpleName();
+
     public final static String NUMBER_INFO = "number_info";
     public final static String TEXT_SIZE = "text_size";
     public final static String WINDOW_TRANS = "window_trans";

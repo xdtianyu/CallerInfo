@@ -110,6 +110,9 @@ public class SettingsActivity extends AppCompatActivity {
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (progress == 0) {
+                        progress = 1;
+                    }
                     sendData(getActivity(), bundleKey, progress);
                 }
 
