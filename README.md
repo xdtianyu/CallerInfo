@@ -20,6 +20,8 @@ An android app to get phone number location and other info. [中文](https://git
 
 4\. Setting colors of cards and float window.
 
+5\. Custom API key.
+
 ##Contributors
 [tianyu](https://www.xdty.org)
 
