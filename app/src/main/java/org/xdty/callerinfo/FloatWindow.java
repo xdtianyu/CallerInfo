@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -55,7 +57,7 @@ public class FloatWindow extends StandOutWindow {
         Point point = new Point();
         display.getSize(point);
 
-        int height = point.y/8;
+        int height = point.y / 8;
 
         StandOutLayoutParams standOutLayoutParams = new StandOutLayoutParams(id, point.x, height,
                 StandOutLayoutParams.CENTER, StandOutLayoutParams.CENTER);
@@ -104,6 +106,18 @@ public class FloatWindow extends StandOutWindow {
     @Override
     public Intent getPersistentNotificationIntent(int id) {
         return StandOutWindow.getCloseIntent(this, FloatWindow.class, id);
+    }
+
+    @Override
+    public Animation getCloseAnimation(int id) {
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean anim = preferences.getBoolean(getString(R.string.window_anim_key), true);
+        if (anim) {
+            return super.getCloseAnimation(id);
+        } else {
+            return null;
+        }
     }
 
     @Override

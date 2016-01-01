@@ -24,10 +24,31 @@
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory
+        android:title="@string/float_window">
+
+        <com.jenzz.materialpreference.Preference
+            android:key="@string/window_text_size_key"
+            android:title="@string/window_text_size">
+        </com.jenzz.materialpreference.Preference>
+
+        <com.jenzz.materialpreference.Preference
+            android:key="@string/window_transparent_key"
+            android:title="@string/window_transparent">
+        </com.jenzz.materialpreference.Preference>
+
+        <com.jenzz.materialpreference.SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/window_anim_key"
+            android:title="@string/window_anim">
+        </com.jenzz.materialpreference.SwitchPreference>
+
+    </com.jenzz.materialpreference.PreferenceCategory>
+
+    <com.jenzz.materialpreference.PreferenceCategory
         android:title="@string/advanced">
         <com.jenzz.materialpreference.Preference
-            android:title="@string/custom_api_key"
-            android:key="@string/baidu_api_key">
+            android:key="@string/baidu_api_key"
+            android:title="@string/custom_api_key">
         </com.jenzz.materialpreference.Preference>
 
     </com.jenzz.materialpreference.PreferenceCategory>

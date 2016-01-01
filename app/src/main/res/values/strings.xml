@@ -31,6 +31,13 @@
     <string name="project_title">Open source project</string>
     <string name="app_package_name" translatable="false">org.xdty.callerinfo</string>
     <string name="advanced">Advanced</string>
-    <string name="custom_api_key">Custom API key</string>
+    <string name="custom_api_key">Custom window_transparent key</string>
     <string name="baidu_api_key" translatable="false">baidu_api_key</string>
+    <string name="float_window">Float window</string>
+    <string name="window_transparent">Window transparent</string>
+    <string name="window_transparent_key" translatable="false">window_transparent_key</string>
+    <string name="window_text_size">Text size</string>
+    <string name="window_text_size_key" translatable="false">window_text_size_key</string>
+    <string name="window_anim_key" translatable="false">window_anim_key</string>
+    <string name="window_anim">Window animation</string>
 </resources>
