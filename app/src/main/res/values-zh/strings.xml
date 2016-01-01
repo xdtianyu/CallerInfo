@@ -33,4 +33,5 @@
     <string name="window_transparent">透明度</string>
     <string name="window_text_size">文字大小</string>
     <string name="window_close_anim">窗口关闭动画</string>
+    <string name="text_size">拖动滑块以调整文字大小</string>
 </resources>

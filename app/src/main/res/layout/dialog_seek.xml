@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <app.minimize.com.seek_bar_compat.SeekBarCompat
+        android:id="@+id/seek_bar"
+        app:progressBackgroundColor="#000"
+        app:progressColor="@color/colorPrimary"
+        app:thumbAlpha="1.0"
+        app:thumbColor="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="300sp"/>
+</LinearLayout>

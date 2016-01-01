@@ -40,4 +40,5 @@
     <string name="window_text_size_key" translatable="false">window_text_size_key</string>
     <string name="window_close_anim_key" translatable="false">window_close_anim_key</string>
     <string name="window_close_anim">Window close animation</string>
+    <string name="text_size">Drag seek bar to set this text\'s size.</string>
 </resources>

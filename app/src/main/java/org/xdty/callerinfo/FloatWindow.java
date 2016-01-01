@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,6 +24,7 @@ import wei.mark.standout.ui.Window;
 public class FloatWindow extends StandOutWindow {
 
     public final static String NUMBER_INFO = "number_info";
+    public final static String TEXT_SIZE = "text_size";
     public final static String WINDOW_COLOR = "window_color";
     public final static String WINDOW = "window";
 
@@ -46,6 +48,11 @@ public class FloatWindow extends StandOutWindow {
         // create a new layout from body.xml
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.float_window, frame, true);
+
+        TextView textView = (TextView) frame.findViewById(R.id.number_info);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int size = preferences.getInt(getString(R.string.window_text_size_key), 25);
+        textView.setTextSize(size);
     }
 
     // the window will be centered
@@ -134,10 +141,21 @@ public class FloatWindow extends StandOutWindow {
             Class<? extends StandOutWindow> fromCls, int fromId) {
         int color = data.getInt(WINDOW_COLOR);
         String text = data.getString(NUMBER_INFO);
+        int size = data.getInt(TEXT_SIZE);
         Window window = getWindow(id);
         LinearLayout layout = (LinearLayout) window.findViewById(R.id.window_layout);
-        layout.setBackgroundColor(color);
         TextView textView = (TextView) window.findViewById(R.id.number_info);
-        textView.setText(text);
+
+        if (color != 0) {
+            layout.setBackgroundColor(color);
+        }
+
+        if (text != null) {
+            textView.setText(text);
+        }
+
+        if (size != 0) {
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+        }
     }
 }

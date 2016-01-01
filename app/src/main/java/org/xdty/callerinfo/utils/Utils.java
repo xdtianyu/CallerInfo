@@ -29,6 +29,27 @@ public class Utils {
         showWindow(context, Utils.getTextColorPair(context, number), true);
     }
 
+    public static void showTextWindow(Context context, int resId) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FloatWindow.NUMBER_INFO, context.getString(resId));
+        bundle.putInt(FloatWindow.WINDOW_COLOR, ContextCompat.getColor(context,
+                R.color.colorPrimary));
+        StandOutWindow.show(context, FloatWindow.class,
+                FloatWindow.VIEWER_FRONT);
+        StandOutWindow.sendData(context, FloatWindow.class,
+                FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
+    }
+
+    public static void sendTextSize(Context context, int size) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(FloatWindow.TEXT_SIZE, size);
+        StandOutWindow.sendData(context, FloatWindow.class,
+                FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
+    }
+
+    public static void closeWindow(Context context) {
+        StandOutWindow.closeAll(context, FloatWindow.class);
+    }
 
     private static void showWindow(Context context, TextColorPair textColor, boolean movable) {
 
