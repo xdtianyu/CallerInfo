@@ -38,8 +38,8 @@
 
         <com.jenzz.materialpreference.SwitchPreference
             android:defaultValue="true"
-            android:key="@string/window_anim_key"
-            android:title="@string/window_anim">
+            android:key="@string/window_close_anim_key"
+            android:title="@string/window_close_anim">
         </com.jenzz.materialpreference.SwitchPreference>
 
     </com.jenzz.materialpreference.PreferenceCategory>

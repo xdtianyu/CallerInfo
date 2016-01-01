@@ -112,7 +112,7 @@ public class FloatWindow extends StandOutWindow {
     public Animation getCloseAnimation(int id) {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean anim = preferences.getBoolean(getString(R.string.window_anim_key), true);
+        boolean anim = preferences.getBoolean(getString(R.string.window_close_anim_key), true);
         if (anim) {
             return super.getCloseAnimation(id);
         } else {

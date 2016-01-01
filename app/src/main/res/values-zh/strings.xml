@@ -32,5 +32,5 @@
     <string name="float_window">悬浮窗</string>
     <string name="window_transparent">透明度</string>
     <string name="window_text_size">文字大小</string>
-    <string name="window_anim">渐变动画</string>
+    <string name="window_close_anim">关闭动画</string>
 </resources>

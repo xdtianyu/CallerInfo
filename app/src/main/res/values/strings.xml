@@ -38,6 +38,6 @@
     <string name="window_transparent_key" translatable="false">window_transparent_key</string>
     <string name="window_text_size">Text size</string>
     <string name="window_text_size_key" translatable="false">window_text_size_key</string>
-    <string name="window_anim_key" translatable="false">window_anim_key</string>
-    <string name="window_anim">Window animation</string>
+    <string name="window_close_anim_key" translatable="false">window_close_anim_key</string>
+    <string name="window_close_anim">Window close animation</string>
 </resources>
