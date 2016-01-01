@@ -3,6 +3,8 @@ An android app to get phone number location and other info. [中文](https://git
 
 [![Build Status](https://travis-ci.org/xdtianyu/CallerInfo.svg?branch=master)](https://travis-ci.org/xdtianyu/CallerInfo)
 
+[![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.0/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.0/callerinfo-v1.1.0-release.apk)
+
 [![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.0.2/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.0.2/callerinfo-v1.0.2-release.apk)
 
 [![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.0.1/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.0.1/callerinfo-v1.0.1-release.apk)
@@ -21,6 +23,8 @@ An android app to get phone number location and other info. [中文](https://git
 4\. Setting colors of cards and float window.
 
 5\. Custom API key.
+
+6\. Custom float window, e.g. text size, transparent.
 
 ##Contributors
 [tianyu](https://www.xdty.org)
