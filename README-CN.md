@@ -3,6 +3,8 @@
 
 [![Build Status](https://travis-ci.org/xdtianyu/CallerInfo.svg?branch=master)](https://travis-ci.org/xdtianyu/CallerInfo)
 
+[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.1/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.1/callerinfo-v1.1.1-release.apk) 
+
 [![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.0/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.0/callerinfo-v1.1.0-release.apk)
 
 [![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.0.2/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.0.2/callerinfo-v1.0.2-release.apk)
