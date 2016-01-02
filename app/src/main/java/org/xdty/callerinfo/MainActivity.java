@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -29,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager mLayoutManager;
     private CallerAdapter mCallerAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private FrameLayout mMainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         mScreenWidth = point.x;
 
+        mMainLayout = (FrameLayout) findViewById(R.id.main_layout);
         mEmptyText = (TextView) findViewById(R.id.empty_text);
         mRecyclerView = (RecyclerView) findViewById(R.id.history_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
@@ -198,6 +202,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onQueryTextSubmit: " + query);
                 showNumberInfo(query);
                 mRecyclerView.setVisibility(View.INVISIBLE);
+                mMainLayout.setBackgroundColor(ContextCompat.getColor(MainActivity.this,
+                        R.color.dark));
                 return false;
             }
 
@@ -205,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 StandOutWindow.closeAll(MainActivity.this, FloatWindow.class);
                 mRecyclerView.setVisibility(View.VISIBLE);
+                mMainLayout.setBackgroundColor(ContextCompat.getColor(MainActivity.this,
+                        R.color.transparent));
                 return false;
             }
         });
