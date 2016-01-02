@@ -2,14 +2,11 @@
 一个获取来电归属地和其他信息(如推销、诈骗)的安卓应用。
 
 [![Build Status](https://travis-ci.org/xdtianyu/CallerInfo.svg?branch=master)](https://travis-ci.org/xdtianyu/CallerInfo)
+[![Release notes](https://img.shields.io/badge/release-notes-yellowgreen.svg)](https://github.com/xdtianyu/CallerInfo/releases)
 
 [![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.1/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.1/callerinfo-v1.1.1-release.apk) 
 
 [![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.0/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.0/callerinfo-v1.1.0-release.apk)
-
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.0.2/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.0.2/callerinfo-v1.0.2-release.apk)
-
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.0.1/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.0.1/callerinfo-v1.0.1-release.apk)
 
 [![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.0.0-beta/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.0.0-beta/callerinfo-v1.0.0-beta.apk)
 
