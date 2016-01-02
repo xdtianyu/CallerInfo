@@ -45,8 +45,6 @@ import org.xdty.phone.number.model.NumberInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import wei.mark.standout.StandOutWindow;
-
 public class MainActivity extends AppCompatActivity {
 
     public final static String TAG = MainActivity.class.getSimpleName();
@@ -63,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private CallerAdapter mCallerAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FrameLayout mMainLayout;
+    private Menu mMenu;
+    private boolean isFloating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +155,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        StandOutWindow.closeAll(this, FloatWindow.class);
+        Utils.closeWindow(this);
+        isFloating = false;
+        updateMenuTitles();
         super.onStop();
     }
 
@@ -167,6 +169,17 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, "SYSTEM_ALERT_WINDOW permission not granted...");
                 }
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isFloating) {
+            Utils.closeWindow(this);
+            isFloating = false;
+            updateMenuTitles();
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -188,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        mMenu = menu;
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(
                 menu.findItem(R.id.action_search));
@@ -209,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                StandOutWindow.closeAll(MainActivity.this, FloatWindow.class);
+                Utils.closeWindow(MainActivity.this);
                 mRecyclerView.setVisibility(View.VISIBLE);
                 mMainLayout.setBackgroundColor(ContextCompat.getColor(MainActivity.this,
                         R.color.transparent));
@@ -227,15 +241,32 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.action_float_window:
-                Utils.showTextWindow(this, R.string.float_window_hint);
+                if (!isFloating) {
+                    Utils.showTextWindow(this, R.string.float_window_hint);
+                    isFloating = true;
+                } else {
+                    Utils.closeWindow(this);
+                    isFloating = false;
+                }
+                updateMenuTitles();
+
                 break;
         }
 
         return true;
     }
 
+    private void updateMenuTitles() {
+        MenuItem floatWindowMenu = mMenu.findItem(R.id.action_float_window);
+        if (isFloating) {
+            floatWindowMenu.setTitle(R.string.close_window);
+        } else {
+            floatWindowMenu.setTitle(R.string.action_float_window);
+        }
+    }
+
     private void showNumberInfo(String phoneNumber) {
-        StandOutWindow.closeAll(this, FloatWindow.class);
+        Utils.closeWindow(this);
 
         if (phoneNumber.isEmpty()) {
             return;
