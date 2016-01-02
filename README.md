@@ -2,14 +2,11 @@
 An android app to get phone number location and other info. [中文](https://github.com/xdtianyu/CallerInfo/blob/master/README-CN.md)
 
 [![Build Status](https://travis-ci.org/xdtianyu/CallerInfo.svg?branch=master)](https://travis-ci.org/xdtianyu/CallerInfo)
+[![Release notes](https://img.shields.io/badge/release-notes-yellowgreen.svg)](https://github.com/xdtianyu/CallerInfo/releases)
 
 [![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.1/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.1/callerinfo-v1.1.1-release.apk)
 
 [![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.0/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.0/callerinfo-v1.1.0-release.apk)
-
-[![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.0.2/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.0.2/callerinfo-v1.0.2-release.apk)
-
-[![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.0.1/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.0.1/callerinfo-v1.0.1-release.apk)
 
 [![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.0.0-beta/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.0.0-beta/callerinfo-v1.0.0-beta.apk)
 
