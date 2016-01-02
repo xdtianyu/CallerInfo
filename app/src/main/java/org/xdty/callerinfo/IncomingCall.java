@@ -37,17 +37,16 @@ public class IncomingCall extends BroadcastReceiver {
     public static class IncomingCallListener extends PhoneStateListener {
 
         public final static String TAG = IncomingCallListener.class.getSimpleName();
-
+        private final boolean DEBUG = BuildConfig.DEBUG;
         private Context context;
-
         private boolean isShowing = false;
-
         private long ringStartTime = -1;
         private long hookStartTime = -1;
         private long idleStartTime = -1;
-
         private long ringTime = -1;
         private long duration = -1;
+
+        private String mIncomingNumber = null;
 
         public IncomingCallListener(Context context) {
             this.context = context;
@@ -89,6 +88,10 @@ public class IncomingCall extends BroadcastReceiver {
 
         void show(String incomingNumber) {
 
+            if (DEBUG) {
+                Log.d(TAG, "show window: " + incomingNumber);
+            }
+
             if (incomingNumber.isEmpty()) {
                 return;
             }
@@ -126,19 +129,25 @@ public class IncomingCall extends BroadcastReceiver {
 
                     }
                 }).fetch(incomingNumber);
+
+                mIncomingNumber = incomingNumber;
             }
         }
 
         void close(String incomingNumber) {
-
-            if (incomingNumber.isEmpty()) {
-                return;
-            }
             Log.d(TAG, "ringStartTime:" + ringStartTime +
                     ", ringTime: " + ringTime + ", duration: " + duration);
 
-            if (ringStartTime != -1) {
-                new InCall(incomingNumber, ringStartTime, ringTime, duration).save();
+            if (DEBUG) {
+                Log.d(TAG, "close window: " + incomingNumber);
+            }
+
+            if (incomingNumber.isEmpty() && duration == -1) {
+                return;
+            }
+
+            if (ringStartTime != -1 && mIncomingNumber != null) {
+                new InCall(mIncomingNumber, ringStartTime, ringTime, duration).save();
             }
 
             if (isShowing) {
@@ -151,6 +160,8 @@ public class IncomingCall extends BroadcastReceiver {
             idleStartTime = -1;
             ringTime = -1;
             duration = -1;
+
+            mIncomingNumber = null;
         }
     }
 }
