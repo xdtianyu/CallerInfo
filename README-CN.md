@@ -5,9 +5,9 @@
 [![Release notes](https://img.shields.io/badge/release-notes-yellowgreen.svg)](https://github.com/xdtianyu/CallerInfo/releases)
 [![Coolapk download](https://img.shields.io/badge/coolapk-download-blue.svg)](http://coolapk.com/apk/org.xdty.callerinfo)
 
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.2/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.2/callerinfo-v1.1.2-release.apk) 
+[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.3/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.3/callerinfo-v1.1.3-release.apk)
 
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.1/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.1/callerinfo-v1.1.1-release.apk) 
+[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.2/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.2/callerinfo-v1.1.2-release.apk)
 
 [![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.0/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.0/callerinfo-v1.1.0-release.apk)
 
