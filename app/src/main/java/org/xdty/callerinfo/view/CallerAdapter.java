@@ -23,10 +23,9 @@ import java.util.Map;
 
 public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder> {
 
+    private static Map<String, Caller> callerMap = new HashMap<>();
     private Context mContext;
     private List<InCall> mList;
-    private static Map<String, Caller> callerMap = new HashMap<>();
-
     private CardView cardView;
 
     public CallerAdapter(Context context, List<InCall> list) {
@@ -45,13 +44,24 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         InCall inCall = mList.get(position);
-        Caller caller = callerMap.get(inCall.getNumber());
+        Caller caller = getCaller(inCall.getNumber());
         holder.bind(inCall, caller);
     }
 
     @Override
     public int getItemCount() {
         return mList.size();
+    }
+
+    private Caller getCaller(String number) {
+        Caller caller = callerMap.get(number);
+
+        if (caller == null) {
+            if (number.contains("+86")) {
+                caller = callerMap.get(number.replace("+86", ""));
+            }
+        }
+        return caller;
     }
 
     private void updateCallerMap() {
@@ -90,7 +100,8 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                 if (inCall.isFetched()) {
                     text.setText(inCall.getNumber());
                     number.setText(R.string.loading_error);
-                    cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.graphite));
+                    cardView.setCardBackgroundColor(
+                            ContextCompat.getColor(context, R.color.graphite));
                 } else {
                     new PhoneNumber(context, new PhoneNumber.Callback() {
                         @Override
@@ -112,7 +123,8 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
                     text.setText(inCall.getNumber());
                     number.setText(R.string.loading);
-                    cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.blue_light));
+                    cardView.setCardBackgroundColor(
+                            ContextCompat.getColor(context, R.color.blue_light));
                 }
             }
         }
