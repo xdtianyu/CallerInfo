@@ -89,7 +89,7 @@ public class IncomingCall extends BroadcastReceiver {
         void show(String incomingNumber) {
 
             if (DEBUG) {
-                Log.d(TAG, "show window: " + incomingNumber);
+                Log.d(TAG, "show window: " + incomingNumber.isEmpty());
             }
 
             if (incomingNumber.isEmpty()) {
@@ -139,7 +139,7 @@ public class IncomingCall extends BroadcastReceiver {
                     ", ringTime: " + ringTime + ", duration: " + duration);
 
             if (DEBUG) {
-                Log.d(TAG, "close window: " + incomingNumber);
+                Log.d(TAG, "close window: " + incomingNumber.isEmpty());
             }
 
             if (incomingNumber.isEmpty() && duration == -1) {
