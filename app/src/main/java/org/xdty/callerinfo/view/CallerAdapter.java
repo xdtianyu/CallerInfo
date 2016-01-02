@@ -80,33 +80,40 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
             number = (TextView) view.findViewById(R.id.number);
         }
 
-        public void bind(InCall inCall, Caller caller) {
+        public void bind(final InCall inCall, Caller caller) {
             if (caller != null) {
                 TextColorPair t = Utils.getTextColorPair(context, caller.toNumber());
                 text.setText(t.text);
                 cardView.setCardBackgroundColor(t.color);
                 number.setText(caller.getNumber());
             } else {
-                new PhoneNumber(context, new PhoneNumber.Callback() {
-                    @Override
-                    public void onResponse(NumberInfo numberInfo) {
+                if (inCall.isFetched()) {
+                    text.setText(inCall.getNumber());
+                    number.setText(R.string.loading_error);
+                    cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.graphite));
+                } else {
+                    new PhoneNumber(context, new PhoneNumber.Callback() {
+                        @Override
+                        public void onResponse(NumberInfo numberInfo) {
 
-                        for (org.xdty.phone.number.model.Number number : numberInfo.getNumbers()) {
-                            new Caller(number).save();
-                            updateCallerMap();
-                            notifyDataSetChanged();
+                            for (org.xdty.phone.number.model.Number number : numberInfo.getNumbers()) {
+                                new Caller(number).save();
+                                inCall.setFetched(true);
+                                updateCallerMap();
+                                notifyDataSetChanged();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onResponseFailed(NumberInfo numberInfo) {
+                        @Override
+                        public void onResponseFailed(NumberInfo numberInfo) {
 
-                    }
-                }).fetch(inCall.getNumber());
+                        }
+                    }).fetch(inCall.getNumber());
 
-                text.setText(inCall.getNumber());
-                number.setText(R.string.loading);
-                cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.blue_light));
+                    text.setText(inCall.getNumber());
+                    number.setText(R.string.loading);
+                    cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.blue_light));
+                }
             }
         }
     }

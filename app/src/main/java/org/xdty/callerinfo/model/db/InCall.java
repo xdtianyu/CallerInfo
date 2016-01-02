@@ -1,12 +1,16 @@
 package org.xdty.callerinfo.model.db;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
 public class InCall extends SugarRecord {
     String number;
     long time;
     long ringTime;
     long duration;
+
+    @Ignore
+    boolean isFetched = false;
 
     public InCall() {
     }
@@ -48,5 +52,13 @@ public class InCall extends SugarRecord {
 
     public void setDuration(long duration) {
         this.duration = duration;
+    }
+
+    public boolean isFetched() {
+        return isFetched;
+    }
+
+    public void setFetched(boolean isFetched) {
+        this.isFetched = isFetched;
     }
 }
