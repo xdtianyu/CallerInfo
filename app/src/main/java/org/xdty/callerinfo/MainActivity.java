@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private CallerAdapter mCallerAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,22 +79,54 @@ public class MainActivity extends AppCompatActivity {
 
         mEmptyText = (TextView) findViewById(R.id.empty_text);
         mRecyclerView = (RecyclerView) findViewById(R.id.history_list);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        inCallList.addAll(InCall.listAll(InCall.class, "time DESC"));
+
+        loadInCallList();
+
         mCallerAdapter = new CallerAdapter(this, inCallList);
         mRecyclerView.setAdapter(mCallerAdapter);
 
         if (inCallList.size() > 0) {
             mEmptyText.setVisibility(View.GONE);
         }
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                // can scroll up and disable refresh
+                if (recyclerView.canScrollVertically(-1)) {
+                    mSwipeRefreshLayout.setEnabled(false);
+                } else {
+                    mSwipeRefreshLayout.setEnabled(true);
+                }
+            }
+        });
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadInCallList();
+                mCallerAdapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        loadInCallList();
         mCallerAdapter.notifyDataSetChanged();
+    }
+
+    private void loadInCallList() {
+        inCallList.clear();
+        inCallList.addAll(InCall.listAll(InCall.class, "time DESC"));
     }
 
     @Override
