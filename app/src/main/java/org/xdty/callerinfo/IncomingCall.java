@@ -59,7 +59,7 @@ public class IncomingCall extends BroadcastReceiver {
                 case TelephonyManager.CALL_STATE_RINGING:
                     ringStartTime = System.currentTimeMillis();
                     Log.d(TAG, "CALL_STATE_RINGING: " + ringStartTime);
-
+                    mIncomingNumber = incomingNumber;
                     show(incomingNumber);
                     break;
                 case TelephonyManager.CALL_STATE_OFFHOOK:
@@ -129,8 +129,6 @@ public class IncomingCall extends BroadcastReceiver {
 
                     }
                 }).fetch(incomingNumber);
-
-                mIncomingNumber = incomingNumber;
             }
         }
 
@@ -148,6 +146,7 @@ public class IncomingCall extends BroadcastReceiver {
 
             if (ringStartTime != -1 && mIncomingNumber != null) {
                 new InCall(mIncomingNumber, ringStartTime, ringTime, duration).save();
+                mIncomingNumber = null;
             }
 
             if (isShowing) {
@@ -160,8 +159,6 @@ public class IncomingCall extends BroadcastReceiver {
             idleStartTime = -1;
             ringTime = -1;
             duration = -1;
-
-            mIncomingNumber = null;
         }
     }
 }
