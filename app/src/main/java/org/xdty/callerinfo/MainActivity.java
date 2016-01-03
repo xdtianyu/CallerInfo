@@ -138,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
                 snackbar.setCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar snackbar, int event) {
-                        Log.d(TAG, "" + event);
                         switch (event) {
                             case DISMISS_EVENT_MANUAL:
                             case DISMISS_EVENT_ACTION:
