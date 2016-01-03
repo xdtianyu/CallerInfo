@@ -90,6 +90,10 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
             number = (TextView) view.findViewById(R.id.number);
         }
 
+        public void setAlpha(float alpha) {
+            cardView.setAlpha(alpha);
+        }
+
         public void bind(final InCall inCall, Caller caller) {
             if (caller != null) {
                 TextColorPair t = Utils.getTextColorPair(context, caller.toNumber());
@@ -127,6 +131,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                             ContextCompat.getColor(context, R.color.blue_light));
                 }
             }
+            cardView.setAlpha(1f);
         }
     }
 }

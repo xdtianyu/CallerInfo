@@ -38,4 +38,6 @@
     <string name="window_trans_back_only">透明仅应用于背景</string>
     <string name="loading_error">获取失败</string>
     <string name="close_window">关闭悬浮窗</string>
+    <string name="undo">撤销</string>
+    <string name="deleted">已移除</string>
 </resources>

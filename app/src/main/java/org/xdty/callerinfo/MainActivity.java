@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,6 +25,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
@@ -93,10 +96,6 @@ public class MainActivity extends AppCompatActivity {
         mCallerAdapter = new CallerAdapter(this, inCallList);
         mRecyclerView.setAdapter(mCallerAdapter);
 
-        if (inCallList.size() > 0) {
-            mEmptyText.setVisibility(View.GONE);
-        }
-
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -110,6 +109,69 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                    RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                final InCall inCall = inCallList.get(viewHolder.getAdapterPosition());
+                inCallList.remove(viewHolder.getAdapterPosition());
+                mCallerAdapter.notifyDataSetChanged();
+                final Snackbar snackbar = Snackbar.make(toolbar, R.string.deleted,
+                        Snackbar.LENGTH_LONG);
+
+                snackbar.setAction(getString(R.string.undo), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                        loadInCallList();
+                        mCallerAdapter.notifyDataSetChanged();
+                    }
+                });
+                snackbar.setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        Log.d(TAG, "" + event);
+                        switch (event) {
+                            case DISMISS_EVENT_MANUAL:
+                            case DISMISS_EVENT_ACTION:
+                                break;
+                            default:
+                                inCall.delete();
+                                break;
+                        }
+                        super.onDismissed(snackbar, event);
+                    }
+                });
+                snackbar.show();
+            }
+
+            @Override
+            public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+                super.onSelectedChanged(viewHolder, actionState);
+                boolean swiping = actionState == ItemTouchHelper.ACTION_STATE_SWIPE;
+                mSwipeRefreshLayout.setEnabled(!swiping);
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView,
+                    RecyclerView.ViewHolder viewHolder,
+                    float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState,
+                        isCurrentlyActive);
+                CallerAdapter.ViewHolder vh = (CallerAdapter.ViewHolder) viewHolder;
+                vh.setAlpha(1 - Math.abs(dX) / mScreenWidth * 2);
+            }
+        });
+
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -131,6 +193,12 @@ public class MainActivity extends AppCompatActivity {
     private void loadInCallList() {
         inCallList.clear();
         inCallList.addAll(InCall.listAll(InCall.class, "time DESC"));
+
+        if (inCallList.size() == 0) {
+            mEmptyText.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyText.setVisibility(View.GONE);
+        }
     }
 
     @Override
