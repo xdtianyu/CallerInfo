@@ -51,7 +51,7 @@
     <string name="deleted">Deleted</string>
     <string name="api_type_key" translatable="false">api_type</string>
     <string name="api_type">Data source</string>
-    <string name="api_baidu">BAIDU</string>
-    <string name="api_juhe">JUHE</string>
+    <string name="api_baidu">BAIDU Phone Number Service</string>
+    <string name="api_juhe">JUHE Phone Service (360)</string>
     <string name="juhe_api_key" translatable="false">juhe_api_key</string>
 </resources>

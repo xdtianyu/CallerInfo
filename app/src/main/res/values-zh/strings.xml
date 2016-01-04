@@ -41,7 +41,7 @@
     <string name="undo">撤销</string>
     <string name="deleted">已移除</string>
     <string name="api_type">数据源</string>
-    <string name="api_baidu">百度</string>
-    <string name="api_juhe">聚合数据(360)</string>
+    <string name="api_baidu">百度电话号码服务</string>
+    <string name="api_juhe">聚合数据手机固话来电显示服务 (360)</string>
     <string name="custom_jh_api_key">自定义聚合数据API密钥</string>
 </resources>
