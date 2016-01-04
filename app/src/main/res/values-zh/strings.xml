@@ -28,7 +28,7 @@
     <string name="disagree">不同意</string>
     <string name="project_title">开放源代码项目</string>
     <string name="advanced">高级</string>
-    <string name="custom_api_key">自定义API密钥</string>
+    <string name="custom_bd_api_key">自定义百度API密钥</string>
     <string name="float_window">悬浮窗</string>
     <string name="window_transparent">透明度</string>
     <string name="window_text_size">文字大小</string>
@@ -40,4 +40,8 @@
     <string name="close_window">关闭悬浮窗</string>
     <string name="undo">撤销</string>
     <string name="deleted">已移除</string>
+    <string name="api_type">数据源</string>
+    <string name="api_baidu">百度</string>
+    <string name="api_juhe">聚合数据(360)</string>
+    <string name="custom_jh_api_key">自定义聚合数据API密钥</string>
 </resources>

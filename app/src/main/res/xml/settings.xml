@@ -53,8 +53,16 @@
     <com.jenzz.materialpreference.PreferenceCategory
         android:title="@string/advanced">
         <com.jenzz.materialpreference.Preference
+            android:key="@string/api_type_key"
+            android:title="@string/api_type">
+        </com.jenzz.materialpreference.Preference>
+        <com.jenzz.materialpreference.Preference
             android:key="@string/baidu_api_key"
-            android:title="@string/custom_api_key">
+            android:title="@string/custom_bd_api_key">
+        </com.jenzz.materialpreference.Preference>
+        <com.jenzz.materialpreference.Preference
+            android:key="@string/juhe_api_key"
+            android:title="@string/custom_jh_api_key">
         </com.jenzz.materialpreference.Preference>
 
     </com.jenzz.materialpreference.PreferenceCategory>

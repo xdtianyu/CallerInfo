@@ -32,7 +32,8 @@
     <string name="project_title">Open source project</string>
     <string name="app_package_name" translatable="false">org.xdty.callerinfo</string>
     <string name="advanced">Advanced</string>
-    <string name="custom_api_key">Custom API key</string>
+    <string name="custom_bd_api_key">Custom BAIDU API key</string>
+    <string name="custom_jh_api_key">Custom JUHE API key</string>
     <string name="baidu_api_key" translatable="false">baidu_api_key</string>
     <string name="float_window">Float window</string>
     <string name="window_transparent">Window transparent</string>
@@ -48,4 +49,9 @@
     <string name="close_window">Close float window</string>
     <string name="undo">undo</string>
     <string name="deleted">Deleted</string>
+    <string name="api_type_key" translatable="false">api_type</string>
+    <string name="api_type">Data source</string>
+    <string name="api_baidu">BAIDU</string>
+    <string name="api_juhe">JUHE</string>
+    <string name="juhe_api_key" translatable="false">juhe_api_key</string>
 </resources>

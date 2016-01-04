@@ -324,11 +324,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateMenuTitles() {
-        MenuItem floatWindowMenu = mMenu.findItem(R.id.action_float_window);
-        if (isFloating) {
-            floatWindowMenu.setTitle(R.string.close_window);
-        } else {
-            floatWindowMenu.setTitle(R.string.action_float_window);
+        if (mMenu != null) {
+            MenuItem floatWindowMenu = mMenu.findItem(R.id.action_float_window);
+            if (isFloating) {
+                floatWindowMenu.setTitle(R.string.close_window);
+            } else {
+                floatWindowMenu.setTitle(R.string.action_float_window);
+            }
         }
     }
 

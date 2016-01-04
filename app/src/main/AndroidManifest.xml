@@ -48,6 +48,9 @@
             android:name="org.xdty.phone.number.API_KEY"
             android:value="${API_KEY}"/>
         <meta-data
+            android:name="org.xdty.phone.number.JUHE_API_KEY"
+            android:value="${JUHE_API_KEY}"/>
+        <meta-data
             android:name="DATABASE"
             android:value="phone_number.db"/>
         <meta-data

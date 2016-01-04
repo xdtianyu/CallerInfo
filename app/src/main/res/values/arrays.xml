@@ -16,4 +16,8 @@
         <item>@color/flamingo</item>
         <item>@color/graphite</item>
     </array>
+    <array name="api_type">
+        <item>@string/api_baidu</item>
+        <item>@string/api_juhe</item>
+    </array>
 </resources>

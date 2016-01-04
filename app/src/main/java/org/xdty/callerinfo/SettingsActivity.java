@@ -9,7 +9,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
+
+import java.util.Arrays;
+import java.util.List;
 
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
 
@@ -36,12 +42,16 @@ public class SettingsActivity extends AppCompatActivity {
     public static class SettingsFragment extends PreferenceFragment {
 
         SharedPreferences sharedPrefs;
-        Preference apiPreference;
+        Preference bdApiPreference;
+        Preference jhApiPreference;
         Preference textSizePref;
         Preference winTransPref;
+        Preference apiTypePref;
         String baiduApiKey;
+        String juheApiKey;
         String textSizeKey;
         String windowTransKey;
+        String apiTypeKey;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -59,17 +69,31 @@ public class SettingsActivity extends AppCompatActivity {
 
             baiduApiKey = getString(R.string.baidu_api_key);
 
-            apiPreference = findPreference(baiduApiKey);
-            final String apiKey = sharedPrefs.getString(baiduApiKey, "");
-            apiPreference.setSummary(mask(apiKey));
+            bdApiPreference = findPreference(baiduApiKey);
+            bdApiPreference.setSummary(mask(sharedPrefs.getString(baiduApiKey, "")));
 
-            apiPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showApiDialog();
-                    return true;
-                }
-            });
+            bdApiPreference.setOnPreferenceClickListener(
+                    new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            showApiDialog(baiduApiKey, R.string.custom_bd_api_key);
+                            return true;
+                        }
+                    });
+
+            juheApiKey = getString(R.string.juhe_api_key);
+
+            jhApiPreference = findPreference(juheApiKey);
+            jhApiPreference.setSummary(mask(sharedPrefs.getString(juheApiKey, "")));
+
+            jhApiPreference.setOnPreferenceClickListener(
+                    new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            showApiDialog(juheApiKey, R.string.custom_jh_api_key);
+                            return true;
+                        }
+                    });
 
             textSizeKey = getString(R.string.window_text_size_key);
 
@@ -93,6 +117,21 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
+            apiTypeKey = getString(R.string.api_type_key);
+            apiTypePref = findPreference(apiTypeKey);
+
+            final List<String> apiList = Arrays.asList(
+                    getResources().getStringArray(R.array.api_type));
+
+            apiTypePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    showRadioDialog(apiTypeKey, R.string.api_type, apiList);
+                    return true;
+                }
+            });
+            apiTypePref.setSummary(apiList.get(sharedPrefs.getInt(apiTypeKey, 0)));
         }
 
         private void showSeekBarDialog(final String key, final String bundleKey, int defaultValue,
@@ -148,30 +187,69 @@ public class SettingsActivity extends AppCompatActivity {
             showTextWindow(getActivity(), textRes);
         }
 
-        private void showApiDialog() {
-            String apiKey = sharedPrefs.getString(baiduApiKey, "");
+        private void showApiDialog(final String key, int title) {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
-            builder.setTitle(getString(R.string.custom_api_key));
+            builder.setTitle(getString(title));
             View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_edit, null);
             builder.setView(layout);
 
             final EditText editText = (EditText) layout.findViewById(R.id.text);
-            editText.setText(apiKey);
+            editText.setText(sharedPrefs.getString(key, ""));
 
             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String value = editText.getText().toString();
-                    apiPreference.setSummary(mask(value));
+                    findPreference(key).setSummary(mask(value));
                     SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putString(baiduApiKey, value);
+                    editor.putString(key, value);
                     editor.apply();
                 }
             });
             builder.setNegativeButton(android.R.string.cancel, null);
             builder.setCancelable(false);
             builder.show();
+        }
+
+        private void showRadioDialog(final String key, int title, final List<String> list) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(title));
+            View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_radio, null);
+            builder.setView(layout);
+            final AlertDialog dialog = builder.create();
+
+            final RadioGroup radioGroup = (RadioGroup) layout.findViewById(R.id.radio);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            for (String s : list) {
+                RadioButton radioButton = new RadioButton(getActivity());
+                radioButton.setText(s);
+                radioGroup.addView(radioButton, layoutParams);
+            }
+
+            RadioButton button = ((RadioButton) radioGroup.getChildAt(sharedPrefs.getInt(key, 0)));
+            button.setChecked(true);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    int index = group.indexOfChild(group.findViewById(checkedId));
+                    findPreference(key).setSummary(list.get(index));
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putInt(key, index);
+                    editor.apply();
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
         }
     }
 }
