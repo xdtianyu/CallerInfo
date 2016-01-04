@@ -150,11 +150,11 @@ public class FloatWindow extends StandOutWindow {
                 getString(R.string.window_trans_back_only_key), true);
 
         if (size == 0) {
-            size = preferences.getInt(getString(R.string.window_text_size_key), 25);
+            size = preferences.getInt(getString(R.string.window_text_size_key), 20);
         }
 
         if (trans == 0) {
-            trans = preferences.getInt(getString(R.string.window_transparent_key), 100);
+            trans = preferences.getInt(getString(R.string.window_transparent_key), 80);
         }
 
         if (color != 0) {

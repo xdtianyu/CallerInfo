@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColor="#ffffff"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:gravity="center"
             android:textStyle="bold" />
     </LinearLayout>

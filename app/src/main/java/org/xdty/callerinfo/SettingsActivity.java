@@ -101,7 +101,7 @@ public class SettingsActivity extends AppCompatActivity {
             textSizePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    showSeekBarDialog(textSizeKey, FloatWindow.TEXT_SIZE, 25, 60,
+                    showSeekBarDialog(textSizeKey, FloatWindow.TEXT_SIZE, 20, 60,
                             R.string.window_text_size, R.string.text_size);
                     return true;
                 }
@@ -112,7 +112,7 @@ public class SettingsActivity extends AppCompatActivity {
             winTransPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    showSeekBarDialog(windowTransKey, FloatWindow.WINDOW_TRANS, 100, 100,
+                    showSeekBarDialog(windowTransKey, FloatWindow.WINDOW_TRANS, 80, 100,
                             R.string.window_transparent, R.string.text_transparent);
                     return true;
                 }
