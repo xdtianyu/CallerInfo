@@ -135,6 +135,13 @@ public class FloatWindow extends StandOutWindow {
     }
 
     @Override
+    public boolean onClose(int id, Window window) {
+        super.onClose(id, window);
+        stopService(getShowIntent(this, getClass(), id));
+        return false;
+    }
+
+    @Override
     public void onReceiveData(int id, int requestCode, Bundle data,
             Class<? extends StandOutWindow> fromCls, int fromId) {
         int color = data.getInt(WINDOW_COLOR);
