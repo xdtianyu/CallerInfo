@@ -5,11 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 
-import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.Number;
 import org.xdty.phone.number.model.NumberInfo;
@@ -89,10 +90,10 @@ public class IncomingCall extends BroadcastReceiver {
         void show(String incomingNumber) {
 
             if (DEBUG) {
-                Log.d(TAG, "show window: " + incomingNumber.isEmpty());
+                Log.d(TAG, "show window: " + TextUtils.isEmpty(incomingNumber));
             }
 
-            if (incomingNumber.isEmpty()) {
+            if (TextUtils.isEmpty(incomingNumber)) {
                 return;
             }
 
@@ -137,10 +138,10 @@ public class IncomingCall extends BroadcastReceiver {
                     ", ringTime: " + ringTime + ", duration: " + duration);
 
             if (DEBUG) {
-                Log.d(TAG, "close window: " + incomingNumber.isEmpty());
+                Log.d(TAG, "close window: " + TextUtils.isEmpty(incomingNumber));
             }
 
-            if (incomingNumber.isEmpty() && duration == -1) {
+            if (TextUtils.isEmpty(incomingNumber) && duration == -1) {
                 return;
             }
 
