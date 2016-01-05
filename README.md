@@ -13,10 +13,6 @@ An android app to get phone number location and other info. [中文](https://git
 
 [![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.3/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.3/callerinfo-v1.1.3-release.apk)
 
-[![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.2/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.2/callerinfo-v1.1.2-release.apk)
-
-[![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.0.0-beta/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.0.0-beta/callerinfo-v1.0.0-beta.apk)
-
 ##Features
 
 1\. Query incoming phone number and show float window with location and extra info.

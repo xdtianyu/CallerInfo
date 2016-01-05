@@ -13,10 +13,6 @@
 
 [![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.3/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.3/callerinfo-v1.1.3-release.apk)
 
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.2/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.2/callerinfo-v1.1.2-release.apk)
-
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.0.0-beta/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.0.0-beta/callerinfo-v1.0.0-beta.apk)
-
 ##功能
 
 1\. 查询来电号码并显示悬浮窗，显示位置和其他号码信息。
