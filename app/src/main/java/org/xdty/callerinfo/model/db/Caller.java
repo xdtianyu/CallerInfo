@@ -3,6 +3,7 @@ package org.xdty.callerinfo.model.db;
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
+import org.xdty.callerinfo.utils.Config;
 import org.xdty.phone.number.model.Location;
 import org.xdty.phone.number.model.Number;
 
@@ -15,6 +16,7 @@ public class Caller extends SugarRecord {
     String operators;
     String city;
     long lastUpdate;
+    boolean isOffline = true;
 
     @Ignore
     Number phoneNumber;
@@ -35,6 +37,11 @@ public class Caller extends SugarRecord {
             this.operators = location.getOperators();
         }
         lastUpdate = System.currentTimeMillis();
+    }
+
+    public Caller(Number number, boolean isOffline) {
+        this(number);
+        this.isOffline = isOffline;
     }
 
     public String getNumber() {
@@ -107,5 +114,17 @@ public class Caller extends SugarRecord {
             s += "-" + operators;
         }
         return s;
+    }
+
+    public boolean isOffline() {
+        return isOffline;
+    }
+
+    public void setOffline(boolean isOffline) {
+        this.isOffline = isOffline;
+    }
+
+    public boolean needUpdate() {
+        return isOffline || lastUpdate - System.currentTimeMillis() >= Config.MAX_UPDATE_CIRCLE;
     }
 }

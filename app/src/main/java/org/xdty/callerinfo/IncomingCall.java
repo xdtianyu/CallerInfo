@@ -104,7 +104,7 @@ public class IncomingCall extends BroadcastReceiver {
 
                 if (callers.size() > 0) {
                     Caller caller = callers.get(0);
-                    if (caller.getLastUpdate() - System.currentTimeMillis() < 7 * 24 * 3600 * 1000) {
+                    if (!caller.needUpdate()) {
                         Utils.showWindow(context, caller.toNumber());
                         return;
                     } else {
@@ -119,7 +119,7 @@ public class IncomingCall extends BroadcastReceiver {
                             List<Number> numbers = numberInfo.getNumbers();
                             if (numbers.size() > 0) {
                                 Number number = numbers.get(0);
-                                new Caller(number).save();
+                                new Caller(number, numberInfo.isOffline()).save();
                                 Utils.showWindow(context, number);
                             }
                         }

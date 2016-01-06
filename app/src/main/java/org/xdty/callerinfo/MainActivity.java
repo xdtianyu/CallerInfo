@@ -345,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (callers.size() > 0) {
             Caller caller = callers.get(0);
-            if (caller.getLastUpdate() - System.currentTimeMillis() < 7 * 24 * 3600 * 1000) {
+            if (!caller.needUpdate()) {
                 Utils.showMovableWindow(MainActivity.this, caller.toNumber());
                 return;
             } else {
@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(NumberInfo numberInfo) {
 
                 for (Number number : numberInfo.getNumbers()) {
-                    new Caller(number).save();
+                    new Caller(number, numberInfo.isOffline()).save();
                     Utils.showMovableWindow(MainActivity.this, number);
                 }
             }
