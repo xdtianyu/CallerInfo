@@ -24,8 +24,8 @@
     <string name="license">License</string>
     <string name="developer">Developer</string>
     <string name="developer_summary" translatable="false">tianyu &lt;xdtianyu@gmail.com&gt;</string>
-    <string name="eula_message">CallerInfo uses Baidu\'s phone number service to query number information. This means that the caller\'s number or the number you search will be sent to Baidu. Please note that this is not linked to your phone number or other personal information.</string>
-    <string name="eula_title">Use Baidu\'s Phone Number Service?</string>
+    <string name="eula_message">CallerInfo uses Baidu\'s or JuHe(360)\'s phone number service to query number information. This means that the caller\'s number or the number you search will be sent to Baidu or JuHe(360). Please note that this is not linked to your phone number or other personal information.</string>
+    <string name="eula_title">Use Online Phone Number Service?</string>
     <string name="agree">Agree</string>
     <string name="disagree">Disagree</string>
     <string name="project_url" translatable="false">https://github.com/xdtianyu/CallerInfo</string>

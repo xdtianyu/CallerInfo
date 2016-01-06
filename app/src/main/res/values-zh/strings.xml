@@ -22,8 +22,8 @@
     <string name="license">开放源代码许可</string>
     <string name="author">作者</string>
     <string name="version">版本</string>
-    <string name="eula_message">此应用使用百度的电话号码服务来查询号码信息。这意味着您的来电号码或您搜索的号码将会被发送给百度。请注意这并不会关联到您的电话号码或其他个人信息。</string>
-    <string name="eula_title">使用百度的电话号码服务?</string>
+    <string name="eula_message">此应用使用百度或聚合数据(360)的电话号码服务来查询号码信息。这意味着您的来电号码或您搜索的号码将会被发送给百度或聚合数据(360)。请注意这并不会关联到您的电话号码或其他个人信息。</string>
+    <string name="eula_title">使用联网的电话号码服务?</string>
     <string name="agree">同意</string>
     <string name="disagree">不同意</string>
     <string name="project_title">开放源代码项目</string>
