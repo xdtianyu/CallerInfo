@@ -109,6 +109,10 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                 } else {
                     new PhoneNumber(context, new PhoneNumber.Callback() {
                         @Override
+                        public void onResponseOffline(NumberInfo numberInfo) {
+                        }
+
+                        @Override
                         public void onResponse(NumberInfo numberInfo) {
 
                             for (org.xdty.phone.number.model.Number number : numberInfo.getNumbers()) {

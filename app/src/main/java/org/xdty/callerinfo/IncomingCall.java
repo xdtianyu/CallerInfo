@@ -114,6 +114,17 @@ public class IncomingCall extends BroadcastReceiver {
 
                 new PhoneNumber(context, new PhoneNumber.Callback() {
                     @Override
+                    public void onResponseOffline(NumberInfo numberInfo) {
+                        if (isShowing && numberInfo != null) {
+                            List<Number> numbers = numberInfo.getNumbers();
+                            if (numbers.size() > 0) {
+                                Number number = numbers.get(0);
+                                Utils.showWindow(context, number);
+                            }
+                        }
+                    }
+
+                    @Override
                     public void onResponse(NumberInfo numberInfo) {
                         if (isShowing && numberInfo != null) {
                             List<Number> numbers = numberInfo.getNumbers();

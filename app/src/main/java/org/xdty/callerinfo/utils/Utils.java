@@ -107,9 +107,13 @@ public class Utils {
             case REPORT:
                 t.color = preferences.getInt("color_report",
                         ContextCompat.getColor(context, R.color.red_light));
-                t.text = context.getResources().getString(
-                        R.string.text_report, province, city, operators,
-                        count, name);
+                if (count == 0) {
+                    t.text = name;
+                } else {
+                    t.text = context.getResources().getString(
+                            R.string.text_report, province, city, operators,
+                            count, name);
+                }
                 break;
         }
         return t;

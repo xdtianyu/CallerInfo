@@ -357,6 +357,10 @@ public class MainActivity extends AppCompatActivity {
 
         new PhoneNumber(this, new PhoneNumber.Callback() {
             @Override
+            public void onResponseOffline(NumberInfo numberInfo) {
+            }
+
+            @Override
             public void onResponse(NumberInfo numberInfo) {
 
                 for (Number number : numberInfo.getNumbers()) {
