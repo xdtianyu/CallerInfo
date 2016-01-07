@@ -222,9 +222,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        Utils.closeWindow(this);
-        isFloating = false;
-        updateMenuTitles();
+        if (isFloating) {
+            Utils.closeWindow(this);
+            isFloating = false;
+            updateMenuTitles();
+        }
         super.onStop();
     }
 
