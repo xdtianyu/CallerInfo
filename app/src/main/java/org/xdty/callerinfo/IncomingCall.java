@@ -104,7 +104,6 @@ public class IncomingCall extends BroadcastReceiver {
             }
 
             if (!isShowing) {
-                isShowing = true;
                 mIgnoreContact = mPrefs.getBoolean(
                         context.getString(R.string.ignore_known_contact_key), false);
 
@@ -113,6 +112,7 @@ public class IncomingCall extends BroadcastReceiver {
                     return;
                 }
 
+                isShowing = true;
                 mIsInContacts = false;
 
                 List<Caller> callers = Caller.find(Caller.class, "number=?", incomingNumber);
@@ -171,11 +171,7 @@ public class IncomingCall extends BroadcastReceiver {
                 return;
             }
 
-            if (mIsInContacts) {
-                return;
-            }
-
-            if (ringStartTime != -1 && mIncomingNumber != null) {
+            if (ringStartTime != -1 && mIncomingNumber != null && !mIsInContacts) {
                 new InCall(mIncomingNumber, ringStartTime, ringTime, duration).save();
                 mIncomingNumber = null;
             }
