@@ -44,5 +44,5 @@
     <string name="api_baidu">百度电话号码服务</string>
     <string name="api_juhe">聚合数据手机固话来电显示服务 (360)</string>
     <string name="custom_jh_api_key">自定义聚合数据API密钥</string>
-    <string name="ignore_known_contact">忽略已存在联系人号码</string>
+    <string name="ignore_known_contact">忽略已存在的联系人号码</string>
 </resources>
