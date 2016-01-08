@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+
+import com.jenzz.materialpreference.SwitchPreference;
 
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +55,7 @@ public class SettingsActivity extends AppCompatActivity {
         Preference textSizePref;
         Preference winTransPref;
         Preference apiTypePref;
-        Preference ignoreContactPref;
+        SwitchPreference ignoreContactPref;
         String baiduApiKey;
         String juheApiKey;
         String textSizeKey;
@@ -141,7 +144,7 @@ public class SettingsActivity extends AppCompatActivity {
             apiTypePref.setSummary(apiList.get(sharedPrefs.getInt(apiTypeKey, 0)));
 
             ignoreContactKey = getString(R.string.ignore_known_contact_key);
-            ignoreContactPref = findPreference(ignoreContactKey);
+            ignoreContactPref = (SwitchPreference)findPreference(ignoreContactKey);
             ignoreContactPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -157,6 +160,20 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
+        }
+
+        @Override
+        public void onRequestPermissionsResult(int requestCode,
+                @NonNull String[] permissions, @NonNull int[] grantResults) {
+            switch (requestCode) {
+                case REQUEST_CODE_CONTACTS_PERMISSION:
+                    if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                        ignoreContactPref.setChecked(false);
+                    }
+                    break;
+                default:
+                    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
         }
 
         private void showSeekBarDialog(final String key, final String bundleKey, int defaultValue,
