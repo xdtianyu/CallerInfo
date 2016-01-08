@@ -1,9 +1,13 @@
 package org.xdty.callerinfo;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -41,17 +45,20 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static class SettingsFragment extends PreferenceFragment {
 
+        public final static int REQUEST_CODE_CONTACTS_PERMISSION = 1003;
         SharedPreferences sharedPrefs;
         Preference bdApiPreference;
         Preference jhApiPreference;
         Preference textSizePref;
         Preference winTransPref;
         Preference apiTypePref;
+        Preference ignoreContactPref;
         String baiduApiKey;
         String juheApiKey;
         String textSizeKey;
         String windowTransKey;
         String apiTypeKey;
+        String ignoreContactKey;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +80,7 @@ public class SettingsActivity extends AppCompatActivity {
             bdApiPreference.setSummary(mask(sharedPrefs.getString(baiduApiKey, "")));
 
             bdApiPreference.setOnPreferenceClickListener(
-                    new Preference.OnPreferenceClickListener() {
+                    new OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
                             showApiDialog(baiduApiKey, R.string.custom_bd_api_key);
@@ -87,7 +94,7 @@ public class SettingsActivity extends AppCompatActivity {
             jhApiPreference.setSummary(mask(sharedPrefs.getString(juheApiKey, "")));
 
             jhApiPreference.setOnPreferenceClickListener(
-                    new Preference.OnPreferenceClickListener() {
+                    new OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
                             showApiDialog(juheApiKey, R.string.custom_jh_api_key);
@@ -98,7 +105,7 @@ public class SettingsActivity extends AppCompatActivity {
             textSizeKey = getString(R.string.window_text_size_key);
 
             textSizePref = findPreference(textSizeKey);
-            textSizePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            textSizePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     showSeekBarDialog(textSizeKey, FloatWindow.TEXT_SIZE, 20, 60,
@@ -109,7 +116,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             windowTransKey = getString(R.string.window_transparent_key);
             winTransPref = findPreference(windowTransKey);
-            winTransPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            winTransPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     showSeekBarDialog(windowTransKey, FloatWindow.WINDOW_TRANS, 80, 100,
@@ -124,7 +131,7 @@ public class SettingsActivity extends AppCompatActivity {
             final List<String> apiList = Arrays.asList(
                     getResources().getStringArray(R.array.api_type));
 
-            apiTypePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            apiTypePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     showRadioDialog(apiTypeKey, R.string.api_type, apiList);
@@ -132,6 +139,24 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
             apiTypePref.setSummary(apiList.get(sharedPrefs.getInt(apiTypeKey, 0)));
+
+            ignoreContactKey = getString(R.string.ignore_known_contact_key);
+            ignoreContactPref = findPreference(ignoreContactKey);
+            ignoreContactPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        int res = getActivity().checkSelfPermission(
+                                Manifest.permission.READ_CONTACTS);
+                        if (res != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
+                                    REQUEST_CODE_CONTACTS_PERMISSION);
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            });
         }
 
         private void showSeekBarDialog(final String key, final String bundleKey, int defaultValue,

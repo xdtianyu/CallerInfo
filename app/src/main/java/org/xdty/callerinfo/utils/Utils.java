@@ -2,8 +2,11 @@ package org.xdty.callerinfo.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract.PhoneLookup;
 import android.support.v4.content.ContextCompat;
 
 import org.xdty.callerinfo.FloatWindow;
@@ -117,6 +120,27 @@ public class Utils {
                 break;
         }
         return t;
+    }
+
+    public static boolean isContactExists(Context context, String number) {
+        Uri lookupUri = Uri.withAppendedPath(
+                PhoneLookup.CONTENT_FILTER_URI,
+                Uri.encode(number));
+        String[] mPhoneNumberProjection = {
+                PhoneLookup._ID, PhoneLookup.NUMBER, PhoneLookup.DISPLAY_NAME
+        };
+        Cursor cur = context.getContentResolver().query(lookupUri, mPhoneNumberProjection, null,
+                null, null);
+        if (cur != null) {
+            try {
+                if (cur.moveToFirst()) {
+                    return true;
+                }
+            } finally {
+                cur.close();
+            }
+        }
+        return false;
     }
 
     public static String getDate(long time) {

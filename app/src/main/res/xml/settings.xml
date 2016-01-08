@@ -48,6 +48,11 @@
             android:title="@string/window_close_anim">
         </com.jenzz.materialpreference.SwitchPreference>
 
+        <com.jenzz.materialpreference.SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/ignore_known_contact_key"
+            android:title="@string/ignore_known_contact">
+        </com.jenzz.materialpreference.SwitchPreference>
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory

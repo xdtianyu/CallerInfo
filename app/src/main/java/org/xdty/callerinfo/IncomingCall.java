@@ -3,6 +3,8 @@ package org.xdty.callerinfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -48,9 +50,13 @@ public class IncomingCall extends BroadcastReceiver {
         private long duration = -1;
 
         private String mIncomingNumber = null;
+        private SharedPreferences mPrefs;
+        boolean mIgnoreContact;
+        boolean mIsInContacts = false;
 
         public IncomingCallListener(Context context) {
             this.context = context;
+            mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         }
 
         @Override
@@ -99,6 +105,15 @@ public class IncomingCall extends BroadcastReceiver {
 
             if (!isShowing) {
                 isShowing = true;
+                mIgnoreContact = mPrefs.getBoolean(
+                        context.getString(R.string.ignore_known_contact_key), false);
+
+                if (mIgnoreContact && Utils.isContactExists(context, incomingNumber)) {
+                    mIsInContacts = true;
+                    return;
+                }
+
+                mIsInContacts = false;
 
                 List<Caller> callers = Caller.find(Caller.class, "number=?", incomingNumber);
 
@@ -153,6 +168,10 @@ public class IncomingCall extends BroadcastReceiver {
             }
 
             if (TextUtils.isEmpty(incomingNumber) && duration == -1) {
+                return;
+            }
+
+            if (mIsInContacts) {
                 return;
             }
 

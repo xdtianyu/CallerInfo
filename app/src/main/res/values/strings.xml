@@ -54,4 +54,6 @@
     <string name="api_baidu">BAIDU Phone Number Service</string>
     <string name="api_juhe">JUHE Phone Service (360)</string>
     <string name="juhe_api_key" translatable="false">juhe_api_key</string>
+    <string name="ignore_known_contact">Ignore exist contact number</string>
+    <string name="ignore_known_contact_key" translatable="false">ignore_known_contact_key</string>
 </resources>
