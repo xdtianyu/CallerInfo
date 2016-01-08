@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract.PhoneLookup;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 
 import org.xdty.callerinfo.FloatWindow;
 import org.xdty.callerinfo.R;
@@ -91,6 +92,10 @@ public class Utils {
             province = context.getResources().getString(R.string.unknown);
             city = "";
             operators = "";
+        }
+
+        if (!TextUtils.isEmpty(province) && !TextUtils.isEmpty(city) && province.equals(city)) {
+            city = "";
         }
 
         TextColorPair t = new TextColorPair();
