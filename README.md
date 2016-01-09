@@ -55,6 +55,7 @@ An android app to get phone number location and other info. [中文](https://git
 
 [StandOut](https://github.com/pingpongboss/StandOut): A library to let you easily create floating windows in your Android app.
 
+[SeekBarCompat](https://github.com/ahmedrizwan/SeekBarCompat): A simple material-based support library to bring consistent SeekBars on Android 14 and above.
 
 ##[License](https://github.com/xdtianyu/CallerInfo/blob/master/LICENSE.md)
 
