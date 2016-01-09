@@ -55,6 +55,8 @@
 
 [StandOut](https://github.com/pingpongboss/StandOut): A library to let you easily create floating windows in your Android app.
 
+[SeekBarCompat](https://github.com/ahmedrizwan/SeekBarCompat): A simple material-based support library to bring consistent SeekBars on Android 14 and above.
+
 
 ##[许可证](https://github.com/xdtianyu/CallerInfo/blob/master/LICENSE.md)
 
