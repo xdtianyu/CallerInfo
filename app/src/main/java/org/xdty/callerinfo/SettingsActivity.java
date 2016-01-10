@@ -2,8 +2,10 @@ package org.xdty.callerinfo;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -89,7 +91,8 @@ public class SettingsActivity extends AppCompatActivity {
                     new OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            showApiDialog(baiduApiKey, R.string.custom_bd_api_key);
+                            showApiDialog(baiduApiKey, R.string.custom_bd_api_key,
+                                    R.string.baidu_api_url);
                             return true;
                         }
                     });
@@ -103,7 +106,7 @@ public class SettingsActivity extends AppCompatActivity {
                     new OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            showApiDialog(juheApiKey, R.string.custom_jh_api_key);
+                            showApiDialog(juheApiKey, R.string.custom_jh_api_key, R.string.juhe_api_url);
                             return true;
                         }
                     });
@@ -256,7 +259,7 @@ public class SettingsActivity extends AppCompatActivity {
             showTextWindow(getActivity(), textRes);
         }
 
-        private void showApiDialog(final String key, int title) {
+        private void showApiDialog(final String key, int title, final int url) {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
@@ -277,6 +280,12 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
             builder.setNegativeButton(android.R.string.cancel, null);
+            builder.setNeutralButton(R.string.fetch, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(url))));
+                }
+            });
             builder.setCancelable(false);
             builder.show();
         }

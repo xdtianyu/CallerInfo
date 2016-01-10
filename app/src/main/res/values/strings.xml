@@ -58,4 +58,7 @@
     <string name="ignore_known_contact_key" translatable="false">ignore_known_contact_key</string>
     <string name="display_on_outgoing">Display on outgoing</string>
     <string name="display_on_outgoing_key" translatable="false">display_on_outgoing_key</string>
+    <string name="fetch">Fetch</string>
+    <string name="baidu_api_url" translatable="false">http://apistore.baidu.com/astore/usercenter</string>
+    <string name="juhe_api_url" translatable="false">https://www.juhe.cn/docs/api/id/72</string>
 </resources>

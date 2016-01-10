@@ -46,4 +46,5 @@
     <string name="custom_jh_api_key">自定义聚合数据API密钥</string>
     <string name="ignore_known_contact">忽略已存在的联系人号码</string>
     <string name="display_on_outgoing">去电时显示</string>
+    <string name="fetch">获取</string>
 </resources>
