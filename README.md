@@ -57,6 +57,8 @@ An android app to get phone number location and other info. [中文](https://git
 
 [SeekBarCompat](https://github.com/ahmedrizwan/SeekBarCompat): A simple material-based support library to bring consistent SeekBars on Android 14 and above.
 
+[CustomActivityOnCrash](https://github.com/Ereza/CustomActivityOnCrash): An android library that allows launching a custom activity when your app crashes.
+
 ##[License](https://github.com/xdtianyu/CallerInfo/blob/master/LICENSE.md)
 
 ```

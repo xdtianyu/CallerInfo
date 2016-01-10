@@ -57,6 +57,7 @@
 
 [SeekBarCompat](https://github.com/ahmedrizwan/SeekBarCompat): A simple material-based support library to bring consistent SeekBars on Android 14 and above.
 
+[CustomActivityOnCrash](https://github.com/Ereza/CustomActivityOnCrash): An android library that allows launching a custom activity when your app crashes.
 
 ##[许可证](https://github.com/xdtianyu/CallerInfo/blob/master/LICENSE.md)
 
