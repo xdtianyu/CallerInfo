@@ -48,20 +48,20 @@ public class IncomingCall extends BroadcastReceiver {
         private long idleStartTime = -1;
         private long ringTime = -1;
         private long duration = -1;
-
         private String mIncomingNumber = null;
         private SharedPreferences mPrefs;
-        boolean mIgnoreContact;
-        boolean mIsInContacts = false;
+        private boolean mIgnoreContact;
+        private boolean mIsInContacts = false;
+        private String mOutgoingKey;
 
         public IncomingCallListener(Context context) {
             this.context = context;
             mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+            mOutgoingKey = context.getString(R.string.display_on_outgoing_key);
         }
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
-
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
                     ringStartTime = System.currentTimeMillis();
@@ -75,6 +75,10 @@ public class IncomingCall extends BroadcastReceiver {
 
                     if (ringStartTime != -1) {
                         ringTime = hookStartTime - ringStartTime;
+                    } else {
+                        if (mPrefs.getBoolean(mOutgoingKey, false)) {
+                            show(incomingNumber);
+                        }
                     }
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:

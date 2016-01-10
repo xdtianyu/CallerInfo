@@ -56,4 +56,6 @@
     <string name="juhe_api_key" translatable="false">juhe_api_key</string>
     <string name="ignore_known_contact">Ignore exist contact number</string>
     <string name="ignore_known_contact_key" translatable="false">ignore_known_contact_key</string>
+    <string name="display_on_outgoing">Display on outgoing</string>
+    <string name="display_on_outgoing_key" translatable="false">display_on_outgoing_key</string>
 </resources>

@@ -49,6 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static class SettingsFragment extends PreferenceFragment {
 
         public final static int REQUEST_CODE_CONTACTS_PERMISSION = 1003;
+        public final static int REQUEST_CODE_OUTGOING_PERMISSION = 1004;
         SharedPreferences sharedPrefs;
         Preference bdApiPreference;
         Preference jhApiPreference;
@@ -56,12 +57,14 @@ public class SettingsActivity extends AppCompatActivity {
         Preference winTransPref;
         Preference apiTypePref;
         SwitchPreference ignoreContactPref;
+        SwitchPreference outgoingPref;
         String baiduApiKey;
         String juheApiKey;
         String textSizeKey;
         String windowTransKey;
         String apiTypeKey;
         String ignoreContactKey;
+        String outgoingKey;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -144,7 +147,7 @@ public class SettingsActivity extends AppCompatActivity {
             apiTypePref.setSummary(apiList.get(sharedPrefs.getInt(apiTypeKey, 0)));
 
             ignoreContactKey = getString(R.string.ignore_known_contact_key);
-            ignoreContactPref = (SwitchPreference)findPreference(ignoreContactKey);
+            ignoreContactPref = (SwitchPreference) findPreference(ignoreContactKey);
             ignoreContactPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -160,6 +163,25 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
+            outgoingKey = getString(R.string.display_on_outgoing_key);
+            outgoingPref = (SwitchPreference) findPreference(outgoingKey);
+            outgoingPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        int res = getActivity().checkSelfPermission(
+                                Manifest.permission.PROCESS_OUTGOING_CALLS);
+                        if (res != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(
+                                    new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS},
+                                    REQUEST_CODE_OUTGOING_PERMISSION);
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            });
         }
 
         @Override
@@ -169,6 +191,11 @@ public class SettingsActivity extends AppCompatActivity {
                 case REQUEST_CODE_CONTACTS_PERMISSION:
                     if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                         ignoreContactPref.setChecked(false);
+                    }
+                    break;
+                case REQUEST_CODE_OUTGOING_PERMISSION:
+                    if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                        outgoingPref.setChecked(false);
                     }
                     break;
                 default:
