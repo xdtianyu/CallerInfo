@@ -1,4 +1,4 @@
-package org.xdty.callerinfo;
+package org.xdty.callerinfo.activity;
 
 import android.Manifest;
 import android.app.SearchManager;
@@ -37,6 +37,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.xdty.callerinfo.BuildConfig;
+import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.utils.Utils;

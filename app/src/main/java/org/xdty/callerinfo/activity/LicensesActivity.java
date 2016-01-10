@@ -1,10 +1,12 @@
-package org.xdty.callerinfo;
+package org.xdty.callerinfo.activity;
 
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.webkit.WebView;
+
+import org.xdty.callerinfo.R;
 
 public class LicensesActivity extends AppCompatActivity {
 

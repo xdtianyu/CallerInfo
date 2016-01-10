@@ -10,7 +10,7 @@ import android.provider.ContactsContract.PhoneLookup;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
-import org.xdty.callerinfo.FloatWindow;
+import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.phone.number.model.Location;

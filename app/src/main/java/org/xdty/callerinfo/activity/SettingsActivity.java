@@ -1,4 +1,4 @@
-package org.xdty.callerinfo;
+package org.xdty.callerinfo.activity;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -20,8 +20,13 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.jenzz.materialpreference.SwitchPreference;
+
+import org.xdty.callerinfo.BuildConfig;
+import org.xdty.callerinfo.service.FloatWindow;
+import org.xdty.callerinfo.R;
 
 import java.util.Arrays;
 import java.util.List;
@@ -60,6 +65,7 @@ public class SettingsActivity extends AppCompatActivity {
         Preference apiTypePref;
         SwitchPreference ignoreContactPref;
         SwitchPreference outgoingPref;
+        SwitchPreference crashPref;
         String baiduApiKey;
         String juheApiKey;
         String textSizeKey;
@@ -67,6 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
         String apiTypeKey;
         String ignoreContactKey;
         String outgoingKey;
+        String crashKey;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -106,7 +113,8 @@ public class SettingsActivity extends AppCompatActivity {
                     new OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            showApiDialog(juheApiKey, R.string.custom_jh_api_key, R.string.juhe_api_url);
+                            showApiDialog(juheApiKey, R.string.custom_jh_api_key,
+                                    R.string.juhe_api_url);
                             return true;
                         }
                     });
@@ -181,6 +189,18 @@ public class SettingsActivity extends AppCompatActivity {
                                     REQUEST_CODE_OUTGOING_PERMISSION);
                             return true;
                         }
+                    }
+                    return false;
+                }
+            });
+
+            crashKey = getString(R.string.catch_crash_key);
+            crashPref = (SwitchPreference) findPreference(crashKey);
+            crashPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (sharedPrefs.getBoolean(crashKey, false)) {
+                        showTextDialog(R.string.catch_crash, R.string.catch_crash_message);
                     }
                     return false;
                 }
@@ -328,6 +348,20 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
             dialog.show();
+        }
+
+        private void showTextDialog(int title, int text) {
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(title));
+            View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_text, null);
+            builder.setView(layout);
+
+            TextView textView = (TextView) layout.findViewById(R.id.text);
+            textView.setText(getString(text));
+
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.show();
         }
     }
 }

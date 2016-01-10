@@ -47,4 +47,16 @@
     <string name="ignore_known_contact">忽略已存在的联系人号码</string>
     <string name="display_on_outgoing">去电时显示</string>
     <string name="fetch">获取</string>
+    <string name="catch_crash">捕获程序异常</string>
+    <string name="catch_crash_message">启用这个功能会抓取程序的崩溃信息，您可以发送这些信息给开发者。请注意如果您是从 Play Store 安装此应用则不需要开启此功能，在应用崩溃后您可以点击报告按钮发送崩溃信息。</string>
+    <string name="customactivityoncrash_error_activity_error_occurred_explanation">程序异常终止\n很抱歉给你带来不便</string>
+    <string name="customactivityoncrash_error_activity_unknown_exception">未知异常</string>
+    <string name="customactivityoncrash_error_activity_restart_app">重启应用</string>
+    <string name="customactivityoncrash_error_activity_close_app">关闭应用</string>
+    <string name="customactivityoncrash_error_activity_error_details">详细错误</string>
+    <string name="customactivityoncrash_error_activity_error_details_title">详细错误</string>
+    <string name="customactivityoncrash_error_activity_error_details_close">关闭</string>
+    <string name="customactivityoncrash_error_activity_error_details_copy">复制到剪切板</string>
+    <string name="customactivityoncrash_error_activity_error_details_copied">已复制到剪切板</string>
+    <string name="customactivityoncrash_error_activity_error_details_clipboard_label">错误信息</string>
 </resources>

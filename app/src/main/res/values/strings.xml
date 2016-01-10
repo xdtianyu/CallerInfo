@@ -61,4 +61,7 @@
     <string name="fetch">Fetch</string>
     <string name="baidu_api_url" translatable="false">http://apistore.baidu.com/astore/usercenter</string>
     <string name="juhe_api_url" translatable="false">https://www.juhe.cn/docs/api/id/72</string>
+    <string name="catch_crash_key" translatable="false">catch_crash_key</string>
+    <string name="catch_crash">Catch application crash</string>
+    <string name="catch_crash_message">Enable this feature will catch crash message, you can send crash messages to the developer. Please notice you don\'t need to enable this if you installed from Play Store, after app crash you can click Report button to send the crash message.</string>
 </resources>
