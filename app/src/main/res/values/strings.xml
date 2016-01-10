@@ -64,4 +64,14 @@
     <string name="catch_crash_key" translatable="false">catch_crash_key</string>
     <string name="catch_crash">Catch application crash</string>
     <string name="catch_crash_message">Enable this feature will catch crash message, you can send crash messages to the developer. Please notice you don\'t need to enable this if you installed from Play Store, after app crash you can click Report button to send the crash message.</string>
+    <string name="customactivityoncrash_error_activity_close_app">Close app</string>
+    <string name="customactivityoncrash_error_activity_error_details">Error details</string>
+    <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Error information</string>
+    <string name="customactivityoncrash_error_activity_error_details_close">Close</string>
+    <string name="customactivityoncrash_error_activity_error_details_copied">Copied to clipboard</string>
+    <string name="customactivityoncrash_error_activity_error_details_copy">Copy to clipboard</string>
+    <string name="customactivityoncrash_error_activity_error_details_title">Error details</string>
+    <string name="customactivityoncrash_error_activity_error_occurred_explanation">An unexpected error occurred.\nSorry for the inconvenience.</string>
+    <string name="customactivityoncrash_error_activity_restart_app">Restart app</string>
+    <string name="customactivityoncrash_error_activity_unknown_exception">Unknown exception</string>
 </resources>
