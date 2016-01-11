@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +102,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                 cardView.setCardBackgroundColor(t.color);
                 number.setText(caller.getNumber());
             } else {
-                if (inCall.isFetched()) {
+                if (inCall.isFetched() || TextUtils.isEmpty(inCall.getNumber())) {
                     text.setText(inCall.getNumber());
                     number.setText(R.string.loading_error);
                     cardView.setCardBackgroundColor(
