@@ -1,5 +1,7 @@
 package org.xdty.callerinfo.service;
 
+import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,7 +36,9 @@ public class FloatWindow extends StandOutWindow {
     public final static String WINDOW = "window";
 
     public final static int CALLER_FRONT = 1000;
-    public final static int VIEWER_FRONT = 1001;
+    public final static int SET_POSITION_FRONT = 1001;
+    public final static int SETTING_FRONT = 1002;
+    public final static int SEARCH_FRONT = 1003;
 
     SharedPreferences sharedPreferences;
 
@@ -87,13 +91,13 @@ public class FloatWindow extends StandOutWindow {
 
         if (x != -1 && y != -1) {
             standOutLayoutParams.x = x;
-            standOutLayoutParams.y = y;
+            standOutLayoutParams.y = (id == SETTING_FRONT) ? (int) (height * 1.5) : y;
         }
 
         standOutLayoutParams.minWidth = point.x;
         standOutLayoutParams.maxWidth = point.x;
         standOutLayoutParams.minHeight = height;
-        if (id == CALLER_FRONT) {
+        if (!isMovable(id)) {
             standOutLayoutParams.type = StandOutLayoutParams.TYPE_SYSTEM_OVERLAY;
         }
         return standOutLayoutParams;
@@ -102,13 +106,18 @@ public class FloatWindow extends StandOutWindow {
     // move the window by dragging the view
     @Override
     public int getFlags(int id) {
-        if (id == CALLER_FRONT) {
+        if (!isMovable(id)) {
             return super.getFlags(id) | StandOutFlags.FLAG_WINDOW_FOCUSABLE_DISABLE;
         } else {
             return super.getFlags(id) | StandOutFlags.FLAG_BODY_MOVE_ENABLE
                     | StandOutFlags.FLAG_WINDOW_EDGE_LIMITS_ENABLE
                     | StandOutFlags.FLAG_WINDOW_PINCH_RESIZE_ENABLE;
         }
+    }
+
+    private boolean isMovable(int id) {
+        KeyguardManager km = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
+        return id != SETTING_FRONT && id != SEARCH_FRONT && !km.inKeyguardRestrictedInputMode();
     }
 
     @Override

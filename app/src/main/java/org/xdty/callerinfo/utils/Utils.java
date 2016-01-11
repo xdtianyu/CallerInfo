@@ -23,39 +23,30 @@ import java.util.TimeZone;
 
 public class Utils {
 
-    public static void showWindow(Context context, Number number) {
-        showWindow(context, Utils.getTextColorPair(context, number), false);
-    }
-
-    public static void showMovableWindow(Context context, Number number) {
-        showWindow(context, Utils.getTextColorPair(context, number), true);
-    }
-
-    public static void showTextWindow(Context context, int resId) {
+    public static void showTextWindow(Context context, int resId, int frontType) {
         Bundle bundle = new Bundle();
         bundle.putString(FloatWindow.NUMBER_INFO, context.getString(resId));
         bundle.putInt(FloatWindow.WINDOW_COLOR, ContextCompat.getColor(context,
                 R.color.colorPrimary));
-        FloatWindow.show(context, FloatWindow.class,
-                FloatWindow.VIEWER_FRONT);
+        FloatWindow.show(context, FloatWindow.class, frontType);
         FloatWindow.sendData(context, FloatWindow.class,
-                FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
+                frontType, 0, bundle, FloatWindow.class, 0);
     }
 
-    public static void sendData(Context context, String key, int value) {
+    public static void sendData(Context context, String key, int value, int frontType) {
         Bundle bundle = new Bundle();
         bundle.putInt(key, value);
         FloatWindow.sendData(context, FloatWindow.class,
-                FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
+                frontType, 0, bundle, FloatWindow.class, 0);
     }
 
     public static void closeWindow(Context context) {
         FloatWindow.closeAll(context, FloatWindow.class);
     }
 
-    private static void showWindow(Context context, TextColorPair textColor, boolean movable) {
+    public static void showWindow(Context context, Number number, int frontType) {
 
-        int frontType = movable ? FloatWindow.VIEWER_FRONT : FloatWindow.CALLER_FRONT;
+        TextColorPair textColor = Utils.getTextColorPair(context, number);
 
         Bundle bundle = new Bundle();
         bundle.putString(FloatWindow.NUMBER_INFO, textColor.text);

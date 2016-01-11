@@ -41,6 +41,7 @@ import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.view.CallerAdapter;
 import org.xdty.phone.number.PhoneNumber;
@@ -313,7 +314,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_float_window:
                 if (!isFloating) {
-                    Utils.showTextWindow(this, R.string.float_window_hint);
+                    Utils.showTextWindow(this, R.string.float_window_hint,
+                            FloatWindow.SET_POSITION_FRONT);
                     isFloating = true;
                 } else {
                     Utils.closeWindow(this);
@@ -350,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
         if (callers.size() > 0) {
             Caller caller = callers.get(0);
             if (!caller.needUpdate()) {
-                Utils.showMovableWindow(MainActivity.this, caller.toNumber());
+                Utils.showWindow(MainActivity.this, caller.toNumber(), FloatWindow.SEARCH_FRONT);
                 return;
             } else {
                 caller.delete();
@@ -367,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
 
                 for (Number number : numberInfo.getNumbers()) {
                     new Caller(number, numberInfo.isOffline()).save();
-                    Utils.showMovableWindow(MainActivity.this, number);
+                    Utils.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
                 }
             }
 

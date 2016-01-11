@@ -244,7 +244,7 @@ public class SettingsActivity extends AppCompatActivity {
                     if (progress == 0) {
                         progress = 1;
                     }
-                    sendData(getActivity(), bundleKey, progress);
+                    sendData(getActivity(), bundleKey, progress, FloatWindow.SETTING_FRONT);
                 }
 
                 @Override
@@ -276,7 +276,7 @@ public class SettingsActivity extends AppCompatActivity {
             });
             builder.show();
 
-            showTextWindow(getActivity(), textRes);
+            showTextWindow(getActivity(), textRes, FloatWindow.SETTING_FRONT);
         }
 
         private void showApiDialog(final String key, int title, final int url) {

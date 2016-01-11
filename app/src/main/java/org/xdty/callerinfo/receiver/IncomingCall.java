@@ -129,7 +129,7 @@ public class IncomingCall extends BroadcastReceiver {
                 if (callers.size() > 0) {
                     Caller caller = callers.get(0);
                     if (!caller.needUpdate()) {
-                        Utils.showWindow(context, caller.toNumber());
+                        Utils.showWindow(context, caller.toNumber(), FloatWindow.CALLER_FRONT);
                         return;
                     } else {
                         caller.delete();
@@ -143,7 +143,7 @@ public class IncomingCall extends BroadcastReceiver {
                             List<Number> numbers = numberInfo.getNumbers();
                             if (numbers.size() > 0) {
                                 Number number = numbers.get(0);
-                                Utils.showWindow(context, number);
+                                Utils.showWindow(context, number, FloatWindow.CALLER_FRONT);
                             }
                         }
                     }
@@ -155,7 +155,7 @@ public class IncomingCall extends BroadcastReceiver {
                             if (numbers.size() > 0) {
                                 Number number = numbers.get(0);
                                 new Caller(number, numberInfo.isOffline()).save();
-                                Utils.showWindow(context, number);
+                                Utils.showWindow(context, number, FloatWindow.CALLER_FRONT);
                             }
                         }
                     }
