@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.xdty.callerinfo.R;
@@ -172,7 +171,7 @@ public class FloatWindow extends StandOutWindow {
         int size = data.getInt(TEXT_SIZE);
         int trans = data.getInt(WINDOW_TRANS);
         Window window = getWindow(id);
-        LinearLayout layout = (LinearLayout) window.findViewById(R.id.window_layout);
+        View layout = window.findViewById(R.id.content);
         TextView textView = (TextView) window.findViewById(R.id.number_info);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -203,5 +202,19 @@ public class FloatWindow extends StandOutWindow {
             layout.setAlpha(trans / 100f);
         }
 
+    }
+
+    @Override
+    public boolean onFocusChange(int id, Window window, boolean focus) {
+        View layout = window.findViewById(R.id.window_layout);
+//        if (focus) {
+//            layout.setBackgroundResource(wei.mark.standout.R.drawable.border_focused);
+//        } else {
+//            layout.setBackgroundResource(0);
+//        }
+        if (id == SET_POSITION_FRONT) {
+            layout.setBackgroundResource(wei.mark.standout.R.drawable.border_focused);
+        }
+        return true;
     }
 }
