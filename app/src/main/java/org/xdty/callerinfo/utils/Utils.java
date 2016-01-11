@@ -10,9 +10,9 @@ import android.provider.ContactsContract.PhoneLookup;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
-import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.TextColorPair;
+import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.phone.number.model.Location;
 import org.xdty.phone.number.model.Number;
 import org.xdty.phone.number.model.Type;
@@ -20,8 +20,6 @@ import org.xdty.phone.number.model.Type;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
-
-import wei.mark.standout.StandOutWindow;
 
 public class Utils {
 
@@ -38,21 +36,21 @@ public class Utils {
         bundle.putString(FloatWindow.NUMBER_INFO, context.getString(resId));
         bundle.putInt(FloatWindow.WINDOW_COLOR, ContextCompat.getColor(context,
                 R.color.colorPrimary));
-        StandOutWindow.show(context, FloatWindow.class,
+        FloatWindow.show(context, FloatWindow.class,
                 FloatWindow.VIEWER_FRONT);
-        StandOutWindow.sendData(context, FloatWindow.class,
+        FloatWindow.sendData(context, FloatWindow.class,
                 FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
     }
 
     public static void sendData(Context context, String key, int value) {
         Bundle bundle = new Bundle();
         bundle.putInt(key, value);
-        StandOutWindow.sendData(context, FloatWindow.class,
+        FloatWindow.sendData(context, FloatWindow.class,
                 FloatWindow.VIEWER_FRONT, 0, bundle, FloatWindow.class, 0);
     }
 
     public static void closeWindow(Context context) {
-        StandOutWindow.closeAll(context, FloatWindow.class);
+        FloatWindow.closeAll(context, FloatWindow.class);
     }
 
     private static void showWindow(Context context, TextColorPair textColor, boolean movable) {
@@ -62,9 +60,9 @@ public class Utils {
         Bundle bundle = new Bundle();
         bundle.putString(FloatWindow.NUMBER_INFO, textColor.text);
         bundle.putInt(FloatWindow.WINDOW_COLOR, textColor.color);
-        StandOutWindow.show(context, FloatWindow.class,
+        FloatWindow.show(context, FloatWindow.class,
                 frontType);
-        StandOutWindow.sendData(context, FloatWindow.class,
+        FloatWindow.sendData(context, FloatWindow.class,
                 frontType, 0, bundle, FloatWindow.class, 0);
     }
 

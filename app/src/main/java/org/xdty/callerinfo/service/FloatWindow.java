@@ -39,6 +39,17 @@ public class FloatWindow extends StandOutWindow {
     SharedPreferences sharedPreferences;
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        try {
+            return super.onStartCommand(intent, flags, startId);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            stopSelf(startId);
+        }
+        return START_NOT_STICKY;
+    }
+
+    @Override
     public String getAppName() {
         return getResources().getString(R.string.app_name);
     }
