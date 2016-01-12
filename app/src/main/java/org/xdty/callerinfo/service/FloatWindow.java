@@ -40,6 +40,7 @@ public class FloatWindow extends StandOutWindow {
     public final static int SEARCH_FRONT = 1003;
 
     SharedPreferences sharedPreferences;
+    private boolean isFirstShow = false;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -148,6 +149,12 @@ public class FloatWindow extends StandOutWindow {
     }
 
     @Override
+    public boolean onShow(int id, Window window) {
+        isFirstShow = true;
+        return super.onShow(id, window);
+    }
+
+    @Override
     public void onMove(int id, Window window, View view, MotionEvent event) {
         super.onMove(id, window, view, event);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -161,6 +168,19 @@ public class FloatWindow extends StandOutWindow {
         super.onClose(id, window);
         stopService(getShowIntent(this, getClass(), id));
         return false;
+    }
+
+    @Override
+    public boolean onTouchBody(int id, Window window, View view, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_OUTSIDE:
+                View layout = window.findViewById(R.id.window_layout);
+                if (layout != null) {
+                    layout.setBackgroundResource(0);
+                }
+                break;
+        }
+        return super.onTouchBody(id, window, view, event);
     }
 
     @Override
@@ -207,14 +227,10 @@ public class FloatWindow extends StandOutWindow {
     @Override
     public boolean onFocusChange(int id, Window window, boolean focus) {
         View layout = window.findViewById(R.id.window_layout);
-//        if (focus) {
-//            layout.setBackgroundResource(wei.mark.standout.R.drawable.border_focused);
-//        } else {
-//            layout.setBackgroundResource(0);
-//        }
-        if (id == SET_POSITION_FRONT) {
+        if (focus && layout != null && !isFirstShow) {
             layout.setBackgroundResource(wei.mark.standout.R.drawable.border_focused);
         }
+        isFirstShow = false;
         return true;
     }
 }
