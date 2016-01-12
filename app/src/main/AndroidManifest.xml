@@ -42,7 +42,7 @@
         <service android:name=".service.FloatWindow"/>
 
         <receiver android:name=".receiver.IncomingCall">
-            <intent-filter>
+            <intent-filter android:priority="999">
                 <action android:name="android.intent.action.PHONE_STATE"/>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
             </intent-filter>
