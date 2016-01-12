@@ -65,6 +65,11 @@ public class IncomingCall extends BroadcastReceiver {
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
+
+            if (!TextUtils.isEmpty(incomingNumber)) {
+                incomingNumber = incomingNumber.replaceAll(" ", "");
+            }
+
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
                     ringStartTime = System.currentTimeMillis();

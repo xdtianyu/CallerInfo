@@ -1,5 +1,7 @@
 package org.xdty.callerinfo.model.db;
 
+import android.text.TextUtils;
+
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
@@ -23,6 +25,9 @@ public class InCall extends SugarRecord {
     }
 
     public String getNumber() {
+        if (!TextUtils.isEmpty(number)) {
+            number = number.replaceAll(" ", "");
+        }
         return number;
     }
 
