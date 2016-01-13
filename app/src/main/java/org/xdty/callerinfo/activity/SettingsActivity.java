@@ -21,12 +21,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.jenzz.materialpreference.PreferenceCategory;
 import com.jenzz.materialpreference.SwitchPreference;
 
 import org.xdty.callerinfo.BuildConfig;
-import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.service.FloatWindow;
 
 import java.util.Arrays;
 import java.util.List;
@@ -74,6 +76,13 @@ public class SettingsActivity extends AppCompatActivity {
         String ignoreContactKey;
         String outgoingKey;
         String crashKey;
+
+        PreferenceCategory advancedPref;
+        PreferenceCategory aboutPref;
+        Preference developerPref;
+
+        int versionClickCount;
+        Toast toast;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -205,6 +214,45 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
+            final String showHiddenKey = getString(R.string.show_hidden_setting_key);
+            boolean isShowHidden = sharedPrefs.getBoolean(showHiddenKey, false);
+
+            if (!isShowHidden) {
+                advancedPref =
+                        (PreferenceCategory) findPreference(getString(R.string.advanced_key));
+                aboutPref = (PreferenceCategory) findPreference(getString(R.string.about_key));
+                developerPref = findPreference(getString(R.string.developer_key));
+
+                advancedPref.removePreference(bdApiPreference);
+                advancedPref.removePreference(jhApiPreference);
+                aboutPref.removePreference(developerPref);
+
+                versionClickCount = 0;
+                version.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        versionClickCount++;
+                        if (versionClickCount == 7) {
+                            sharedPrefs.edit().putBoolean(showHiddenKey, true).apply();
+
+                            advancedPref.addPreference(bdApiPreference);
+                            advancedPref.addPreference(jhApiPreference);
+                            aboutPref.addPreference(developerPref);
+                        }
+                        if (versionClickCount > 3 && versionClickCount < 7) {
+                            if (toast != null) {
+                                toast.cancel();
+                            }
+                            toast = Toast.makeText(getActivity(),
+                                    getString(R.string.show_hidden_toast, 7 - versionClickCount),
+                                    Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                        return false;
+                    }
+                });
+            }
         }
 
         @Override

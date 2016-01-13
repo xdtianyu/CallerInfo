@@ -74,4 +74,9 @@
     <string name="customactivityoncrash_error_activity_error_occurred_explanation">An unexpected error occurred.\nSorry for the inconvenience.</string>
     <string name="customactivityoncrash_error_activity_restart_app">Restart app</string>
     <string name="customactivityoncrash_error_activity_unknown_exception">Unknown exception</string>
+    <string name="advanced_key" translatable="false">advanced_key</string>
+    <string name="about_key" translatable="false">about_key</string>
+    <string name="developer_key" translatable="false">developer_key</string>
+    <string name="show_hidden_setting_key" translatable="false">show_hidden_setting_key</string>
+    <string name="show_hidden_toast">Click %1$s times to show hidden settings</string>
 </resources>

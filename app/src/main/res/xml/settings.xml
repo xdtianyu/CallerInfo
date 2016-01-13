@@ -62,6 +62,7 @@
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory
+        android:key="@string/advanced_key"
         android:title="@string/advanced">
         <com.jenzz.materialpreference.Preference
             android:key="@string/api_type_key"
@@ -84,6 +85,7 @@
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory
+        android:key="@string/about_key"
         android:title="@string/about">
 
         <com.jenzz.materialpreference.Preference
@@ -91,6 +93,7 @@
             android:title="@string/version"/>
 
         <com.jenzz.materialpreference.Preference
+            android:key="@string/developer_key"
             android:summary="@string/developer_summary"
             android:title="@string/developer"/>
 
