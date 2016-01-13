@@ -91,8 +91,11 @@ public class FloatWindow extends StandOutWindow {
 
         if (x != -1 && y != -1) {
             standOutLayoutParams.x = x;
-            standOutLayoutParams.y =
-                    (id == SETTING_FRONT || id == SEARCH_FRONT) ? (int) (height * 1.5) : y;
+            standOutLayoutParams.y = y;
+        }
+
+        if (id == SETTING_FRONT || id == SEARCH_FRONT) {
+            standOutLayoutParams.y = (int) (height * 1.5);
         }
 
         standOutLayoutParams.minWidth = point.x;
