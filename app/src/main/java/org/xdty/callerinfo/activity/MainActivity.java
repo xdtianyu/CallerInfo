@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.net.Uri;
@@ -50,6 +51,7 @@ import org.xdty.phone.number.model.NumberInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,6 +75,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isForceChinese =
+                sharedPreferences.getBoolean(getString(R.string.force_chinese_key), false);
+
+        if (isForceChinese) {
+            Locale locale = new Locale("zh");
+            Locale.setDefault(locale);
+            Configuration config = getResources().getConfiguration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config,
+                    getBaseContext().getResources().getDisplayMetrics());
+        }
+
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -381,8 +397,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkEula() {
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean eula = sharedPreferences.getBoolean("eula", false);
 
         if (!eula) {

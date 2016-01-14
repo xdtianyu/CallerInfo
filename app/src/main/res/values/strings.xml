@@ -79,4 +79,6 @@
     <string name="developer_key" translatable="false">developer_key</string>
     <string name="show_hidden_setting_key" translatable="false">show_hidden_setting_key</string>
     <string name="show_hidden_toast">Click %1$s times to show hidden settings</string>
+    <string name="force_chinese_key" translatable="false">force_chinese_key</string>
+    <string name="force_chinese">Force chinese language</string>
 </resources>

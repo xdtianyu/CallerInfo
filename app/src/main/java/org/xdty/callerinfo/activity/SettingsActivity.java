@@ -68,6 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
         SwitchPreference ignoreContactPref;
         SwitchPreference outgoingPref;
         SwitchPreference crashPref;
+        SwitchPreference chinesePref;
         String baiduApiKey;
         String juheApiKey;
         String textSizeKey;
@@ -76,6 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
         String ignoreContactKey;
         String outgoingKey;
         String crashKey;
+        String chineseKey;
 
         PreferenceCategory advancedPref;
         PreferenceCategory aboutPref;
@@ -215,6 +217,9 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
+            chineseKey = getString(R.string.force_chinese_key);
+            chinesePref = (SwitchPreference) findPreference(chineseKey);
+
             final String showHiddenKey = getString(R.string.show_hidden_setting_key);
             boolean isShowHidden = sharedPrefs.getBoolean(showHiddenKey, false);
 
@@ -226,6 +231,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 advancedPref.removePreference(bdApiPreference);
                 advancedPref.removePreference(jhApiPreference);
+                advancedPref.removePreference(chinesePref);
                 aboutPref.removePreference(developerPref);
 
                 versionClickCount = 0;
@@ -238,6 +244,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                             advancedPref.addPreference(bdApiPreference);
                             advancedPref.addPreference(jhApiPreference);
+                            advancedPref.addPreference(chinesePref);
                             aboutPref.addPreference(developerPref);
                         }
                         if (versionClickCount > 3 && versionClickCount < 7) {

@@ -60,4 +60,5 @@
     <string name="customactivityoncrash_error_activity_error_details_copied">已复制到剪切板</string>
     <string name="customactivityoncrash_error_activity_error_details_clipboard_label">错误信息</string>
     <string name="show_hidden_toast">再点击 %1$s 次以显示隐藏设置</string>
+    <string name="force_chinese">始终显示中文</string>
 </resources>
