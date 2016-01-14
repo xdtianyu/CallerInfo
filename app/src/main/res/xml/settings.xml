@@ -59,6 +59,11 @@
             android:key="@string/display_on_outgoing_key"
             android:title="@string/display_on_outgoing">
         </com.jenzz.materialpreference.SwitchPreference>
+        <com.jenzz.materialpreference.SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/hide_when_off_hook_key"
+            android:title="@string/hide_when_off_hook">
+        </com.jenzz.materialpreference.SwitchPreference>
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory

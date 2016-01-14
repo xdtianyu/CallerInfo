@@ -56,11 +56,13 @@ public class IncomingCall extends BroadcastReceiver {
         private boolean mIgnoreContact;
         private boolean mIsInContacts = false;
         private String mOutgoingKey;
+        private String mHideKey;
 
         public IncomingCallListener(Context context) {
             this.context = context;
             mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             mOutgoingKey = context.getString(R.string.display_on_outgoing_key);
+            mHideKey = context.getString(R.string.hide_when_off_hook_key);
         }
 
         @Override
@@ -85,6 +87,9 @@ public class IncomingCall extends BroadcastReceiver {
 
                     if (ringStartTime != -1) {
                         ringTime = hookStartTime - ringStartTime;
+                        if (mPrefs.getBoolean(mHideKey, false)) {
+                            hide(incomingNumber);
+                        }
                     } else {
                         if (mPrefs.getBoolean(mOutgoingKey, false)) {
                             show(incomingNumber);
@@ -170,6 +175,13 @@ public class IncomingCall extends BroadcastReceiver {
 
                     }
                 }).fetch(incomingNumber);
+            }
+        }
+
+        void hide(String incomingNumber) {
+            Log.d(TAG, "hide");
+            if (isShowing) {
+                StandOutWindow.hide(context, FloatWindow.class, FloatWindow.CALLER_FRONT);
             }
         }
 

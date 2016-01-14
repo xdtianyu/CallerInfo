@@ -81,4 +81,6 @@
     <string name="show_hidden_toast">Click %1$s times to show hidden settings</string>
     <string name="force_chinese_key" translatable="false">force_chinese_key</string>
     <string name="force_chinese">Force chinese language</string>
+    <string name="hide_when_off_hook">Hide when off hook</string>
+    <string name="hide_when_off_hook_key" translatable="false">hide_when_off_hook_key</string>
 </resources>
