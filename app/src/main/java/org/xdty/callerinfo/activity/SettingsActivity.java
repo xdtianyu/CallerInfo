@@ -69,6 +69,7 @@ public class SettingsActivity extends AppCompatActivity {
         SwitchPreference outgoingPref;
         SwitchPreference crashPref;
         SwitchPreference chinesePref;
+        SwitchPreference transBackPref;
         String baiduApiKey;
         String juheApiKey;
         String textSizeKey;
@@ -78,9 +79,11 @@ public class SettingsActivity extends AppCompatActivity {
         String outgoingKey;
         String crashKey;
         String chineseKey;
+        String transBackKey;
 
         PreferenceCategory advancedPref;
         PreferenceCategory aboutPref;
+        PreferenceCategory floatWindowPref;
         Preference developerPref;
 
         int versionClickCount;
@@ -220,6 +223,9 @@ public class SettingsActivity extends AppCompatActivity {
             chineseKey = getString(R.string.force_chinese_key);
             chinesePref = (SwitchPreference) findPreference(chineseKey);
 
+            transBackKey = getString(R.string.window_trans_back_only_key);
+            transBackPref = (SwitchPreference) findPreference(transBackKey);
+
             final String showHiddenKey = getString(R.string.show_hidden_setting_key);
             boolean isShowHidden = sharedPrefs.getBoolean(showHiddenKey, false);
 
@@ -227,12 +233,15 @@ public class SettingsActivity extends AppCompatActivity {
                 advancedPref =
                         (PreferenceCategory) findPreference(getString(R.string.advanced_key));
                 aboutPref = (PreferenceCategory) findPreference(getString(R.string.about_key));
+                floatWindowPref =
+                        (PreferenceCategory) findPreference(getString(R.string.float_window_key));
                 developerPref = findPreference(getString(R.string.developer_key));
 
                 advancedPref.removePreference(bdApiPreference);
                 advancedPref.removePreference(jhApiPreference);
                 advancedPref.removePreference(chinesePref);
                 aboutPref.removePreference(developerPref);
+                floatWindowPref.removePreference(transBackPref);
 
                 versionClickCount = 0;
                 version.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -246,6 +255,7 @@ public class SettingsActivity extends AppCompatActivity {
                             advancedPref.addPreference(jhApiPreference);
                             advancedPref.addPreference(chinesePref);
                             aboutPref.addPreference(developerPref);
+                            floatWindowPref.addPreference(transBackPref);
                         }
                         if (versionClickCount > 3 && versionClickCount < 7) {
                             if (toast != null) {

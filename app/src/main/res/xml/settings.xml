@@ -24,6 +24,7 @@
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory
+        android:key="@string/float_window_key"
         android:title="@string/float_window">
 
         <com.jenzz.materialpreference.Preference
