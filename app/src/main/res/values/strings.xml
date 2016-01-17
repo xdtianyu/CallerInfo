@@ -84,4 +84,11 @@
     <string name="hide_when_off_hook">Hide when off hook</string>
     <string name="hide_when_off_hook_key" translatable="false">hide_when_off_hook_key</string>
     <string name="float_window_key" translatable="false">float_window_key</string>
+    <string name="custom_api_key" translatable="false">custom_api_key</string>
+    <string name="custom_api_url" translatable="false">custom_api_url</string>
+    <string name="custom_api">Custom API</string>
+    <string name="document">Document</string>
+    <string name="api_document_url" translatable="false">https://github.com/xdtianyu/PhoneNumber/blob/master/CUSTOM.md</string>
+    <string name="api_url_hint">API Url</string>
+    <string name="api_key_hint">API key</string>
 </resources>

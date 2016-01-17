@@ -65,6 +65,7 @@ public class SettingsActivity extends AppCompatActivity {
         Preference textSizePref;
         Preference winTransPref;
         Preference apiTypePref;
+        Preference customApiPref;
         SwitchPreference ignoreContactPref;
         SwitchPreference outgoingPref;
         SwitchPreference crashPref;
@@ -80,6 +81,8 @@ public class SettingsActivity extends AppCompatActivity {
         String crashKey;
         String chineseKey;
         String transBackKey;
+        String customApiUrl;
+        String customApiKey;
 
         PreferenceCategory advancedPref;
         PreferenceCategory aboutPref;
@@ -226,6 +229,17 @@ public class SettingsActivity extends AppCompatActivity {
             transBackKey = getString(R.string.window_trans_back_only_key);
             transBackPref = (SwitchPreference) findPreference(transBackKey);
 
+            customApiUrl = getString(R.string.custom_api_url);
+            customApiKey = getString(R.string.custom_api_key);
+            customApiPref = findPreference(customApiUrl);
+            customApiPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    showCustomApiDialog();
+                    return false;
+                }
+            });
+
             final String showHiddenKey = getString(R.string.show_hidden_setting_key);
             boolean isShowHidden = sharedPrefs.getBoolean(showHiddenKey, false);
 
@@ -239,6 +253,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 advancedPref.removePreference(bdApiPreference);
                 advancedPref.removePreference(jhApiPreference);
+                advancedPref.removePreference(customApiPref);
                 advancedPref.removePreference(chinesePref);
                 aboutPref.removePreference(developerPref);
                 floatWindowPref.removePreference(transBackPref);
@@ -253,6 +268,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                             advancedPref.addPreference(bdApiPreference);
                             advancedPref.addPreference(jhApiPreference);
+                            advancedPref.addPreference(customApiPref);
                             advancedPref.addPreference(chinesePref);
                             aboutPref.addPreference(developerPref);
                             floatWindowPref.addPreference(transBackPref);
@@ -426,6 +442,42 @@ public class SettingsActivity extends AppCompatActivity {
             textView.setText(getString(text));
 
             builder.setPositiveButton(android.R.string.ok, null);
+            builder.show();
+        }
+
+        private void showCustomApiDialog() {
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(R.string.custom_api));
+            View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_custom_api, null);
+            builder.setView(layout);
+
+            final EditText apiUri = (EditText) layout.findViewById(R.id.api_uri);
+            final EditText apiKey = (EditText) layout.findViewById(R.id.api_key);
+            apiUri.setText(sharedPrefs.getString(customApiUrl, ""));
+            apiKey.setText(sharedPrefs.getString(customApiKey, ""));
+
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String value = apiUri.getText().toString();
+                    String key = apiKey.getText().toString();
+                    findPreference(customApiUrl).setSummary(value);
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putString(customApiUrl, value);
+                    editor.putString(customApiKey, key);
+                    editor.apply();
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, null);
+            builder.setNeutralButton(R.string.document, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(getString(R.string.api_document_url))));
+                }
+            });
+            builder.setCancelable(false);
             builder.show();
         }
     }

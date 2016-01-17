@@ -82,6 +82,10 @@
             android:key="@string/juhe_api_key"
             android:title="@string/custom_jh_api_key">
         </com.jenzz.materialpreference.Preference>
+        <com.jenzz.materialpreference.Preference
+            android:key="@string/custom_api_url"
+            android:title="@string/custom_api">
+        </com.jenzz.materialpreference.Preference>
         <com.jenzz.materialpreference.SwitchPreference
             android:defaultValue="false"
             android:key="@string/force_chinese_key"

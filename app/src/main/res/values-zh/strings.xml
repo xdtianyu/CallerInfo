@@ -62,4 +62,8 @@
     <string name="show_hidden_toast">再点击 %1$s 次以显示隐藏设置</string>
     <string name="force_chinese">始终显示中文</string>
     <string name="hide_when_off_hook">接听后隐藏</string>
+    <string name="custom_api">自定义API</string>
+    <string name="document">文档</string>
+    <string name="api_key_hint">API 密钥</string>
+    <string name="api_url_hint">API 地址</string>
 </resources>
