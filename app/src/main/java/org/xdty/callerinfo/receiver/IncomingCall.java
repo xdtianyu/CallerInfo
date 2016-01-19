@@ -17,8 +17,7 @@ import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
-import org.xdty.phone.number.model.Number;
-import org.xdty.phone.number.model.NumberInfo;
+import org.xdty.phone.number.model.INumber;
 
 import java.util.List;
 
@@ -139,7 +138,7 @@ public class IncomingCall extends BroadcastReceiver {
                 if (callers.size() > 0) {
                     Caller caller = callers.get(0);
                     if (!caller.needUpdate()) {
-                        Utils.showWindow(context, caller.toNumber(), FloatWindow.CALLER_FRONT);
+                        Utils.showWindow(context, caller, FloatWindow.CALLER_FRONT);
                         return;
                     } else {
                         caller.delete();
@@ -148,30 +147,22 @@ public class IncomingCall extends BroadcastReceiver {
 
                 new PhoneNumber(context, new PhoneNumber.Callback() {
                     @Override
-                    public void onResponseOffline(NumberInfo numberInfo) {
-                        if (isShowing && numberInfo != null) {
-                            List<Number> numbers = numberInfo.getNumbers();
-                            if (numbers.size() > 0) {
-                                Number number = numbers.get(0);
-                                Utils.showWindow(context, number, FloatWindow.CALLER_FRONT);
-                            }
+                    public void onResponseOffline(INumber number) {
+                        if (isShowing && number != null) {
+                            Utils.showWindow(context, number, FloatWindow.CALLER_FRONT);
                         }
                     }
 
                     @Override
-                    public void onResponse(NumberInfo numberInfo) {
-                        if (isShowing && numberInfo != null) {
-                            List<Number> numbers = numberInfo.getNumbers();
-                            if (numbers.size() > 0) {
-                                Number number = numbers.get(0);
-                                new Caller(number, numberInfo.isOffline()).save();
-                                Utils.showWindow(context, number, FloatWindow.CALLER_FRONT);
-                            }
+                    public void onResponse(INumber number) {
+                        if (isShowing && number != null) {
+                            new Caller(number, !number.isOnline()).save();
+                            Utils.showWindow(context, number, FloatWindow.CALLER_FRONT);
                         }
                     }
 
                     @Override
-                    public void onResponseFailed(NumberInfo numberInfo) {
+                    public void onResponseFailed(INumber number) {
 
                     }
                 }).fetch(incomingNumber);

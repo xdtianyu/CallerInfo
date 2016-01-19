@@ -46,8 +46,7 @@ import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.view.CallerAdapter;
 import org.xdty.phone.number.PhoneNumber;
-import org.xdty.phone.number.model.Number;
-import org.xdty.phone.number.model.NumberInfo;
+import org.xdty.phone.number.model.INumber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -368,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
         if (callers.size() > 0) {
             Caller caller = callers.get(0);
             if (!caller.needUpdate()) {
-                Utils.showWindow(MainActivity.this, caller.toNumber(), FloatWindow.SEARCH_FRONT);
+                Utils.showWindow(MainActivity.this, caller, FloatWindow.SEARCH_FRONT);
                 return;
             } else {
                 caller.delete();
@@ -377,20 +376,20 @@ public class MainActivity extends AppCompatActivity {
 
         new PhoneNumber(this, new PhoneNumber.Callback() {
             @Override
-            public void onResponseOffline(NumberInfo numberInfo) {
+            public void onResponseOffline(INumber number) {
             }
 
             @Override
-            public void onResponse(NumberInfo numberInfo) {
+            public void onResponse(INumber number) {
 
-                for (Number number : numberInfo.getNumbers()) {
-                    new Caller(number, numberInfo.isOffline()).save();
+                if (number!=null && number.isValid()) {
+                    new Caller(number, !number.isOnline()).save();
                     Utils.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
                 }
             }
 
             @Override
-            public void onResponseFailed(NumberInfo numberInfo) {
+            public void onResponseFailed(INumber number) {
 
             }
         }).fetch(phoneNumber);

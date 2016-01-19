@@ -13,8 +13,7 @@ import android.text.TextUtils;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.service.FloatWindow;
-import org.xdty.phone.number.model.Location;
-import org.xdty.phone.number.model.Number;
+import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 
 import java.text.SimpleDateFormat;
@@ -44,7 +43,7 @@ public class Utils {
         FloatWindow.closeAll(context, FloatWindow.class);
     }
 
-    public static void showWindow(Context context, Number number, int frontType) {
+    public static void showWindow(Context context, INumber number, int frontType) {
 
         TextColorPair textColor = Utils.getTextColorPair(context, number);
 
@@ -57,17 +56,11 @@ public class Utils {
                 frontType, 0, bundle, FloatWindow.class, 0);
     }
 
-    public static TextColorPair getTextColorPair(Context context, Number number) {
-        Location location = number.getLocation();
+    public static TextColorPair getTextColorPair(Context context, INumber number) {
 
-        String province = "";
-        String city = "";
-        String operators = "";
-        if (location != null) {
-            province = location.getProvince();
-            city = location.getCity();
-            operators = location.getOperators();
-        }
+        String province = number.getProvince();
+        String city = number.getCity();
+        String operators = number.getProvider();
         return Utils.getTextColorPair(context, number.getType().getText(), province, city,
                 operators, number.getName(), number.getCount());
     }

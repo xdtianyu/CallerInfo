@@ -11,12 +11,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.xdty.callerinfo.R;
-import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
-import org.xdty.phone.number.model.NumberInfo;
+import org.xdty.phone.number.model.INumber;
 
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +97,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
         public void bind(final InCall inCall, Caller caller) {
             if (caller != null) {
-                TextColorPair t = Utils.getTextColorPair(context, caller.toNumber());
+                TextColorPair t = Utils.getTextColorPair(context, caller);
                 text.setText(t.text);
                 cardView.setCardBackgroundColor(t.color);
                 number.setText(caller.getNumber());
@@ -110,22 +110,19 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                 } else {
                     new PhoneNumber(context, new PhoneNumber.Callback() {
                         @Override
-                        public void onResponseOffline(NumberInfo numberInfo) {
+                        public void onResponseOffline(INumber number) {
                         }
 
                         @Override
-                        public void onResponse(NumberInfo numberInfo) {
-
-                            for (org.xdty.phone.number.model.Number number : numberInfo.getNumbers()) {
-                                new Caller(number).save();
-                                inCall.setFetched(true);
-                                updateCallerMap();
-                                notifyDataSetChanged();
-                            }
+                        public void onResponse(INumber number) {
+                            new Caller(number).save();
+                            inCall.setFetched(true);
+                            updateCallerMap();
+                            notifyDataSetChanged();
                         }
 
                         @Override
-                        public void onResponseFailed(NumberInfo numberInfo) {
+                        public void onResponseFailed(INumber number) {
 
                         }
                     }).fetch(inCall.getNumber());

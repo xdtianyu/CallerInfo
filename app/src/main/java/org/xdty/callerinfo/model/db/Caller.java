@@ -1,13 +1,12 @@
 package org.xdty.callerinfo.model.db;
 
 import com.orm.SugarRecord;
-import com.orm.dsl.Ignore;
 
 import org.xdty.callerinfo.utils.Config;
-import org.xdty.phone.number.model.Location;
-import org.xdty.phone.number.model.Number;
+import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.Type;
 
-public class Caller extends SugarRecord {
+public class Caller extends SugarRecord implements INumber<Caller> {
     String number;
     String name;
     String type;
@@ -18,28 +17,21 @@ public class Caller extends SugarRecord {
     long lastUpdate;
     boolean isOffline = true;
 
-    @Ignore
-    Number phoneNumber;
-
     public Caller() {
     }
 
-    public Caller(Number number) {
-        this.phoneNumber = number;
+    public Caller(INumber number) {
         this.number = number.getNumber();
         this.name = number.getName();
         this.type = number.getType().getText();
         this.count = number.getCount();
-        Location location = number.getLocation();
-        if (location != null) {
-            this.province = location.getProvince();
-            this.city = location.getCity();
-            this.operators = location.getOperators();
-        }
+        this.province = number.getProvince();
+        this.city = number.getCity();
+        this.operators = number.getProvider();
         lastUpdate = System.currentTimeMillis();
     }
 
-    public Caller(Number number, boolean isOffline) {
+    public Caller(INumber number, boolean isOffline) {
         this(number);
         this.isOffline = isOffline;
     }
@@ -48,20 +40,56 @@ public class Caller extends SugarRecord {
         return number;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String getProvider() {
+        return operators;
     }
 
-    public String getType() {
-        return type;
+    @Override
+    public String url() {
+        return null;
+    }
+
+    @Override
+    public String key() {
+        return null;
+    }
+
+    @Override
+    public Caller find(String number) {
+        return null;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getCount() {
         return count;
     }
 
+    @Override
+    public boolean isOnline() {
+        return false;
+    }
+
+    @Override
+    public boolean isValid() {
+        return false;
+    }
+
+    @Override
+    public int getApiId() {
+        return 0;
+    }
+
     public String getProvince() {
         return province;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.fromString(type);
     }
 
     public String getOperators() {
@@ -74,22 +102,6 @@ public class Caller extends SugarRecord {
 
     public long getLastUpdate() {
         return lastUpdate;
-    }
-
-    public Number toNumber() {
-        if (phoneNumber == null) {
-            phoneNumber = new Number();
-            phoneNumber.setNumber(number);
-            phoneNumber.setCount(count);
-            phoneNumber.setName(name);
-            phoneNumber.setType(type);
-            Location location = new Location();
-            location.setCity(city);
-            location.setOperators(operators);
-            location.setProvince(province);
-            phoneNumber.setLocation(location);
-        }
-        return phoneNumber;
     }
 
     public String toString() {
