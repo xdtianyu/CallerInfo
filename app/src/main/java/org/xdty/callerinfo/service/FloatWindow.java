@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -189,7 +188,6 @@ public class FloatWindow extends StandOutWindow {
                 if (!isFocused && hideWhenTouch) {
                     hide(id);
                 }
-                Log.d(TAG, "hide: " + isFocused + " " + hideWhenTouch);
                 isFocused = false;
                 break;
         }
