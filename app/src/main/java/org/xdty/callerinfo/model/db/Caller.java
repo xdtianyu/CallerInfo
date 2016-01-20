@@ -6,7 +6,7 @@ import org.xdty.callerinfo.utils.Config;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 
-public class Caller extends SugarRecord implements INumber<Caller> {
+public class Caller extends SugarRecord implements INumber {
     String number;
     String name;
     String type;
@@ -43,21 +43,6 @@ public class Caller extends SugarRecord implements INumber<Caller> {
     @Override
     public String getProvider() {
         return operators;
-    }
-
-    @Override
-    public String url() {
-        return null;
-    }
-
-    @Override
-    public String key() {
-        return null;
-    }
-
-    @Override
-    public Caller find(String number) {
-        return null;
     }
 
     public String getName() {

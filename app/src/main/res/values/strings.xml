@@ -91,4 +91,6 @@
     <string name="api_document_url" translatable="false">https://github.com/xdtianyu/PhoneNumber/blob/master/CUSTOM.md</string>
     <string name="api_url_hint">API Url</string>
     <string name="api_key_hint">API key</string>
+    <string name="hide_when_touch_key" translatable="false">hide_when_touch_key</string>
+    <string name="hide_when_touch">Hide when touch</string>
 </resources>

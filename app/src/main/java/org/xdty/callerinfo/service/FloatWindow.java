@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -41,6 +42,7 @@ public class FloatWindow extends StandOutWindow {
 
     SharedPreferences sharedPreferences;
     private boolean isFirstShow = false;
+    private boolean isFocused = false;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -181,6 +183,14 @@ public class FloatWindow extends StandOutWindow {
                 if (layout != null) {
                     layout.setBackgroundResource(0);
                 }
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                boolean hideWhenTouch = preferences.getBoolean(
+                        getString(R.string.hide_when_touch_key), false);
+                if (!isFocused && hideWhenTouch) {
+                    hide(id);
+                }
+                Log.d(TAG, "hide: " + isFocused + " " + hideWhenTouch);
+                isFocused = false;
                 break;
         }
         return super.onTouchBody(id, window, view, event);
@@ -232,6 +242,7 @@ public class FloatWindow extends StandOutWindow {
         View layout = window.findViewById(R.id.window_layout);
         if (focus && layout != null && !isFirstShow) {
             layout.setBackgroundResource(wei.mark.standout.R.drawable.border_focused);
+            isFocused = true;
         }
         isFirstShow = false;
         return true;
