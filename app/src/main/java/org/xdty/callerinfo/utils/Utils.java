@@ -2,6 +2,7 @@ package org.xdty.callerinfo.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import org.xdty.phone.number.model.Type;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class Utils {
@@ -141,6 +143,21 @@ public class Utils {
 
     public static String mask(String s) {
         return s.replaceAll("([0-9]|[a-f])", "*");
+    }
+
+    public static void checkLocale(Context context) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean isForceChinese =
+                pref.getBoolean(context.getString(R.string.force_chinese_key), false);
+
+        if (isForceChinese) {
+            Locale locale = new Locale("zh");
+            Locale.setDefault(locale);
+            Configuration config = context.getResources().getConfiguration();
+            config.locale = locale;
+            context.getResources().updateConfiguration(config,
+                    context.getResources().getDisplayMetrics());
+        }
     }
 
 }
