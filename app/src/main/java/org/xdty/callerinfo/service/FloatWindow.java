@@ -5,6 +5,7 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,6 +20,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.xdty.callerinfo.R;
+
+import java.util.Locale;
 
 import wei.mark.standout.StandOutWindow;
 import wei.mark.standout.constants.StandOutFlags;
@@ -66,7 +69,18 @@ public class FloatWindow extends StandOutWindow {
 
     @Override
     public void createAndAttachView(int id, FrameLayout frame) {
-        // create a new layout from body.xml
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isForceChinese = pref.getBoolean(getString(R.string.force_chinese_key), false);
+
+        if (isForceChinese) {
+            Locale locale = new Locale("zh");
+            Locale.setDefault(locale);
+            Configuration config = getResources().getConfiguration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config,
+                    getBaseContext().getResources().getDisplayMetrics());
+        }
+
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.float_window, frame, true);
     }
