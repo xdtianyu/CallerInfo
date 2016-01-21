@@ -93,6 +93,11 @@
         </com.jenzz.materialpreference.Preference>
         <com.jenzz.materialpreference.SwitchPreference
             android:defaultValue="false"
+            android:key="@string/only_offline_key"
+            android:title="@string/only_offline">
+        </com.jenzz.materialpreference.SwitchPreference>
+        <com.jenzz.materialpreference.SwitchPreference
+            android:defaultValue="false"
             android:key="@string/force_chinese_key"
             android:title="@string/force_chinese">
         </com.jenzz.materialpreference.SwitchPreference>
