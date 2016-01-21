@@ -185,7 +185,7 @@ public class FloatWindow extends StandOutWindow {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 boolean hideWhenTouch = preferences.getBoolean(
                         getString(R.string.hide_when_touch_key), false);
-                if (!isFocused && hideWhenTouch) {
+                if (!isFocused && hideWhenTouch && id == CALLER_FRONT) {
                     hide(id);
                 }
                 isFocused = false;
