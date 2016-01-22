@@ -67,6 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
         Preference apiTypePref;
         Preference customApiPref;
         SwitchPreference ignoreContactPref;
+        SwitchPreference contactOfflinePref;
         SwitchPreference outgoingPref;
         SwitchPreference crashPref;
         SwitchPreference chinesePref;
@@ -77,6 +78,7 @@ public class SettingsActivity extends AppCompatActivity {
         String windowTransKey;
         String apiTypeKey;
         String ignoreContactKey;
+        String contactOfflineKey;
         String outgoingKey;
         String crashKey;
         String chineseKey;
@@ -240,6 +242,9 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
+            contactOfflineKey = getString(R.string.contact_offline_key);
+            contactOfflinePref = (SwitchPreference) findPreference(contactOfflineKey);
+
             final String showHiddenKey = getString(R.string.show_hidden_setting_key);
             boolean isShowHidden = sharedPrefs.getBoolean(showHiddenKey, false);
 
@@ -257,6 +262,7 @@ public class SettingsActivity extends AppCompatActivity {
                 advancedPref.removePreference(chinesePref);
                 aboutPref.removePreference(developerPref);
                 floatWindowPref.removePreference(transBackPref);
+                floatWindowPref.removePreference(contactOfflinePref);
 
                 versionClickCount = 0;
                 version.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -272,6 +278,7 @@ public class SettingsActivity extends AppCompatActivity {
                             advancedPref.addPreference(chinesePref);
                             aboutPref.addPreference(developerPref);
                             floatWindowPref.addPreference(transBackPref);
+                            floatWindowPref.addPreference(contactOfflinePref);
                         }
                         if (versionClickCount > 3 && versionClickCount < 7) {
                             if (toast != null) {

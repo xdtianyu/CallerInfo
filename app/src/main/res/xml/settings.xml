@@ -57,6 +57,13 @@
 
         <com.jenzz.materialpreference.SwitchPreference
             android:defaultValue="false"
+            android:dependency="@string/ignore_known_contact_key"
+            android:key="@string/contact_offline_key"
+            android:title="@string/contact_offline">
+        </com.jenzz.materialpreference.SwitchPreference>
+
+        <com.jenzz.materialpreference.SwitchPreference
+            android:defaultValue="false"
             android:key="@string/display_on_outgoing_key"
             android:title="@string/display_on_outgoing">
         </com.jenzz.materialpreference.SwitchPreference>

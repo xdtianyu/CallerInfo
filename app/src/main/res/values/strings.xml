@@ -94,4 +94,6 @@
     <string name="hide_when_touch_key" translatable="false">hide_when_touch_key</string>
     <string name="hide_when_touch">Hide when touch</string>
     <string name="only_offline">Only using offline data</string>
+    <string name="contact_offline">Show contact offline location</string>
+    <string name="contact_offline_key" translatable="false">contact_offline_key</string>
 </resources>

@@ -53,6 +53,7 @@ public class IncomingCall extends BroadcastReceiver {
         private String mIncomingNumber = null;
         private SharedPreferences mPrefs;
         private boolean mIgnoreContact;
+        private boolean mShowContactOffline = false;
         private boolean mIsInContacts = false;
         private String mOutgoingKey;
         private String mHideKey;
@@ -125,13 +126,22 @@ public class IncomingCall extends BroadcastReceiver {
                 mIgnoreContact = mPrefs.getBoolean(
                         context.getString(R.string.ignore_known_contact_key), false);
 
+
                 if (mIgnoreContact && Utils.isContactExists(context, incomingNumber)) {
                     mIsInContacts = true;
-                    return;
+                    if (mPrefs.getBoolean(context.getString(R.string.contact_offline_key),
+                            false)) {
+                        mShowContactOffline = true;
+                    } else {
+                        mShowContactOffline = false;
+                        return;
+                    }
+                } else {
+                    mIsInContacts = false;
+                    mShowContactOffline = false;
                 }
 
                 isShowing = true;
-                mIsInContacts = false;
 
                 List<Caller> callers = Caller.find(Caller.class, "number=?", incomingNumber);
 
@@ -145,7 +155,7 @@ public class IncomingCall extends BroadcastReceiver {
                     }
                 }
 
-                new PhoneNumber(context, new PhoneNumber.Callback() {
+                new PhoneNumber(context, mShowContactOffline, new PhoneNumber.Callback() {
                     @Override
                     public void onResponseOffline(INumber number) {
                         if (isShowing && number != null) {
