@@ -378,8 +378,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponseFailed(INumber number) {
-
+            public void onResponseFailed(INumber number, boolean isOnline) {
+                if (isOnline) {
+                    Utils.showTextWindow(MainActivity.this, R.string.online_failed,
+                            FloatWindow.SEARCH_FRONT);
+                } else {
+                    Utils.showTextWindow(MainActivity.this, R.string.offline_failed,
+                            FloatWindow.SEARCH_FRONT);
+                }
             }
         }).fetch(phoneNumber);
     }

@@ -103,8 +103,8 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                 number.setText(caller.getNumber());
             } else {
                 if (inCall.isFetched() || TextUtils.isEmpty(inCall.getNumber())) {
-                    text.setText(inCall.getNumber());
-                    number.setText(R.string.loading_error);
+                    text.setText(R.string.loading_error);
+                    number.setText(inCall.getNumber());
                     cardView.setCardBackgroundColor(
                             ContextCompat.getColor(context, R.color.graphite));
                 } else {
@@ -122,13 +122,15 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                         }
 
                         @Override
-                        public void onResponseFailed(INumber number) {
-
+                        public void onResponseFailed(INumber number, boolean isOnline) {
+                            inCall.setFetched(true);
+                            updateCallerMap();
+                            notifyDataSetChanged();
                         }
                     }).fetch(inCall.getNumber());
 
-                    text.setText(inCall.getNumber());
-                    number.setText(R.string.loading);
+                    text.setText(R.string.loading);
+                    number.setText(inCall.getNumber());
                     cardView.setCardBackgroundColor(
                             ContextCompat.getColor(context, R.color.blue_light));
                 }

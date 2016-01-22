@@ -96,4 +96,6 @@
     <string name="only_offline">Only using offline data</string>
     <string name="contact_offline">Show contact offline location</string>
     <string name="contact_offline_key" translatable="false">contact_offline_key</string>
+    <string name="online_failed">Online fetch failed</string>
+    <string name="offline_failed">Can not find offline data</string>
 </resources>

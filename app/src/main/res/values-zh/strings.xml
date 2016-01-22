@@ -69,4 +69,6 @@
     <string name="hide_when_touch">触摸屏幕后隐藏</string>
     <string name="only_offline">仅使用离线数据</string>
     <string name="contact_offline">显示联系人离线归属地</string>
+    <string name="offline_failed">未找到离线数据</string>
+    <string name="online_failed">网络数据获取失败</string>
 </resources>
