@@ -1,13 +1,13 @@
 # 来电信息
 一个获取来电归属地和其他信息(如推销、诈骗)的安卓应用。
 
-[![Google Play](http://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=org.xdty.callerinfo)
+[![Google Play](https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/en-play-badge-border.png)](https://play.google.com/store/apps/details?id=org.xdty.callerinfo)
 
 [![Build Status](https://travis-ci.org/xdtianyu/CallerInfo.svg?branch=master)](https://travis-ci.org/xdtianyu/CallerInfo)
 [![Release notes](https://img.shields.io/badge/release-notes-yellowgreen.svg)](https://github.com/xdtianyu/CallerInfo/releases)
 [![Coolapk download](https://img.shields.io/badge/coolapk-download-blue.svg)](http://coolapk.com/apk/org.xdty.callerinfo)
 
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.2.0/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.2.0/callerinfo-v1.2.0-release.apk)
+[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.2.1/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.2.1/callerinfo-v1.2.1-release.apk)
 
 [![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.11/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.11/callerinfo-v1.1.11-release.apk)
 
