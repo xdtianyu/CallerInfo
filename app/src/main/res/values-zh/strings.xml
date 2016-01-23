@@ -71,4 +71,6 @@
     <string name="contact_offline">显示联系人离线归属地</string>
     <string name="offline_failed">未找到离线数据</string>
     <string name="online_failed">网络数据获取失败</string>
+    <string name="window_visibility">显示与隐藏</string>
+    <string name="custom_data">自定义数据源</string>
 </resources>

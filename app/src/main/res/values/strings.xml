@@ -98,4 +98,7 @@
     <string name="contact_offline_key" translatable="false">contact_offline_key</string>
     <string name="online_failed">Online fetch failed</string>
     <string name="offline_failed">Can not find offline data</string>
+    <string name="window_visibility">Show or hide action</string>
+    <string name="custom_data_key" translatable="false">custom_data_key</string>
+    <string name="custom_data">Custom data source</string>
 </resources>

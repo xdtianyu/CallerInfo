@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,12 +12,19 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -66,8 +74,8 @@ public class SettingsActivity extends AppCompatActivity {
         Preference winTransPref;
         Preference apiTypePref;
         Preference customApiPref;
+        PreferenceScreen customDataPref;
         SwitchPreference ignoreContactPref;
-        SwitchPreference contactOfflinePref;
         SwitchPreference outgoingPref;
         SwitchPreference crashPref;
         SwitchPreference chinesePref;
@@ -78,13 +86,13 @@ public class SettingsActivity extends AppCompatActivity {
         String windowTransKey;
         String apiTypeKey;
         String ignoreContactKey;
-        String contactOfflineKey;
         String outgoingKey;
         String crashKey;
         String chineseKey;
         String transBackKey;
         String customApiUrl;
         String customApiKey;
+        String customDataKey;
 
         PreferenceCategory advancedPref;
         PreferenceCategory aboutPref;
@@ -242,8 +250,8 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            contactOfflineKey = getString(R.string.contact_offline_key);
-            contactOfflinePref = (SwitchPreference) findPreference(contactOfflineKey);
+            customDataKey = getString(R.string.custom_data_key);
+            customDataPref = (PreferenceScreen) findPreference(customDataKey);
 
             final String showHiddenKey = getString(R.string.show_hidden_setting_key);
             boolean isShowHidden = sharedPrefs.getBoolean(showHiddenKey, false);
@@ -256,13 +264,10 @@ public class SettingsActivity extends AppCompatActivity {
                         (PreferenceCategory) findPreference(getString(R.string.float_window_key));
                 developerPref = findPreference(getString(R.string.developer_key));
 
-                advancedPref.removePreference(bdApiPreference);
-                advancedPref.removePreference(jhApiPreference);
-                advancedPref.removePreference(customApiPref);
+                advancedPref.removePreference(customDataPref);
                 advancedPref.removePreference(chinesePref);
                 aboutPref.removePreference(developerPref);
                 floatWindowPref.removePreference(transBackPref);
-                floatWindowPref.removePreference(contactOfflinePref);
 
                 versionClickCount = 0;
                 version.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -272,13 +277,10 @@ public class SettingsActivity extends AppCompatActivity {
                         if (versionClickCount == 7) {
                             sharedPrefs.edit().putBoolean(showHiddenKey, true).apply();
 
-                            advancedPref.addPreference(bdApiPreference);
-                            advancedPref.addPreference(jhApiPreference);
-                            advancedPref.addPreference(customApiPref);
+                            advancedPref.addPreference(customDataPref);
                             advancedPref.addPreference(chinesePref);
                             aboutPref.addPreference(developerPref);
                             floatWindowPref.addPreference(transBackPref);
-                            floatWindowPref.addPreference(contactOfflinePref);
                         }
                         if (versionClickCount > 3 && versionClickCount < 7) {
                             if (toast != null) {
@@ -293,6 +295,61 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 });
             }
+        }
+
+        @Override
+        public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
+                Preference preference) {
+            super.onPreferenceTreeClick(preferenceScreen, preference);
+            if (preference instanceof PreferenceScreen) {
+                setUpNestedScreen((PreferenceScreen) preference);
+            }
+            return false;
+        }
+
+        public void setUpNestedScreen(PreferenceScreen preferenceScreen) {
+            final Dialog dialog = preferenceScreen.getDialog();
+
+            AppBarLayout appBarLayout;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                LinearLayout root =
+                        (LinearLayout) dialog.findViewById(android.R.id.list).getParent();
+                appBarLayout = (AppBarLayout) LayoutInflater.from(getActivity()).inflate(
+                        R.layout.settings_toolbar, root, false);
+                root.addView(appBarLayout, 0);
+            } else {
+                ViewGroup root = (ViewGroup) dialog.findViewById(android.R.id.content);
+                ListView content = (ListView) root.getChildAt(0);
+
+                root.removeAllViews();
+
+                appBarLayout = (AppBarLayout) LayoutInflater.from(getActivity()).inflate(
+                        R.layout.settings_toolbar, root, false);
+
+                int height;
+                TypedValue tv = new TypedValue();
+                if (getActivity().getTheme().resolveAttribute(R.attr.actionBarSize, tv, true)) {
+                    height = TypedValue.complexToDimensionPixelSize(tv.data,
+                            getResources().getDisplayMetrics());
+                } else {
+                    height = appBarLayout.getHeight();
+                }
+
+                content.setPadding(0, height, 0, 0);
+
+                root.addView(content);
+                root.addView(appBarLayout);
+            }
+
+            Toolbar toolbar = (Toolbar) appBarLayout.findViewById(R.id.toolbar);
+            toolbar.setTitle(preferenceScreen.getTitle());
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
         }
 
         @Override
@@ -456,7 +513,8 @@ public class SettingsActivity extends AppCompatActivity {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(R.string.custom_api));
-            View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_custom_api, null);
+            View layout =
+                    getActivity().getLayoutInflater().inflate(R.layout.dialog_custom_api, null);
             builder.setView(layout);
 
             final EditText apiUri = (EditText) layout.findViewById(R.id.api_uri);
