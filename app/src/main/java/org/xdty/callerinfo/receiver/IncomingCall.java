@@ -194,8 +194,8 @@ public class IncomingCall extends BroadcastReceiver {
                     @Override
                     public void onResponseFailed(INumber number, boolean isOnline) {
                         if (isOnline) {
-                            Utils.showTextWindow(context, R.string.online_failed,
-                                    FloatWindow.CALLER_FRONT);
+                            Utils.sendData(context, FloatWindow.WINDOW_ERROR,
+                                    R.string.online_failed, FloatWindow.CALLER_FRONT);
                         } else {
                             Utils.showTextWindow(context, R.string.offline_failed,
                                     FloatWindow.CALLER_FRONT);

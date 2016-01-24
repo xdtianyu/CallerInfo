@@ -33,6 +33,7 @@ public class FloatWindow extends StandOutWindow {
     public final static String TEXT_SIZE = "text_size";
     public final static String WINDOW_TRANS = "window_trans";
     public final static String WINDOW_COLOR = "window_color";
+    public final static String WINDOW_ERROR = "window_error";
     public final static String WINDOW = "window";
 
     public final static int CALLER_FRONT = 1000;
@@ -203,9 +204,11 @@ public class FloatWindow extends StandOutWindow {
         String text = data.getString(NUMBER_INFO);
         int size = data.getInt(TEXT_SIZE);
         int trans = data.getInt(WINDOW_TRANS);
+        int error = data.getInt(WINDOW_ERROR);
         Window window = getWindow(id);
         View layout = window.findViewById(R.id.content);
         TextView textView = (TextView) window.findViewById(R.id.number_info);
+        TextView errorText = (TextView) window.findViewById(R.id.error);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         boolean isTransBackOnly = preferences.getBoolean(
@@ -233,6 +236,11 @@ public class FloatWindow extends StandOutWindow {
             layout.getBackground().setAlpha((int) (trans / 100.0 * 255));
         } else {
             layout.setAlpha(trans / 100f);
+        }
+
+        if (error != 0) {
+            errorText.setVisibility(View.VISIBLE);
+            errorText.setText(getString(error));
         }
 
     }
