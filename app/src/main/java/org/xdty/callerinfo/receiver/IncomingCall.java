@@ -1,9 +1,13 @@
 package org.xdty.callerinfo.receiver;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -14,10 +18,12 @@ import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.plugin.IPluginService;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.Type;
 
 import java.util.List;
 
@@ -58,6 +64,10 @@ public class IncomingCall extends BroadcastReceiver {
         private String mOutgoingKey;
         private String mHideKey;
 
+        private IPluginService mPluginService;
+        private Intent mPluginIntent;
+        private ServiceConnection mConnection;
+
         public IncomingCallListener(Context context) {
             this.context = context;
             mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -67,7 +77,7 @@ public class IncomingCall extends BroadcastReceiver {
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
-
+            incomingNumber = "15709187586";
             if (!TextUtils.isEmpty(incomingNumber)) {
                 incomingNumber = incomingNumber.replaceAll(" ", "");
             }
@@ -143,11 +153,19 @@ public class IncomingCall extends BroadcastReceiver {
 
                 isShowing = true;
 
+                final boolean hangup =
+                        mPrefs.getBoolean(context.getString(R.string.auto_hangup_key), false);
+                final boolean saveLog =
+                        mPrefs.getBoolean(context.getString(R.string.add_call_log_key), false);
+
                 List<Caller> callers = Caller.find(Caller.class, "number=?", incomingNumber);
 
                 if (callers.size() > 0) {
                     Caller caller = callers.get(0);
                     if (!caller.needUpdate()) {
+                        if (caller.getType() == Type.REPORT && (hangup || saveLog)) {
+                            bindPluginService(hangup, saveLog, caller);
+                        }
                         Utils.showWindow(context, caller, FloatWindow.CALLER_FRONT);
                         return;
                     } else {
@@ -167,6 +185,9 @@ public class IncomingCall extends BroadcastReceiver {
                     public void onResponse(INumber number) {
                         if (isShowing && number != null) {
                             new Caller(number, !number.isOnline()).save();
+                            if (number.getType() == Type.REPORT && (hangup || saveLog)) {
+                                bindPluginService(hangup, saveLog, number);
+                            }
                             Utils.showWindow(context, number, FloatWindow.CALLER_FRONT);
                         }
                     }
@@ -219,6 +240,53 @@ public class IncomingCall extends BroadcastReceiver {
             idleStartTime = -1;
             ringTime = -1;
             duration = -1;
+        }
+
+        private void bindPluginService(final boolean hangup, final boolean saveLog,
+                final INumber number) {
+
+            if (mConnection == null) {
+                mConnection = new ServiceConnection() {
+                    @Override
+                    public void onServiceConnected(ComponentName name, IBinder service) {
+                        Log.d(TAG, "onServiceConnected: " + name.toString());
+                        mPluginService = IPluginService.Stub.asInterface(service);
+                        try {
+                            if (hangup) {
+                                mPluginService.hangUpPhoneCall();
+                            }
+                            if (saveLog) {
+
+                            }
+
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                        unBindPluginService();
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName name) {
+                        Log.d(TAG, "onServiceDisconnected: " + name.toString());
+                        mPluginService = null;
+                    }
+                };
+            }
+
+            if (mPluginIntent == null) {
+                mPluginIntent = new Intent().setComponent(new ComponentName(
+                        "org.xdty.callerinfo.plugin",
+                        "org.xdty.callerinfo.plugin.PluginService"));
+            }
+
+            context.startService(mPluginIntent);
+            context.getApplicationContext().bindService(mPluginIntent, mConnection,
+                    Context.BIND_AUTO_CREATE);
+        }
+
+        private void unBindPluginService() {
+            context.getApplicationContext().unbindService(mConnection);
+            context.stopService(mPluginIntent);
         }
     }
 }
