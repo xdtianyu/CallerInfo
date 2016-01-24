@@ -2,12 +2,16 @@ package org.xdty.callerinfo.plugin;
 
 import android.Manifest;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import java.lang.reflect.Method;
 
 public class PluginService extends Service {
     private static final String TAG = PluginService.class.getSimpleName();
@@ -45,7 +49,7 @@ public class PluginService extends Service {
 
         @Override
         public void hangUpPhoneCall() throws RemoteException {
-            Log.d(TAG, "hangUpPhoneCall: ");
+            Log.d(TAG, "hangUpPhoneCall: " + killPhoneCall());
         }
 
         @Override
@@ -84,5 +88,24 @@ public class PluginService extends Service {
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind: " + intent.toString());
         return mBinder;
+    }
+
+    private boolean killPhoneCall() {
+        try {
+            TelephonyManager telephonyManager =
+                    (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            Class classTelephony = Class.forName(telephonyManager.getClass().getName());
+            Method methodGetITelephony = classTelephony.getDeclaredMethod("getITelephony");
+            methodGetITelephony.setAccessible(true);
+            Object telephonyInterface = methodGetITelephony.invoke(telephonyManager);
+            Class telephonyInterfaceClass =
+                    Class.forName(telephonyInterface.getClass().getName());
+            Method methodEndCall = telephonyInterfaceClass.getDeclaredMethod("endCall");
+            methodEndCall.invoke(telephonyInterface);
+        } catch (Exception e) {
+            Log.d(TAG, "hangupPhoneCall" + e.toString());
+            return false;
+        }
+        return true;
     }
 }
