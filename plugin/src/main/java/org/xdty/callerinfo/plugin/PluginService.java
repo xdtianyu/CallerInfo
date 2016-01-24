@@ -67,7 +67,7 @@ public class PluginService extends Service {
             }
 
             ContentValues values = new ContentValues();
-            values.put(CallLog.Calls.NUMBER, name + " <" + number + ">");
+            values.put(CallLog.Calls.NUMBER, name + " (" + number + ")");
             values.put(CallLog.Calls.DATE, System.currentTimeMillis());
             values.put(CallLog.Calls.DURATION, 0);
             values.put(CallLog.Calls.TYPE, CallLog.Calls.INCOMING_TYPE);
