@@ -73,4 +73,7 @@
     <string name="online_failed">网络数据获取失败</string>
     <string name="window_visibility">显示与隐藏</string>
     <string name="custom_data">自定义数据源</string>
+    <string name="plugin">插件</string>
+    <string name="auto_hangup">自动挂断</string>
+    <string name="add_call_log">添加号码信息到通话记录</string>
 </resources>

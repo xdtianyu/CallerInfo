@@ -2,13 +2,18 @@ package org.xdty.callerinfo.activity;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
@@ -18,6 +23,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +42,10 @@ import com.jenzz.materialpreference.SwitchPreference;
 
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.plugin.IPluginService;
+import org.xdty.callerinfo.plugin.IPluginServiceCallback;
 import org.xdty.callerinfo.service.FloatWindow;
+import org.xdty.callerinfo.utils.Utils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -99,8 +108,49 @@ public class SettingsActivity extends AppCompatActivity {
         PreferenceCategory floatWindowPref;
         Preference developerPref;
 
+        String pluginKey;
+        PreferenceScreen pluginPref;
+        String hangupKey;
+        SwitchPreference hangupPref;
+        String callLogKey;
+        SwitchPreference callLogPref;
+
         int versionClickCount;
         Toast toast;
+
+        private IPluginService mPluginService;
+        private ServiceConnection mConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                Log.d(TAG, "onServiceConnected: " + name.toString());
+                mPluginService = IPluginService.Stub.asInterface(service);
+                try {
+                    mPluginService.registerCallback(new IPluginServiceCallback.Stub() {
+                        @Override
+                        public void onCallPermissionResult(boolean success) throws RemoteException {
+                            Log.d(TAG, "onCallPermissionResult: " + success);
+                        }
+
+                        @Override
+                        public void onCallLogPermissionResult(boolean success) throws
+                                RemoteException {
+                            Log.d(TAG, "onCallLogPermissionResult: " + success);
+                        }
+                    });
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Log.d(TAG, "onServiceDisconnected: " + name.toString());
+                mPluginService = null;
+            }
+        };
+        private Intent mPluginIntent = new Intent().setComponent(new ComponentName(
+                "org.xdty.callerinfo.plugin",
+                "org.xdty.callerinfo.plugin.PluginService"));
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -295,6 +345,59 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 });
             }
+
+            pluginKey = getString(R.string.plugin_key);
+            pluginPref = (PreferenceScreen) findPreference(pluginKey);
+            if (Utils.isAppInstalled(getActivity(), getString(R.string.plugin_package_name))) {
+                bindPluginService();
+
+                hangupKey = getString(R.string.auto_hangup_key);
+                callLogKey = getString(R.string.add_call_log_key);
+                hangupPref = (SwitchPreference) findPreference(hangupKey);
+                callLogPref = (SwitchPreference) findPreference(callLogKey);
+                hangupPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        try {
+                            mPluginService.checkCallPermission();
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                        return false;
+                    }
+                });
+                callLogPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        try {
+                            mPluginService.checkCallLogPermission();
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                        return false;
+                    }
+                });
+            } else {
+                advancedPref.removePreference(pluginPref);
+            }
+        }
+
+        @Override
+        public void onDestroy() {
+            if (Utils.isAppInstalled(getActivity(), getString(R.string.plugin_package_name))) {
+                unBindPluginService();
+            }
+            super.onDestroy();
+        }
+
+        private void bindPluginService() {
+            getActivity().startService(mPluginIntent);
+            getActivity().bindService(mPluginIntent, mConnection, Context.BIND_AUTO_CREATE);
+        }
+
+        private void unBindPluginService() {
+            getActivity().unbindService(mConnection);
+            getActivity().stopService(mPluginIntent);
         }
 
         @Override

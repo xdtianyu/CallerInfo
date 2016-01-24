@@ -2,6 +2,7 @@ package org.xdty.callerinfo.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -157,6 +158,15 @@ public class Utils {
             config.locale = locale;
             context.getResources().updateConfiguration(config,
                     context.getResources().getDisplayMetrics());
+        }
+    }
+
+    public static boolean isAppInstalled(Context context, String packageName) {
+        try {
+            context.getPackageManager().getApplicationInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
         }
     }
 

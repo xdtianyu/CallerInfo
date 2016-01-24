@@ -101,4 +101,11 @@
     <string name="window_visibility">Show or hide action</string>
     <string name="custom_data_key" translatable="false">custom_data_key</string>
     <string name="custom_data">Custom data source</string>
+    <string name="plugin">Plugin</string>
+    <string name="plugin_key" translatable="false">plugin_key</string>
+    <string name="auto_hangup_key" translatable="false">auto_hangup_key</string>
+    <string name="auto_hangup">Auto hangup</string>
+    <string name="add_call_log">Add number info to call log</string>
+    <string name="add_call_log_key" translatable="false">add_call_log_key</string>
+    <string name="plugin_package_name" translatable="false">org.xdty.callerinfo.plugin</string>
 </resources>

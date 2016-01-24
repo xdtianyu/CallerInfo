@@ -109,6 +109,20 @@
                 android:title="@string/only_offline">
             </com.jenzz.materialpreference.SwitchPreference>
         </PreferenceScreen>
+        <PreferenceScreen
+            android:key="@string/plugin_key"
+            android:title="@string/plugin">
+            <com.jenzz.materialpreference.SwitchPreference
+                android:defaultValue="false"
+                android:key="@string/auto_hangup_key"
+                android:title="@string/auto_hangup">
+            </com.jenzz.materialpreference.SwitchPreference>
+            <com.jenzz.materialpreference.SwitchPreference
+                android:defaultValue="false"
+                android:key="@string/add_call_log_key"
+                android:title="@string/add_call_log">
+            </com.jenzz.materialpreference.SwitchPreference>
+        </PreferenceScreen>
         <com.jenzz.materialpreference.SwitchPreference
             android:defaultValue="false"
             android:key="@string/force_chinese_key"
