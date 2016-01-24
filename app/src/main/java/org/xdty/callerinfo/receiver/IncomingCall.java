@@ -77,7 +77,6 @@ public class IncomingCall extends BroadcastReceiver {
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
-            incomingNumber = "15709187586";
             if (!TextUtils.isEmpty(incomingNumber)) {
                 incomingNumber = incomingNumber.replaceAll(" ", "");
             }
