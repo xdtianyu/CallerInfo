@@ -318,10 +318,9 @@ public class SettingsActivity extends AppCompatActivity {
 
             final String showHiddenKey = getString(R.string.show_hidden_setting_key);
             boolean isShowHidden = sharedPrefs.getBoolean(showHiddenKey, false);
-
+            advancedPref = (PreferenceCategory) findPreference(getString(R.string.advanced_key));
             if (!isShowHidden) {
-                advancedPref =
-                        (PreferenceCategory) findPreference(getString(R.string.advanced_key));
+
                 aboutPref = (PreferenceCategory) findPreference(getString(R.string.about_key));
                 floatWindowPref =
                         (PreferenceCategory) findPreference(getString(R.string.float_window_key));
