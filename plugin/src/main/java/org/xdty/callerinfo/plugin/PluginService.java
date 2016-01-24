@@ -2,12 +2,14 @@ package org.xdty.callerinfo.plugin;
 
 import android.Manifest;
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.provider.CallLog;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -37,8 +39,10 @@ public class PluginService extends Service {
         public void checkCallLogPermission() throws RemoteException {
             Log.d(TAG, "checkCallLogPermission");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                int res = checkSelfPermission(Manifest.permission.CALL_PHONE);
-                if (res != PackageManager.PERMISSION_GRANTED) {
+                int res = checkSelfPermission(Manifest.permission.READ_CALL_LOG);
+                int res2 = checkSelfPermission(Manifest.permission.WRITE_CALL_LOG);
+                if (res != PackageManager.PERMISSION_GRANTED ||
+                        res2 != PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(PluginService.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("type", MainActivity.REQUEST_CODE_CALL_LOG_PERMISSION);
@@ -50,6 +54,28 @@ public class PluginService extends Service {
         @Override
         public void hangUpPhoneCall() throws RemoteException {
             Log.d(TAG, "hangUpPhoneCall: " + killPhoneCall());
+        }
+
+        @Override
+        public void updateCallLog(String number, String name) throws RemoteException {
+            Log.d(TAG, "updateCallLog: " + "name = [" + name + "]");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                    checkSelfPermission(Manifest.permission.READ_CALL_LOG) !=
+                            PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "updateCallLog: have no READ_CALL_LOG permission");
+                return;
+            }
+
+            ContentValues values = new ContentValues();
+            values.put(CallLog.Calls.NUMBER, name + " <" + number + ">");
+            values.put(CallLog.Calls.DATE, System.currentTimeMillis());
+            values.put(CallLog.Calls.DURATION, 0);
+            values.put(CallLog.Calls.TYPE, CallLog.Calls.INCOMING_TYPE);
+            values.put(CallLog.Calls.NEW, 1);
+            values.put(CallLog.Calls.CACHED_NAME, "");
+            values.put(CallLog.Calls.CACHED_NUMBER_TYPE, 0);
+            values.put(CallLog.Calls.CACHED_NUMBER_LABEL, "");
+            getContentResolver().insert(CallLog.Calls.CONTENT_URI, values);
         }
 
         @Override

@@ -256,7 +256,7 @@ public class IncomingCall extends BroadcastReceiver {
                                 mPluginService.hangUpPhoneCall();
                             }
                             if (saveLog) {
-
+                                mPluginService.updateCallLog(number.getNumber(), number.getName());
                             }
 
                         } catch (RemoteException e) {

@@ -6,5 +6,6 @@ interface IPluginService {
     void checkCallPermission();
     void checkCallLogPermission();
     void hangUpPhoneCall();
+    void updateCallLog(String number, String name);
     void registerCallback(IPluginServiceCallback callback);
 }

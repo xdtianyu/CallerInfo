@@ -30,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case REQUEST_CODE_CALL_LOG_PERMISSION:
                     requestPermissions(
-                            new String[]{Manifest.permission.WRITE_CALL_LOG},
+                            new String[]{Manifest.permission.READ_CALL_LOG,
+                                    Manifest.permission.WRITE_CALL_LOG},
                             REQUEST_CODE_CALL_LOG_PERMISSION);
                     break;
             }
