@@ -67,6 +67,8 @@ public class IncomingCall extends BroadcastReceiver {
         private IPluginService mPluginService;
         private Intent mPluginIntent;
         private ServiceConnection mConnection;
+        private String mLogNumber;
+        private String mLogName;
 
         public IncomingCallListener(Context context) {
             this.context = context;
@@ -244,6 +246,9 @@ public class IncomingCall extends BroadcastReceiver {
         private void bindPluginService(final boolean hangup, final boolean saveLog,
                 final INumber number) {
 
+            mLogNumber = number.getNumber();
+            mLogName = number.getName();
+
             if (mConnection == null) {
                 mConnection = new ServiceConnection() {
                     @Override
@@ -255,7 +260,7 @@ public class IncomingCall extends BroadcastReceiver {
                                 mPluginService.hangUpPhoneCall();
                             }
                             if (saveLog) {
-                                mPluginService.updateCallLog(number.getNumber(), number.getName());
+                                mPluginService.updateCallLog(mLogNumber, mLogName);
                             }
 
                         } catch (RemoteException e) {
