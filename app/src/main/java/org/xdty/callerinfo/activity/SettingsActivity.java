@@ -127,14 +127,27 @@ public class SettingsActivity extends AppCompatActivity {
                 try {
                     mPluginService.registerCallback(new IPluginServiceCallback.Stub() {
                         @Override
-                        public void onCallPermissionResult(boolean success) throws RemoteException {
+                        public void onCallPermissionResult(final boolean success) throws
+                                RemoteException {
                             Log.d(TAG, "onCallPermissionResult: " + success);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hangupPref.setChecked(success);
+                                }
+                            });
                         }
 
                         @Override
-                        public void onCallLogPermissionResult(boolean success) throws
+                        public void onCallLogPermissionResult(final boolean success) throws
                                 RemoteException {
                             Log.d(TAG, "onCallLogPermissionResult: " + success);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callLogPref.setChecked(success);
+                                }
+                            });
                         }
                     });
                 } catch (RemoteException e) {

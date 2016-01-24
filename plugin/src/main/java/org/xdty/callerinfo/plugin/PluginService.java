@@ -17,22 +17,30 @@ public class PluginService extends Service {
 
         @Override
         public void checkCallPermission() throws RemoteException {
-            Log.d(TAG, "checkPermission: ");
+            Log.d(TAG, "checkCallPermission");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 int res = checkSelfPermission(Manifest.permission.CALL_PHONE);
                 if (res != PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(PluginService.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("type", MainActivity.REQUEST_CODE_CALL_PERMISSION);
                     startActivity(intent);
                 }
             }
-            mCallback.onCallPermissionResult(true);
         }
 
         @Override
         public void checkCallLogPermission() throws RemoteException {
-            Log.d(TAG, "checkPermission: ");
-            mCallback.onCallLogPermissionResult(true);
+            Log.d(TAG, "checkCallLogPermission");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                int res = checkSelfPermission(Manifest.permission.CALL_PHONE);
+                if (res != PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(PluginService.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("type", MainActivity.REQUEST_CODE_CALL_LOG_PERMISSION);
+                    startActivity(intent);
+                }
+            }
         }
 
         @Override
@@ -48,6 +56,28 @@ public class PluginService extends Service {
     };
 
     public PluginService() {
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        int res = super.onStartCommand(intent, flags, startId);
+        if (mCallback != null) {
+            int type = intent.getIntExtra("type", 0);
+            boolean result = intent.getBooleanExtra("result", false);
+            try {
+                switch (type) {
+                    case MainActivity.REQUEST_CODE_CALL_PERMISSION:
+                        mCallback.onCallPermissionResult(result);
+                        break;
+                    case MainActivity.REQUEST_CODE_CALL_LOG_PERMISSION:
+                        mCallback.onCallLogPermissionResult(result);
+                        break;
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return res;
     }
 
     @Override
