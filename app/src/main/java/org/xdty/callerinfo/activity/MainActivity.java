@@ -366,12 +366,15 @@ public class MainActivity extends AppCompatActivity {
         new PhoneNumber(this, new PhoneNumber.Callback() {
             @Override
             public void onResponseOffline(INumber number) {
+                if (number != null) {
+                    Utils.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
+                }
             }
 
             @Override
             public void onResponse(INumber number) {
 
-                if (number!=null && number.isValid()) {
+                if (number != null && number.isValid()) {
                     new Caller(number, !number.isOnline()).save();
                     Utils.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
                 }
@@ -380,8 +383,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponseFailed(INumber number, boolean isOnline) {
                 if (isOnline) {
-                    Utils.showTextWindow(MainActivity.this, R.string.online_failed,
-                            FloatWindow.SEARCH_FRONT);
+                    Utils.sendData(MainActivity.this, FloatWindow.WINDOW_ERROR,
+                            R.string.online_failed, FloatWindow.SEARCH_FRONT);
                 } else {
                     Utils.showTextWindow(MainActivity.this, R.string.offline_failed,
                             FloatWindow.SEARCH_FRONT);
