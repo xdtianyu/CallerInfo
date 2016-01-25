@@ -108,4 +108,5 @@
     <string name="add_call_log">Add number info to call log</string>
     <string name="add_call_log_key" translatable="false">add_call_log_key</string>
     <string name="plugin_package_name" translatable="false">org.xdty.callerinfo.plugin</string>
+    <string name="plugin_not_started">Plugin service not started, please check auto run permission</string>
 </resources>

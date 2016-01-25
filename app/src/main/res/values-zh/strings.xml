@@ -76,4 +76,5 @@
     <string name="plugin">插件</string>
     <string name="auto_hangup">自动挂断</string>
     <string name="add_call_log">添加号码信息到通话记录</string>
+    <string name="plugin_not_started">插件服务未启动，请检查权限或其他阻止运行设置</string>
 </resources>

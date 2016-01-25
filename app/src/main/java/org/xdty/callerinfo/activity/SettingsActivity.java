@@ -150,6 +150,8 @@ public class SettingsActivity extends AppCompatActivity {
                             });
                         }
                     });
+                    pluginPref.setEnabled(true);
+                    pluginPref.setSummary("");
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -360,6 +362,8 @@ public class SettingsActivity extends AppCompatActivity {
 
             pluginKey = getString(R.string.plugin_key);
             pluginPref = (PreferenceScreen) findPreference(pluginKey);
+            pluginPref.setEnabled(false);
+            pluginPref.setSummary(getString(R.string.plugin_not_started));
             if (Utils.isAppInstalled(getActivity(), getString(R.string.plugin_package_name))) {
                 bindPluginService();
 
