@@ -63,6 +63,8 @@ public class IncomingCall extends BroadcastReceiver {
         private boolean mIsInContacts = false;
         private String mOutgoingKey;
         private String mHideKey;
+        private String mKeywordKey;
+        private String mKeywordDefault;
 
         private IPluginService mPluginService;
         private Intent mPluginIntent;
@@ -75,6 +77,8 @@ public class IncomingCall extends BroadcastReceiver {
             mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             mOutgoingKey = context.getString(R.string.display_on_outgoing_key);
             mHideKey = context.getString(R.string.hide_when_off_hook_key);
+            mKeywordKey = context.getString(R.string.hangup_keyword_key);
+            mKeywordDefault = context.getString(R.string.hangup_keyword_default);
         }
 
         @Override
@@ -164,7 +168,7 @@ public class IncomingCall extends BroadcastReceiver {
                 if (callers.size() > 0) {
                     Caller caller = callers.get(0);
                     if (!caller.needUpdate()) {
-                        if (caller.getType() == Type.REPORT && (hangup || saveLog)) {
+                        if (caller.getType() != Type.NORMAL && (hangup || saveLog)) {
                             bindPluginService(hangup, saveLog, caller);
                         }
                         Utils.showWindow(context, caller, FloatWindow.CALLER_FRONT);
@@ -257,7 +261,16 @@ public class IncomingCall extends BroadcastReceiver {
                         mPluginService = IPluginService.Stub.asInterface(service);
                         try {
                             if (hangup) {
-                                mPluginService.hangUpPhoneCall();
+                                String keywords = mPrefs.getString(mKeywordKey, mKeywordDefault);
+                                keywords = keywords.trim();
+                                if (keywords.isEmpty()) {
+                                    keywords = mKeywordDefault;
+                                }
+                                for (String keyword : keywords.split(" ")) {
+                                    if (mLogName.contains(keyword)) {
+                                        mPluginService.hangUpPhoneCall();
+                                    }
+                                }
                             }
                             if (saveLog) {
                                 mPluginService.updateCallLog(mLogNumber, mLogName);

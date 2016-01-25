@@ -122,6 +122,11 @@
                 android:key="@string/add_call_log_key"
                 android:title="@string/add_call_log">
             </com.jenzz.materialpreference.SwitchPreference>
+            <com.jenzz.materialpreference.Preference
+                android:key="@string/hangup_keyword_key"
+                android:summary="@string/hangup_keyword_summary"
+                android:title="@string/hangup_keyword">
+            </com.jenzz.materialpreference.Preference>
         </PreferenceScreen>
         <com.jenzz.materialpreference.SwitchPreference
             android:defaultValue="false"

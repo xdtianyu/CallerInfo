@@ -23,6 +23,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -114,6 +115,8 @@ public class SettingsActivity extends AppCompatActivity {
         SwitchPreference hangupPref;
         String callLogKey;
         SwitchPreference callLogPref;
+        String hangupKeywordKey;
+        Preference hangupKeywordPref;
 
         int versionClickCount;
         Toast toast;
@@ -371,6 +374,8 @@ public class SettingsActivity extends AppCompatActivity {
                 callLogKey = getString(R.string.add_call_log_key);
                 hangupPref = (SwitchPreference) findPreference(hangupKey);
                 callLogPref = (SwitchPreference) findPreference(callLogKey);
+                hangupKeywordKey = getString(R.string.hangup_keyword_key);
+                hangupKeywordPref = findPreference(hangupKeywordKey);
                 hangupPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
@@ -390,6 +395,14 @@ public class SettingsActivity extends AppCompatActivity {
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
+                        return false;
+                    }
+                });
+                hangupKeywordPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        showEditDialog(hangupKeywordKey, R.string.hangup_keyword,
+                                R.string.hangup_keyword_default, R.string.hangup_keyword_hint);
                         return false;
                     }
                 });
@@ -530,7 +543,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     int value = seekBar.getProgress();
@@ -539,7 +552,7 @@ public class SettingsActivity extends AppCompatActivity {
                     editor.apply();
                 }
             });
-            builder.setNegativeButton(android.R.string.cancel, null);
+            builder.setNegativeButton(R.string.cancel, null);
             builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
@@ -561,7 +574,7 @@ public class SettingsActivity extends AppCompatActivity {
             final EditText editText = (EditText) layout.findViewById(R.id.text);
             editText.setText(sharedPrefs.getString(key, ""));
 
-            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String value = editText.getText().toString();
@@ -571,7 +584,7 @@ public class SettingsActivity extends AppCompatActivity {
                     editor.apply();
                 }
             });
-            builder.setNegativeButton(android.R.string.cancel, null);
+            builder.setNegativeButton(R.string.cancel, null);
             builder.setNeutralButton(R.string.fetch, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -632,7 +645,7 @@ public class SettingsActivity extends AppCompatActivity {
             TextView textView = (TextView) layout.findViewById(R.id.text);
             textView.setText(getString(text));
 
-            builder.setPositiveButton(android.R.string.ok, null);
+            builder.setPositiveButton(R.string.ok, null);
             builder.show();
         }
 
@@ -649,7 +662,7 @@ public class SettingsActivity extends AppCompatActivity {
             apiUri.setText(sharedPrefs.getString(customApiUrl, ""));
             apiKey.setText(sharedPrefs.getString(customApiKey, ""));
 
-            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String value = apiUri.getText().toString();
@@ -661,7 +674,7 @@ public class SettingsActivity extends AppCompatActivity {
                     editor.apply();
                 }
             });
-            builder.setNegativeButton(android.R.string.cancel, null);
+            builder.setNegativeButton(R.string.cancel, null);
             builder.setNeutralButton(R.string.document, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -670,6 +683,35 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
             builder.setCancelable(false);
+            builder.show();
+        }
+
+        private void showEditDialog(final String key, int title, int defaultText, int hint) {
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(title));
+            View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_edit, null);
+            builder.setView(layout);
+
+            final EditText editText = (EditText) layout.findViewById(R.id.text);
+            editText.setText(sharedPrefs.getString(key, getString(defaultText)));
+            editText.setInputType(InputType.TYPE_CLASS_TEXT);
+            if (hint > 0) {
+                editText.setHint(hint);
+            }
+
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String value = editText.getText().toString();
+                    findPreference(key).setSummary(value);
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putString(key, value);
+                    editor.apply();
+                }
+            });
+            builder.setNegativeButton(R.string.cancel, null);
+            builder.setCancelable(true);
             builder.show();
         }
     }

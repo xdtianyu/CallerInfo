@@ -109,4 +109,11 @@
     <string name="add_call_log_key" translatable="false">add_call_log_key</string>
     <string name="plugin_package_name" translatable="false">org.xdty.callerinfo.plugin</string>
     <string name="plugin_not_started">Plugin service not started, please check auto run permission</string>
+    <string name="hangup_keyword_key" translatable="false">hangup_keyword_key</string>
+    <string name="hangup_keyword">Hangup keyword</string>
+    <string name="hangup_keyword_summary">Hangup when number info contains keyword</string>
+    <string name="hangup_keyword_hint">Please split keywords with space</string>
+    <string name="hangup_keyword_default" translatable="false">诈骗 广告</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>
