@@ -407,13 +407,21 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         private void bindPluginService() {
-            getActivity().startService(mPluginIntent);
-            getActivity().bindService(mPluginIntent, mConnection, Context.BIND_AUTO_CREATE);
+            try {
+                getActivity().startService(mPluginIntent);
+                getActivity().bindService(mPluginIntent, mConnection, Context.BIND_AUTO_CREATE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         private void unBindPluginService() {
-            getActivity().unbindService(mConnection);
-            getActivity().stopService(mPluginIntent);
+            try {
+                getActivity().unbindService(mConnection);
+                getActivity().stopService(mPluginIntent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
