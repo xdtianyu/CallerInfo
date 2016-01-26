@@ -188,7 +188,7 @@ public class FloatWindow extends StandOutWindow {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 boolean hideWhenTouch = preferences.getBoolean(
                         getString(R.string.hide_when_touch_key), false);
-                if (!isFocused && hideWhenTouch && id == CALLER_FRONT) {
+                if (!isFocused && hideWhenTouch && id == CALLER_FRONT && getWindow(id) != null) {
                     hide(id);
                 }
                 isFocused = false;
@@ -206,6 +206,11 @@ public class FloatWindow extends StandOutWindow {
         int trans = data.getInt(WINDOW_TRANS);
         int error = data.getInt(WINDOW_ERROR);
         Window window = getWindow(id);
+
+        if (window == null) {
+            return;
+        }
+
         View layout = window.findViewById(R.id.content);
         TextView textView = (TextView) window.findViewById(R.id.number_info);
         TextView errorText = (TextView) window.findViewById(R.id.error);
