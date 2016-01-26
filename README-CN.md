@@ -9,10 +9,6 @@
 
 [![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.3.2/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.3.2/callerinfo-v1.3.2-release.apk)
 
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.3.1/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.3.1/callerinfo-v1.3.1-release.apk)
-
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.1.11/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.1.11/callerinfo-v1.1.11-release.apk)
-
 [![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.3.0/CallerInfo-plugin-v1.0.0-release.apk.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.3.0/CallerInfo-plugin-v1.0.0-release.apk)
 
 ##功能
