@@ -452,7 +452,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             AppBarLayout appBarLayout;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 LinearLayout root =
                         (LinearLayout) dialog.findViewById(android.R.id.list).getParent();
                 appBarLayout = (AppBarLayout) LayoutInflater.from(getActivity()).inflate(
@@ -476,7 +476,7 @@ public class SettingsActivity extends AppCompatActivity {
                     height = appBarLayout.getHeight();
                 }
 
-                content.setPadding(0, height, 0, 0);
+                content.setPadding((int) dpToPx(16), height, (int) dpToPx(16), 0);
 
                 root.addView(content);
                 root.addView(appBarLayout);
@@ -713,6 +713,11 @@ public class SettingsActivity extends AppCompatActivity {
             builder.setNegativeButton(R.string.cancel, null);
             builder.setCancelable(true);
             builder.show();
+        }
+
+        private float dpToPx(float dp) {
+            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                    getActivity().getResources().getDisplayMetrics());
         }
     }
 }

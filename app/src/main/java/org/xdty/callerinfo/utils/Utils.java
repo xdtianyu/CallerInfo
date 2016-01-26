@@ -38,6 +38,7 @@ public class Utils {
     public static void sendData(Context context, String key, int value, int frontType) {
         Bundle bundle = new Bundle();
         bundle.putInt(key, value);
+        FloatWindow.show(context, FloatWindow.class, frontType);
         FloatWindow.sendData(context, FloatWindow.class,
                 frontType, 0, bundle, FloatWindow.class, 0);
     }
