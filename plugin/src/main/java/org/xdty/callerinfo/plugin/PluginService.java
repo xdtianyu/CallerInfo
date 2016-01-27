@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.provider.CallLog;
@@ -19,7 +20,12 @@ public class PluginService extends Service {
     private static final String TAG = PluginService.class.getSimpleName();
     private IPluginServiceCallback mCallback;
 
+    private Handler mHandler = new Handler();
+
     private final IPluginService.Stub mBinder = new IPluginService.Stub() {
+
+        private String mNumber;
+        private String mName;
 
         @Override
         public void checkCallPermission() throws RemoteException {
@@ -58,24 +64,25 @@ public class PluginService extends Service {
 
         @Override
         public void updateCallLog(String number, String name) throws RemoteException {
-            Log.d(TAG, "updateCallLog: " + "name = [" + name + "]");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                    checkSelfPermission(Manifest.permission.READ_CALL_LOG) !=
-                            PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "updateCallLog: have no READ_CALL_LOG permission");
-                return;
-            }
+            Log.d(TAG, "updateCallLog: " + "name = [" + mName + "]");
+            mNumber = number;
+            mName = name;
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                            checkSelfPermission(Manifest.permission.READ_CALL_LOG) !=
+                                    PackageManager.PERMISSION_GRANTED) {
+                        Log.d(TAG, "updateCallLog: have no READ_CALL_LOG permission");
+                        return;
+                    }
+                    ContentValues content = new ContentValues();
+                    content.put(CallLog.Calls.NUMBER, mName + " (" + mNumber + ")");
+                    getContentResolver().update(CallLog.Calls.CONTENT_URI, content,
+                            CallLog.Calls.NUMBER + "=?", new String[]{mNumber});
+                }
+            }, 500);
 
-            ContentValues values = new ContentValues();
-            values.put(CallLog.Calls.NUMBER, name + " (" + number + ")");
-            values.put(CallLog.Calls.DATE, System.currentTimeMillis());
-            values.put(CallLog.Calls.DURATION, 0);
-            values.put(CallLog.Calls.TYPE, CallLog.Calls.INCOMING_TYPE);
-            values.put(CallLog.Calls.NEW, 1);
-            values.put(CallLog.Calls.CACHED_NAME, "");
-            values.put(CallLog.Calls.CACHED_NUMBER_TYPE, 0);
-            values.put(CallLog.Calls.CACHED_NUMBER_LABEL, "");
-            getContentResolver().insert(CallLog.Calls.CONTENT_URI, values);
         }
 
         @Override

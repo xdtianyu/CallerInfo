@@ -169,7 +169,7 @@ public class IncomingCall extends BroadcastReceiver {
                     Caller caller = callers.get(0);
                     if (!caller.needUpdate()) {
                         if (caller.getType() != Type.NORMAL && (hangup || saveLog)) {
-                            bindPluginService(hangup, saveLog, caller);
+                            bindPluginService(hangup, caller);
                         }
                         Utils.showWindow(context, caller, FloatWindow.CALLER_FRONT);
                         return;
@@ -191,7 +191,7 @@ public class IncomingCall extends BroadcastReceiver {
                         if (isShowing && number != null) {
                             new Caller(number, !number.isOnline()).save();
                             if (number.getType() == Type.REPORT && (hangup || saveLog)) {
-                                bindPluginService(hangup, saveLog, number);
+                                bindPluginService(hangup, number);
                             }
                             Utils.showWindow(context, number, FloatWindow.CALLER_FRONT);
                         }
@@ -238,6 +238,14 @@ public class IncomingCall extends BroadcastReceiver {
             if (isShowing) {
                 isShowing = false;
                 StandOutWindow.closeAll(context, FloatWindow.class);
+                boolean saveLog =
+                        mPrefs.getBoolean(context.getString(R.string.add_call_log_key), false);
+                if (mLogName != null && mLogNumber != null) {
+                    if (saveLog) {
+                        updateCallLog(mLogNumber, mLogName);
+                    }
+                    unBindPluginService();
+                }
             }
 
             ringStartTime = -1;
@@ -247,8 +255,7 @@ public class IncomingCall extends BroadcastReceiver {
             duration = -1;
         }
 
-        private void bindPluginService(final boolean hangup, final boolean saveLog,
-                final INumber number) {
+        private void bindPluginService(final boolean hangup, final INumber number) {
 
             mLogNumber = number.getNumber();
             mLogName = number.getName();
@@ -272,14 +279,10 @@ public class IncomingCall extends BroadcastReceiver {
                                     }
                                 }
                             }
-                            if (saveLog) {
-                                mPluginService.updateCallLog(mLogNumber, mLogName);
-                            }
 
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
-                        unBindPluginService();
                     }
 
                     @Override
@@ -304,6 +307,18 @@ public class IncomingCall extends BroadcastReceiver {
         private void unBindPluginService() {
             context.getApplicationContext().unbindService(mConnection);
             context.stopService(mPluginIntent);
+            mLogNumber = null;
+            mLogName = null;
+        }
+
+        private void updateCallLog(String number, String name) {
+            if (mPluginService != null) {
+                try {
+                    mPluginService.updateCallLog(number, name);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
