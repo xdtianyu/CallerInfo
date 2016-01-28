@@ -398,6 +398,11 @@ public class SettingsActivity extends AppCompatActivity {
                         return false;
                     }
                 });
+                String keyword = sharedPrefs.getString(hangupKeywordKey, "");
+                if (keyword.isEmpty()) {
+                    keyword = getString(R.string.hangup_keyword_summary);
+                }
+                hangupKeywordPref.setSummary(keyword);
                 hangupKeywordPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
@@ -686,7 +691,7 @@ public class SettingsActivity extends AppCompatActivity {
             builder.show();
         }
 
-        private void showEditDialog(final String key, int title, int defaultText, int hint) {
+        private void showEditDialog(final String key, int title, final int defaultText, int hint) {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
@@ -704,6 +709,9 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String value = editText.getText().toString();
+                    if (value.isEmpty()) {
+                        value = getString(defaultText);
+                    }
                     findPreference(key).setSummary(value);
                     SharedPreferences.Editor editor = sharedPrefs.edit();
                     editor.putString(key, value);
