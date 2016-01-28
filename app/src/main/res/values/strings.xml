@@ -118,4 +118,5 @@
     <string name="cancel">Cancel</string>
     <string name="action_clear_history">Clear history</string>
     <string name="clear_history_message">Clear all history records?</string>
+    <string name="ring_once">Ring once</string>
 </resources>

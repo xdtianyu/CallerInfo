@@ -84,4 +84,5 @@
     <string name="cancel">取消</string>
     <string name="action_clear_history">清空历史</string>
     <string name="clear_history_message">清空全部历史记录？</string>
+    <string name="ring_once">响一声</string>
 </resources>

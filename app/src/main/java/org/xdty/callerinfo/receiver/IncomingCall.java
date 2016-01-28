@@ -168,7 +168,7 @@ public class IncomingCall extends BroadcastReceiver {
                 if (callers.size() > 0) {
                     Caller caller = callers.get(0);
                     if (!caller.needUpdate()) {
-                        if (caller.getType() != Type.NORMAL && (hangup || saveLog)) {
+                        if (hangup || saveLog) {
                             bindPluginService(hangup, caller);
                         }
                         Utils.showWindow(context, caller, FloatWindow.CALLER_FRONT);
@@ -230,16 +230,24 @@ public class IncomingCall extends BroadcastReceiver {
                 return;
             }
 
+            boolean saveLog =
+                    mPrefs.getBoolean(context.getString(R.string.add_call_log_key), false);
             if (ringStartTime != -1 && !TextUtils.isEmpty(mIncomingNumber) && !mIsInContacts) {
                 new InCall(mIncomingNumber, ringStartTime, ringTime, duration).save();
                 mIncomingNumber = null;
+
+                if (ringTime < 3000 && duration <= 0) {
+                    saveLog = true;
+                    if (TextUtils.isEmpty(mLogName)) {
+                        mLogName = "";
+                    }
+                    mLogName += " " + context.getString(R.string.ring_once);
+                }
             }
 
             if (isShowing) {
                 isShowing = false;
                 StandOutWindow.closeAll(context, FloatWindow.class);
-                boolean saveLog =
-                        mPrefs.getBoolean(context.getString(R.string.add_call_log_key), false);
                 if (mLogName != null && mLogNumber != null) {
                     if (saveLog) {
                         updateCallLog(mLogNumber, mLogName);
@@ -274,7 +282,8 @@ public class IncomingCall extends BroadcastReceiver {
                                     keywords = mKeywordDefault;
                                 }
                                 for (String keyword : keywords.split(" ")) {
-                                    if (mLogName.contains(keyword)) {
+                                    if (!TextUtils.isEmpty(mLogName) &&
+                                            mLogName.contains(keyword)) {
                                         mPluginService.hangUpPhoneCall();
                                     }
                                 }
