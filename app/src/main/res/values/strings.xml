@@ -116,4 +116,6 @@
     <string name="hangup_keyword_default" translatable="false">诈骗 广告</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="action_clear_history">Clear history</string>
+    <string name="clear_history_message">Clear all history records?</string>
 </resources>

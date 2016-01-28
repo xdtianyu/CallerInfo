@@ -12,6 +12,11 @@
         android:orderInCategory="100"
         android:title="@string/action_float_window"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_clear_history"
+        android:orderInCategory="100"
+        android:title="@string/action_clear_history"
+        app:showAsAction="never"/>
     <item android:id="@+id/action_search"
           android:title="@string/action_search"
           android:icon="@drawable/abc_ic_search_api_mtrl_alpha"

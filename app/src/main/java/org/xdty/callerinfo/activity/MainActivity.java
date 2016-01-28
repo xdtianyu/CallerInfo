@@ -326,7 +326,9 @@ public class MainActivity extends AppCompatActivity {
                     isFloating = false;
                 }
                 updateMenuTitles();
-
+                break;
+            case R.id.action_clear_history:
+                clearHistory();
                 break;
         }
 
@@ -422,5 +424,26 @@ public class MainActivity extends AppCompatActivity {
                     });
             builder.show();
         }
+    }
+
+    private void clearHistory() {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.action_clear_history));
+        builder.setMessage(getString(R.string.clear_history_message));
+        builder.setCancelable(true);
+        builder.setPositiveButton(getString(R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (InCall inCall : inCallList) {
+                            inCall.delete();
+                        }
+                        loadInCallList();
+                        mCallerAdapter.notifyDataSetChanged();
+                    }
+                });
+        builder.setNegativeButton(getString(R.string.cancel), null);
+        builder.show();
     }
 }

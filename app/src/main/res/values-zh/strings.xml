@@ -82,4 +82,6 @@
     <string name="hangup_keyword_hint">请以空格分隔关键字</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
+    <string name="action_clear_history">清空历史</string>
+    <string name="clear_history_message">清空全部历史记录？</string>
 </resources>
