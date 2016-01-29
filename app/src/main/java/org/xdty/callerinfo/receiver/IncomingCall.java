@@ -23,7 +23,6 @@ import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
-import org.xdty.phone.number.model.Type;
 
 import java.util.List;
 
@@ -190,7 +189,7 @@ public class IncomingCall extends BroadcastReceiver {
                     public void onResponse(INumber number) {
                         if (isShowing && number != null) {
                             new Caller(number, !number.isOnline()).save();
-                            if (number.getType() == Type.REPORT && (hangup || saveLog)) {
+                            if (hangup || saveLog) {
                                 bindPluginService(hangup, number);
                             }
                             Utils.showWindow(context, number, FloatWindow.CALLER_FRONT);
@@ -321,6 +320,7 @@ public class IncomingCall extends BroadcastReceiver {
         }
 
         private void updateCallLog(String number, String name) {
+            Log.d(TAG, name);
             if (mPluginService != null) {
                 try {
                     mPluginService.updateCallLog(number, name);

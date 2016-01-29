@@ -64,7 +64,7 @@ public class PluginService extends Service {
 
         @Override
         public void updateCallLog(String number, String name) throws RemoteException {
-            Log.d(TAG, "updateCallLog: " + "name = [" + mName + "]");
+            Log.d(TAG, "updateCallLog: " + "name = [" + name + "]");
             mNumber = number;
             mName = name;
             mHandler.postDelayed(new Runnable() {
