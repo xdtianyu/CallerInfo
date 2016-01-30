@@ -2,20 +2,20 @@
     <string name="app_name">CallerInfo</string>
     <string name="text_normal">%1$s %2$s %3$s</string>
     <string name="text_poi">%1$s</string>
-    <string name="text_report">%1$s %2$s %3$s Be tagged by %4$s users as %5$s</string>
-    <string name="close_float_window">Click to close the FloatWindow</string>
+    <string name="text_report">%1$s %2$s %3$s, tagged by %4$s users as %5$s</string>
+    <string name="close_float_window">Tap to hide the float window</string>
     <string name="action_settings">Settings</string>
     <string name="action_float_window">Float window position</string>
-    <string name="float_window_hint">Drag up and down to set the position</string>
+    <string name="float_window_hint">Drag to move</string>
     <string name="action_search">Search</string>
     <string name="search_hint">Search phone number&#8230;</string>
-    <string name="no_history">No incoming call history</string>
+    <string name="no_history">No incoming call log</string>
     <string name="unknown">Unknown</string>
     <string name="loading">Loading&#8230;</string>
     <string name="loading_error">Loading failed</string>
     <string name="color">Color</string>
     <string name="color_normal">Normal number</string>
-    <string name="color_poi">Enterprise number</string>
+    <string name="color_poi">Bussiness number</string>
     <string name="color_report">Reported number</string>
     <string name="about">About</string>
     <string name="author">Author</string>
@@ -24,7 +24,7 @@
     <string name="license">License</string>
     <string name="developer">Developer</string>
     <string name="developer_summary" translatable="false">tianyu &lt;xdtianyu@gmail.com&gt;</string>
-    <string name="eula_message">CallerInfo uses Baidu\'s or JuHe(360)\'s phone number service to query number information. This means that the caller\'s number or the number you search will be sent to Baidu or JuHe(360). Please note that this is not linked to your phone number or other personal information.</string>
+    <string name="eula_message">CallerInfo uses services from Baidu and JuHe(360) to query caller information. It means that the caller\'s number and any number you search will be sent to Baidu or JuHe(360). Please note that this is not linked to your own phone number or other personal information.</string>
     <string name="eula_title">Use Online Phone Number Service?</string>
     <string name="agree">Agree</string>
     <string name="disagree">Disagree</string>
@@ -36,17 +36,17 @@
     <string name="custom_jh_api_key">Custom JUHE API key</string>
     <string name="baidu_api_key" translatable="false">baidu_api_key</string>
     <string name="float_window">Float window</string>
-    <string name="window_transparent">Window transparent</string>
+    <string name="window_transparent">Transparency</string>
     <string name="window_transparent_key" translatable="false">window_transparent_key</string>
-    <string name="window_text_size">Text size</string>
+    <string name="window_text_size">Font size</string>
     <string name="window_text_size_key" translatable="false">window_text_size_key</string>
     <string name="window_close_anim_key" translatable="false">window_close_anim_key</string>
-    <string name="window_close_anim">Window close animation</string>
-    <string name="text_size">Drag seek bar to set this text\'s size.</string>
-    <string name="text_transparent">Drag seek bar to set window transparent.</string>
+    <string name="window_close_anim">Animation on hide</string>
+    <string name="text_size">Drag to change font size.</string>
+    <string name="text_transparent">Drag to change transparency.</string>
     <string name="window_trans_back_only_key" translatable="false">window_trans_back_only_key</string>
-    <string name="window_trans_back_only">Transparent only for background</string>
-    <string name="close_window">Close float window</string>
+    <string name="window_trans_back_only">Transparency only applies for background</string>
+    <string name="close_window">Hide float window</string>
     <string name="undo">undo</string>
     <string name="deleted">Deleted</string>
     <string name="api_type_key" translatable="false">api_type</string>
@@ -54,16 +54,16 @@
     <string name="api_baidu">BAIDU Phone Number Service</string>
     <string name="api_juhe">JUHE Phone Service (360)</string>
     <string name="juhe_api_key" translatable="false">juhe_api_key</string>
-    <string name="ignore_known_contact">Ignore exist contact number</string>
+    <string name="ignore_known_contact">Ignore calls from contact list</string>
     <string name="ignore_known_contact_key" translatable="false">ignore_known_contact_key</string>
-    <string name="display_on_outgoing">Display on outgoing</string>
+    <string name="display_on_outgoing">Show on outgoing calls</string>
     <string name="display_on_outgoing_key" translatable="false">display_on_outgoing_key</string>
     <string name="fetch">Fetch</string>
     <string name="baidu_api_url" translatable="false">http://apistore.baidu.com/astore/usercenter</string>
     <string name="juhe_api_url" translatable="false">https://www.juhe.cn/docs/api/id/72</string>
     <string name="catch_crash_key" translatable="false">catch_crash_key</string>
-    <string name="catch_crash">Catch application crash</string>
-    <string name="catch_crash_message">Enable this feature will catch crash message, you can send crash messages to the developer. Please notice you don\'t need to enable this if you installed from Play Store, after app crash you can click Report button to send the crash message.</string>
+    <string name="catch_crash">Report crashes</string>
+    <string name="catch_crash_message">This feature allows the app to report technical details to the developer after crash. Please notice that it is not necessary to enable this if you downloaded the app from Play Store, you only need to tap on "Report" button after crash.</string>
     <string name="customactivityoncrash_error_activity_close_app">Close app</string>
     <string name="customactivityoncrash_error_activity_error_details">Error details</string>
     <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Error information</string>
@@ -78,10 +78,10 @@
     <string name="about_key" translatable="false">about_key</string>
     <string name="developer_key" translatable="false">developer_key</string>
     <string name="show_hidden_setting_key" translatable="false">show_hidden_setting_key</string>
-    <string name="show_hidden_toast">Click %1$s times to show hidden settings</string>
+    <string name="show_hidden_toast">Tap %1$s more times to show hidden settings</string>
     <string name="force_chinese_key" translatable="false">force_chinese_key</string>
-    <string name="force_chinese">Force chinese language</string>
-    <string name="hide_when_off_hook">Hide when off hook</string>
+    <string name="force_chinese">Use Chinese as app language</string>
+    <string name="hide_when_off_hook">Hide after accepting</string>
     <string name="hide_when_off_hook_key" translatable="false">hide_when_off_hook_key</string>
     <string name="float_window_key" translatable="false">float_window_key</string>
     <string name="custom_api_key" translatable="false">custom_api_key</string>
@@ -89,34 +89,34 @@
     <string name="custom_api">Custom API</string>
     <string name="document">Document</string>
     <string name="api_document_url" translatable="false">https://github.com/xdtianyu/PhoneNumber/blob/master/CUSTOM.md</string>
-    <string name="api_url_hint">API Url</string>
+    <string name="api_url_hint">API URL</string>
     <string name="api_key_hint">API key</string>
     <string name="hide_when_touch_key" translatable="false">hide_when_touch_key</string>
-    <string name="hide_when_touch">Hide when touch</string>
-    <string name="only_offline">Only using offline data</string>
-    <string name="contact_offline">Show contact offline location</string>
+    <string name="hide_when_touch">Hide on tap</string>
+    <string name="only_offline">Only use offline database</string>
+    <string name="contact_offline">Show contact location when offline</string>
     <string name="contact_offline_key" translatable="false">contact_offline_key</string>
     <string name="online_failed">Online fetch failed</string>
-    <string name="offline_failed">Can not find offline data</string>
-    <string name="window_visibility">Show or hide action</string>
+    <string name="offline_failed">Offline database not found</string>
+    <string name="window_visibility">Show and hide</string>
     <string name="custom_data_key" translatable="false">custom_data_key</string>
     <string name="custom_data">Custom data source</string>
     <string name="plugin">Plugin</string>
     <string name="plugin_key" translatable="false">plugin_key</string>
     <string name="auto_hangup_key" translatable="false">auto_hangup_key</string>
-    <string name="auto_hangup">Auto hangup</string>
+    <string name="auto_hangup">Call block</string>
     <string name="add_call_log">Add number info to call log</string>
     <string name="add_call_log_key" translatable="false">add_call_log_key</string>
     <string name="plugin_package_name" translatable="false">org.xdty.callerinfo.plugin</string>
-    <string name="plugin_not_started">Plugin service not started, please check auto run permission</string>
+    <string name="plugin_not_started">Plugin service not started, please check auto-run permission</string>
     <string name="hangup_keyword_key" translatable="false">hangup_keyword_key</string>
-    <string name="hangup_keyword">Hangup keyword</string>
-    <string name="hangup_keyword_summary">Hangup when number info contains keyword</string>
+    <string name="hangup_keyword">Call block keywords</string>
+    <string name="hangup_keyword_summary">Hangup when caller info contains keyword</string>
     <string name="hangup_keyword_hint">Please split keywords with space</string>
     <string name="hangup_keyword_default" translatable="false">诈骗 广告</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="action_clear_history">Clear history</string>
-    <string name="clear_history_message">Clear all history records?</string>
+    <string name="action_clear_history">Clear call log</string>
+    <string name="clear_history_message">Clear all call logs?</string>
     <string name="ring_once">Ring once</string>
 </resources>
