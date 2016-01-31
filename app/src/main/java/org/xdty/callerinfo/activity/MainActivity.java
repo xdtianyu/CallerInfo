@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         Utils.checkLocale(getBaseContext());
@@ -173,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState,
                         isCurrentlyActive);
                 CallerAdapter.ViewHolder vh = (CallerAdapter.ViewHolder) viewHolder;
-                vh.setAlpha(1 - Math.abs(dX) / mScreenWidth * 2);
+                vh.setAlpha(1 - Math.abs(dX) / mScreenWidth * 1.2f);
             }
         });
 
