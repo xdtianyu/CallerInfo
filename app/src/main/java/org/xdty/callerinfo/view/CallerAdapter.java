@@ -115,7 +115,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
                         @Override
                         public void onResponse(INumber number) {
-                            new Caller(number).save();
+                            new Caller(number, !number.isOnline()).save();
                             inCall.setFetched(true);
                             updateCallerMap();
                             notifyDataSetChanged();
