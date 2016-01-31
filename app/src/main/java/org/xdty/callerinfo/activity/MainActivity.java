@@ -66,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
     private CallerAdapter mCallerAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FrameLayout mMainLayout;
-    private Menu mMenu;
-    private boolean isFloating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,10 +226,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        if (isFloating) {
+        if (FloatWindow.status() != FloatWindow.STATUS_CLOSE) {
             Utils.closeWindow(this);
-            isFloating = false;
-            updateMenuTitles();
         }
         super.onStop();
     }
@@ -249,10 +245,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (isFloating) {
+        if (FloatWindow.status() != FloatWindow.STATUS_CLOSE) {
             Utils.closeWindow(this);
-            isFloating = false;
-            updateMenuTitles();
         } else {
             super.onBackPressed();
         }
@@ -274,9 +268,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem floatWindowMenu = menu.findItem(R.id.action_float_window);
+        if (FloatWindow.status() != FloatWindow.STATUS_CLOSE) {
+            floatWindowMenu.setTitle(R.string.close_window);
+        } else {
+            floatWindowMenu.setTitle(R.string.action_float_window);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        mMenu = menu;
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(
                 menu.findItem(R.id.action_search));
@@ -316,15 +320,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.action_float_window:
-                if (!isFloating) {
+                if (FloatWindow.status() == FloatWindow.STATUS_CLOSE) {
                     Utils.showTextWindow(this, R.string.float_window_hint,
                             FloatWindow.SET_POSITION_FRONT);
-                    isFloating = true;
                 } else {
                     Utils.closeWindow(this);
-                    isFloating = false;
                 }
-                updateMenuTitles();
                 break;
             case R.id.action_clear_history:
                 clearHistory();
@@ -332,17 +333,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return true;
-    }
-
-    private void updateMenuTitles() {
-        if (mMenu != null) {
-            MenuItem floatWindowMenu = mMenu.findItem(R.id.action_float_window);
-            if (isFloating) {
-                floatWindowMenu.setTitle(R.string.close_window);
-            } else {
-                floatWindowMenu.setTitle(R.string.action_float_window);
-            }
-        }
     }
 
     private void showNumberInfo(String phoneNumber) {

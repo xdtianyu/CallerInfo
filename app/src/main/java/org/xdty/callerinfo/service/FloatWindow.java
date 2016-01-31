@@ -41,9 +41,19 @@ public class FloatWindow extends StandOutWindow {
     public final static int SETTING_FRONT = 1002;
     public final static int SEARCH_FRONT = 1003;
 
+    public final static int STATUS_CLOSE = 0;
+    public final static int STATUS_SHOWING = 1;
+    public final static int STATUS_HIDE = 2;
+
+    private static int mShowingStatus = STATUS_CLOSE;
+
     SharedPreferences sharedPreferences;
     private boolean isFirstShow = false;
     private boolean isFocused = false;
+
+    public static int status() {
+        return mShowingStatus;
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -158,6 +168,7 @@ public class FloatWindow extends StandOutWindow {
     @Override
     public boolean onShow(int id, Window window) {
         isFirstShow = true;
+        mShowingStatus = STATUS_SHOWING;
         return super.onShow(id, window);
     }
 
@@ -174,7 +185,14 @@ public class FloatWindow extends StandOutWindow {
     public boolean onClose(int id, Window window) {
         super.onClose(id, window);
         stopService(getShowIntent(this, getClass(), id));
+        mShowingStatus = STATUS_CLOSE;
         return false;
+    }
+
+    @Override
+    public boolean onHide(int id, Window window) {
+        mShowingStatus = STATUS_HIDE;
+        return super.onHide(id, window);
     }
 
     @Override
