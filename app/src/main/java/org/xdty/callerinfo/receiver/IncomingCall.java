@@ -64,12 +64,15 @@ public class IncomingCall extends BroadcastReceiver {
         private String mHideKey;
         private String mKeywordKey;
         private String mKeywordDefault;
+        private String mGeoKeywordKey;
+        private String mNumberKeywordKey;
 
         private IPluginService mPluginService;
         private Intent mPluginIntent;
         private ServiceConnection mConnection;
         private String mLogNumber;
         private String mLogName;
+        private String mLogGeo;
 
         public IncomingCallListener(Context context) {
             this.context = context;
@@ -78,6 +81,8 @@ public class IncomingCall extends BroadcastReceiver {
             mHideKey = context.getString(R.string.hide_when_off_hook_key);
             mKeywordKey = context.getString(R.string.hangup_keyword_key);
             mKeywordDefault = context.getString(R.string.hangup_keyword_default);
+            mGeoKeywordKey = context.getString(R.string.hangup_geo_keyword_key);
+            mNumberKeywordKey = context.getString(R.string.hangup_number_keyword_key);
         }
 
         @Override
@@ -266,6 +271,7 @@ public class IncomingCall extends BroadcastReceiver {
 
             mLogNumber = number.getNumber();
             mLogName = number.getName();
+            mLogGeo = number.getProvince() + " " + number.getCity();
 
             if (mConnection == null) {
                 mConnection = new ServiceConnection() {
@@ -284,6 +290,29 @@ public class IncomingCall extends BroadcastReceiver {
                                     if (!TextUtils.isEmpty(mLogName) &&
                                             mLogName.contains(keyword)) {
                                         mPluginService.hangUpPhoneCall();
+                                    }
+                                }
+
+                                String geoKeywords = mPrefs.getString(mGeoKeywordKey, "");
+                                geoKeywords = geoKeywords.trim();
+                                if (!geoKeywords.isEmpty()) {
+                                    for (String keyword : geoKeywords.split(" ")) {
+                                        Log.e(TAG, "onServiceConnected: " +keyword + "-" + mLogGeo);
+                                        if (!TextUtils.isEmpty(mLogGeo) &&
+                                                mLogGeo.contains(keyword)) {
+                                            mPluginService.hangUpPhoneCall();
+                                        }
+                                    }
+                                }
+
+                                String numberKeywords = mPrefs.getString(mNumberKeywordKey, "");
+                                numberKeywords = numberKeywords.trim();
+                                if (!numberKeywords.isEmpty()) {
+                                    for (String keyword : numberKeywords.split(" ")) {
+                                        if (!TextUtils.isEmpty(mLogNumber) &&
+                                                mLogNumber.startsWith(keyword)) {
+                                            mPluginService.hangUpPhoneCall();
+                                        }
                                     }
                                 }
                             }
