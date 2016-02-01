@@ -85,4 +85,8 @@
     <string name="action_clear_history">清空历史</string>
     <string name="clear_history_message">清空全部历史记录？</string>
     <string name="ring_once">响一声</string>
+    <string name="hangup_geo_keyword">挂断归属地关键字</string>
+    <string name="hangup_geo_keyword_summary">当号码归属地包含关键字时挂断</string>
+    <string name="hangup_number_keyword_summary">当来电号码是以关键字开始时挂断</string>
+    <string name="hangup_number_keyword">挂断号码关键字</string>
 </resources>

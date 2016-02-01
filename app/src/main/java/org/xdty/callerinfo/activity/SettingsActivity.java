@@ -117,6 +117,10 @@ public class SettingsActivity extends AppCompatActivity {
         SwitchPreference callLogPref;
         String hangupKeywordKey;
         Preference hangupKeywordPref;
+        String hangupGeoKeywordKey;
+        Preference hangupGeoKeywordPref;
+        String hangupNumberKeywordKey;
+        Preference hangupNumberKeywordPref;
 
         int versionClickCount;
         Toast toast;
@@ -373,9 +377,6 @@ public class SettingsActivity extends AppCompatActivity {
                 hangupKey = getString(R.string.auto_hangup_key);
                 callLogKey = getString(R.string.add_call_log_key);
                 hangupPref = (SwitchPreference) findPreference(hangupKey);
-                callLogPref = (SwitchPreference) findPreference(callLogKey);
-                hangupKeywordKey = getString(R.string.hangup_keyword_key);
-                hangupKeywordPref = findPreference(hangupKeywordKey);
                 hangupPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
@@ -387,6 +388,7 @@ public class SettingsActivity extends AppCompatActivity {
                         return false;
                     }
                 });
+                callLogPref = (SwitchPreference) findPreference(callLogKey);
                 callLogPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
@@ -398,10 +400,14 @@ public class SettingsActivity extends AppCompatActivity {
                         return false;
                     }
                 });
+
+                hangupKeywordKey = getString(R.string.hangup_keyword_key);
                 String keyword = sharedPrefs.getString(hangupKeywordKey, "");
                 if (keyword.isEmpty()) {
                     keyword = getString(R.string.hangup_keyword_summary);
                 }
+
+                hangupKeywordPref = findPreference(hangupKeywordKey);
                 hangupKeywordPref.setSummary(keyword);
                 hangupKeywordPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                     @Override
@@ -411,6 +417,42 @@ public class SettingsActivity extends AppCompatActivity {
                         return false;
                     }
                 });
+
+                hangupGeoKeywordKey = getString(R.string.hangup_geo_keyword_key);
+                String geoKeyword = sharedPrefs.getString(hangupGeoKeywordKey, "");
+                if (geoKeyword.isEmpty()) {
+                    geoKeyword = getString(R.string.hangup_geo_keyword_summary);
+                }
+
+                hangupGeoKeywordPref = findPreference(hangupGeoKeywordKey);
+                hangupGeoKeywordPref.setSummary(geoKeyword);
+                hangupGeoKeywordPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        showEditDialog(hangupGeoKeywordKey, R.string.hangup_geo_keyword,
+                                R.string.empty_string, R.string.hangup_keyword_hint);
+                        return false;
+                    }
+                });
+
+                hangupNumberKeywordKey = getString(R.string.hangup_number_keyword_key);
+                String numberKeyword = sharedPrefs.getString(hangupNumberKeywordKey, "");
+                if (numberKeyword.isEmpty()) {
+                    numberKeyword = getString(R.string.hangup_number_keyword_summary);
+                }
+
+                hangupNumberKeywordPref = findPreference(hangupNumberKeywordKey);
+                hangupNumberKeywordPref.setSummary(numberKeyword);
+                hangupNumberKeywordPref.setOnPreferenceClickListener(
+                        new OnPreferenceClickListener() {
+                            @Override
+                            public boolean onPreferenceClick(Preference preference) {
+                                showEditDialog(hangupNumberKeywordKey,
+                                        R.string.hangup_number_keyword,
+                                        R.string.empty_string, R.string.hangup_keyword_hint);
+                                return false;
+                            }
+                        });
             } else {
                 advancedPref.removePreference(pluginPref);
             }

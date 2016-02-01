@@ -119,4 +119,11 @@
     <string name="action_clear_history">Clear call log</string>
     <string name="clear_history_message">Clear all call logs?</string>
     <string name="ring_once">Ring once</string>
+    <string name="hangup_geo_keyword_key" translatable="false">hangup_geo_keyword_key</string>
+    <string name="hangup_geo_keyword_summary">Hangup when caller geo location contains keyword</string>
+    <string name="hangup_geo_keyword">Call block geo location keywords</string>
+    <string name="hangup_number_keyword_key" translatable="false">hangup_number_keyword_key</string>
+    <string name="hangup_number_keyword_summary">Hangup when caller number start with keywords</string>
+    <string name="hangup_number_keyword">Call block number start with keywords</string>
+    <string name="empty_string" translatable="false"/>
 </resources>

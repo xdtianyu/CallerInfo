@@ -130,6 +130,16 @@
                 android:summary="@string/hangup_keyword_summary"
                 android:title="@string/hangup_keyword">
             </com.jenzz.materialpreference.Preference>
+            <com.jenzz.materialpreference.Preference
+                android:key="@string/hangup_geo_keyword_key"
+                android:summary="@string/hangup_geo_keyword_summary"
+                android:title="@string/hangup_geo_keyword">
+            </com.jenzz.materialpreference.Preference>
+            <com.jenzz.materialpreference.Preference
+                android:key="@string/hangup_number_keyword_key"
+                android:summary="@string/hangup_number_keyword_summary"
+                android:title="@string/hangup_number_keyword">
+            </com.jenzz.materialpreference.Preference>
         </PreferenceScreen>
         <com.jenzz.materialpreference.SwitchPreference
             android:defaultValue="false"
