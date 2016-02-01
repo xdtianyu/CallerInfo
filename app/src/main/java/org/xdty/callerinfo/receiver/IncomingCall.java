@@ -297,7 +297,6 @@ public class IncomingCall extends BroadcastReceiver {
                                 geoKeywords = geoKeywords.trim();
                                 if (!geoKeywords.isEmpty()) {
                                     for (String keyword : geoKeywords.split(" ")) {
-                                        Log.e(TAG, "onServiceConnected: " +keyword + "-" + mLogGeo);
                                         if (!TextUtils.isEmpty(mLogGeo) &&
                                                 mLogGeo.contains(keyword)) {
                                             mPluginService.hangUpPhoneCall();
