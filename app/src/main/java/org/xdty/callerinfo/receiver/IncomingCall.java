@@ -73,6 +73,7 @@ public class IncomingCall extends BroadcastReceiver {
         private String mLogNumber;
         private String mLogName;
         private String mLogGeo;
+        private boolean mAutoHangup = false;
 
         public IncomingCallListener(Context context) {
             this.context = context;
@@ -139,6 +140,14 @@ public class IncomingCall extends BroadcastReceiver {
 
             if (TextUtils.isEmpty(incomingNumber)) {
                 return;
+            }
+
+            if (incomingNumber.startsWith("+86")) {
+                incomingNumber = incomingNumber.replace("+86", "");
+            }
+
+            if (incomingNumber.startsWith("86")) {
+                incomingNumber = incomingNumber.replace("86", "");
             }
 
             if (!isShowing) {
@@ -245,7 +254,11 @@ public class IncomingCall extends BroadcastReceiver {
                     if (TextUtils.isEmpty(mLogName)) {
                         mLogName = "";
                     }
-                    mLogName += " " + context.getString(R.string.ring_once);
+                    if (mAutoHangup) {
+                        mLogName += " " + context.getString(R.string.auto_hangup);
+                    } else {
+                        mLogName += " " + context.getString(R.string.ring_once);
+                    }
                 }
             }
 
@@ -265,6 +278,10 @@ public class IncomingCall extends BroadcastReceiver {
             idleStartTime = -1;
             ringTime = -1;
             duration = -1;
+            mLogNumber = null;
+            mLogGeo = null;
+            mLogName = null;
+            mAutoHangup = false;
         }
 
         private void bindPluginService(final boolean hangup, final INumber number) {
@@ -272,6 +289,7 @@ public class IncomingCall extends BroadcastReceiver {
             mLogNumber = number.getNumber();
             mLogName = number.getName();
             mLogGeo = number.getProvince() + " " + number.getCity();
+            mAutoHangup = false;
 
             if (mConnection == null) {
                 mConnection = new ServiceConnection() {
@@ -290,6 +308,7 @@ public class IncomingCall extends BroadcastReceiver {
                                     if (!TextUtils.isEmpty(mLogName) &&
                                             mLogName.contains(keyword)) {
                                         mPluginService.hangUpPhoneCall();
+                                        mAutoHangup = true;
                                     }
                                 }
 
@@ -300,6 +319,7 @@ public class IncomingCall extends BroadcastReceiver {
                                         if (!TextUtils.isEmpty(mLogGeo) &&
                                                 mLogGeo.contains(keyword)) {
                                             mPluginService.hangUpPhoneCall();
+                                            mAutoHangup = true;
                                         }
                                     }
                                 }
@@ -311,6 +331,7 @@ public class IncomingCall extends BroadcastReceiver {
                                         if (!TextUtils.isEmpty(mLogNumber) &&
                                                 mLogNumber.startsWith(keyword)) {
                                             mPluginService.hangUpPhoneCall();
+                                            mAutoHangup = true;
                                         }
                                     }
                                 }
