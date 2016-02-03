@@ -110,6 +110,11 @@ public class Utils {
                 }
                 break;
         }
+
+        if (t.text.isEmpty() || t.text.contains(context.getString(R.string.baidu_advertising))) {
+            t.text = context.getString(R.string.unknown);
+        }
+
         return t;
     }
 

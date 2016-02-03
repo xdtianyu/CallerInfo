@@ -126,4 +126,5 @@
     <string name="hangup_number_keyword_summary">Hangup when caller number start with keywords</string>
     <string name="hangup_number_keyword">Call block number start with keywords</string>
     <string name="empty_string" translatable="false"/>
+    <string name="baidu_advertising" translatable="false">百度糯米</string>
 </resources>
