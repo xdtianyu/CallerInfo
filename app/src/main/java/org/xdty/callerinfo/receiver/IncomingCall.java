@@ -147,7 +147,7 @@ public class IncomingCall extends BroadcastReceiver {
             }
 
             if (incomingNumber.startsWith("86")) {
-                incomingNumber = incomingNumber.replace("86", "");
+                incomingNumber = incomingNumber.replaceFirst("^86", "");
             }
 
             if (!isShowing) {
