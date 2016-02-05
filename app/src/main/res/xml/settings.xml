@@ -32,6 +32,11 @@
             android:title="@string/window_text_size">
         </com.jenzz.materialpreference.Preference>
 
+       <com.jenzz.materialpreference.Preference
+           android:key="@string/window_text_alignment_key"
+           android:title="@string/window_text_alignment">
+       </com.jenzz.materialpreference.Preference>
+
         <com.jenzz.materialpreference.Preference
             android:key="@string/window_transparent_key"
             android:title="@string/window_transparent">

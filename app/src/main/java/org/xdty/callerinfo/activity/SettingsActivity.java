@@ -81,6 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
         Preference bdApiPreference;
         Preference jhApiPreference;
         Preference textSizePref;
+        Preference textAlignPref;
         Preference winTransPref;
         Preference apiTypePref;
         Preference customApiPref;
@@ -93,6 +94,7 @@ public class SettingsActivity extends AppCompatActivity {
         String baiduApiKey;
         String juheApiKey;
         String textSizeKey;
+        String textAlignKey;
         String windowTransKey;
         String apiTypeKey;
         String ignoreContactKey;
@@ -226,6 +228,19 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onPreferenceClick(Preference preference) {
                     showSeekBarDialog(textSizeKey, FloatWindow.TEXT_SIZE, 20, 60,
                             R.string.window_text_size, R.string.text_size);
+                    return true;
+                }
+            });
+
+            final List<String> alignList = Arrays.asList(
+                    getResources().getStringArray(R.array.align_type));
+
+            textAlignKey = getString(R.string.window_text_alignment_key);
+            textAlignPref = findPreference(textAlignKey);
+            textAlignPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    showRadioDialog(textAlignKey, R.string.window_text_alignment, alignList);
                     return true;
                 }
             });
