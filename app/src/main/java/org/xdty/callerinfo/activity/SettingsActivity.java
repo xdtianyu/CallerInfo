@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,9 +27,11 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -81,6 +84,7 @@ public class SettingsActivity extends AppCompatActivity {
         Preference bdApiPreference;
         Preference jhApiPreference;
         Preference textSizePref;
+        Preference winHeightPref;
         Preference textAlignPref;
         Preference winTransPref;
         Preference apiTypePref;
@@ -94,6 +98,7 @@ public class SettingsActivity extends AppCompatActivity {
         String baiduApiKey;
         String juheApiKey;
         String textSizeKey;
+        String winHeightKey;
         String textAlignKey;
         String windowTransKey;
         String apiTypeKey;
@@ -228,6 +233,22 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onPreferenceClick(Preference preference) {
                     showSeekBarDialog(textSizeKey, FloatWindow.TEXT_SIZE, 20, 60,
                             R.string.window_text_size, R.string.text_size);
+                    return true;
+                }
+            });
+
+            winHeightKey = getString(R.string.window_height_key);
+            winHeightPref = findPreference(winHeightKey);
+            winHeightPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    WindowManager mWindowManager = (WindowManager) getActivity().
+                            getSystemService(Context.WINDOW_SERVICE);
+                    Display display = mWindowManager.getDefaultDisplay();
+                    Point point = new Point();
+                    display.getSize(point);
+                    showSeekBarDialog(winHeightKey, FloatWindow.WINDOW_HEIGHT, point.y / 8,
+                            point.y / 4, R.string.window_height, R.string.window_height_message);
                     return true;
                 }
             });
@@ -584,8 +605,8 @@ public class SettingsActivity extends AppCompatActivity {
             builder.setView(layout);
 
             final SeekBarCompat seekBar = (SeekBarCompat) layout.findViewById(R.id.seek_bar);
-            seekBar.setProgress(value);
             seekBar.setMax(max);
+            seekBar.setProgress(value);
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

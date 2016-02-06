@@ -32,6 +32,7 @@ public class FloatWindow extends StandOutWindow {
 
     public final static String NUMBER_INFO = "number_info";
     public final static String TEXT_SIZE = "text_size";
+    public final static String WINDOW_HEIGHT = "window_height";
     public final static String WINDOW_TRANS = "window_trans";
     public final static String WINDOW_COLOR = "window_color";
     public final static String WINDOW_ERROR = "window_error";
@@ -98,7 +99,9 @@ public class FloatWindow extends StandOutWindow {
         Point point = new Point();
         display.getSize(point);
 
-        int height = point.y / 8;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int defaultHeight = point.y / 8;
+        int height = preferences.getInt(getString(R.string.window_height_key), defaultHeight);
 
         StandOutLayoutParams standOutLayoutParams = new StandOutLayoutParams(id, point.x, height,
                 StandOutLayoutParams.CENTER, StandOutLayoutParams.CENTER);
@@ -114,7 +117,7 @@ public class FloatWindow extends StandOutWindow {
         }
 
         if (id == SETTING_FRONT || id == SEARCH_FRONT) {
-            standOutLayoutParams.y = (int) (height * 1.5);
+            standOutLayoutParams.y = (int) (defaultHeight * 1.5);
         }
 
         standOutLayoutParams.minWidth = point.x;

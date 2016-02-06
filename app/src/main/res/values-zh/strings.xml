@@ -89,8 +89,10 @@
     <string name="hangup_geo_keyword_summary">当号码归属地包含关键字时挂断</string>
     <string name="hangup_number_keyword_summary">当来电号码是以关键字开始时挂断</string>
     <string name="hangup_number_keyword">挂断号码关键字</string>
-    <string name="window_text_alignment">文字对齐方式</string>
-    <string name="align_center">居中对齐</string>
-    <string name="align_left">左对齐</string>
-    <string name="align_right">右对齐</string>
+    <string name="window_text_alignment">文字对齐</string>
+    <string name="align_center">居中</string>
+    <string name="align_right">靠右</string>
+    <string name="window_height">窗口高度</string>
+    <string name="align_left">靠左</string>
+    <string name="window_height_message">拖动滑块以调整悬浮窗高度</string>
 </resources>

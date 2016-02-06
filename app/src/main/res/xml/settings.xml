@@ -32,10 +32,15 @@
             android:title="@string/window_text_size">
         </com.jenzz.materialpreference.Preference>
 
-       <com.jenzz.materialpreference.Preference
-           android:key="@string/window_text_alignment_key"
-           android:title="@string/window_text_alignment">
-       </com.jenzz.materialpreference.Preference>
+        <com.jenzz.materialpreference.Preference
+            android:key="@string/window_text_alignment_key"
+            android:title="@string/window_text_alignment">
+        </com.jenzz.materialpreference.Preference>
+
+        <com.jenzz.materialpreference.Preference
+            android:key="@string/window_height_key"
+            android:title="@string/window_height">
+        </com.jenzz.materialpreference.Preference>
 
         <com.jenzz.materialpreference.Preference
             android:key="@string/window_transparent_key"
@@ -46,12 +51,6 @@
             android:defaultValue="true"
             android:key="@string/window_trans_back_only_key"
             android:title="@string/window_trans_back_only">
-        </com.jenzz.materialpreference.SwitchPreference>
-
-        <com.jenzz.materialpreference.SwitchPreference
-            android:defaultValue="true"
-            android:key="@string/window_close_anim_key"
-            android:title="@string/window_close_anim">
         </com.jenzz.materialpreference.SwitchPreference>
 
         <PreferenceScreen
@@ -82,6 +81,11 @@
                 android:defaultValue="false"
                 android:key="@string/hide_when_touch_key"
                 android:title="@string/hide_when_touch">
+            </com.jenzz.materialpreference.SwitchPreference>
+            <com.jenzz.materialpreference.SwitchPreference
+                android:defaultValue="true"
+                android:key="@string/window_close_anim_key"
+                android:title="@string/window_close_anim">
             </com.jenzz.materialpreference.SwitchPreference>
         </PreferenceScreen>
 

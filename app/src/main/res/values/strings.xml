@@ -132,4 +132,7 @@
     <string name="align_left">Align left</string>
     <string name="align_center">Align center</string>
     <string name="align_right">Align right</string>
+    <string name="window_height_key" translatable="false">window_height_key</string>
+    <string name="window_height">Window height</string>
+    <string name="window_height_message">Drag to change window height.</string>
 </resources>
