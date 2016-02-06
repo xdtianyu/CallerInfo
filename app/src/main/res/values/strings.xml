@@ -135,4 +135,7 @@
     <string name="window_height_key" translatable="false">window_height_key</string>
     <string name="window_height">Window height</string>
     <string name="window_height_message">Drag to change window height.</string>
+    <string name="window_text_style">Text style</string>
+    <string name="window_text_color_key" translatable="false">window_text_color_key</string>
+    <string name="window_text_color">Enable text color</string>
 </resources>

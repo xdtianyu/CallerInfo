@@ -27,15 +27,25 @@
         android:key="@string/float_window_key"
         android:title="@string/float_window">
 
-        <com.jenzz.materialpreference.Preference
-            android:key="@string/window_text_size_key"
-            android:title="@string/window_text_size">
-        </com.jenzz.materialpreference.Preference>
+        <PreferenceScreen
+            android:layout="@layout/preference"
+            android:title="@string/window_text_style">
+            <com.jenzz.materialpreference.Preference
+                android:key="@string/window_text_size_key"
+                android:title="@string/window_text_size">
+            </com.jenzz.materialpreference.Preference>
 
-        <com.jenzz.materialpreference.Preference
-            android:key="@string/window_text_alignment_key"
-            android:title="@string/window_text_alignment">
-        </com.jenzz.materialpreference.Preference>
+            <com.jenzz.materialpreference.Preference
+                android:key="@string/window_text_alignment_key"
+                android:title="@string/window_text_alignment">
+            </com.jenzz.materialpreference.Preference>
+
+            <com.jenzz.materialpreference.SwitchPreference
+                android:defaultValue="false"
+                android:key="@string/window_text_color_key"
+                android:title="@string/window_text_color">
+            </com.jenzz.materialpreference.SwitchPreference>
+        </PreferenceScreen>
 
         <com.jenzz.materialpreference.Preference
             android:key="@string/window_height_key"

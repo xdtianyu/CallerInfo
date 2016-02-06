@@ -95,4 +95,6 @@
     <string name="window_height">窗口高度</string>
     <string name="align_left">靠左</string>
     <string name="window_height_message">拖动滑块以调整悬浮窗高度</string>
+    <string name="window_text_style">文字样式</string>
+    <string name="window_text_color">启用文字颜色</string>
 </resources>

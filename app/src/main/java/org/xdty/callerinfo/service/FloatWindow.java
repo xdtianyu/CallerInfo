@@ -245,6 +245,8 @@ public class FloatWindow extends StandOutWindow {
 
         boolean isTransBackOnly = preferences.getBoolean(
                 getString(R.string.window_trans_back_only_key), true);
+        boolean enableTextColor = preferences.getBoolean(
+                getString(R.string.window_text_color_key), false);
 
         if (id == CALLER_FRONT || id == SETTING_FRONT) {
             int alignType = preferences.getInt(getString(R.string.window_text_alignment_key), 1);
@@ -282,6 +284,9 @@ public class FloatWindow extends StandOutWindow {
 
         if (color != 0) {
             layout.setBackgroundColor(color);
+            if (enableTextColor && id == CALLER_FRONT) {
+                textView.setTextColor(color);
+            }
         }
 
         if (text != null) {
