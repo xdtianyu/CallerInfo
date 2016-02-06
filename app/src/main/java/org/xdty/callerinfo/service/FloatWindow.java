@@ -122,7 +122,7 @@ public class FloatWindow extends StandOutWindow {
 
         standOutLayoutParams.minWidth = point.x;
         standOutLayoutParams.maxWidth = point.x;
-        standOutLayoutParams.minHeight = height;
+        standOutLayoutParams.minHeight = defaultHeight / 4;
         if (!isMovable(id)) {
             standOutLayoutParams.type = StandOutLayoutParams.TYPE_SYSTEM_OVERLAY;
         }
@@ -229,6 +229,7 @@ public class FloatWindow extends StandOutWindow {
         int color = data.getInt(WINDOW_COLOR);
         String text = data.getString(NUMBER_INFO);
         int size = data.getInt(TEXT_SIZE);
+        int height = data.getInt(WINDOW_HEIGHT);
         int trans = data.getInt(WINDOW_TRANS);
         int error = data.getInt(WINDOW_ERROR);
         Window window = getWindow(id);
@@ -245,7 +246,7 @@ public class FloatWindow extends StandOutWindow {
         boolean isTransBackOnly = preferences.getBoolean(
                 getString(R.string.window_trans_back_only_key), true);
 
-        if (id == CALLER_FRONT) {
+        if (id == CALLER_FRONT || id == SETTING_FRONT) {
             int alignType = preferences.getInt(getString(R.string.window_text_alignment_key), 1);
             int gravity;
             switch (alignType) {
@@ -270,6 +271,11 @@ public class FloatWindow extends StandOutWindow {
             size = preferences.getInt(getString(R.string.window_text_size_key), 20);
         }
 
+        if (height != 0) {
+            StandOutLayoutParams params = window.getLayoutParams();
+            window.edit().setSize(params.width, height).commit();
+        }
+
         if (trans == 0) {
             trans = preferences.getInt(getString(R.string.window_transparent_key), 80);
         }
@@ -285,7 +291,9 @@ public class FloatWindow extends StandOutWindow {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
 
         if (isTransBackOnly) {
-            layout.getBackground().setAlpha((int) (trans / 100.0 * 255));
+            if (layout.getBackground() != null) {
+                layout.getBackground().setAlpha((int) (trans / 100.0 * 255));
+            }
         } else {
             layout.setAlpha(trans / 100f);
         }
