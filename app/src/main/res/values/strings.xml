@@ -129,13 +129,7 @@
     <string name="baidu_advertising" translatable="false">百度糯米</string>
     <string name="window_text_alignment_key" translatable="false">window_text_alignment_key</string>
     <string name="window_text_alignment">Window text alignment</string>
-    <string name="align_left_top">Align left top</string>
     <string name="align_left">Align left</string>
-    <string name="align_left_bottom">Align left bottom</string>
-    <string name="align_center_top">Align center top</string>
     <string name="align_center">Align center</string>
-    <string name="align_center_bottom">Align center bottom</string>
-    <string name="align_right_top">Align right top</string>
     <string name="align_right">Align right</string>
-    <string name="align_right_bottom">Align right bottom</string>
 </resources>

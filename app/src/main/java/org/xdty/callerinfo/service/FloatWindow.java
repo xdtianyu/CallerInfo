@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -44,6 +45,10 @@ public class FloatWindow extends StandOutWindow {
     public final static int STATUS_CLOSE = 0;
     public final static int STATUS_SHOWING = 1;
     public final static int STATUS_HIDE = 2;
+
+    public final static int TEXT_ALIGN_LEFT = 0;
+    public final static int TEXT_ALIGN_CENTER = 1;
+    public final static int TEXT_ALIGN_RIGHT = 2;
 
     private static int mShowingStatus = STATUS_CLOSE;
 
@@ -237,6 +242,27 @@ public class FloatWindow extends StandOutWindow {
         boolean isTransBackOnly = preferences.getBoolean(
                 getString(R.string.window_trans_back_only_key), true);
 
+        if (id == CALLER_FRONT) {
+            int alignType = preferences.getInt(getString(R.string.window_text_alignment_key), 1);
+            int gravity;
+            switch (alignType) {
+                case TEXT_ALIGN_LEFT:
+                    gravity = Gravity.START | Gravity.CENTER;
+                    break;
+                case TEXT_ALIGN_CENTER:
+                    gravity = Gravity.CENTER;
+                    break;
+                case TEXT_ALIGN_RIGHT:
+                    gravity = Gravity.END | Gravity.CENTER;
+                    break;
+                default:
+                    gravity = Gravity.CENTER;
+                    break;
+            }
+            errorText.setGravity(gravity);
+            textView.setGravity(gravity);
+        }
+
         if (size == 0) {
             size = preferences.getInt(getString(R.string.window_text_size_key), 20);
         }
@@ -265,7 +291,6 @@ public class FloatWindow extends StandOutWindow {
             errorText.setVisibility(View.VISIBLE);
             errorText.setText(getString(error));
         }
-
     }
 
     @Override

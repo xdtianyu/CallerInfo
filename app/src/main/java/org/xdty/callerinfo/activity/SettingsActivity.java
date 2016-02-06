@@ -240,10 +240,11 @@ public class SettingsActivity extends AppCompatActivity {
             textAlignPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    showRadioDialog(textAlignKey, R.string.window_text_alignment, alignList);
+                    showRadioDialog(textAlignKey, R.string.window_text_alignment, alignList, 1);
                     return true;
                 }
             });
+            textAlignPref.setSummary(alignList.get(sharedPrefs.getInt(textAlignKey, 1)));
 
             windowTransKey = getString(R.string.window_transparent_key);
             winTransPref = findPreference(windowTransKey);
@@ -265,7 +266,7 @@ public class SettingsActivity extends AppCompatActivity {
             apiTypePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    showRadioDialog(apiTypeKey, R.string.api_type, apiList);
+                    showRadioDialog(apiTypeKey, R.string.api_type, apiList, 0);
                     return true;
                 }
             });
@@ -657,7 +658,8 @@ public class SettingsActivity extends AppCompatActivity {
             builder.show();
         }
 
-        private void showRadioDialog(final String key, int title, final List<String> list) {
+        private void showRadioDialog(final String key, int title, final List<String> list,
+                int defValue) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
             View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_radio, null);
@@ -674,7 +676,8 @@ public class SettingsActivity extends AppCompatActivity {
                 radioGroup.addView(radioButton, layoutParams);
             }
 
-            RadioButton button = ((RadioButton) radioGroup.getChildAt(sharedPrefs.getInt(key, 0)));
+            RadioButton button =
+                    ((RadioButton) radioGroup.getChildAt(sharedPrefs.getInt(key, defValue)));
             button.setChecked(true);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override

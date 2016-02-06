@@ -91,12 +91,6 @@
     <string name="hangup_number_keyword">挂断号码关键字</string>
     <string name="window_text_alignment">文字对齐方式</string>
     <string name="align_center">居中对齐</string>
-    <string name="align_center_bottom">中下对齐</string>
-    <string name="align_center_top">中上对齐</string>
-    <string name="align_left">居左对齐</string>
-    <string name="align_left_bottom">左下对齐</string>
-    <string name="align_left_top">左上对齐</string>
-    <string name="align_right">居右对齐</string>
-    <string name="align_right_bottom">右下对齐</string>
-    <string name="align_right_top">右上对齐</string>
+    <string name="align_left">左对齐</string>
+    <string name="align_right">右对齐</string>
 </resources>

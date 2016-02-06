@@ -21,11 +21,8 @@
         <item>@string/api_juhe</item>
     </array>
     <string-array name="align_type">
-        <item>@string/align_left_top</item>
         <item>@string/align_left</item>
-        <item>@string/align_center_top</item>
         <item>@string/align_center</item>
-        <item>@string/align_right_top</item>
         <item>@string/align_right</item>
     </string-array>
 </resources>
