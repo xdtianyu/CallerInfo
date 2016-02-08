@@ -155,6 +155,11 @@
                 android:title="@string/hangup_geo_keyword">
             </com.jenzz.materialpreference.Preference>
             <com.jenzz.materialpreference.Preference
+                android:key="@string/allow_geo_keyword_key"
+                android:summary="@string/allow_geo_keyword_summary"
+                android:title="@string/allow_geo_keyword">
+            </com.jenzz.materialpreference.Preference>
+            <com.jenzz.materialpreference.Preference
                 android:key="@string/hangup_number_keyword_key"
                 android:summary="@string/hangup_number_keyword_summary"
                 android:title="@string/hangup_number_keyword">
