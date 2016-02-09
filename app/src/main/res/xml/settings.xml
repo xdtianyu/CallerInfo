@@ -129,6 +129,10 @@
                 android:key="@string/only_offline_key"
                 android:title="@string/only_offline">
             </com.jenzz.materialpreference.SwitchPreference>
+            <com.jenzz.materialpreference.Preference
+                android:key="@string/ignore_regex_key"
+                android:title="@string/ignore_regex">
+            </com.jenzz.materialpreference.Preference>
         </PreferenceScreen>
         <PreferenceScreen
             android:key="@string/plugin_key"

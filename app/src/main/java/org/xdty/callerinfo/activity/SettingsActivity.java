@@ -89,6 +89,7 @@ public class SettingsActivity extends AppCompatActivity {
         Preference winTransPref;
         Preference apiTypePref;
         Preference customApiPref;
+        Preference ignoreRegexPref;
         PreferenceScreen customDataPref;
         SwitchPreference ignoreContactPref;
         SwitchPreference outgoingPref;
@@ -110,6 +111,7 @@ public class SettingsActivity extends AppCompatActivity {
         String customApiUrl;
         String customApiKey;
         String customDataKey;
+        String ignoreRegexKey;
 
         PreferenceCategory advancedPref;
         PreferenceCategory aboutPref;
@@ -358,6 +360,21 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
+            ignoreRegexKey = getString(R.string.ignore_regex_key);
+            ignoreRegexPref = findPreference(ignoreRegexKey);
+            ignoreRegexPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    showEditDialog(ignoreRegexKey, R.string.ignore_regex, R.string.empty_string,
+                            R.string.ignore_regex_hint, R.string.example, R.string.regex_example);
+                    return false;
+                }
+            });
+            String regex = sharedPrefs.getString(ignoreRegexKey, "");
+            if (!regex.isEmpty()) {
+                ignoreRegexPref.setSummary(regex);
+            }
 
             customDataKey = getString(R.string.custom_data_key);
             customDataPref = (PreferenceScreen) findPreference(customDataKey);
@@ -773,6 +790,11 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         private void showEditDialog(final String key, int title, final int defaultText, int hint) {
+            showEditDialog(key, title, defaultText, hint, 0, 0);
+        }
+
+        private void showEditDialog(final String key, int title, final int defaultText, int hint,
+                final int help, final int helpText) {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
@@ -800,6 +822,16 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
             builder.setNegativeButton(R.string.cancel, null);
+
+            if (help != 0) {
+                builder.setNeutralButton(help, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showTextDialog(help, helpText);
+                    }
+                });
+            }
+
             builder.setCancelable(true);
             builder.show();
         }

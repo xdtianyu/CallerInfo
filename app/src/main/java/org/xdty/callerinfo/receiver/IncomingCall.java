@@ -79,7 +79,6 @@ public class IncomingCall extends BroadcastReceiver {
         private String mLogGeo;
         private boolean mAutoHangup = false;
         private boolean mIgnore = false;
-        private String mIgnoreRegex;
 
         public IncomingCallListener(Context context) {
             this.context = context;
@@ -90,15 +89,16 @@ public class IncomingCall extends BroadcastReceiver {
             mKeywordDefault = context.getString(R.string.hangup_keyword_default);
             mGeoKeywordKey = context.getString(R.string.hangup_geo_keyword_key);
             mNumberKeywordKey = context.getString(R.string.hangup_number_keyword_key);
-            mIgnoreRegex  = mPrefs.getString(context.getString(R.string.ignore_regex_key), "");
-            mIgnoreRegex = mIgnoreRegex.replace("*", "[0-9]").replace(" ", "|");
         }
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
             if (!TextUtils.isEmpty(incomingNumber)) {
                 incomingNumber = incomingNumber.replaceAll(" ", "");
-                mIgnore = incomingNumber.matches(mIgnoreRegex);
+                String ignoreRegex =
+                        mPrefs.getString(context.getString(R.string.ignore_regex_key), "");
+                ignoreRegex = ignoreRegex.replace("*", "[0-9]").replace(" ", "|");
+                mIgnore = incomingNumber.matches(ignoreRegex);
             }
 
             if (mIgnore) {
