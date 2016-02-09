@@ -10,7 +10,7 @@
     <string name="action_search">Search</string>
     <string name="search_hint">Search phone number&#8230;</string>
     <string name="no_history">No incoming call log</string>
-    <string name="unknown">Unknown</string>
+    <string name="unknown">No data</string>
     <string name="loading">Loading&#8230;</string>
     <string name="loading_error">Loading failed</string>
     <string name="color">Color</string>
