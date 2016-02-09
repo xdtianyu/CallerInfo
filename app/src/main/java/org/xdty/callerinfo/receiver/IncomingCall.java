@@ -266,7 +266,7 @@ public class IncomingCall extends BroadcastReceiver {
                 isShowing = false;
                 StandOutWindow.closeAll(context, FloatWindow.class);
                 if (mLogName != null && mLogNumber != null) {
-                    if (saveLog) {
+                    if (saveLog && !mLogName.isEmpty()) {
                         updateCallLog(mLogNumber, mLogName);
                     }
                     unBindPluginService();
