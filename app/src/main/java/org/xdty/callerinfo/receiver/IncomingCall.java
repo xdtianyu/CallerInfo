@@ -36,6 +36,10 @@ public class IncomingCall extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "onReceive: " + intent.toString() + " " +
+                    Utils.bundleToString(intent.getExtras()));
+        }
         if (mIncomingCallListener == null) {
             TelephonyManager telephonyManager = (TelephonyManager) context
                     .getSystemService(Context.TELEPHONY_SERVICE);
@@ -74,6 +78,8 @@ public class IncomingCall extends BroadcastReceiver {
         private String mLogName;
         private String mLogGeo;
         private boolean mAutoHangup = false;
+        private boolean mIgnore = false;
+        private String mIgnoreRegex;
 
         public IncomingCallListener(Context context) {
             this.context = context;
@@ -84,12 +90,19 @@ public class IncomingCall extends BroadcastReceiver {
             mKeywordDefault = context.getString(R.string.hangup_keyword_default);
             mGeoKeywordKey = context.getString(R.string.hangup_geo_keyword_key);
             mNumberKeywordKey = context.getString(R.string.hangup_number_keyword_key);
+            mIgnoreRegex  = mPrefs.getString(context.getString(R.string.ignore_regex_key), "");
+            mIgnoreRegex = mIgnoreRegex.replace("*", "[0-9]").replace(" ", "|");
         }
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
             if (!TextUtils.isEmpty(incomingNumber)) {
                 incomingNumber = incomingNumber.replaceAll(" ", "");
+                mIgnore = incomingNumber.matches(mIgnoreRegex);
+            }
+
+            if (mIgnore) {
+                return;
             }
 
             switch (state) {

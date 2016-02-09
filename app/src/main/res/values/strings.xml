@@ -138,4 +138,5 @@
     <string name="window_text_style">Text style</string>
     <string name="window_text_color_key" translatable="false">window_text_color_key</string>
     <string name="window_text_color">Enable text color</string>
+    <string name="ignore_regex_key">ignore_regex_key</string>
 </resources>
