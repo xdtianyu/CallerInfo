@@ -314,13 +314,24 @@ public class IncomingCall extends BroadcastReceiver {
 
                                 String geoKeywords = mPrefs.getString(mGeoKeywordKey, "");
                                 geoKeywords = geoKeywords.trim();
-                                if (!geoKeywords.isEmpty()) {
+                                if (!geoKeywords.isEmpty() && !TextUtils.isEmpty(mLogGeo)) {
+                                    boolean hangUp = false;
                                     for (String keyword : geoKeywords.split(" ")) {
-                                        if (!TextUtils.isEmpty(mLogGeo) &&
-                                                mLogGeo.contains(keyword)) {
-                                            mPluginService.hangUpPhoneCall();
-                                            mAutoHangup = true;
+                                        if (!keyword.startsWith("!")) {
+                                            if (mLogGeo.contains(keyword)) {
+                                                hangUp = true;
+                                                break;
+                                            }
+                                        } else if (mLogGeo.contains(keyword.replace("!", ""))) {
+                                            hangUp = false;
+                                            break;
+                                        } else {
+                                            hangUp = true;
                                         }
+                                    }
+                                    if (hangUp) {
+                                        mPluginService.hangUpPhoneCall();
+                                        mAutoHangup = true;
                                     }
                                 }
 
