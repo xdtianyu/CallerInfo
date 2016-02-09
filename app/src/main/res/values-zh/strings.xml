@@ -97,6 +97,4 @@
     <string name="window_height_message">拖动滑块以调整悬浮窗高度</string>
     <string name="window_text_style">文字样式</string>
     <string name="window_text_color">启用文字颜色</string>
-    <string name="allow_geo_keyword">允许归属地关键字</string>
-    <string name="allow_geo_keyword_summary">当号码归属地不包含关键字时挂断</string>
 </resources>

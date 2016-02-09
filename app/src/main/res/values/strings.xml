@@ -138,7 +138,4 @@
     <string name="window_text_style">Text style</string>
     <string name="window_text_color_key" translatable="false">window_text_color_key</string>
     <string name="window_text_color">Enable text color</string>
-    <string name="allow_geo_keyword_key" translatable="false">allow_geo_keyword_key</string>
-    <string name="allow_geo_keyword_summary">Hangup when caller geo location not contains keyword</string>
-    <string name="allow_geo_keyword">Allow geo location keyword</string>
 </resources>
