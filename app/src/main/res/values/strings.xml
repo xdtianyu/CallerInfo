@@ -143,4 +143,7 @@
     <string name="ignore_regex_hint">Please split keywords with space</string>
     <string name="example">Example</string>
     <string name="regex_example">Match a number with a star(*), split ranges with a space, To match \"1000–19999\", please enter \"1*** 1****\", to match \"550–579\", please enter \"55* 56* 57*\"</string>
+    <string name="window_text_padding_key" translatable="false">window_text_padding_key</string>
+    <string name="window_text_padding">Window text padding</string>
+    <string name="text_padding">Drag to change text padding.</string>
 </resources>

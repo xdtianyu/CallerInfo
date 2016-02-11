@@ -87,6 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
         Preference winHeightPref;
         Preference textAlignPref;
         Preference winTransPref;
+        Preference winPaddingPref;
         Preference apiTypePref;
         Preference customApiPref;
         Preference ignoreRegexPref;
@@ -102,6 +103,7 @@ public class SettingsActivity extends AppCompatActivity {
         String winHeightKey;
         String textAlignKey;
         String windowTransKey;
+        String windowPaddingKey;
         String apiTypeKey;
         String ignoreContactKey;
         String outgoingKey;
@@ -182,11 +184,18 @@ public class SettingsActivity extends AppCompatActivity {
         private Intent mPluginIntent = new Intent().setComponent(new ComponentName(
                 "org.xdty.callerinfo.plugin",
                 "org.xdty.callerinfo.plugin.PluginService"));
+        private Point mPoint;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings);
+
+            WindowManager mWindowManager = (WindowManager) getActivity().
+                    getSystemService(Context.WINDOW_SERVICE);
+            Display display = mWindowManager.getDefaultDisplay();
+            mPoint = new Point();
+            display.getSize(mPoint);
 
             sharedPrefs = getPreferenceManager().getSharedPreferences();
 
@@ -244,13 +253,8 @@ public class SettingsActivity extends AppCompatActivity {
             winHeightPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    WindowManager mWindowManager = (WindowManager) getActivity().
-                            getSystemService(Context.WINDOW_SERVICE);
-                    Display display = mWindowManager.getDefaultDisplay();
-                    Point point = new Point();
-                    display.getSize(point);
-                    showSeekBarDialog(winHeightKey, FloatWindow.WINDOW_HEIGHT, point.y / 8,
-                            point.y / 4, R.string.window_height, R.string.window_height_message);
+                    showSeekBarDialog(winHeightKey, FloatWindow.WINDOW_HEIGHT, mPoint.y / 8,
+                            mPoint.y / 4, R.string.window_height, R.string.window_height_message);
                     return true;
                 }
             });
@@ -276,6 +280,17 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onPreferenceClick(Preference preference) {
                     showSeekBarDialog(windowTransKey, FloatWindow.WINDOW_TRANS, 80, 100,
                             R.string.window_transparent, R.string.text_transparent);
+                    return true;
+                }
+            });
+
+            windowPaddingKey = getString(R.string.window_text_padding_key);
+            winPaddingPref = findPreference(windowPaddingKey);
+            winPaddingPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    showSeekBarDialog(windowPaddingKey, FloatWindow.TEXT_PADDING, 0, mPoint.x / 2,
+                            R.string.window_text_padding, R.string.text_padding);
                     return true;
                 }
             });

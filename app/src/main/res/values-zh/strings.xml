@@ -101,4 +101,6 @@
     <string name="example">示例</string>
     <string name="ignore_regex_hint">请使用空格分隔关键字</string>
     <string name="regex_example">使用星号(*)匹配任意数字, 使用空格分隔每个号码段。匹配 \"1000–19999\", 请输入 \"1*** 1****\", 匹配 \"550–579\", 请输入 \"55* 56* 57*\"</string>
+    <string name="text_padding">拖动以调整文字缩进</string>
+    <string name="window_text_padding">文字缩进</string>
 </resources>

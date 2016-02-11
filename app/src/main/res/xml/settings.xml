@@ -40,6 +40,11 @@
                 android:title="@string/window_text_alignment">
             </com.jenzz.materialpreference.Preference>
 
+            <com.jenzz.materialpreference.Preference
+                android:key="@string/window_text_padding_key"
+                android:title="@string/window_text_padding">
+            </com.jenzz.materialpreference.Preference>
+
             <com.jenzz.materialpreference.SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/window_text_color_key"

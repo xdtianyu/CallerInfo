@@ -32,6 +32,7 @@ public class FloatWindow extends StandOutWindow {
 
     public final static String NUMBER_INFO = "number_info";
     public final static String TEXT_SIZE = "text_size";
+    public final static String TEXT_PADDING = "text_padding";
     public final static String WINDOW_HEIGHT = "window_height";
     public final static String WINDOW_TRANS = "window_trans";
     public final static String WINDOW_COLOR = "window_color";
@@ -232,6 +233,7 @@ public class FloatWindow extends StandOutWindow {
         int height = data.getInt(WINDOW_HEIGHT);
         int trans = data.getInt(WINDOW_TRANS);
         int error = data.getInt(WINDOW_ERROR);
+        int padding = data.getInt(TEXT_PADDING);
         Window window = getWindow(id);
 
         if (window == null) {
@@ -248,21 +250,29 @@ public class FloatWindow extends StandOutWindow {
         boolean enableTextColor = preferences.getBoolean(
                 getString(R.string.window_text_color_key), false);
 
+        if (padding == 0) {
+            padding = preferences.getInt(getString(R.string.window_text_padding_key), 0);
+        }
+
         if (id == CALLER_FRONT || id == SETTING_FRONT) {
             int alignType = preferences.getInt(getString(R.string.window_text_alignment_key), 1);
             int gravity;
             switch (alignType) {
                 case TEXT_ALIGN_LEFT:
                     gravity = Gravity.START | Gravity.CENTER;
+                    textView.setPadding(padding, 0, 0, 0);
                     break;
                 case TEXT_ALIGN_CENTER:
                     gravity = Gravity.CENTER;
+                    textView.setPadding(0, padding, 0, 0);
                     break;
                 case TEXT_ALIGN_RIGHT:
                     gravity = Gravity.END | Gravity.CENTER;
+                    textView.setPadding(0, 0, padding, 0);
                     break;
                 default:
                     gravity = Gravity.CENTER;
+                    textView.setPadding(padding, 0, 0, 0);
                     break;
             }
             errorText.setGravity(gravity);
