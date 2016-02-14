@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private CallerAdapter mCallerAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FrameLayout mMainLayout;
+    private PhoneNumber mPhoneNumber;
+    private long mLastSearchTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,6 +231,10 @@ public class MainActivity extends AppCompatActivity {
         if (FloatWindow.status() != FloatWindow.STATUS_CLOSE) {
             Utils.closeWindow(this);
         }
+        if (mPhoneNumber != null) {
+            mPhoneNumber.clear();
+            mPhoneNumber = null;
+        }
         super.onStop();
     }
 
@@ -293,10 +299,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: " + query);
-                showNumberInfo(query);
-                mRecyclerView.setVisibility(View.INVISIBLE);
-                mMainLayout.setBackgroundColor(ContextCompat.getColor(MainActivity.this,
-                        R.color.dark));
+                if (System.currentTimeMillis() - mLastSearchTime > 1000) {
+                    showNumberInfo(query);
+                    mRecyclerView.setVisibility(View.INVISIBLE);
+                    mMainLayout.setBackgroundColor(ContextCompat.getColor(MainActivity.this,
+                            R.color.dark));
+                    mLastSearchTime = System.currentTimeMillis();
+                }
                 return false;
             }
 
@@ -336,7 +345,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showNumberInfo(String phoneNumber) {
-        Utils.closeWindow(this);
 
         if (phoneNumber.isEmpty()) {
             return;
@@ -354,34 +362,37 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        new PhoneNumber(this, new PhoneNumber.Callback() {
-            @Override
-            public void onResponseOffline(INumber number) {
-                if (number != null) {
-                    Utils.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
+        if (mPhoneNumber == null) {
+            mPhoneNumber = new PhoneNumber(this, new PhoneNumber.Callback() {
+                @Override
+                public void onResponseOffline(INumber number) {
+                    if (number != null) {
+                        Utils.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
+                    }
                 }
-            }
 
-            @Override
-            public void onResponse(INumber number) {
+                @Override
+                public void onResponse(INumber number) {
 
-                if (number != null && number.isValid()) {
-                    new Caller(number, !number.isOnline()).save();
-                    Utils.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
+                    if (number != null && number.isValid()) {
+                        new Caller(number, !number.isOnline()).save();
+                        Utils.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
+                    }
                 }
-            }
 
-            @Override
-            public void onResponseFailed(INumber number, boolean isOnline) {
-                if (isOnline) {
-                    Utils.sendData(MainActivity.this, FloatWindow.WINDOW_ERROR,
-                            R.string.online_failed, FloatWindow.SEARCH_FRONT);
-                } else {
-                    Utils.showTextWindow(MainActivity.this, R.string.offline_failed,
-                            FloatWindow.SEARCH_FRONT);
+                @Override
+                public void onResponseFailed(INumber number, boolean isOnline) {
+                    if (isOnline) {
+                        Utils.sendData(MainActivity.this, FloatWindow.WINDOW_ERROR,
+                                R.string.online_failed, FloatWindow.SEARCH_FRONT);
+                    } else {
+                        Utils.showTextWindow(MainActivity.this, R.string.offline_failed,
+                                FloatWindow.SEARCH_FRONT);
+                    }
                 }
-            }
-        }).fetch(phoneNumber);
+            });
+        }
+        mPhoneNumber.fetch(phoneNumber);
     }
 
     private void checkEula() {
