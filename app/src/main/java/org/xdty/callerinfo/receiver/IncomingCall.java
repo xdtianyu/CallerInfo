@@ -33,6 +33,7 @@ public class IncomingCall extends BroadcastReceiver {
     public final static String TAG = IncomingCall.class.getSimpleName();
 
     private static IncomingCallListener mIncomingCallListener;
+    private static String mIncomingNumber = null;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -46,11 +47,16 @@ public class IncomingCall extends BroadcastReceiver {
             mIncomingCallListener = new IncomingCallListener(context);
             telephonyManager.listen(mIncomingCallListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
+
+        if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
+            mIncomingNumber = intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER);
+        } else {
+            mIncomingNumber = null;
+        }
     }
 
     public static class IncomingCallListener extends PhoneStateListener {
 
-        public final static String TAG = IncomingCallListener.class.getSimpleName();
         private final boolean DEBUG = BuildConfig.DEBUG;
         private Context context;
         private boolean isShowing = false;
@@ -59,7 +65,6 @@ public class IncomingCall extends BroadcastReceiver {
         private long idleStartTime = -1;
         private long ringTime = -1;
         private long duration = -1;
-        private String mIncomingNumber = null;
         private SharedPreferences mPrefs;
         private boolean mIgnoreContact;
         private boolean mShowContactOffline = false;
@@ -125,6 +130,11 @@ public class IncomingCall extends BroadcastReceiver {
                         }
                     } else {
                         if (mPrefs.getBoolean(mOutgoingKey, false)) {
+                            if (TextUtils.isEmpty(incomingNumber)) {
+                                Log.d(TAG, "number is null. " + TextUtils.isEmpty(mIncomingNumber));
+                                incomingNumber = mIncomingNumber;
+                                mIncomingNumber = null;
+                            }
                             show(incomingNumber);
                         }
                     }
