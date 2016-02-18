@@ -50,8 +50,6 @@ public class IncomingCall extends BroadcastReceiver {
 
         if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
             mIncomingNumber = intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER);
-        } else {
-            mIncomingNumber = null;
         }
     }
 
