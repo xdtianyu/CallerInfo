@@ -7,7 +7,7 @@ An android app to get phone number location and other info. [中文](https://git
 [![Release notes](https://img.shields.io/badge/release-notes-yellowgreen.svg)](https://github.com/xdtianyu/CallerInfo/releases)
 [![Coolapk download](https://img.shields.io/badge/coolapk-download-blue.svg)](http://coolapk.com/apk/org.xdty.callerinfo)
 
-[![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.3.5/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.3.5/callerinfo-v1.3.5-release.apk)
+[![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.3.6/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.3.6/callerinfo-v1.3.6-release.apk)
 
 [![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.3.3/CallerInfo-plugin-v1.0.1-release.apk.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.3.3/CallerInfo-plugin-v1.0.1-release.apk)
 
