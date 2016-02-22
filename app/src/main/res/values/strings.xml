@@ -146,4 +146,5 @@
     <string name="window_text_padding_key" translatable="false">window_text_padding_key</string>
     <string name="window_text_padding">Window text padding</string>
     <string name="text_padding">Drag to change text padding.</string>
+    <string name="icon">Icon</string>
 </resources>

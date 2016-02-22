@@ -147,7 +147,7 @@ public class Utils {
         Calendar calendar = Calendar.getInstance();
         TimeZone tz = TimeZone.getDefault();
         calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         java.util.Date currentTimeZone = new java.util.Date(time);
         return sdf.format(currentTimeZone);
     }

@@ -633,7 +633,7 @@ public class SettingsActivity extends AppCompatActivity {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
-            View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_seek, null);
+            View layout = View.inflate(getActivity(), R.layout.dialog_seek, null);
             builder.setView(layout);
 
             final SeekBarCompat seekBar = (SeekBarCompat) layout.findViewById(R.id.seek_bar);
@@ -684,7 +684,7 @@ public class SettingsActivity extends AppCompatActivity {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
-            View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_edit, null);
+            View layout = View.inflate(getActivity(), R.layout.dialog_edit, null);
             builder.setView(layout);
 
             final EditText editText = (EditText) layout.findViewById(R.id.text);
@@ -715,7 +715,7 @@ public class SettingsActivity extends AppCompatActivity {
                 int defValue) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
-            View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_radio, null);
+            View layout = View.inflate(getActivity(), R.layout.dialog_radio, null);
             builder.setView(layout);
             final AlertDialog dialog = builder.create();
 
@@ -757,7 +757,7 @@ public class SettingsActivity extends AppCompatActivity {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
-            View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_text, null);
+            View layout = View.inflate(getActivity(), R.layout.dialog_text, null);
             builder.setView(layout);
 
             TextView textView = (TextView) layout.findViewById(R.id.text);
@@ -771,8 +771,7 @@ public class SettingsActivity extends AppCompatActivity {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(R.string.custom_api));
-            View layout =
-                    getActivity().getLayoutInflater().inflate(R.layout.dialog_custom_api, null);
+            View layout = View.inflate(getActivity(), R.layout.dialog_custom_api, null);
             builder.setView(layout);
 
             final EditText apiUri = (EditText) layout.findViewById(R.id.api_uri);
@@ -813,7 +812,7 @@ public class SettingsActivity extends AppCompatActivity {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
-            View layout = getActivity().getLayoutInflater().inflate(R.layout.dialog_edit, null);
+            View layout = View.inflate(getActivity(), R.layout.dialog_edit, null);
             builder.setView(layout);
 
             final EditText editText = (EditText) layout.findViewById(R.id.text);
