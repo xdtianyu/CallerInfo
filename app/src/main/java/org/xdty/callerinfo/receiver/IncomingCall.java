@@ -30,7 +30,7 @@ import wei.mark.standout.StandOutWindow;
 
 public class IncomingCall extends BroadcastReceiver {
 
-    public final static String TAG = IncomingCall.class.getSimpleName();
+    private final static String TAG = IncomingCall.class.getSimpleName();
 
     private static IncomingCallListener mIncomingCallListener;
     private static String mIncomingNumber = null;
@@ -56,23 +56,23 @@ public class IncomingCall extends BroadcastReceiver {
     public static class IncomingCallListener extends PhoneStateListener {
 
         private final boolean DEBUG = BuildConfig.DEBUG;
-        private Context context;
+        private final Context context;
         private boolean isShowing = false;
         private long ringStartTime = -1;
         private long hookStartTime = -1;
         private long idleStartTime = -1;
         private long ringTime = -1;
         private long duration = -1;
-        private SharedPreferences mPrefs;
+        private final SharedPreferences mPrefs;
         private boolean mIgnoreContact;
         private boolean mShowContactOffline = false;
         private boolean mIsInContacts = false;
-        private String mOutgoingKey;
-        private String mHideKey;
-        private String mKeywordKey;
-        private String mKeywordDefault;
-        private String mGeoKeywordKey;
-        private String mNumberKeywordKey;
+        private final String mOutgoingKey;
+        private final String mHideKey;
+        private final String mKeywordKey;
+        private final String mKeywordDefault;
+        private final String mGeoKeywordKey;
+        private final String mNumberKeywordKey;
 
         private IPluginService mPluginService;
         private Intent mPluginIntent;
@@ -201,7 +201,7 @@ public class IncomingCall extends BroadcastReceiver {
 
                 if (callers.size() > 0) {
                     Caller caller = callers.get(0);
-                    if (!caller.needUpdate()) {
+                    if (caller.isUpdated()) {
                         if (hangup || saveLog) {
                             bindPluginService(hangup, caller);
                         }

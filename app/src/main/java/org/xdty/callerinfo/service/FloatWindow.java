@@ -37,7 +37,7 @@ public class FloatWindow extends StandOutWindow {
     public final static String WINDOW_TRANS = "window_trans";
     public final static String WINDOW_COLOR = "window_color";
     public final static String WINDOW_ERROR = "window_error";
-    public final static String WINDOW = "window";
+    private final static String WINDOW = "window";
 
     public final static int CALLER_FRONT = 1000;
     public final static int SET_POSITION_FRONT = 1001;
@@ -45,16 +45,16 @@ public class FloatWindow extends StandOutWindow {
     public final static int SEARCH_FRONT = 1003;
 
     public final static int STATUS_CLOSE = 0;
-    public final static int STATUS_SHOWING = 1;
-    public final static int STATUS_HIDE = 2;
+    private final static int STATUS_SHOWING = 1;
+    private final static int STATUS_HIDE = 2;
 
-    public final static int TEXT_ALIGN_LEFT = 0;
-    public final static int TEXT_ALIGN_CENTER = 1;
-    public final static int TEXT_ALIGN_RIGHT = 2;
+    private final static int TEXT_ALIGN_LEFT = 0;
+    private final static int TEXT_ALIGN_CENTER = 1;
+    private final static int TEXT_ALIGN_RIGHT = 2;
 
     private static int mShowingStatus = STATUS_CLOSE;
 
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
     private boolean isFirstShow = false;
     private boolean isFocused = false;
 
@@ -124,7 +124,7 @@ public class FloatWindow extends StandOutWindow {
         standOutLayoutParams.minWidth = point.x;
         standOutLayoutParams.maxWidth = point.x;
         standOutLayoutParams.minHeight = defaultHeight / 4;
-        if (!isMovable(id)) {
+        if (isUnmovable(id)) {
             standOutLayoutParams.type = StandOutLayoutParams.TYPE_SYSTEM_OVERLAY;
         }
         return standOutLayoutParams;
@@ -133,7 +133,7 @@ public class FloatWindow extends StandOutWindow {
     // move the window by dragging the view
     @Override
     public int getFlags(int id) {
-        if (!isMovable(id)) {
+        if (isUnmovable(id)) {
             return super.getFlags(id) | StandOutFlags.FLAG_WINDOW_FOCUSABLE_DISABLE;
         } else {
             return super.getFlags(id) | StandOutFlags.FLAG_BODY_MOVE_ENABLE
@@ -142,9 +142,9 @@ public class FloatWindow extends StandOutWindow {
         }
     }
 
-    private boolean isMovable(int id) {
+    private boolean isUnmovable(int id) {
         KeyguardManager km = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
-        return id != SETTING_FRONT && id != SEARCH_FRONT && !km.inKeyguardRestrictedInputMode();
+        return id == SETTING_FRONT || id == SEARCH_FRONT || km.inKeyguardRestrictedInputMode();
     }
 
     @Override

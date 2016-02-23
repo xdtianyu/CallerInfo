@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">来电信息</string>
     <string name="text_normal">%1$s %2$s %3$s</string>
     <string name="text_poi">%1$s</string>
@@ -20,7 +20,7 @@
     <string name="about">关于</string>
     <string name="developer">开发者</string>
     <string name="license">开放源代码许可</string>
-    <string name="author">作者</string>
+    <string name="author" tools:ignore="UnusedResources">作者</string>
     <string name="version">版本</string>
     <string name="eula_message">此应用使用百度或聚合数据(360)的电话号码服务来查询号码信息。这意味着您的来电号码或您搜索的号码将会被发送给百度或聚合数据(360)。请注意这并不会关联到您的电话号码或其他个人信息。</string>
     <string name="eula_title">使用联网的电话号码服务?</string>
@@ -104,4 +104,5 @@
     <string name="text_padding">拖动以调整文字缩进</string>
     <string name="window_text_padding">文字缩进</string>
     <string name="icon">图标</string>
+    <string name="action_bar_up_description">"转到上一层级"</string>
 </resources>

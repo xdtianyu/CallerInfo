@@ -6,13 +6,13 @@ import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
 public class InCall extends SugarRecord {
-    String number;
-    long time;
-    long ringTime;
-    long duration;
+    private String number;
+    private long time;
+    private long ringTime;
+    private long duration;
 
     @Ignore
-    boolean isFetched = false;
+    private boolean isFetched = false;
 
     public InCall() {
     }
@@ -63,6 +63,7 @@ public class InCall extends SugarRecord {
         return isFetched;
     }
 
+    @SuppressWarnings("SameParameterValue")
     public void setFetched(boolean isFetched) {
         this.isFetched = isFetched;
     }

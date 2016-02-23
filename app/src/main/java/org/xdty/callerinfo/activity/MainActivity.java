@@ -52,17 +52,16 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public final static String TAG = MainActivity.class.getSimpleName();
-    public final static int REQUEST_CODE_OVERLAY_PERMISSION = 1001;
-    public final static int REQUEST_CODE_ASK_PERMISSIONS = 1002;
+    private final static String TAG = MainActivity.class.getSimpleName();
+    private final static int REQUEST_CODE_OVERLAY_PERMISSION = 1001;
+    private final static int REQUEST_CODE_ASK_PERMISSIONS = 1002;
 
-    Toolbar toolbar;
-    List<InCall> inCallList = new ArrayList<>();
-    SharedPreferences sharedPreferences;
+    private Toolbar mToolbar;
+    private final List<InCall> mInCallList = new ArrayList<>();
+    private SharedPreferences mSharedPreferences;
     private int mScreenWidth;
     private TextView mEmptyText;
     private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
     private CallerAdapter mCallerAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FrameLayout mMainLayout;
@@ -72,13 +71,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         Utils.checkLocale(getBaseContext());
 
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         checkEula();
 
@@ -94,12 +93,13 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.history_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
-        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        LinearLayoutManager layoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
 
         loadInCallList();
 
-        mCallerAdapter = new CallerAdapter(this, inCallList);
+        mCallerAdapter = new CallerAdapter(this, mInCallList);
         mRecyclerView.setAdapter(mCallerAdapter);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -127,10 +127,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                final InCall inCall = inCallList.get(viewHolder.getAdapterPosition());
-                inCallList.remove(viewHolder.getAdapterPosition());
+                final InCall inCall = mInCallList.get(viewHolder.getAdapterPosition());
+                mInCallList.remove(viewHolder.getAdapterPosition());
                 mCallerAdapter.notifyDataSetChanged();
-                final Snackbar snackbar = Snackbar.make(toolbar, R.string.deleted,
+                final Snackbar snackbar = Snackbar.make(mToolbar, R.string.deleted,
                         Snackbar.LENGTH_LONG);
 
                 snackbar.setAction(getString(R.string.undo), new View.OnClickListener() {
@@ -196,10 +196,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadInCallList() {
-        inCallList.clear();
-        inCallList.addAll(InCall.listAll(InCall.class, "time DESC"));
+        mInCallList.clear();
+        mInCallList.addAll(InCall.listAll(InCall.class, "time DESC"));
 
-        if (inCallList.size() == 0) {
+        if (mInCallList.size() == 0) {
             mEmptyText.setVisibility(View.VISIBLE);
         } else {
             mEmptyText.setVisibility(View.GONE);
@@ -354,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (callers.size() > 0) {
             Caller caller = callers.get(0);
-            if (!caller.needUpdate()) {
+            if (caller.isUpdated()) {
                 Utils.showWindow(MainActivity.this, caller, FloatWindow.SEARCH_FRONT);
                 return;
             } else {
@@ -396,7 +396,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkEula() {
-        boolean eula = sharedPreferences.getBoolean("eula", false);
+        boolean eula = mSharedPreferences.getBoolean("eula", false);
 
         if (!eula) {
             AlertDialog.Builder builder =
@@ -408,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            SharedPreferences.Editor editor = mSharedPreferences.edit();
                             editor.putBoolean("eula", true);
                             editor.putInt("eula_version", 1);
                             editor.putInt("version", BuildConfig.VERSION_CODE);
@@ -436,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for (InCall inCall : inCallList) {
+                        for (InCall inCall : mInCallList) {
                             inCall.delete();
                         }
                         loadInCallList();

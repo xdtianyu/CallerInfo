@@ -24,9 +24,9 @@ import java.util.Map;
 
 public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder> {
 
-    private static Map<String, Caller> callerMap = new HashMap<>();
-    private Context mContext;
-    private List<InCall> mList;
+    private static final Map<String, Caller> callerMap = new HashMap<>();
+    private final Context mContext;
+    private final List<InCall> mList;
     private CardView cardView;
 
     public CallerAdapter(Context context, List<InCall> list) {
@@ -78,10 +78,10 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        Context context;
-        CardView cardView;
-        TextView text;
-        TextView number;
+        final Context context;
+        final CardView cardView;
+        final TextView text;
+        final TextView number;
 
         public ViewHolder(Context context, View view) {
             super(view);

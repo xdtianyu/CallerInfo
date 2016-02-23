@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">CallerInfo</string>
     <string name="text_normal">%1$s %2$s %3$s</string>
     <string name="text_poi">%1$s</string>
@@ -18,7 +18,7 @@
     <string name="color_poi">Business number</string>
     <string name="color_report">Reported number</string>
     <string name="about">About</string>
-    <string name="author">Author</string>
+    <string name="author" tools:ignore="UnusedResources">Author</string>
     <string name="version_key" translatable="false">version</string>
     <string name="version">Version</string>
     <string name="license">License</string>
@@ -30,7 +30,7 @@
     <string name="disagree">Disagree</string>
     <string name="project_url" translatable="false">https://github.com/xdtianyu/CallerInfo</string>
     <string name="project_title">Open source project</string>
-    <string name="app_package_name" translatable="false">org.xdty.callerinfo</string>
+    <string name="app_package_name" translatable="false" tools:ignore="UnusedResources">org.xdty.callerinfo</string>
     <string name="advanced">Advanced</string>
     <string name="custom_bd_api_key">Custom BAIDU API key</string>
     <string name="custom_jh_api_key">Custom JUHE API key</string>
@@ -147,4 +147,5 @@
     <string name="window_text_padding">Window text padding</string>
     <string name="text_padding">Drag to change text padding.</string>
     <string name="icon">Icon</string>
+    <string name="action_bar_up_description">Navigate up</string>
 </resources>

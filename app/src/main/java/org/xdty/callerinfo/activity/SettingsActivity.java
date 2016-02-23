@@ -63,7 +63,7 @@ import static org.xdty.callerinfo.utils.Utils.showTextWindow;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    public final static String TAG = SettingsActivity.class.getSimpleName();
+    private final static String TAG = SettingsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +137,7 @@ public class SettingsActivity extends AppCompatActivity {
         Toast toast;
 
         private IPluginService mPluginService;
-        private ServiceConnection mConnection = new ServiceConnection() {
+        private final ServiceConnection mConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 Log.d(TAG, "onServiceConnected: " + name.toString());
@@ -181,7 +181,7 @@ public class SettingsActivity extends AppCompatActivity {
                 mPluginService = null;
             }
         };
-        private Intent mPluginIntent = new Intent().setComponent(new ComponentName(
+        private final Intent mPluginIntent = new Intent().setComponent(new ComponentName(
                 "org.xdty.callerinfo.plugin",
                 "org.xdty.callerinfo.plugin.PluginService"));
         private Point mPoint;
@@ -803,6 +803,7 @@ public class SettingsActivity extends AppCompatActivity {
             builder.show();
         }
 
+        @SuppressWarnings("SameParameterValue")
         private void showEditDialog(final String key, int title, final int defaultText, int hint) {
             showEditDialog(key, title, defaultText, hint, 0, 0);
         }
@@ -850,6 +851,7 @@ public class SettingsActivity extends AppCompatActivity {
             builder.show();
         }
 
+        @SuppressWarnings("SameParameterValue")
         private float dpToPx(float dp) {
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                     getActivity().getResources().getDisplayMetrics());
