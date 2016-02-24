@@ -1,5 +1,5 @@
 # CallerInfo
-An android app to get phone number location and other info. [中文](https://github.com/xdtianyu/CallerInfo/blob/master/README-CN.md)
+An android app to get phone number location and other info. [中文](https://github.com/xdtianyu/CallerInfo/blob/master/README.md)
 
 [![Google Play](https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/en-play-badge.png)](https://play.google.com/store/apps/details?id=org.xdty.callerinfo)
 
