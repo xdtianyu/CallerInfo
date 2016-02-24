@@ -1,5 +1,5 @@
-# 来电信息
-一个获取来电归属地和其他信息(如推销、诈骗)的安卓应用。
+# CallerInfo
+An android app to get phone number location and other info. [中文](https://github.com/xdtianyu/CallerInfo/blob/master/README-CN.md)
 
 [![Google Play](https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/en-play-badge.png)](https://play.google.com/store/apps/details?id=org.xdty.callerinfo)
 
@@ -7,28 +7,30 @@
 [![Release notes](https://img.shields.io/badge/release-notes-yellowgreen.svg)](https://github.com/xdtianyu/CallerInfo/releases)
 [![Coolapk download](https://img.shields.io/badge/coolapk-download-blue.svg)](http://coolapk.com/apk/org.xdty.callerinfo)
 
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.3.6/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.3.6/callerinfo-v1.3.6-release.apk)
+[![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.3.6/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.3.6/callerinfo-v1.3.6-release.apk)
 
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.3.3/CallerInfo-plugin-v1.0.1-release.apk.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.3.1/CallerInfo-plugin-v1.0.1-release.apk)
+[![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.3.3/CallerInfo-plugin-v1.0.1-release.apk.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.3.3/CallerInfo-plugin-v1.0.1-release.apk)
 
-##功能
+##Features
 
-1\. 查询来电号码并显示悬浮窗，显示位置和其他号码信息。
+1\. Query incoming phone number and show float window with location and extra info.
 
-2\. 主界面显示最近来电列表。
+2\. List recently incoming calls.
 
-3\. 在主界面可以查询电话号码信息。
+3\. Search phone number's information.
 
-4\. 在设置界面可以自定义设置卡片及悬浮窗的颜色。
+4\. Setting colors of cards and float window.
 
-5\. 自定义 API 密钥。
+5\. Custom API key.
 
-6\. 自定义悬浮窗, 如文字大小、透明度。
+6\. Custom float window, e.g. text size, transparent.
 
-##贡献者
+7\. Auto hangup by number info or geo location, write number info in system call log (plugin function).
+
+##Contributors
 [tianyu](https://www.xdty.org)
 
-##屏幕截图
+##Screenshots
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/2.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/3.png" alt="screenshot" width="300">
@@ -39,7 +41,7 @@
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-2.png" alt="screenshot" width="300">
 
-##感谢
+##Thanks to
 
 [PhoneNumber](https://github.com/xdtianyu/PhoneNumber): A library to get phone number location and other info from baidu api.
 
@@ -55,7 +57,7 @@
 
 [CustomActivityOnCrash](https://github.com/Ereza/CustomActivityOnCrash): An android library that allows launching a custom activity when your app crashes.
 
-##[许可证](https://github.com/xdtianyu/CallerInfo/blob/master/LICENSE.md)
+##[License](https://github.com/xdtianyu/CallerInfo/blob/master/LICENSE.md)
 
 ```
                     GNU GENERAL PUBLIC LICENSE
