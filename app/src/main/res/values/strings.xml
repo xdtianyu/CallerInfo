@@ -150,4 +150,6 @@
     <string name="action_bar_up_description">Navigate up</string>
     <string name="disable_notify_key" translatable="false">disable_notify_key</string>
     <string name="disable_notify">Disable notification</string>
+    <string name="disable_move_key" translatable="false">disable_move_key</string>
+    <string name="disable_move">Disable move</string>
 </resources>

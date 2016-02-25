@@ -106,4 +106,5 @@
     <string name="icon">图标</string>
     <string name="action_bar_up_description">"转到上一层级"</string>
     <string name="disable_notify">禁用通知提示</string>
+    <string name="disable_move">禁用通话时长按拖动</string>
 </resources>

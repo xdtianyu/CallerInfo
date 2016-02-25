@@ -37,14 +37,12 @@ public class FloatWindow extends StandOutWindow {
     public final static String WINDOW_TRANS = "window_trans";
     public final static String WINDOW_COLOR = "window_color";
     public final static String WINDOW_ERROR = "window_error";
-    private final static String WINDOW = "window";
-
     public final static int CALLER_FRONT = 1000;
     public final static int SET_POSITION_FRONT = 1001;
     public final static int SETTING_FRONT = 1002;
     public final static int SEARCH_FRONT = 1003;
-
     public final static int STATUS_CLOSE = 0;
+    private final static String WINDOW = "window";
     private final static int STATUS_SHOWING = 1;
     private final static int STATUS_HIDE = 2;
 
@@ -144,7 +142,10 @@ public class FloatWindow extends StandOutWindow {
 
     private boolean isUnmovable(int id) {
         KeyguardManager km = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
-        return id == SETTING_FRONT || id == SEARCH_FRONT || km.inKeyguardRestrictedInputMode();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean disableMove = preferences.getBoolean(getString(R.string.disable_move_key), false);
+        return id == SETTING_FRONT || id == SEARCH_FRONT || (id == CALLER_FRONT && disableMove) ||
+                km.inKeyguardRestrictedInputMode();
     }
 
     @Override

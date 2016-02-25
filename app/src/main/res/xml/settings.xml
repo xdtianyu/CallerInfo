@@ -107,6 +107,11 @@
                 android:key="@string/disable_notify_key"
                 android:title="@string/disable_notify">
             </com.jenzz.materialpreference.SwitchPreference>
+            <com.jenzz.materialpreference.SwitchPreference
+                android:defaultValue="false"
+                android:key="@string/disable_move_key"
+                android:title="@string/disable_move">
+            </com.jenzz.materialpreference.SwitchPreference>
         </PreferenceScreen>
 
     </com.jenzz.materialpreference.PreferenceCategory>
