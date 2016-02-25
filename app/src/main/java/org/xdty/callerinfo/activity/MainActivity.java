@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.net.Uri;
@@ -55,9 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
     private final static int REQUEST_CODE_OVERLAY_PERMISSION = 1001;
     private final static int REQUEST_CODE_ASK_PERMISSIONS = 1002;
-
-    private Toolbar mToolbar;
     private final List<InCall> mInCallList = new ArrayList<>();
+    private Toolbar mToolbar;
     private SharedPreferences mSharedPreferences;
     private int mScreenWidth;
     private TextView mEmptyText;
@@ -67,6 +67,12 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout mMainLayout;
     private PhoneNumber mPhoneNumber;
     private long mLastSearchTime;
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Utils.checkLocale(getBaseContext());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
