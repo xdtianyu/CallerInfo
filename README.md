@@ -48,7 +48,9 @@
 5\. 如果您觉得这个应用做的不错，欢迎在 GitHub star、在 Play 市场及酷市场 五星好评，欢迎您将此应用通过推特、微博、朋友圈等社交网络推广给更多的人。
 
 ##贡献者
-[tianyu](https://www.xdty.org)
+[tianyu](https://www.xdty.org) 
+
+[blueset](https://github.com/blueset) 修复英语翻译
 
 ##屏幕截图
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/1.png" alt="screenshot" width="300">
