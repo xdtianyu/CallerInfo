@@ -120,7 +120,7 @@ public class FloatWindow extends StandOutWindow {
         }
 
         standOutLayoutParams.minWidth = point.x;
-        standOutLayoutParams.maxWidth = point.x;
+        standOutLayoutParams.maxWidth = Math.max(point.x, point.y);
         standOutLayoutParams.minHeight = defaultHeight / 4;
         if (isUnmovable(id)) {
             standOutLayoutParams.type = StandOutLayoutParams.TYPE_SYSTEM_OVERLAY;
