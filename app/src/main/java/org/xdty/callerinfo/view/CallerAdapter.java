@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.xdty.callerinfo.R;
@@ -82,6 +83,8 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         final CardView cardView;
         final TextView text;
         final TextView number;
+        final RelativeLayout detail;
+        InCall inCall;
 
         public ViewHolder(Context context, View view) {
             super(view);
@@ -89,6 +92,19 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
             cardView = (CardView) view.findViewById(R.id.card_view);
             text = (TextView) view.findViewById(R.id.text);
             number = (TextView) view.findViewById(R.id.number);
+            detail = (RelativeLayout) view.findViewById(R.id.detail);
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (detail.getVisibility() == View.VISIBLE) {
+                        detail.setVisibility(View.GONE);
+                        inCall.setExpanded(false);
+                    } else {
+                        detail.setVisibility(View.VISIBLE);
+                        inCall.setExpanded(true);
+                    }
+                }
+            });
         }
 
         public void setAlpha(float alpha) {
@@ -138,6 +154,12 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                 }
             }
             cardView.setAlpha(1f);
+            if (inCall.isExpanded()) {
+                detail.setVisibility(View.VISIBLE);
+            } else {
+                detail.setVisibility(View.GONE);
+            }
+            this.inCall = inCall;
         }
     }
 }

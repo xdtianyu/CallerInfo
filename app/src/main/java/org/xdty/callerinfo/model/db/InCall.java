@@ -13,6 +13,8 @@ public class InCall extends SugarRecord {
 
     @Ignore
     private boolean isFetched = false;
+    @Ignore
+    private boolean isExpanded = false;
 
     public InCall() {
     }
@@ -66,5 +68,13 @@ public class InCall extends SugarRecord {
     @SuppressWarnings("SameParameterValue")
     public void setFetched(boolean isFetched) {
         this.isFetched = isFetched;
+    }
+
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        isExpanded = expanded;
     }
 }
