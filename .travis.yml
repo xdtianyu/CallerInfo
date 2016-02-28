@@ -1,12 +1,5 @@
 language: android
 
-addons:
-    apt:
-        packages:
-        - libgd2-xpm
-        - ia32-libs
-        - ia32-libs-multiarch
-
 android:
    components:
    - tools
