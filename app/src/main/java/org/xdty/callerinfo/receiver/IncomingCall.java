@@ -1,14 +1,17 @@
 package org.xdty.callerinfo.receiver;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -57,23 +60,22 @@ public class IncomingCall extends BroadcastReceiver {
 
         private final boolean DEBUG = BuildConfig.DEBUG;
         private final Context context;
-        private boolean isShowing = false;
-        private long ringStartTime = -1;
-        private long hookStartTime = -1;
-        private long idleStartTime = -1;
-        private long ringTime = -1;
-        private long duration = -1;
         private final SharedPreferences mPrefs;
-        private boolean mIgnoreContact;
-        private boolean mShowContactOffline = false;
-        private boolean mIsInContacts = false;
         private final String mOutgoingKey;
         private final String mHideKey;
         private final String mKeywordKey;
         private final String mKeywordDefault;
         private final String mGeoKeywordKey;
         private final String mNumberKeywordKey;
-
+        private boolean isShowing = false;
+        private long ringStartTime = -1;
+        private long hookStartTime = -1;
+        private long idleStartTime = -1;
+        private long ringTime = -1;
+        private long duration = -1;
+        private boolean mIgnoreContact;
+        private boolean mShowContactOffline = false;
+        private boolean mIsInContacts = false;
         private IPluginService mPluginService;
         private Intent mPluginIntent;
         private ServiceConnection mConnection;
@@ -172,8 +174,10 @@ public class IncomingCall extends BroadcastReceiver {
             }
 
             if (!isShowing) {
-                mIgnoreContact = mPrefs.getBoolean(
-                        context.getString(R.string.ignore_known_contact_key), false);
+                mIgnoreContact =
+                        mPrefs.getBoolean(context.getString(R.string.ignore_known_contact_key),
+                                false) && (ContextCompat.checkSelfPermission(context,
+                                Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED);
 
 
                 if (mIgnoreContact && Utils.isContactExists(context, incomingNumber)) {
