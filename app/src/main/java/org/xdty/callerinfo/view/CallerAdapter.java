@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.xdty.callerinfo.R;
@@ -83,7 +83,10 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         final CardView cardView;
         final TextView text;
         final TextView number;
-        final RelativeLayout detail;
+        final LinearLayout detail;
+        final TextView time;
+        final TextView ringTime;
+        final TextView duration;
         InCall inCall;
 
         public ViewHolder(Context context, View view) {
@@ -92,7 +95,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
             cardView = (CardView) view.findViewById(R.id.card_view);
             text = (TextView) view.findViewById(R.id.text);
             number = (TextView) view.findViewById(R.id.number);
-            detail = (RelativeLayout) view.findViewById(R.id.detail);
+            detail = (LinearLayout) view.findViewById(R.id.detail);
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -105,6 +108,9 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                     }
                 }
             });
+            time = (TextView) view.findViewById(R.id.time);
+            ringTime = (TextView) view.findViewById(R.id.ring_time);
+            duration = (TextView) view.findViewById(R.id.duration);
         }
 
         public void setAlpha(float alpha) {
@@ -117,6 +123,9 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                 text.setText(t.text);
                 cardView.setCardBackgroundColor(t.color);
                 number.setText(caller.getNumber());
+                time.setText(Utils.readableDate(context, inCall.getTime()));
+                ringTime.setText(Utils.readableTime(context, inCall.getRingTime()));
+                duration.setText(Utils.readableTime(context, inCall.getDuration()));
             } else {
                 if (inCall.isFetched() || TextUtils.isEmpty(inCall.getNumber())) {
                     text.setText(R.string.loading_error);

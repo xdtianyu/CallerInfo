@@ -152,4 +152,10 @@
     <string name="disable_notify">Disable notification</string>
     <string name="disable_move_key" translatable="false">disable_move_key</string>
     <string name="disable_move">Disable move</string>
+    <string name="readable_second">%1$s s</string>
+    <string name="readable_minute">%1$s m %2$s s</string>
+    <string name="readable_hour">%1$s:%2$s:%3$s</string>
+    <string name="readable_today">Today</string>
+    <string name="readable_yesterday">Yesterday</string>
+    <string name="readable_date">MM/dd/yyyy</string>
 </resources>

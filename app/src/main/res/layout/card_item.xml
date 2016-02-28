@@ -48,33 +48,57 @@
                     android:textStyle="bold"/>
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/detail"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/main"
-                android:visibility="gone"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/number2"
-                    android:layout_width="match_parent"
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/ic_date_range_white_18dp"
+                    android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/ic_date_range_white_18dp"
                     android:padding="5dp"
+                    android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/text2"
-                    android:layout_width="match_parent"
+                    android:id="@+id/ring_time"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/number2"
-                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/ic_timer_white_18dp"
+                    android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/ic_timer_white_18dp"
                     android:padding="5dp"
+                    android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"/>
-            </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/ic_update_white_18dp"
+                    android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/ic_update_white_18dp"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"/>
+            </LinearLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

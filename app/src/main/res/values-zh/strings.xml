@@ -107,4 +107,10 @@
     <string name="action_bar_up_description">"转到上一层级"</string>
     <string name="disable_notify">禁用通知提示</string>
     <string name="disable_move">禁用通话时长按拖动</string>
+    <string name="readable_hour">%1$s:%2$s:%3$s</string>
+    <string name="readable_minute">%1$s 分 %2$s 秒</string>
+    <string name="readable_second">%1$s 秒</string>
+    <string name="readable_today">今天</string>
+    <string name="readable_yesterday">昨天</string>
+    <string name="readable_date">yyyy年MM月dd日</string>
 </resources>

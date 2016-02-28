@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract.PhoneLookup;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.TextColorPair;
@@ -22,6 +23,7 @@ import org.xdty.phone.number.model.Type;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -150,6 +152,35 @@ public class Utils {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         java.util.Date currentTimeZone = new java.util.Date(time);
         return sdf.format(currentTimeZone);
+    }
+
+    public static String readableDate(Context context, long time) {
+        String result;
+        long current = System.currentTimeMillis();
+        if (current - time < 60 * 60 * 24 * 1000) {
+            result = context.getString(R.string.readable_today);
+        } else if (current - time < 2 * 60 * 60 * 24 * 1000) {
+            result = context.getString(R.string.readable_yesterday);
+        } else {
+            result = DateFormat.format(context.getString(R.string.readable_date),
+                    new Date(time)).toString();
+        }
+        return result;
+    }
+
+    public static String readableTime(Context context, long time) {
+        String result;
+        int seconds = (int) (time / 1000) % 60;
+        int minutes = (int) ((time / (1000 * 60)) % 60);
+        int hours = (int) ((time / (1000 * 60 * 60)) % 24);
+        if (time < 60000) {
+            result = context.getString(R.string.readable_second, seconds);
+        } else if (time < 3600000) {
+            result = context.getString(R.string.readable_minute, minutes, seconds);
+        } else {
+            result = context.getString(R.string.readable_hour, hours, minutes, seconds);
+        }
+        return result;
     }
 
     public static String mask(String s) {
