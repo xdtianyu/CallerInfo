@@ -59,10 +59,10 @@
 
                 <TextView
                     android:id="@+id/time"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
+                    android:layout_weight="1.8"
                     android:drawableLeft="@drawable/ic_date_range_white_18dp"
                     android:drawablePadding="5dp"
                     android:drawableStart="@drawable/ic_date_range_white_18dp"
@@ -73,10 +73,10 @@
 
                 <TextView
                     android:id="@+id/ring_time"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
+                    android:layout_weight="0.8"
                     android:drawableLeft="@drawable/ic_timer_white_18dp"
                     android:drawablePadding="5dp"
                     android:drawableStart="@drawable/ic_timer_white_18dp"
@@ -87,10 +87,10 @@
 
                 <TextView
                     android:id="@+id/duration"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
+                    android:layout_weight="1.2"
                     android:drawableLeft="@drawable/ic_update_white_18dp"
                     android:drawablePadding="5dp"
                     android:drawableStart="@drawable/ic_update_white_18dp"
