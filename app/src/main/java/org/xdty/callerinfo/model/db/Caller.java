@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.model.db;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
 import org.xdty.callerinfo.utils.Config;
 import org.xdty.phone.number.model.INumber;
@@ -16,6 +17,9 @@ public class Caller extends SugarRecord implements INumber {
     private String city;
     private long lastUpdate;
     private boolean isOffline = true;
+
+    @Ignore
+    private String contactName;
 
     public Caller() {
     }
@@ -123,5 +127,13 @@ public class Caller extends SugarRecord implements INumber {
 
     public boolean isUpdated() {
         return !isOffline && lastUpdate - System.currentTimeMillis() < Config.MAX_UPDATE_CIRCLE;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
     }
 }

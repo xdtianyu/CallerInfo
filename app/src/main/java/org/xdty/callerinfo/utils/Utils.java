@@ -145,6 +145,27 @@ public class Utils {
         return false;
     }
 
+    public static String getContactName(Context context, String number) {
+        Uri lookupUri = Uri.withAppendedPath(
+                PhoneLookup.CONTENT_FILTER_URI,
+                Uri.encode(number));
+        String[] mPhoneNumberProjection = {
+                PhoneLookup._ID, PhoneLookup.NUMBER, PhoneLookup.DISPLAY_NAME
+        };
+        Cursor cur = context.getContentResolver().query(lookupUri, mPhoneNumberProjection, null,
+                null, null);
+        if (cur != null) {
+            try {
+                if (cur.moveToFirst()) {
+                    return cur.getString(cur.getColumnIndex(PhoneLookup.DISPLAY_NAME));
+                }
+            } finally {
+                cur.close();
+            }
+        }
+        return "";
+    }
+
     public static String getDate(long time) {
         Calendar calendar = Calendar.getInstance();
         TimeZone tz = TimeZone.getDefault();
