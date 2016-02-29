@@ -78,7 +78,7 @@ public class IncomingCall extends BroadcastReceiver {
         private boolean mIsInContacts = false;
         private IPluginService mPluginService;
         private Intent mPluginIntent;
-        private ServiceConnection mConnection;
+        private PluginConnection mConnection;
         private String mLogNumber;
         private String mLogName;
         private String mLogGeo;
@@ -309,7 +309,7 @@ public class IncomingCall extends BroadcastReceiver {
             mAutoHangup = false;
         }
 
-        private void bindPluginService(final boolean hangup, final INumber number) {
+        private void bindPluginService(boolean hangup, INumber number) {
 
             mLogNumber = number.getNumber();
             mLogName = number.getName();
@@ -317,74 +317,10 @@ public class IncomingCall extends BroadcastReceiver {
             mAutoHangup = false;
 
             if (mConnection == null) {
-                mConnection = new ServiceConnection() {
-                    @Override
-                    public void onServiceConnected(ComponentName name, IBinder service) {
-                        Log.d(TAG, "onServiceConnected: " + name.toString());
-                        mPluginService = IPluginService.Stub.asInterface(service);
-                        try {
-                            if (hangup) {
-                                String keywords = mPrefs.getString(mKeywordKey, mKeywordDefault);
-                                keywords = keywords.trim();
-                                if (keywords.isEmpty()) {
-                                    keywords = mKeywordDefault;
-                                }
-                                for (String keyword : keywords.split(" ")) {
-                                    if (!TextUtils.isEmpty(mLogName) &&
-                                            mLogName.contains(keyword)) {
-                                        mPluginService.hangUpPhoneCall();
-                                        mAutoHangup = true;
-                                    }
-                                }
-
-                                String geoKeywords = mPrefs.getString(mGeoKeywordKey, "");
-                                geoKeywords = geoKeywords.trim();
-                                if (!geoKeywords.isEmpty() && !TextUtils.isEmpty(mLogGeo)) {
-                                    boolean hangUp = false;
-                                    for (String keyword : geoKeywords.split(" ")) {
-                                        if (!keyword.startsWith("!")) {
-                                            if (mLogGeo.contains(keyword)) {
-                                                hangUp = true;
-                                                break;
-                                            }
-                                        } else if (mLogGeo.contains(keyword.replace("!", ""))) {
-                                            hangUp = false;
-                                            break;
-                                        } else {
-                                            hangUp = true;
-                                        }
-                                    }
-                                    if (hangUp) {
-                                        mPluginService.hangUpPhoneCall();
-                                        mAutoHangup = true;
-                                    }
-                                }
-
-                                String numberKeywords = mPrefs.getString(mNumberKeywordKey, "");
-                                numberKeywords = numberKeywords.trim();
-                                if (!numberKeywords.isEmpty()) {
-                                    for (String keyword : numberKeywords.split(" ")) {
-                                        if (!TextUtils.isEmpty(mLogNumber) &&
-                                                mLogNumber.startsWith(keyword)) {
-                                            mPluginService.hangUpPhoneCall();
-                                            mAutoHangup = true;
-                                        }
-                                    }
-                                }
-                            }
-
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onServiceDisconnected(ComponentName name) {
-                        Log.d(TAG, "onServiceDisconnected: " + name.toString());
-                        mPluginService = null;
-                    }
-                };
+                mConnection = newConnection();
             }
+
+            mConnection.update(hangup, number);
 
             if (mPluginIntent == null) {
                 mPluginIntent = new Intent().setComponent(new ComponentName(
@@ -395,6 +331,86 @@ public class IncomingCall extends BroadcastReceiver {
             context.startService(mPluginIntent);
             context.getApplicationContext().bindService(mPluginIntent, mConnection,
                     Context.BIND_AUTO_CREATE);
+        }
+
+        private PluginConnection newConnection() {
+            return new PluginConnection() {
+
+                boolean hangup;
+                INumber number;
+
+                @Override
+                public void update(boolean hangup, INumber number) {
+                    this.hangup = hangup;
+                    this.number = number;
+                }
+
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    Log.d(TAG, "onServiceConnected: " + name.toString());
+                    mPluginService = IPluginService.Stub.asInterface(service);
+                    try {
+                        if (hangup) {
+                            String keywords = mPrefs.getString(mKeywordKey, mKeywordDefault);
+                            keywords = keywords.trim();
+                            if (keywords.isEmpty()) {
+                                keywords = mKeywordDefault;
+                            }
+                            for (String keyword : keywords.split(" ")) {
+                                if (!TextUtils.isEmpty(mLogName) &&
+                                        mLogName.contains(keyword)) {
+                                    mPluginService.hangUpPhoneCall();
+                                    mAutoHangup = true;
+                                }
+                            }
+
+                            String geoKeywords = mPrefs.getString(mGeoKeywordKey, "");
+                            geoKeywords = geoKeywords.trim();
+                            if (!geoKeywords.isEmpty() && !TextUtils.isEmpty(mLogGeo)) {
+                                boolean hangUp = false;
+                                for (String keyword : geoKeywords.split(" ")) {
+                                    if (!keyword.startsWith("!")) {
+                                        if (mLogGeo.contains(keyword)) {
+                                            hangUp = true;
+                                            break;
+                                        }
+                                    } else if (mLogGeo.contains(keyword.replace("!", ""))) {
+                                        hangUp = false;
+                                        break;
+                                    } else {
+                                        hangUp = true;
+                                    }
+                                }
+                                if (hangUp) {
+                                    mPluginService.hangUpPhoneCall();
+                                    mAutoHangup = true;
+                                }
+                            }
+
+                            String numberKeywords = mPrefs.getString(mNumberKeywordKey, "");
+                            numberKeywords = numberKeywords.trim();
+                            if (!numberKeywords.isEmpty()) {
+                                for (String keyword : numberKeywords.split(" ")) {
+                                    if (!TextUtils.isEmpty(mLogNumber) &&
+                                            mLogNumber.startsWith(keyword)) {
+                                        mPluginService.hangUpPhoneCall();
+                                        mAutoHangup = true;
+                                    }
+                                }
+                            }
+                        }
+
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    Log.d(TAG, "onServiceDisconnected: " + name.toString());
+                    mPluginService = null;
+                }
+            };
         }
 
         private void unBindPluginService() {
@@ -413,6 +429,10 @@ public class IncomingCall extends BroadcastReceiver {
                     e.printStackTrace();
                 }
             }
+        }
+
+        interface PluginConnection extends ServiceConnection {
+            void update(boolean hangup, INumber number);
         }
     }
 }
