@@ -10,6 +10,9 @@ import org.xdty.callerinfo.R;
 
 public class LicensesActivity extends AppCompatActivity {
 
+    private final static String ACTION_LICENSE = "org.xdty.callerinfo.action.VIEW_LICENSES";
+    private final static String ACTION_PRIVACY = "org.xdty.callerinfo.action.VIEW_PRIVACY";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +24,19 @@ public class LicensesActivity extends AppCompatActivity {
         }
 
         WebView webView = (WebView) findViewById(R.id.webView);
-        webView.loadUrl("file:///android_res/raw/licenses.html");
+
+        String action = getIntent().getAction();
+        String url = "file:///android_res/raw/licenses.html";
+
+        switch (action) {
+            case ACTION_LICENSE:
+                break;
+            case ACTION_PRIVACY:
+                setTitle(R.string.privacy_notice);
+                url = "file:///android_res/raw/privacy_notice.html";
+                break;
+        }
+        webView.loadUrl(url);
     }
 
     @Override

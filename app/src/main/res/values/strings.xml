@@ -158,4 +158,7 @@
     <string name="readable_today">Today</string>
     <string name="readable_yesterday">Yesterday</string>
     <string name="readable_date">MM/dd/yyyy</string>
+    <string name="about_more_key" translatable="false">about_more_key</string>
+    <string name="about_more">More</string>
+    <string name="privacy_notice">Privacy notice</string>
 </resources>

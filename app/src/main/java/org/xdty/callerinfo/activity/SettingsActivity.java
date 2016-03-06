@@ -397,16 +397,16 @@ public class SettingsActivity extends AppCompatActivity {
             final String showHiddenKey = getString(R.string.show_hidden_setting_key);
             boolean isShowHidden = sharedPrefs.getBoolean(showHiddenKey, false);
             advancedPref = (PreferenceCategory) findPreference(getString(R.string.advanced_key));
+            developerPref = findPreference(getString(R.string.developer_key));
+
             if (!isShowHidden) {
 
                 aboutPref = (PreferenceCategory) findPreference(getString(R.string.about_key));
                 floatWindowPref =
                         (PreferenceCategory) findPreference(getString(R.string.float_window_key));
-                developerPref = findPreference(getString(R.string.developer_key));
 
                 advancedPref.removePreference(customDataPref);
                 advancedPref.removePreference(chinesePref);
-                aboutPref.removePreference(developerPref);
                 floatWindowPref.removePreference(transBackPref);
 
                 versionClickCount = 0;
@@ -419,7 +419,6 @@ public class SettingsActivity extends AppCompatActivity {
 
                             advancedPref.addPreference(customDataPref);
                             advancedPref.addPreference(chinesePref);
-                            aboutPref.addPreference(developerPref);
                             floatWindowPref.addPreference(transBackPref);
                         }
                         if (versionClickCount > 3 && versionClickCount < 7) {

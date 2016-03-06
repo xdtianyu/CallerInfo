@@ -113,4 +113,6 @@
     <string name="readable_today">今天</string>
     <string name="readable_yesterday">昨天</string>
     <string name="readable_date">yyyy年MM月dd日</string>
+    <string name="about_more">其他</string>
+    <string name="privacy_notice">隐私权声明</string>
 </resources>

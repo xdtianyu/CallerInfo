@@ -201,11 +201,6 @@
             android:title="@string/version"/>
 
         <com.jenzz.materialpreference.Preference
-            android:key="@string/developer_key"
-            android:summary="@string/developer_summary"
-            android:title="@string/developer"/>
-
-        <com.jenzz.materialpreference.Preference
             android:key="project"
             android:summary="@string/project_url"
             android:title="@string/project_title">
@@ -214,11 +209,25 @@
                 android:data="@string/project_url"/>
         </com.jenzz.materialpreference.Preference>
 
-        <com.jenzz.materialpreference.Preference
-            android:key="license"
-            android:title="@string/license">
-            <intent android:action="org.xdty.callerinfo.action.VIEW_LICENSES"/>
-        </com.jenzz.materialpreference.Preference>
+        <PreferenceScreen
+            android:key="@string/about_more_key"
+            android:layout="@layout/preference"
+            android:title="@string/about_more">
+            <com.jenzz.materialpreference.Preference
+                android:key="@string/developer_key"
+                android:summary="@string/developer_summary"
+                android:title="@string/developer"/>
+            <com.jenzz.materialpreference.Preference
+                android:key="license"
+                android:title="@string/license">
+                <intent android:action="org.xdty.callerinfo.action.VIEW_LICENSES"/>
+            </com.jenzz.materialpreference.Preference>
+            <com.jenzz.materialpreference.Preference
+                android:key="privacy"
+                android:title="@string/privacy_notice">
+                <intent android:action="org.xdty.callerinfo.action.VIEW_PRIVACY"/>
+            </com.jenzz.materialpreference.Preference>
+        </PreferenceScreen>
 
     </com.jenzz.materialpreference.PreferenceCategory>
 </PreferenceScreen>
