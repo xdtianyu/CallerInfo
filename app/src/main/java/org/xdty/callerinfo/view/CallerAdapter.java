@@ -147,6 +147,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                     new PhoneNumber(context, new PhoneNumber.Callback() {
                         @Override
                         public void onResponseOffline(INumber number) {
+                            new Caller(number, !number.isOnline()).save();
                             callerMap.put(number.getNumber(), new Caller(number));
                             notifyDataSetChanged();
                         }
