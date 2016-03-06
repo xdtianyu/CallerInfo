@@ -12,6 +12,7 @@ public class LicensesActivity extends AppCompatActivity {
 
     private final static String ACTION_LICENSE = "org.xdty.callerinfo.action.VIEW_LICENSES";
     private final static String ACTION_PRIVACY = "org.xdty.callerinfo.action.VIEW_PRIVACY";
+    private final static String ACTION_FEATURE = "org.xdty.callerinfo.action.VIEW_FEATURE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,10 @@ public class LicensesActivity extends AppCompatActivity {
             case ACTION_PRIVACY:
                 setTitle(R.string.privacy_notice);
                 url = "file:///android_res/raw/privacy_notice.html";
+                break;
+            case ACTION_FEATURE:
+                setTitle(R.string.feature_notice);
+                url = "file:///android_res/raw/feature_notice.html";
                 break;
         }
         webView.loadUrl(url);

@@ -115,4 +115,5 @@
     <string name="readable_date">yyyy年MM月dd日</string>
     <string name="about_more">其他</string>
     <string name="privacy_notice">隐私权声明</string>
+    <string name="feature_notice">功能说明</string>
 </resources>

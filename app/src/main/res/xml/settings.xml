@@ -223,6 +223,11 @@
                 <intent android:action="org.xdty.callerinfo.action.VIEW_LICENSES"/>
             </com.jenzz.materialpreference.Preference>
             <com.jenzz.materialpreference.Preference
+                android:key="feature"
+                android:title="@string/feature_notice">
+                <intent android:action="org.xdty.callerinfo.action.VIEW_FEATURE"/>
+            </com.jenzz.materialpreference.Preference>
+            <com.jenzz.materialpreference.Preference
                 android:key="privacy"
                 android:title="@string/privacy_notice">
                 <intent android:action="org.xdty.callerinfo.action.VIEW_PRIVACY"/>

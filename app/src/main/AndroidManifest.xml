@@ -39,6 +39,7 @@
             <intent-filter>
                 <action android:name="org.xdty.callerinfo.action.VIEW_LICENSES"/>
                 <action android:name="org.xdty.callerinfo.action.VIEW_PRIVACY"/>
+                <action android:name="org.xdty.callerinfo.action.VIEW_FEATURE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>

@@ -161,4 +161,5 @@
     <string name="about_more_key" translatable="false">about_more_key</string>
     <string name="about_more">More</string>
     <string name="privacy_notice">Privacy notice</string>
+    <string name="feature_notice">Feature notice</string>
 </resources>
