@@ -11,7 +11,7 @@
 
 [![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.3.3/CallerInfo-plugin-v1.0.1-release.apk.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.3.1/CallerInfo-plugin-v1.0.1-release.apk)
 
-##功能
+## 功能
 
 1\. 查询来电号码并显示悬浮窗，显示位置和其他号码信息。
  
@@ -35,24 +35,24 @@
  
 2\. 添加号码信息到系统通话记录。会添加诈骗、骚扰、广告、响一声、自动挂断等信息到系统通话记录。
 
-##说明
+## 说明
  
 1\. “来电信息” 的不断改进和完善离不开社区的反馈，非常感谢所有在 Play 市场、V站、酷市场留言及发送邮件反馈的朋友。
  
-2\. 应用开源免费无广告，请放心使用。APK 文件通过 Travis CI 自动生成并上传，用户可在每个 GitHub 版本发行中找到编译日志来校验文件 sha1 及 md5。
+2\. 应用开源免费无广告，请放心使用。APK 文件通过 Travis CI 自动生成并上传，用户可在每个 [GitHub 版本发行](https://github.com/xdtianyu/CallerInfo/releases)中找到编译日志来校验文件 sha1 及 md5。
  
 3\. 请避免限制主应用及插件请求的权限。如出现来电时不显示悬浮窗，请先检查权限设置、权限管理类型应用的设置。如果安装了插件，请确保插件和主应用没有进入管理类软件的黑名单或优化项目。
  
-4\. 如果对此开源应用有任何不满、问题或建议，请在 GitHub 提交问题单或发送问题到作者邮件。非常欢迎大家反馈，来和作者一起完善这个应用。
+4\. 如果对此开源应用有任何不满、问题或建议，请在 [GitHub](https://github.com/xdtianyu/CallerInfo/issues) 提交问题单或发送问题到作者邮件。非常欢迎大家反馈，来和作者一起完善这个应用。
  
-5\. 如果您觉得这个应用做的不错，欢迎在 GitHub star、在 Play 市场及酷市场 五星好评，欢迎您将此应用通过推特、微博、朋友圈等社交网络推广给更多的人。
+5\. 如果您觉得这个应用做的不错，欢迎在 [GitHub](https://github.com/xdtianyu/CallerInfo) star、在 [Play 市场](https://play.google.com/store/apps/details?id=org.xdty.callerinfo)及[酷市场](http://coolapk.com/apk/org.xdty.callerinfo) 五星好评，欢迎您将此应用通过推特、微博、朋友圈等社交网络推广给更多的人。
 
-##贡献者
+## 贡献者
 [tianyu](https://www.xdty.org) 
 
 [blueset](https://github.com/blueset) 修复英语翻译
 
-##屏幕截图
+## 屏幕截图
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/2.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/3.png" alt="screenshot" width="300">
@@ -63,7 +63,7 @@
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-2.png" alt="screenshot" width="300">
 
-##感谢
+## 感谢
 
 [PhoneNumber](https://github.com/xdtianyu/PhoneNumber): A library to get phone number location and other info from baidu api.
 
@@ -79,7 +79,7 @@
 
 [CustomActivityOnCrash](https://github.com/Ereza/CustomActivityOnCrash): An android library that allows launching a custom activity when your app crashes.
 
-##[许可证](https://github.com/xdtianyu/CallerInfo/blob/master/LICENSE.md)
+## [许可证](https://github.com/xdtianyu/CallerInfo/blob/master/LICENSE.md)
 
 ```
                     GNU GENERAL PUBLIC LICENSE
