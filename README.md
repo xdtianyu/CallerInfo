@@ -39,13 +39,13 @@
  
 1\. “来电信息” 的不断改进和完善离不开社区的反馈，非常感谢所有在 Play 市场、V站、酷市场留言及发送邮件反馈的朋友。
  
-2\. 应用开源免费无广告，请放心使用。APK 文件通过 Travis CI 自动生成并上传，用户可在每个 [GitHub 版本发行](https://github.com/xdtianyu/CallerInfo/releases)中找到编译日志来校验文件 sha1 及 md5。
+2\. 应用开源免费无广告，请放心使用。APK 文件通过 Travis CI 自动生成并上传，用户可在每个 [GitHub 版本发行](https://github.com/xdtianyu/CallerInfo/releases) 中找到编译日志来校验文件 sha1 及 md5。
  
 3\. 请避免限制主应用及插件请求的权限。如出现来电时不显示悬浮窗，请先检查权限设置、权限管理类型应用的设置。如果安装了插件，请确保插件和主应用没有进入管理类软件的黑名单或优化项目。
  
 4\. 如果对此开源应用有任何不满、问题或建议，请在 [GitHub](https://github.com/xdtianyu/CallerInfo/issues) 提交问题单或发送问题到作者邮件。非常欢迎大家反馈，来和作者一起完善这个应用。
  
-5\. 如果您觉得这个应用做的不错，欢迎在 [GitHub](https://github.com/xdtianyu/CallerInfo) star、在 [Play 市场](https://play.google.com/store/apps/details?id=org.xdty.callerinfo)及[酷市场](http://coolapk.com/apk/org.xdty.callerinfo) 五星好评，欢迎您将此应用通过推特、微博、朋友圈等社交网络推广给更多的人。
+5\. 如果您觉得这个应用做的不错，欢迎在 [GitHub](https://github.com/xdtianyu/CallerInfo) star、在 [Play 市场](https://play.google.com/store/apps/details?id=org.xdty.callerinfo) 及 [酷市场](http://coolapk.com/apk/org.xdty.callerinfo) 五星好评，欢迎您将此应用通过推特、微博、朋友圈等社交网络推广给更多的人。
 
 ## 贡献者
 [tianyu](https://www.xdty.org) 
