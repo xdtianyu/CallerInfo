@@ -1,0 +1,31 @@
+def manifestProperties = "manifest.properties"
+def manifestKeys = [
+        API_KEY    : { x -> x },
+        JUHE_API_KEY: { x -> x }
+]
+
+// Find manifest.properties in project root, or in $HOME/.gradle
+def f = ["${rootDir}/${manifestProperties}", "${gradle.gradleUserHomeDir}/${manifestProperties}"].find {
+    file(it).exists()
+}
+
+if (f) {
+    logger.info "Loading manifest properties from ${f}"
+    def props = new Properties()
+    props.load(new FileInputStream(f))
+
+    // For each property apply it to the release manifest config
+    manifestKeys.any { k, fn ->
+        if (!props.containsKey(k)) {
+            logger.error "Missing property ${k}"
+            android.defaultConfig.manifestPlaceholders = null
+            return true
+        }
+        android.defaultConfig.manifestPlaceholders[k] = fn(props[k])
+        logger.info "Setting property ${k}"
+    }
+} else {
+    logger.info "Missing ${manifestProperties} file"
+    android.defaultConfig.manifestPlaceholders["API_KEY"] = "${System.env.API_KEY}"
+    android.defaultConfig.manifestPlaceholders["JUHE_API_KEY"] = "${System.env.JUHE_API_KEY}"
+}

@@ -1,0 +1,35 @@
+def signingProperties = "signing.properties"
+def signingKeys = [
+        storeFile    : { x -> rootProject.file(x) },
+        storePassword: { x -> x },
+        keyAlias     : { x -> x },
+        keyPassword  : { x -> x },
+]
+
+// Find signing.properties in project root, or in $HOME/.gradle
+def f = ["${rootDir}/${signingProperties}", "${gradle.gradleUserHomeDir}/${signingProperties}"].find {
+    file(it).exists()
+}
+
+if (f) {
+    logger.info "Loading signing properties from ${f}"
+    def props = new Properties()
+    props.load(new FileInputStream(f))
+
+    // For each property apply it to the release signing config
+    signingKeys.any { k, fn ->
+        if (!props.containsKey(k)) {
+            logger.error "Missing property ${k}"
+            android.buildTypes.release.signingConfig = null
+            return true
+        }
+        android.signingConfigs.release[k] = fn(props[k])
+        logger.info "Setting property ${k}"
+    }
+} else {
+    logger.info "Missing ${signingProperties} file"
+    android.signingConfigs.release["storeFile"] = rootProject.file("release.jks")
+    android.signingConfigs.release["storePassword"] = "${System.env.KEYSTORE_PASSWORD}"
+    android.signingConfigs.release["keyAlias"] = "${System.env.ALIAS}"
+    android.signingConfigs.release["keyPassword"] = "${System.env.ALIAS_PASSWORD}"
+}

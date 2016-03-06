@@ -14,12 +14,7 @@ android {
     }
 
     signingConfigs {
-        release {
-            storeFile rootProject.file("release.jks")
-            storePassword "${System.env.KEYSTORE_PASSWORD}"
-            keyAlias "${System.env.ALIAS}"
-            keyPassword "${System.env.ALIAS_PASSWORD}"
-        }
+        release
     }
 
     buildTypes {
@@ -40,5 +35,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.2.0'
 }
+
+apply from: '../signing.gradle'

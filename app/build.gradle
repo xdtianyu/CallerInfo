@@ -11,19 +11,10 @@ android {
         versionCode project.VERSION_CODE.toInteger()
         versionName project.VERSION_NAME
         setProperty("archivesBaseName", "CallerInfo-v$versionName")
-        manifestPlaceholders = [
-                API_KEY: "${System.env.API_KEY}",
-                JUHE_API_KEY: "${System.env.JUHE_API_KEY}"
-        ]
     }
 
     signingConfigs {
-        release {
-            storeFile rootProject.file("release.jks")
-            storePassword "${System.env.KEYSTORE_PASSWORD}"
-            keyAlias "${System.env.ALIAS}"
-            keyPassword "${System.env.ALIAS_PASSWORD}"
-        }
+        release
     }
 
     buildTypes {
@@ -49,10 +40,10 @@ dependencies {
     compile project(':standOut')
 //    compile 'com.github.sherpya:standout:1.0.3'
 
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:cardview-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:cardview-v7:23.2.0'
+    compile 'com.android.support:design:23.2.0'
+    compile 'com.android.support:support-v4:23.2.0'
     compile 'com.github.satyan:sugar:1.4'
     compile 'org.xdty.phone.number:phone-number:0.3.9'
     compile 'org.xdty.preference:color-picker:0.0.4'
@@ -60,3 +51,6 @@ dependencies {
     compile 'com.minimize.library:seekbar-compat:0.2.4'
     compile 'cat.ereza:customactivityoncrash:1.4.0'
 }
+
+apply from: '../signing.gradle'
+apply from: '../manifest.gradle'
