@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setMaxWidth(mScreenWidth);
-        searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
+        searchView.setInputType(InputType.TYPE_CLASS_PHONE);
         searchView.setQueryHint(getString(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
