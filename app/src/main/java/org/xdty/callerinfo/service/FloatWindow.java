@@ -142,10 +142,7 @@ public class FloatWindow extends StandOutWindow {
 
     private boolean isUnmovable(int id) {
         KeyguardManager km = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean disableMove = preferences.getBoolean(getString(R.string.disable_move_key), false);
-        return id == SETTING_FRONT || id == SEARCH_FRONT || (id == CALLER_FRONT && disableMove) ||
-                km.inKeyguardRestrictedInputMode();
+        return id == SETTING_FRONT || id == SEARCH_FRONT || km.inKeyguardRestrictedInputMode();
     }
 
     @Override
@@ -329,5 +326,15 @@ public class FloatWindow extends StandOutWindow {
         }
         isFirstShow = false;
         return true;
+    }
+
+    @Override
+    public boolean isDisableMove(int id) {
+        if (id != CALLER_FRONT) {
+            return false;
+        } else {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            return preferences.getBoolean(getString(R.string.disable_move_key), false);
+        }
     }
 }
