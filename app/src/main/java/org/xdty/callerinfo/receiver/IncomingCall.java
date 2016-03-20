@@ -220,6 +220,9 @@ public class IncomingCall extends BroadcastReceiver {
                     @Override
                     public void onResponseOffline(INumber number) {
                         if (isShowing && number != null) {
+                            if (hangup || saveLog) {
+                                bindPluginService(hangup, number);
+                            }
                             Utils.showWindow(context, number, FloatWindow.CALLER_FRONT);
                         }
                     }
