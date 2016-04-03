@@ -1,10 +1,13 @@
 package org.xdty.callerinfo.contract;
 
+import android.support.annotation.NonNull;
+
 import org.xdty.callerinfo.model.db.InCall;
 
 import java.util.List;
 
 public interface MainContact {
+
     interface View extends BaseView<Presenter> {
 
         void showNoCallLog(boolean show);
@@ -37,5 +40,13 @@ public interface MainContact {
         void checkEula();
 
         void setEula();
+
+        boolean canDrawOverlays();
+
+        void requestDrawOverlays(int requestCode);
+
+        int checkPermission(String permission);
+
+        void requestPermissions(@NonNull String[] permissions, int requestCode);
     }
 }

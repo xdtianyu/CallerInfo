@@ -8,10 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -38,6 +35,8 @@ import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.contract.MainContact;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.permission.Permission;
+import org.xdty.callerinfo.permission.PermissionImpl;
 import org.xdty.callerinfo.presenter.MainPresenter;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.setting.Setting;
@@ -52,9 +51,9 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity implements MainContact.View {
 
+    public final static int REQUEST_CODE_OVERLAY_PERMISSION = 1001;
+    public final static int REQUEST_CODE_ASK_PERMISSIONS = 1002;
     private final static String TAG = MainActivity.class.getSimpleName();
-    private final static int REQUEST_CODE_OVERLAY_PERMISSION = 1001;
-    private final static int REQUEST_CODE_ASK_PERMISSIONS = 1002;
     private Toolbar mToolbar;
     private int mScreenWidth;
     private TextView mEmptyText;
@@ -71,8 +70,9 @@ public class MainActivity extends BaseActivity implements MainContact.View {
         super.onCreate(savedInstanceState);
 
         Setting setting = new SettingImpl(getApplicationContext());
+        Permission permission = new PermissionImpl(this);
 
-        mPresenter = new MainPresenter(this, setting);
+        mPresenter = new MainPresenter(this, setting, permission);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -197,19 +197,14 @@ public class MainActivity extends BaseActivity implements MainContact.View {
     protected void onStart() {
         super.onStart();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(this)) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:" + getPackageName()));
-                startActivityForResult(intent, REQUEST_CODE_OVERLAY_PERMISSION);
-            }
+        if (!mPresenter.canDrawOverlays()) {
+            mPresenter.requestDrawOverlays(REQUEST_CODE_OVERLAY_PERMISSION);
+        }
 
-            int res = checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
-            if (res != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE},
-                        REQUEST_CODE_OVERLAY_PERMISSION);
-            }
-
+        int res = mPresenter.checkPermission(Manifest.permission.READ_PHONE_STATE);
+        if (res != PackageManager.PERMISSION_GRANTED) {
+            mPresenter.requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE},
+                    REQUEST_CODE_ASK_PERMISSIONS);
         }
     }
 
@@ -228,10 +223,8 @@ public class MainActivity extends BaseActivity implements MainContact.View {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_OVERLAY_PERMISSION) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (!Settings.canDrawOverlays(this)) {
-                    Log.e(TAG, "SYSTEM_ALERT_WINDOW permission not granted...");
-                }
+            if (!mPresenter.canDrawOverlays()) {
+                Log.e(TAG, "SYSTEM_ALERT_WINDOW permission not granted...");
             }
         }
     }
