@@ -30,7 +30,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
     private static final Map<String, Caller> callerMap = new HashMap<>();
     private final Context mContext;
-    private final List<InCall> mList;
+    private List<InCall> mList;
     private CardView cardView;
 
     public CallerAdapter(Context context, List<InCall> list) {
@@ -88,6 +88,11 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                 callerMap.put(caller.getNumber(), caller);
             }
         }
+    }
+
+    public void replaceData(List<InCall> inCalls) {
+        mList = inCalls;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

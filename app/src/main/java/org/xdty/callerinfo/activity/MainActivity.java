@@ -38,8 +38,10 @@ import android.widget.Toast;
 
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.contract.MainContact;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.presenter.MainPresenter;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.view.CallerAdapter;
@@ -49,12 +51,11 @@ import org.xdty.phone.number.model.INumber;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements MainContact.View {
 
     private final static String TAG = MainActivity.class.getSimpleName();
     private final static int REQUEST_CODE_OVERLAY_PERMISSION = 1001;
     private final static int REQUEST_CODE_ASK_PERMISSIONS = 1002;
-    private final List<InCall> mInCallList = new ArrayList<>();
     private Toolbar mToolbar;
     private SharedPreferences mSharedPreferences;
     private int mScreenWidth;
@@ -65,10 +66,14 @@ public class MainActivity extends BaseActivity {
     private FrameLayout mMainLayout;
     private PhoneNumber mPhoneNumber;
     private long mLastSearchTime;
+    private MainContact.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mPresenter = new MainPresenter(this);
+
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -92,9 +97,7 @@ public class MainActivity extends BaseActivity {
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        loadInCallList();
-
-        mCallerAdapter = new CallerAdapter(this, mInCallList);
+        mCallerAdapter = new CallerAdapter(this, new ArrayList<InCall>());
         mRecyclerView.setAdapter(mCallerAdapter);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -122,8 +125,8 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                final InCall inCall = mInCallList.get(viewHolder.getAdapterPosition());
-                mInCallList.remove(viewHolder.getAdapterPosition());
+                final int position = viewHolder.getAdapterPosition();
+                mPresenter.removeInCallFromList(position);
                 mCallerAdapter.notifyDataSetChanged();
                 final Snackbar snackbar = Snackbar.make(mToolbar, R.string.deleted,
                         Snackbar.LENGTH_LONG);
@@ -132,8 +135,7 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         snackbar.dismiss();
-                        loadInCallList();
-                        mCallerAdapter.notifyDataSetChanged();
+                        mPresenter.loadInCallList();
                     }
                 });
                 snackbar.setCallback(new Snackbar.Callback() {
@@ -144,7 +146,7 @@ public class MainActivity extends BaseActivity {
                             case DISMISS_EVENT_ACTION:
                                 break;
                             default:
-                                inCall.delete();
+                                mPresenter.removeInCall(position);
                                 break;
                         }
                         super.onDismissed(snackbar, event);
@@ -176,8 +178,7 @@ public class MainActivity extends BaseActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadInCallList();
-                mCallerAdapter.notifyDataSetChanged();
+                mPresenter.loadInCallList();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -191,19 +192,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadInCallList();
-        mCallerAdapter.notifyDataSetChanged();
-    }
-
-    private void loadInCallList() {
-        mInCallList.clear();
-        mInCallList.addAll(InCall.listAll(InCall.class, "time DESC"));
-
-        if (mInCallList.size() == 0) {
-            mEmptyText.setVisibility(View.VISIBLE);
-        } else {
-            mEmptyText.setVisibility(View.GONE);
-        }
+        mPresenter.start();
     }
 
     @Override
@@ -436,14 +425,41 @@ public class MainActivity extends BaseActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for (InCall inCall : mInCallList) {
-                            inCall.delete();
-                        }
-                        loadInCallList();
-                        mCallerAdapter.notifyDataSetChanged();
+                        mPresenter.clearAll();
+                        mPresenter.loadInCallList();
                     }
                 });
         builder.setNegativeButton(getString(R.string.cancel), null);
         builder.show();
+    }
+
+    @Override
+    public void showNoCallLog(boolean show) {
+        mEmptyText.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void showLoading(boolean active) {
+
+    }
+
+    @Override
+    public void showCallLogs(List<InCall> inCalls) {
+        mCallerAdapter.replaceData(inCalls);
+    }
+
+    @Override
+    public void showSearch() {
+
+    }
+
+    @Override
+    public void showTitle(String title) {
+        setTitle(title);
+    }
+
+    @Override
+    public void setPresenter(MainContact.Presenter presenter) {
+        mPresenter = presenter;
     }
 }
