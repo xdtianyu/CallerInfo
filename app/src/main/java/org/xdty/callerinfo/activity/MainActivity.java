@@ -33,7 +33,6 @@ import android.widget.Toast;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.contract.MainContact;
-import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.permission.Permission;
 import org.xdty.callerinfo.permission.PermissionImpl;
@@ -61,7 +60,6 @@ public class MainActivity extends BaseActivity implements MainContact.View {
     private CallerAdapter mCallerAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FrameLayout mMainLayout;
-    private PhoneNumber mPhoneNumber;
     private long mLastSearchTime;
     private MainContact.Presenter mPresenter;
 
@@ -71,8 +69,24 @@ public class MainActivity extends BaseActivity implements MainContact.View {
 
         Setting setting = new SettingImpl(getApplicationContext());
         Permission permission = new PermissionImpl(this);
+        PhoneNumber phoneNumber = new PhoneNumber(this, new PhoneNumber.Callback() {
+            @Override
+            public void onResponseOffline(INumber number) {
+                mPresenter.handleResponse(number, false);
+            }
 
-        mPresenter = new MainPresenter(this, setting, permission);
+            @Override
+            public void onResponse(INumber number) {
+                mPresenter.handleResponse(number, true);
+            }
+
+            @Override
+            public void onResponseFailed(INumber number, boolean isOnline) {
+                mPresenter.handleResponseFailed(number, isOnline);
+            }
+        });
+
+        mPresenter = new MainPresenter(this, setting, permission, phoneNumber);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -213,10 +227,7 @@ public class MainActivity extends BaseActivity implements MainContact.View {
         if (FloatWindow.status() != FloatWindow.STATUS_CLOSE) {
             Utils.closeWindow(this);
         }
-        if (mPhoneNumber != null) {
-            mPhoneNumber.clear();
-            mPhoneNumber = null;
-        }
+        mPresenter.clearSearch();
         super.onStop();
     }
 
@@ -280,7 +291,7 @@ public class MainActivity extends BaseActivity implements MainContact.View {
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: " + query);
                 if (System.currentTimeMillis() - mLastSearchTime > 1000) {
-                    showNumberInfo(query);
+                    mPresenter.search(query);
                     mRecyclerView.setVisibility(View.INVISIBLE);
                     mMainLayout.setBackgroundColor(ContextCompat.getColor(MainActivity.this,
                             R.color.dark));
@@ -324,57 +335,6 @@ public class MainActivity extends BaseActivity implements MainContact.View {
         return true;
     }
 
-    private void showNumberInfo(String phoneNumber) {
-
-        if (phoneNumber.isEmpty()) {
-            return;
-        }
-
-        List<Caller> callers = Caller.find(Caller.class, "number=?", phoneNumber);
-
-        if (callers.size() > 0) {
-            Caller caller = callers.get(0);
-            if (caller.isUpdated()) {
-                Utils.showWindow(MainActivity.this, caller, FloatWindow.SEARCH_FRONT);
-                return;
-            } else {
-                caller.delete();
-            }
-        }
-
-        if (mPhoneNumber == null) {
-            mPhoneNumber = new PhoneNumber(this, new PhoneNumber.Callback() {
-                @Override
-                public void onResponseOffline(INumber number) {
-                    if (number != null) {
-                        Utils.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
-                    }
-                }
-
-                @Override
-                public void onResponse(INumber number) {
-
-                    if (number != null && number.isValid()) {
-                        new Caller(number, !number.isOnline()).save();
-                        Utils.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
-                    }
-                }
-
-                @Override
-                public void onResponseFailed(INumber number, boolean isOnline) {
-                    if (isOnline) {
-                        Utils.sendData(MainActivity.this, FloatWindow.WINDOW_ERROR,
-                                R.string.online_failed, FloatWindow.SEARCH_FRONT);
-                    } else {
-                        Utils.showTextWindow(MainActivity.this, R.string.offline_failed,
-                                FloatWindow.SEARCH_FRONT);
-                    }
-                }
-            });
-        }
-        mPhoneNumber.fetch(phoneNumber);
-    }
-
     private void clearHistory() {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this);
@@ -409,11 +369,6 @@ public class MainActivity extends BaseActivity implements MainContact.View {
     }
 
     @Override
-    public void showSearch() {
-
-    }
-
-    @Override
     public void showTitle(String title) {
         setTitle(title);
     }
@@ -440,6 +395,22 @@ public class MainActivity extends BaseActivity implements MainContact.View {
                     }
                 });
         builder.show();
+    }
+
+    @Override
+    public void showSearchResult(INumber number) {
+        Utils.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
+    }
+
+    @Override
+    public void showSearchFailed(boolean isOnline) {
+        if (isOnline) {
+            Utils.sendData(MainActivity.this, FloatWindow.WINDOW_ERROR,
+                    R.string.online_failed, FloatWindow.SEARCH_FRONT);
+        } else {
+            Utils.showTextWindow(MainActivity.this, R.string.offline_failed,
+                    FloatWindow.SEARCH_FRONT);
+        }
     }
 
     @Override

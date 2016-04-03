@@ -3,6 +3,7 @@ package org.xdty.callerinfo.contract;
 import android.support.annotation.NonNull;
 
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.phone.number.model.INumber;
 
 import java.util.List;
 
@@ -16,11 +17,13 @@ public interface MainContact {
 
         void showCallLogs(List<InCall> inCalls);
 
-        void showSearch();
-
         void showTitle(String title);
 
         void showEula();
+
+        void showSearchResult(INumber number);
+
+        void showSearchFailed(boolean isOnline);
     }
 
     interface Presenter extends BasePresenter {
@@ -48,5 +51,11 @@ public interface MainContact {
         int checkPermission(String permission);
 
         void requestPermissions(@NonNull String[] permissions, int requestCode);
+
+        void handleResponse(INumber number, boolean isOnline);
+
+        void handleResponseFailed(INumber number, boolean isOnline);
+
+        void clearSearch();
     }
 }

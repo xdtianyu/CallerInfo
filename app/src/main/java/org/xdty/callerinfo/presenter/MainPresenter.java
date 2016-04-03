@@ -3,9 +3,12 @@ package org.xdty.callerinfo.presenter;
 import android.support.annotation.NonNull;
 
 import org.xdty.callerinfo.contract.MainContact;
+import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.permission.Permission;
 import org.xdty.callerinfo.setting.Setting;
+import org.xdty.phone.number.PhoneNumber;
+import org.xdty.phone.number.model.INumber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +19,14 @@ public class MainPresenter implements MainContact.Presenter {
     private MainContact.View mView;
     private Setting mSetting;
     private Permission mPermission;
+    private PhoneNumber mPhoneNumber;
 
-    public MainPresenter(MainContact.View view, Setting setting, Permission permission) {
+    public MainPresenter(MainContact.View view, Setting setting, Permission permission,
+            PhoneNumber phoneNumber) {
         mView = view;
         mSetting = setting;
         mPermission = permission;
+        mPhoneNumber = phoneNumber;
     }
 
     @Override
@@ -62,7 +68,22 @@ public class MainPresenter implements MainContact.Presenter {
 
     @Override
     public void search(String number) {
+        if (number.isEmpty()) {
+            return;
+        }
 
+        List<Caller> callers = Caller.find(Caller.class, "number=?", number);
+
+        if (callers.size() > 0) {
+            Caller caller = callers.get(0);
+            if (caller.isUpdated()) {
+                mView.showSearchResult(caller);
+                return;
+            } else {
+                caller.delete();
+            }
+        }
+        mPhoneNumber.fetch(number);
     }
 
     @Override
@@ -100,5 +121,25 @@ public class MainPresenter implements MainContact.Presenter {
     @Override
     public void start() {
         loadInCallList();
+    }
+
+    @Override
+    public void handleResponse(INumber number, boolean isOnline) {
+        if (number != null) {
+            if (isOnline && number.isValid()) {
+                new Caller(number, !number.isOnline()).save();
+            }
+            mView.showSearchResult(number);
+        }
+    }
+
+    @Override
+    public void handleResponseFailed(INumber number, boolean isOnline) {
+        mView.showSearchFailed(isOnline);
+    }
+
+    @Override
+    public void clearSearch() {
+        mPhoneNumber.clear();
     }
 }
