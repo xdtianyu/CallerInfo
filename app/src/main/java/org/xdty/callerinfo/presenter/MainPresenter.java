@@ -2,6 +2,7 @@ package org.xdty.callerinfo.presenter;
 
 import org.xdty.callerinfo.contract.MainContact;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.setting.Setting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +10,12 @@ import java.util.List;
 public class MainPresenter implements MainContact.Presenter {
 
     private MainContact.View mView;
+    private Setting mSetting;
     private final List<InCall> mInCallList = new ArrayList<>();
 
-    public MainPresenter(MainContact.View view) {
+    public MainPresenter(MainContact.View view, Setting setting) {
         mView = view;
+        mSetting = setting;
     }
 
     @Override
@@ -55,6 +58,18 @@ public class MainPresenter implements MainContact.Presenter {
     @Override
     public void search(String number) {
 
+    }
+
+    @Override
+    public void checkEula() {
+        if (!mSetting.isEulaSet()) {
+            mView.showEula();
+        }
+    }
+
+    @Override
+    public void setEula() {
+        mSetting.setEula();
     }
 
     @Override

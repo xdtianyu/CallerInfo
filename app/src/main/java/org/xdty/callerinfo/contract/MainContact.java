@@ -16,6 +16,8 @@ public interface MainContact {
         void showSearch();
 
         void showTitle(String title);
+
+        void showEula();
     }
 
     interface Presenter extends BasePresenter {
@@ -31,5 +33,9 @@ public interface MainContact {
         void clearAll();
 
         void search(String number);
+
+        void checkEula();
+
+        void setEula();
     }
 }
