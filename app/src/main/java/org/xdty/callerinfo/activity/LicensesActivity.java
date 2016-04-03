@@ -2,13 +2,12 @@ package org.xdty.callerinfo.activity;
 
 import android.app.ActionBar;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
 import org.xdty.callerinfo.R;
 
-public class LicensesActivity extends AppCompatActivity {
+public class LicensesActivity extends BaseActivity {
 
     private final static String ACTION_LICENSE = "org.xdty.callerinfo.action.VIEW_LICENSES";
     private final static String ACTION_PRIVACY = "org.xdty.callerinfo.action.VIEW_PRIVACY";
@@ -17,7 +16,6 @@ public class LicensesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_licenses);
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -42,6 +40,11 @@ public class LicensesActivity extends AppCompatActivity {
                 break;
         }
         webView.loadUrl(url);
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_licenses;
     }
 
     @Override

@@ -32,6 +32,11 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
+        exclude 'META-INF/maven/com.google.guava/guava/pom.xml'
+    }
 }
 
 dependencies {
@@ -55,7 +60,7 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'com.google.dagger:dagger:2.2'
-    compile 'com.google.dagger:dagger-compiler:2.2'
+    apt 'com.google.dagger:dagger-compiler:2.2'
 }
 
 apply from: '../signing.gradle'
