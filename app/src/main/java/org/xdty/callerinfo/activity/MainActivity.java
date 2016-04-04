@@ -191,7 +191,6 @@ public class MainActivity extends BaseActivity implements MainContact.View {
             @Override
             public void onRefresh() {
                 mPresenter.loadInCallList();
-                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -360,7 +359,7 @@ public class MainActivity extends BaseActivity implements MainContact.View {
 
     @Override
     public void showLoading(boolean active) {
-
+        mSwipeRefreshLayout.setRefreshing(active);
     }
 
     @Override

@@ -46,6 +46,7 @@ public class MainPresenter implements MainContact.Presenter {
         } else {
             mView.showNoCallLog(false);
         }
+        mView.showLoading(false);
     }
 
     @Override
