@@ -76,66 +76,22 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    public static class SettingsFragment extends PreferenceFragment {
+    public static class SettingsFragment extends PreferenceFragment
+            implements OnPreferenceClickListener {
 
         public final static int REQUEST_CODE_CONTACTS_PERMISSION = 1003;
         public final static int REQUEST_CODE_OUTGOING_PERMISSION = 1004;
-        SharedPreferences sharedPrefs;
-        Preference bdApiPreference;
-        Preference jhApiPreference;
-        Preference textSizePref;
-        Preference winHeightPref;
-        Preference textAlignPref;
-        Preference winTransPref;
-        Preference winPaddingPref;
-        Preference apiTypePref;
-        Preference customApiPref;
-        Preference ignoreRegexPref;
-        PreferenceScreen customDataPref;
-        SwitchPreference ignoreContactPref;
-        SwitchPreference outgoingPref;
-        SwitchPreference crashPref;
-        SwitchPreference chinesePref;
-        SwitchPreference transBackPref;
-        String baiduApiKey;
-        String juheApiKey;
-        String textSizeKey;
-        String winHeightKey;
-        String textAlignKey;
-        String windowTransKey;
-        String windowPaddingKey;
-        String apiTypeKey;
-        String ignoreContactKey;
-        String outgoingKey;
-        String crashKey;
-        String chineseKey;
-        String transBackKey;
-        String customApiUrl;
-        String customApiKey;
-        String customDataKey;
-        String ignoreRegexKey;
+        private final static int SUMMARY_FLAG_NORMAL = 0x00000001;
+        private final static int SUMMARY_FLAG_MASK = 0x00000002;
+        private final static int SUMMARY_FLAG_NULL = 0x00000004;
+        private final Intent mPluginIntent = new Intent().setComponent(new ComponentName(
+                "org.xdty.callerinfo.plugin",
+                "org.xdty.callerinfo.plugin.PluginService"));
 
-        PreferenceCategory advancedPref;
-        PreferenceCategory aboutPref;
-        PreferenceCategory floatWindowPref;
-        Preference developerPref;
-
-        String pluginKey;
         PreferenceScreen pluginPref;
-        String hangupKey;
-        SwitchPreference hangupPref;
-        String callLogKey;
-        SwitchPreference callLogPref;
-        String hangupKeywordKey;
-        Preference hangupKeywordPref;
-        String hangupGeoKeywordKey;
-        Preference hangupGeoKeywordPref;
-        String hangupNumberKeywordKey;
-        Preference hangupNumberKeywordPref;
-
         int versionClickCount;
         Toast toast;
-
+        SharedPreferences sharedPrefs;
         private IPluginService mPluginService;
         private final ServiceConnection mConnection = new ServiceConnection() {
             @Override
@@ -151,7 +107,7 @@ public class SettingsActivity extends AppCompatActivity {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    hangupPref.setChecked(success);
+                                    setChecked(R.string.auto_hangup_key, success);
                                 }
                             });
                         }
@@ -163,7 +119,7 @@ public class SettingsActivity extends AppCompatActivity {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    callLogPref.setChecked(success);
+                                    setChecked(R.string.add_call_log_key, success);
                                 }
                             });
                         }
@@ -181,9 +137,6 @@ public class SettingsActivity extends AppCompatActivity {
                 mPluginService = null;
             }
         };
-        private final Intent mPluginIntent = new Intent().setComponent(new ComponentName(
-                "org.xdty.callerinfo.plugin",
-                "org.xdty.callerinfo.plugin.PluginService"));
         private Point mPoint;
 
         @Override
@@ -191,13 +144,13 @@ public class SettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings);
 
+            sharedPrefs = getPreferenceManager().getSharedPreferences();
+
             WindowManager mWindowManager = (WindowManager) getActivity().
                     getSystemService(Context.WINDOW_SERVICE);
             Display display = mWindowManager.getDefaultDisplay();
             mPoint = new Point();
             display.getSize(mPoint);
-
-            sharedPrefs = getPreferenceManager().getSharedPreferences();
 
             Preference version = findPreference(getString(R.string.version_key));
             String versionString = BuildConfig.VERSION_NAME;
@@ -206,208 +159,28 @@ public class SettingsActivity extends AppCompatActivity {
             }
             version.setSummary(versionString);
 
-            baiduApiKey = getString(R.string.baidu_api_key);
-
-            bdApiPreference = findPreference(baiduApiKey);
-            bdApiPreference.setSummary(mask(sharedPrefs.getString(baiduApiKey, "")));
-
-            bdApiPreference.setOnPreferenceClickListener(
-                    new OnPreferenceClickListener() {
-                        @Override
-                        public boolean onPreferenceClick(Preference preference) {
-                            showApiDialog(baiduApiKey, R.string.custom_bd_api_key,
-                                    R.string.baidu_api_url);
-                            return true;
-                        }
-                    });
-
-            juheApiKey = getString(R.string.juhe_api_key);
-
-            jhApiPreference = findPreference(juheApiKey);
-            jhApiPreference.setSummary(mask(sharedPrefs.getString(juheApiKey, "")));
-
-            jhApiPreference.setOnPreferenceClickListener(
-                    new OnPreferenceClickListener() {
-                        @Override
-                        public boolean onPreferenceClick(Preference preference) {
-                            showApiDialog(juheApiKey, R.string.custom_jh_api_key,
-                                    R.string.juhe_api_url);
-                            return true;
-                        }
-                    });
-
-            textSizeKey = getString(R.string.window_text_size_key);
-
-            textSizePref = findPreference(textSizeKey);
-            textSizePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showSeekBarDialog(textSizeKey, FloatWindow.TEXT_SIZE, 20, 60,
-                            R.string.window_text_size, R.string.text_size);
-                    return true;
-                }
-            });
-
-            winHeightKey = getString(R.string.window_height_key);
-            winHeightPref = findPreference(winHeightKey);
-            winHeightPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showSeekBarDialog(winHeightKey, FloatWindow.WINDOW_HEIGHT, mPoint.y / 8,
-                            mPoint.y / 4, R.string.window_height, R.string.window_height_message);
-                    return true;
-                }
-            });
-
-            final List<String> alignList = Arrays.asList(
-                    getResources().getStringArray(R.array.align_type));
-
-            textAlignKey = getString(R.string.window_text_alignment_key);
-            textAlignPref = findPreference(textAlignKey);
-            textAlignPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showRadioDialog(textAlignKey, R.string.window_text_alignment, alignList, 1);
-                    return true;
-                }
-            });
-            textAlignPref.setSummary(alignList.get(sharedPrefs.getInt(textAlignKey, 1)));
-
-            windowTransKey = getString(R.string.window_transparent_key);
-            winTransPref = findPreference(windowTransKey);
-            winTransPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showSeekBarDialog(windowTransKey, FloatWindow.WINDOW_TRANS, 80, 100,
-                            R.string.window_transparent, R.string.text_transparent);
-                    return true;
-                }
-            });
-
-            windowPaddingKey = getString(R.string.window_text_padding_key);
-            winPaddingPref = findPreference(windowPaddingKey);
-            winPaddingPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showSeekBarDialog(windowPaddingKey, FloatWindow.TEXT_PADDING, 0, mPoint.x / 2,
-                            R.string.window_text_padding, R.string.text_padding);
-                    return true;
-                }
-            });
-
-            apiTypeKey = getString(R.string.api_type_key);
-            apiTypePref = findPreference(apiTypeKey);
-
-            final List<String> apiList = Arrays.asList(
-                    getResources().getStringArray(R.array.api_type));
-
-            apiTypePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showRadioDialog(apiTypeKey, R.string.api_type, apiList, 0);
-                    return true;
-                }
-            });
-            apiTypePref.setSummary(apiList.get(sharedPrefs.getInt(apiTypeKey, 0)));
-
-            ignoreContactKey = getString(R.string.ignore_known_contact_key);
-            ignoreContactPref = (SwitchPreference) findPreference(ignoreContactKey);
-            ignoreContactPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        int res = getActivity().checkSelfPermission(
-                                Manifest.permission.READ_CONTACTS);
-                        if (res != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
-                                    REQUEST_CODE_CONTACTS_PERMISSION);
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            });
-
-            outgoingKey = getString(R.string.display_on_outgoing_key);
-            outgoingPref = (SwitchPreference) findPreference(outgoingKey);
-            outgoingPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        int res = getActivity().checkSelfPermission(
-                                Manifest.permission.PROCESS_OUTGOING_CALLS);
-                        if (res != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(
-                                    new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS},
-                                    REQUEST_CODE_OUTGOING_PERMISSION);
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            });
-
-            crashKey = getString(R.string.catch_crash_key);
-            crashPref = (SwitchPreference) findPreference(crashKey);
-            crashPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (sharedPrefs.getBoolean(crashKey, false)) {
-                        showTextDialog(R.string.catch_crash, R.string.catch_crash_message);
-                    }
-                    return false;
-                }
-            });
-
-            chineseKey = getString(R.string.force_chinese_key);
-            chinesePref = (SwitchPreference) findPreference(chineseKey);
-
-            transBackKey = getString(R.string.window_trans_back_only_key);
-            transBackPref = (SwitchPreference) findPreference(transBackKey);
-
-            customApiUrl = getString(R.string.custom_api_url);
-            customApiKey = getString(R.string.custom_api_key);
-            customApiPref = findPreference(customApiUrl);
-            customApiPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showCustomApiDialog();
-                    return false;
-                }
-            });
-
-            ignoreRegexKey = getString(R.string.ignore_regex_key);
-            ignoreRegexPref = findPreference(ignoreRegexKey);
-            ignoreRegexPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showEditDialog(ignoreRegexKey, R.string.ignore_regex, R.string.empty_string,
-                            R.string.ignore_regex_hint, R.string.example, R.string.regex_example);
-                    return false;
-                }
-            });
-            String regex = sharedPrefs.getString(ignoreRegexKey, "");
-            if (!regex.isEmpty()) {
-                ignoreRegexPref.setSummary(regex);
-            }
-
-            customDataKey = getString(R.string.custom_data_key);
-            customDataPref = (PreferenceScreen) findPreference(customDataKey);
+            bindPreference(R.string.baidu_api_key, true);
+            bindPreference(R.string.juhe_api_key, true);
+            bindPreference(R.string.window_text_size_key);
+            bindPreference(R.string.window_height_key);
+            bindPreferenceList(R.string.window_text_alignment_key, R.array.align_type, 1);
+            bindPreference(R.string.window_transparent_key);
+            bindPreference(R.string.window_text_padding_key);
+            bindPreferenceList(R.string.api_type_key, R.array.api_type, 0);
+            bindPreference(R.string.ignore_known_contact_key);
+            bindPreference(R.string.display_on_outgoing_key);
+            bindPreference(R.string.catch_crash_key);
+            bindPreference(R.string.ignore_regex_key, false);
+            bindPreference(R.string.custom_api_url);
 
             final String showHiddenKey = getString(R.string.show_hidden_setting_key);
             boolean isShowHidden = sharedPrefs.getBoolean(showHiddenKey, false);
-            advancedPref = (PreferenceCategory) findPreference(getString(R.string.advanced_key));
-            developerPref = findPreference(getString(R.string.developer_key));
 
             if (!isShowHidden) {
 
-                aboutPref = (PreferenceCategory) findPreference(getString(R.string.about_key));
-                floatWindowPref =
-                        (PreferenceCategory) findPreference(getString(R.string.float_window_key));
-
-                advancedPref.removePreference(customDataPref);
-                advancedPref.removePreference(chinesePref);
-                floatWindowPref.removePreference(transBackPref);
+                removePreference(R.string.advanced_key, R.string.custom_data_key);
+                removePreference(R.string.advanced_key, R.string.force_chinese_key);
+                removePreference(R.string.float_window_key, R.string.window_trans_back_only_key);
 
                 versionClickCount = 0;
                 version.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -417,9 +190,10 @@ public class SettingsActivity extends AppCompatActivity {
                         if (versionClickCount == 7) {
                             sharedPrefs.edit().putBoolean(showHiddenKey, true).apply();
 
-                            advancedPref.addPreference(customDataPref);
-                            advancedPref.addPreference(chinesePref);
-                            floatWindowPref.addPreference(transBackPref);
+                            addPreference(R.string.advanced_key, R.string.custom_data_key);
+                            addPreference(R.string.advanced_key, R.string.force_chinese_key);
+                            addPreference(R.string.float_window_key,
+                                    R.string.window_trans_back_only_key);
                         }
                         if (versionClickCount > 3 && versionClickCount < 7) {
                             if (toast != null) {
@@ -435,94 +209,22 @@ public class SettingsActivity extends AppCompatActivity {
                 });
             }
 
-            pluginKey = getString(R.string.plugin_key);
-            pluginPref = (PreferenceScreen) findPreference(pluginKey);
+            pluginPref = (PreferenceScreen) findPreference(getString(R.string.plugin_key));
             pluginPref.setEnabled(false);
             pluginPref.setSummary(getString(R.string.plugin_not_started));
             if (Utils.isAppInstalled(getActivity(), getString(R.string.plugin_package_name))) {
                 bindPluginService();
 
-                hangupKey = getString(R.string.auto_hangup_key);
-                callLogKey = getString(R.string.add_call_log_key);
-                hangupPref = (SwitchPreference) findPreference(hangupKey);
-                hangupPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        try {
-                            mPluginService.checkCallPermission();
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                        return false;
-                    }
-                });
-                callLogPref = (SwitchPreference) findPreference(callLogKey);
-                callLogPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        try {
-                            mPluginService.checkCallLogPermission();
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                        return false;
-                    }
-                });
+                bindPreference(R.string.auto_hangup_key);
+                bindPreference(R.string.add_call_log_key);
 
-                hangupKeywordKey = getString(R.string.hangup_keyword_key);
-                String keyword = sharedPrefs.getString(hangupKeywordKey, "");
-                if (keyword.isEmpty()) {
-                    keyword = getString(R.string.hangup_keyword_summary);
-                }
-
-                hangupKeywordPref = findPreference(hangupKeywordKey);
-                hangupKeywordPref.setSummary(keyword);
-                hangupKeywordPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        showEditDialog(hangupKeywordKey, R.string.hangup_keyword,
-                                R.string.hangup_keyword_default, R.string.hangup_keyword_hint);
-                        return false;
-                    }
-                });
-
-                hangupGeoKeywordKey = getString(R.string.hangup_geo_keyword_key);
-                String geoKeyword = sharedPrefs.getString(hangupGeoKeywordKey, "");
-                if (geoKeyword.isEmpty()) {
-                    geoKeyword = getString(R.string.hangup_geo_keyword_summary);
-                }
-
-                hangupGeoKeywordPref = findPreference(hangupGeoKeywordKey);
-                hangupGeoKeywordPref.setSummary(geoKeyword);
-                hangupGeoKeywordPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        showEditDialog(hangupGeoKeywordKey, R.string.hangup_geo_keyword,
-                                R.string.empty_string, R.string.hangup_keyword_hint);
-                        return false;
-                    }
-                });
-
-                hangupNumberKeywordKey = getString(R.string.hangup_number_keyword_key);
-                String numberKeyword = sharedPrefs.getString(hangupNumberKeywordKey, "");
-                if (numberKeyword.isEmpty()) {
-                    numberKeyword = getString(R.string.hangup_number_keyword_summary);
-                }
-
-                hangupNumberKeywordPref = findPreference(hangupNumberKeywordKey);
-                hangupNumberKeywordPref.setSummary(numberKeyword);
-                hangupNumberKeywordPref.setOnPreferenceClickListener(
-                        new OnPreferenceClickListener() {
-                            @Override
-                            public boolean onPreferenceClick(Preference preference) {
-                                showEditDialog(hangupNumberKeywordKey,
-                                        R.string.hangup_number_keyword,
-                                        R.string.empty_string, R.string.hangup_keyword_hint);
-                                return false;
-                            }
-                        });
+                bindPreference(R.string.hangup_keyword_key, R.string.hangup_keyword_summary);
+                bindPreference(R.string.hangup_geo_keyword_key,
+                        R.string.hangup_geo_keyword_summary);
+                bindPreference(R.string.hangup_number_keyword_key,
+                        R.string.hangup_number_keyword_summary);
             } else {
-                advancedPref.removePreference(pluginPref);
+                removePreference(R.string.advanced_key, R.string.plugin_key);
             }
         }
 
@@ -613,12 +315,12 @@ public class SettingsActivity extends AppCompatActivity {
             switch (requestCode) {
                 case REQUEST_CODE_CONTACTS_PERMISSION:
                     if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                        ignoreContactPref.setChecked(false);
+                        setChecked(R.string.ignore_known_contact_key, false);
                     }
                     break;
                 case REQUEST_CODE_OUTGOING_PERMISSION:
                     if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                        outgoingPref.setChecked(false);
+                        setChecked(R.string.display_on_outgoing_key, false);
                     }
                     break;
                 default:
@@ -626,8 +328,9 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
-        private void showSeekBarDialog(final String key, final String bundleKey, int defaultValue,
+        private void showSeekBarDialog(int keyId, final String bundleKey, int defaultValue,
                 int max, int title, int textRes) {
+            final String key = getString(keyId);
             int value = sharedPrefs.getInt(key, defaultValue);
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
@@ -679,13 +382,14 @@ public class SettingsActivity extends AppCompatActivity {
             showTextWindow(getActivity(), textRes, FloatWindow.SETTING_FRONT);
         }
 
-        private void showApiDialog(final String key, int title, final int url) {
+        private void showApiDialog(int keyId, int title, final int url) {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
             View layout = View.inflate(getActivity(), R.layout.dialog_edit, null);
             builder.setView(layout);
 
+            final String key = getString(keyId);
             final EditText editText = (EditText) layout.findViewById(R.id.text);
             editText.setText(sharedPrefs.getString(key, ""));
 
@@ -710,8 +414,9 @@ public class SettingsActivity extends AppCompatActivity {
             builder.show();
         }
 
-        private void showRadioDialog(final String key, int title, final List<String> list,
+        private void showRadioDialog(int keyId, int title, final List<String> list,
                 int defValue) {
+            final String key = getString(keyId);
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
             View layout = View.inflate(getActivity(), R.layout.dialog_radio, null);
@@ -767,14 +472,15 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         private void showCustomApiDialog() {
-            AlertDialog.Builder builder =
-                    new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(R.string.custom_api));
             View layout = View.inflate(getActivity(), R.layout.dialog_custom_api, null);
             builder.setView(layout);
 
             final EditText apiUri = (EditText) layout.findViewById(R.id.api_uri);
             final EditText apiKey = (EditText) layout.findViewById(R.id.api_key);
+            final String customApiKey = getString(R.string.custom_api_key);
+            final String customApiUrl = getString(R.string.custom_api_url);
             apiUri.setText(sharedPrefs.getString(customApiUrl, ""));
             apiKey.setText(sharedPrefs.getString(customApiKey, ""));
 
@@ -803,12 +509,13 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         @SuppressWarnings("SameParameterValue")
-        private void showEditDialog(final String key, int title, final int defaultText, int hint) {
-            showEditDialog(key, title, defaultText, hint, 0, 0);
+        private void showEditDialog(int keyId, int title, final int defaultText, int hint) {
+            showEditDialog(keyId, title, defaultText, hint, 0, 0);
         }
 
-        private void showEditDialog(final String key, int title, final int defaultText, int hint,
+        private void showEditDialog(int keyId, int title, final int defaultText, int hint,
                 final int help, final int helpText) {
+            final String key = getString(keyId);
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
@@ -854,6 +561,181 @@ public class SettingsActivity extends AppCompatActivity {
         private float dpToPx(float dp) {
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                     getActivity().getResources().getDisplayMetrics());
+        }
+
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+
+
+            switch (getKeyId(preference.getKey())) {
+                case R.string.baidu_api_key:
+                    showApiDialog(R.string.baidu_api_key, R.string.custom_bd_api_key,
+                            R.string.baidu_api_url);
+                    break;
+                case R.string.juhe_api_key:
+                    showApiDialog(R.string.juhe_api_key, R.string.custom_jh_api_key,
+                            R.string.juhe_api_url);
+                    break;
+                case R.string.window_text_size_key:
+                    showSeekBarDialog(R.string.window_text_size_key, FloatWindow.TEXT_SIZE, 20, 60,
+                            R.string.window_text_size, R.string.text_size);
+                    break;
+                case R.string.window_height_key:
+                    showSeekBarDialog(R.string.window_height_key, FloatWindow.WINDOW_HEIGHT,
+                            mPoint.y / 8, mPoint.y / 4, R.string.window_height,
+                            R.string.window_height_message);
+                    break;
+                case R.string.window_text_alignment_key:
+                    List<String> alignList = Arrays.asList(
+                            getResources().getStringArray(R.array.align_type));
+                    showRadioDialog(R.string.window_text_alignment_key,
+                            R.string.window_text_alignment, alignList, 1);
+                    break;
+                case R.string.window_transparent_key:
+                    showSeekBarDialog(R.string.window_transparent_key, FloatWindow.WINDOW_TRANS, 80,
+                            100, R.string.window_transparent, R.string.text_transparent);
+                    break;
+                case R.string.window_text_padding_key:
+                    showSeekBarDialog(R.string.window_text_padding_key, FloatWindow.TEXT_PADDING, 0,
+                            mPoint.x / 2,
+                            R.string.window_text_padding, R.string.text_padding);
+                    break;
+                case R.string.api_type_key:
+                    List<String> apiList = Arrays.asList(
+                            getResources().getStringArray(R.array.api_type));
+                    showRadioDialog(R.string.api_type_key, R.string.api_type, apiList, 0);
+                    break;
+                case R.string.ignore_known_contact_key:
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        int res = getActivity().checkSelfPermission(
+                                Manifest.permission.READ_CONTACTS);
+                        if (res != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
+                                    REQUEST_CODE_CONTACTS_PERMISSION);
+                            return true;
+                        }
+                    }
+                    return false;
+                case R.string.display_on_outgoing_key:
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        int res = getActivity().checkSelfPermission(
+                                Manifest.permission.PROCESS_OUTGOING_CALLS);
+                        if (res != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(
+                                    new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS},
+                                    REQUEST_CODE_OUTGOING_PERMISSION);
+                            return true;
+                        }
+                    }
+                    return false;
+                case R.string.catch_crash_key:
+                    if (sharedPrefs.getBoolean(getString(R.string.catch_crash_key), false)) {
+                        showTextDialog(R.string.catch_crash, R.string.catch_crash_message);
+                    }
+                    break;
+                case R.string.ignore_regex_key:
+                    showEditDialog(R.string.ignore_regex_key, R.string.ignore_regex,
+                            R.string.empty_string,
+                            R.string.ignore_regex_hint, R.string.example, R.string.regex_example);
+                    return false;
+                case R.string.hangup_keyword_key:
+                    showEditDialog(R.string.hangup_keyword_key, R.string.hangup_keyword,
+                            R.string.hangup_keyword_default, R.string.hangup_keyword_hint);
+                    return false;
+                case R.string.hangup_number_keyword_key:
+                    showEditDialog(R.string.hangup_number_keyword_key,
+                            R.string.hangup_number_keyword,
+                            R.string.empty_string, R.string.hangup_keyword_hint);
+                    return false;
+                case R.string.hangup_geo_keyword_key:
+                    showEditDialog(R.string.hangup_geo_keyword_key, R.string.hangup_geo_keyword,
+                            R.string.empty_string, R.string.hangup_keyword_hint);
+                    return false;
+                case R.string.custom_api_url:
+                    showCustomApiDialog();
+                    return false;
+                case R.string.auto_hangup_key:
+                    try {
+                        mPluginService.checkCallPermission();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                case R.string.add_call_log_key:
+                    try {
+                        mPluginService.checkCallLogPermission();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+            }
+
+            return true;
+        }
+
+        private void bindPreference(int keyId) {
+            bindPreference(keyId, SUMMARY_FLAG_NULL, 0);
+        }
+
+        private void bindPreference(int keyId, boolean mask) {
+            if (mask) {
+                bindPreference(keyId, SUMMARY_FLAG_NORMAL | SUMMARY_FLAG_MASK, 0);
+            } else {
+                bindPreference(keyId, SUMMARY_FLAG_NORMAL, 0);
+            }
+        }
+
+        private void bindPreference(int keyId, int summaryId) {
+            bindPreference(keyId, SUMMARY_FLAG_NORMAL, summaryId);
+        }
+
+        private void bindPreferenceList(int keyId, int arrayId, int index) {
+            String key = getString(keyId);
+            Preference preference = findPreference(key);
+            List<String> apiList = Arrays.asList(getResources().getStringArray(arrayId));
+            preference.setOnPreferenceClickListener(this);
+            preference.setSummary(apiList.get(sharedPrefs.getInt(key, index)));
+        }
+
+        private void bindPreference(int keyId, int summaryFlags, int summaryId) {
+            String key = getString(keyId);
+            Preference preference = findPreference(key);
+            preference.setOnPreferenceClickListener(this);
+
+            if ((summaryFlags & SUMMARY_FLAG_NORMAL) == SUMMARY_FLAG_NORMAL) {
+                String defaultSummary = summaryId == 0 ? "" : getString(summaryId);
+                String summary = sharedPrefs.getString(key, defaultSummary);
+
+                if (summary.isEmpty() && !defaultSummary.isEmpty()) {
+                    summary = defaultSummary;
+                }
+
+                boolean mask = ((summaryFlags & SUMMARY_FLAG_MASK) == SUMMARY_FLAG_MASK);
+                preference.setSummary(mask ? mask(summary) : summary);
+            }
+        }
+
+        private int getKeyId(String key) {
+            return getResources().getIdentifier(key, "string", getActivity().getPackageName());
+        }
+
+        private void removePreference(int parent, int child) {
+            String key = getString(child);
+            Preference preference = findPreference(key);
+            PreferenceCategory category = (PreferenceCategory) findPreference(getString(parent));
+            category.removePreference(preference);
+        }
+
+        private void addPreference(int parent, int child) {
+            String key = getString(child);
+            Preference preference = findPreference(key);
+            PreferenceCategory category = (PreferenceCategory) findPreference(getString(parent));
+            category.addPreference(preference);
+        }
+
+        private void setChecked(int key, boolean checked) {
+            SwitchPreference preference = (SwitchPreference) findPreference(getString(key));
+            preference.setChecked(checked);
         }
     }
 }
