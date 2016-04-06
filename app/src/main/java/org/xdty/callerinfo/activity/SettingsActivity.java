@@ -78,7 +78,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment
-            implements OnPreferenceClickListener {
+            implements OnPreferenceClickListener, ServiceConnection {
 
         public final static int REQUEST_CODE_CONTACTS_PERMISSION = 1003;
         public final static int REQUEST_CODE_OUTGOING_PERMISSION = 1004;
@@ -99,50 +99,6 @@ public class SettingsActivity extends AppCompatActivity {
         private Point mPoint;
         private HashMap<String, Integer> keyMap = new HashMap<>();
         private HashMap<String, Preference> prefMap = new HashMap<>();
-
-        private final ServiceConnection mConnection = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                Log.d(TAG, "onServiceConnected: " + name.toString());
-                mPluginService = IPluginService.Stub.asInterface(service);
-                try {
-                    mPluginService.registerCallback(new IPluginServiceCallback.Stub() {
-                        @Override
-                        public void onCallPermissionResult(final boolean success) throws
-                                RemoteException {
-                            Log.d(TAG, "onCallPermissionResult: " + success);
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    setChecked(R.string.auto_hangup_key, success);
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onCallLogPermissionResult(final boolean success) throws
-                                RemoteException {
-                            Log.d(TAG, "onCallLogPermissionResult: " + success);
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    setChecked(R.string.add_call_log_key, success);
-                                }
-                            });
-                        }
-                    });
-                    enablePluginPreference();
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                Log.d(TAG, "onServiceDisconnected: " + name.toString());
-                mPluginService = null;
-            }
-        };
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -176,6 +132,8 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         private void bindVersionPreference() {
+
+            bindPreference(R.string.version_key);
             Preference version = findPreference(getString(R.string.version_key));
             String versionString = BuildConfig.VERSION_NAME;
             if (BuildConfig.DEBUG) {
@@ -183,40 +141,15 @@ public class SettingsActivity extends AppCompatActivity {
             }
             version.setSummary(versionString);
 
-            final String showHiddenKey = getString(R.string.show_hidden_setting_key);
-            boolean isShowHidden = sharedPrefs.getBoolean(showHiddenKey, false);
+            boolean isShowHidden =
+                    sharedPrefs.getBoolean(getString(R.string.show_hidden_setting_key), false);
 
-            if (!isShowHidden) {
-
+            if (isShowHidden) {
+                version.setOnPreferenceClickListener(null);
+            } else {
                 removePreference(R.string.advanced_key, R.string.custom_data_key);
                 removePreference(R.string.advanced_key, R.string.force_chinese_key);
                 removePreference(R.string.float_window_key, R.string.window_trans_back_only_key);
-
-                versionClickCount = 0;
-                version.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        versionClickCount++;
-                        if (versionClickCount == 7) {
-                            sharedPrefs.edit().putBoolean(showHiddenKey, true).apply();
-
-                            addPreference(R.string.advanced_key, R.string.custom_data_key);
-                            addPreference(R.string.advanced_key, R.string.force_chinese_key);
-                            addPreference(R.string.float_window_key,
-                                    R.string.window_trans_back_only_key);
-                        }
-                        if (versionClickCount > 3 && versionClickCount < 7) {
-                            if (toast != null) {
-                                toast.cancel();
-                            }
-                            toast = Toast.makeText(getActivity(),
-                                    getString(R.string.show_hidden_toast, 7 - versionClickCount),
-                                    Toast.LENGTH_SHORT);
-                            toast.show();
-                        }
-                        return false;
-                    }
-                });
             }
         }
 
@@ -259,7 +192,7 @@ public class SettingsActivity extends AppCompatActivity {
         private void bindPluginService() {
             try {
                 getActivity().startService(mPluginIntent);
-                getActivity().bindService(mPluginIntent, mConnection, Context.BIND_AUTO_CREATE);
+                getActivity().bindService(mPluginIntent, this, Context.BIND_AUTO_CREATE);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -267,7 +200,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         private void unBindPluginService() {
             try {
-                getActivity().unbindService(mConnection);
+                getActivity().unbindService(this);
                 getActivity().stopService(mPluginIntent);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -696,6 +629,27 @@ public class SettingsActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     return false;
+                case R.string.version_key:
+                    versionClickCount++;
+                    if (versionClickCount == 7) {
+                        sharedPrefs.edit().putBoolean(getString(R.string.show_hidden_setting_key),
+                                true).apply();
+
+                        addPreference(R.string.advanced_key, R.string.custom_data_key);
+                        addPreference(R.string.advanced_key, R.string.force_chinese_key);
+                        addPreference(R.string.float_window_key,
+                                R.string.window_trans_back_only_key);
+                    }
+                    if (versionClickCount > 3 && versionClickCount < 7) {
+                        if (toast != null) {
+                            toast.cancel();
+                        }
+                        toast = Toast.makeText(getActivity(),
+                                getString(R.string.show_hidden_toast, 7 - versionClickCount),
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    return false;
             }
 
             return true;
@@ -776,6 +730,48 @@ public class SettingsActivity extends AppCompatActivity {
         private void setChecked(int key, boolean checked) {
             SwitchPreference preference = (SwitchPreference) findPreference(getString(key));
             preference.setChecked(checked);
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "onServiceConnected: " + name.toString());
+            mPluginService = IPluginService.Stub.asInterface(service);
+            try {
+                mPluginService.registerCallback(new IPluginServiceCallback.Stub() {
+                    @Override
+                    public void onCallPermissionResult(final boolean success) throws
+                            RemoteException {
+                        Log.d(TAG, "onCallPermissionResult: " + success);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setChecked(R.string.auto_hangup_key, success);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCallLogPermissionResult(final boolean success) throws
+                            RemoteException {
+                        Log.d(TAG, "onCallLogPermissionResult: " + success);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setChecked(R.string.add_call_log_key, success);
+                            }
+                        });
+                    }
+                });
+                enablePluginPreference();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(TAG, "onServiceDisconnected: " + name.toString());
+            mPluginService = null;
         }
     }
 }
