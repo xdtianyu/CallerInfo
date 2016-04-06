@@ -69,22 +69,7 @@ public class MainActivity extends BaseActivity implements MainContact.View {
 
         Setting setting = new SettingImpl(getApplicationContext());
         Permission permission = new PermissionImpl(this);
-        PhoneNumber phoneNumber = new PhoneNumber(this, new PhoneNumber.Callback() {
-            @Override
-            public void onResponseOffline(INumber number) {
-                mPresenter.handleResponse(number, false);
-            }
-
-            @Override
-            public void onResponse(INumber number) {
-                mPresenter.handleResponse(number, true);
-            }
-
-            @Override
-            public void onResponseFailed(INumber number, boolean isOnline) {
-                mPresenter.handleResponseFailed(number, isOnline);
-            }
-        });
+        PhoneNumber phoneNumber = new PhoneNumber(this);
 
         mPresenter = new MainPresenter(this, setting, permission, phoneNumber);
 

@@ -13,7 +13,7 @@ import org.xdty.phone.number.model.INumber;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainPresenter implements MainContact.Presenter {
+public class MainPresenter implements MainContact.Presenter, PhoneNumber.Callback {
 
     private final List<InCall> mInCallList = new ArrayList<>();
     private MainContact.View mView;
@@ -121,6 +121,7 @@ public class MainPresenter implements MainContact.Presenter {
 
     @Override
     public void start() {
+        mPhoneNumber.setCallback(this);
         loadInCallList();
     }
 
@@ -142,5 +143,20 @@ public class MainPresenter implements MainContact.Presenter {
     @Override
     public void clearSearch() {
         mPhoneNumber.clear();
+    }
+
+    @Override
+    public void onResponseOffline(INumber number) {
+        handleResponse(number, false);
+    }
+
+    @Override
+    public void onResponse(INumber number) {
+        handleResponse(number, true);
+    }
+
+    @Override
+    public void onResponseFailed(INumber number, boolean isOnline) {
+        handleResponseFailed(number, isOnline);
     }
 }
