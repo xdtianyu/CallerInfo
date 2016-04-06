@@ -82,14 +82,15 @@ public class SettingsActivity extends AppCompatActivity {
 
         public final static int REQUEST_CODE_CONTACTS_PERMISSION = 1003;
         public final static int REQUEST_CODE_OUTGOING_PERMISSION = 1004;
+
         private final static int SUMMARY_FLAG_NORMAL = 0x00000001;
         private final static int SUMMARY_FLAG_MASK = 0x00000002;
         private final static int SUMMARY_FLAG_NULL = 0x00000004;
+
         private final Intent mPluginIntent = new Intent().setComponent(new ComponentName(
                 "org.xdty.callerinfo.plugin",
                 "org.xdty.callerinfo.plugin.PluginService"));
 
-        PreferenceScreen pluginPref;
         int versionClickCount;
         Toast toast;
         SharedPreferences sharedPrefs;
@@ -130,8 +131,7 @@ public class SettingsActivity extends AppCompatActivity {
                             });
                         }
                     });
-                    pluginPref.setEnabled(true);
-                    pluginPref.setSummary("");
+                    enablePluginPreference();
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -157,13 +157,6 @@ public class SettingsActivity extends AppCompatActivity {
             mPoint = new Point();
             display.getSize(mPoint);
 
-            Preference version = findPreference(getString(R.string.version_key));
-            String versionString = BuildConfig.VERSION_NAME;
-            if (BuildConfig.DEBUG) {
-                versionString += "." + BuildConfig.BUILD_TYPE;
-            }
-            version.setSummary(versionString);
-
             bindPreference(R.string.baidu_api_key, true);
             bindPreference(R.string.juhe_api_key, true);
             bindPreference(R.string.window_text_size_key);
@@ -177,6 +170,18 @@ public class SettingsActivity extends AppCompatActivity {
             bindPreference(R.string.catch_crash_key);
             bindPreference(R.string.ignore_regex_key, false);
             bindPreference(R.string.custom_api_url);
+
+            bindVersionPreference();
+            bindPluginPreference();
+        }
+
+        private void bindVersionPreference() {
+            Preference version = findPreference(getString(R.string.version_key));
+            String versionString = BuildConfig.VERSION_NAME;
+            if (BuildConfig.DEBUG) {
+                versionString += "." + BuildConfig.BUILD_TYPE;
+            }
+            version.setSummary(versionString);
 
             final String showHiddenKey = getString(R.string.show_hidden_setting_key);
             boolean isShowHidden = sharedPrefs.getBoolean(showHiddenKey, false);
@@ -213,8 +218,11 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 });
             }
+        }
 
-            pluginPref = (PreferenceScreen) findPreference(getString(R.string.plugin_key));
+        private void bindPluginPreference() {
+            PreferenceScreen pluginPref =
+                    (PreferenceScreen) findPreference(getString(R.string.plugin_key));
             pluginPref.setEnabled(false);
             pluginPref.setSummary(getString(R.string.plugin_not_started));
             if (Utils.isAppInstalled(getActivity(), getString(R.string.plugin_package_name))) {
@@ -231,6 +239,13 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 removePreference(R.string.advanced_key, R.string.plugin_key);
             }
+        }
+
+        private void enablePluginPreference() {
+            PreferenceScreen pluginPref =
+                    (PreferenceScreen) findPreference(getString(R.string.plugin_key));
+            pluginPref.setEnabled(true);
+            pluginPref.setSummary("");
         }
 
         @Override
