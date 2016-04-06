@@ -17,8 +17,6 @@ public interface MainContact {
 
         void showCallLogs(List<InCall> inCalls);
 
-        void showTitle(String title);
-
         void showEula();
 
         void showSearchResult(INumber number);

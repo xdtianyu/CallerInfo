@@ -70,6 +70,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle(R.string.action_settings);
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(android.R.id.content, new SettingsFragment())

@@ -67,6 +67,8 @@ public class MainActivity extends BaseActivity implements MainContact.View {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle(R.string.app_name);
+
         Setting setting = new SettingImpl(getApplicationContext());
         Permission permission = new PermissionImpl(this);
         PhoneNumber phoneNumber = new PhoneNumber(this);
@@ -350,11 +352,6 @@ public class MainActivity extends BaseActivity implements MainContact.View {
     @Override
     public void showCallLogs(List<InCall> inCalls) {
         mCallerAdapter.replaceData(inCalls);
-    }
-
-    @Override
-    public void showTitle(String title) {
-        setTitle(title);
     }
 
     @Override

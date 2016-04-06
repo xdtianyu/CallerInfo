@@ -1,7 +1,7 @@
 package org.xdty.callerinfo.activity;
 
-import android.app.ActionBar;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
@@ -17,7 +17,9 @@ public class LicensesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getActionBar();
+        setTitle(R.string.license);
+
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -39,7 +41,9 @@ public class LicensesActivity extends BaseActivity {
                 url = "file:///android_res/raw/feature_notice.html";
                 break;
         }
-        webView.loadUrl(url);
+        if (webView != null) {
+            webView.loadUrl(url);
+        }
     }
 
     @Override
