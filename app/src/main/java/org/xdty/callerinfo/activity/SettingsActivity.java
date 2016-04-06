@@ -52,6 +52,7 @@ import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
@@ -93,6 +94,11 @@ public class SettingsActivity extends AppCompatActivity {
         Toast toast;
         SharedPreferences sharedPrefs;
         private IPluginService mPluginService;
+
+        private Point mPoint;
+        private HashMap<String, Integer> keyMap = new HashMap<>();
+        private HashMap<String, Preference> prefMap = new HashMap<>();
+
         private final ServiceConnection mConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -137,7 +143,6 @@ public class SettingsActivity extends AppCompatActivity {
                 mPluginService = null;
             }
         };
-        private Point mPoint;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -262,6 +267,15 @@ public class SettingsActivity extends AppCompatActivity {
                 setUpNestedScreen((PreferenceScreen) preference);
             }
             return false;
+        }
+
+        @Override
+        public Preference findPreference(CharSequence key) {
+            Preference pref = prefMap.get(key.toString());
+            if (pref == null) {
+                pref = super.findPreference(key);
+            }
+            return pref;
         }
 
         public void setUpNestedScreen(PreferenceScreen preferenceScreen) {
@@ -565,9 +579,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-
-
-            switch (getKeyId(preference.getKey())) {
+            int keyId = getKeyId(preference.getKey());
+            switch (keyId) {
                 case R.string.baidu_api_key:
                     showApiDialog(R.string.baidu_api_key, R.string.custom_bd_api_key,
                             R.string.baidu_api_url);
@@ -695,6 +708,8 @@ public class SettingsActivity extends AppCompatActivity {
             List<String> apiList = Arrays.asList(getResources().getStringArray(arrayId));
             preference.setOnPreferenceClickListener(this);
             preference.setSummary(apiList.get(sharedPrefs.getInt(key, index)));
+            keyMap.put(key, keyId);
+            prefMap.put(key, preference);
         }
 
         private void bindPreference(int keyId, int summaryFlags, int summaryId) {
@@ -713,24 +728,34 @@ public class SettingsActivity extends AppCompatActivity {
                 boolean mask = ((summaryFlags & SUMMARY_FLAG_MASK) == SUMMARY_FLAG_MASK);
                 preference.setSummary(mask ? mask(summary) : summary);
             }
+            keyMap.put(key, keyId);
+            prefMap.put(key, preference);
         }
 
         private int getKeyId(String key) {
-            return getResources().getIdentifier(key, "string", getActivity().getPackageName());
+            return keyMap.get(key);
         }
 
         private void removePreference(int parent, int child) {
-            String key = getString(child);
-            Preference preference = findPreference(key);
-            PreferenceCategory category = (PreferenceCategory) findPreference(getString(parent));
+            String childKey = getString(child);
+            String parentKey = getString(parent);
+            Preference preference = findPreference(childKey);
+            PreferenceCategory category = (PreferenceCategory) findPreference(parentKey);
             category.removePreference(preference);
+            prefMap.put(childKey, preference);
+            prefMap.put(parentKey, category);
         }
 
         private void addPreference(int parent, int child) {
-            String key = getString(child);
-            Preference preference = findPreference(key);
-            PreferenceCategory category = (PreferenceCategory) findPreference(getString(parent));
+            String childKey = getString(child);
+            String parentKey = getString(parent);
+            Preference preference = findPreference(childKey);
+            PreferenceCategory category = (PreferenceCategory) findPreference(parentKey);
             category.addPreference(preference);
+            keyMap.put(childKey, child);
+            keyMap.put(parentKey, parent);
+            prefMap.put(childKey, preference);
+            prefMap.put(parentKey, category);
         }
 
         private void setChecked(int key, boolean checked) {
