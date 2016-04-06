@@ -19,9 +19,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         Utils.checkLocale(getBaseContext());
 
         setContentView(getLayoutId());
+        setTitle(getTitleId());
 
     }
 
     protected abstract int getLayoutId();
+
+    protected abstract int getTitleId();
 
 }

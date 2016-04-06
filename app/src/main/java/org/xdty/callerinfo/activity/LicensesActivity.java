@@ -17,8 +17,6 @@ public class LicensesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(R.string.license);
-
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -49,6 +47,11 @@ public class LicensesActivity extends BaseActivity {
     @Override
     protected int getLayoutId() {
         return R.layout.activity_licenses;
+    }
+
+    @Override
+    protected int getTitleId() {
+        return R.string.license;
     }
 
     @Override
