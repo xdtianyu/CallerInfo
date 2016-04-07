@@ -54,4 +54,16 @@ public class PermissionImpl implements Permission {
             }
         }
     }
+
+    @Override
+    public boolean canReadPhoneState() {
+        return checkPermission(
+                Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public boolean canReadContact() {
+        return checkPermission(
+                Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
+    }
 }

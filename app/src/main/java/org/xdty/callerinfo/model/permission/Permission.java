@@ -12,4 +12,8 @@ public interface Permission {
 
     void requestPermissions(@NonNull String[] permissions, int requestCode);
 
+    boolean canReadPhoneState();
+
+    boolean canReadContact();
+
 }

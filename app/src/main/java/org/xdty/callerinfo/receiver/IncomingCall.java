@@ -1,17 +1,12 @@
 package org.xdty.callerinfo.receiver;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -21,6 +16,10 @@ import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.model.permission.Permission;
+import org.xdty.callerinfo.model.permission.PermissionImpl;
+import org.xdty.callerinfo.model.setting.Setting;
+import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.plugin.IPluginService;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
@@ -58,15 +57,7 @@ public class IncomingCall extends BroadcastReceiver {
 
     public static class IncomingCallListener extends PhoneStateListener {
 
-        private final boolean DEBUG = BuildConfig.DEBUG;
-        private final Context context;
-        private final SharedPreferences mPrefs;
-        private final String mOutgoingKey;
-        private final String mHideKey;
-        private final String mKeywordKey;
-        private final String mKeywordDefault;
-        private final String mGeoKeywordKey;
-        private final String mNumberKeywordKey;
+        private final Context mContext;
         private boolean isShowing = false;
         private long ringStartTime = -1;
         private long hookStartTime = -1;
@@ -85,24 +76,20 @@ public class IncomingCall extends BroadcastReceiver {
         private boolean mAutoHangup = false;
         private boolean mIgnore = false;
 
+        private Setting mSetting;
+        private Permission mPermission;
+
         public IncomingCallListener(Context context) {
-            this.context = context;
-            mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-            mOutgoingKey = context.getString(R.string.display_on_outgoing_key);
-            mHideKey = context.getString(R.string.hide_when_off_hook_key);
-            mKeywordKey = context.getString(R.string.hangup_keyword_key);
-            mKeywordDefault = context.getString(R.string.hangup_keyword_default);
-            mGeoKeywordKey = context.getString(R.string.hangup_geo_keyword_key);
-            mNumberKeywordKey = context.getString(R.string.hangup_number_keyword_key);
+            mContext = context.getApplicationContext();
+            mSetting = new SettingImpl(mContext);
+            mPermission = new PermissionImpl(mContext);
         }
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
             if (!TextUtils.isEmpty(incomingNumber)) {
                 incomingNumber = incomingNumber.replaceAll(" ", "");
-                String ignoreRegex =
-                        mPrefs.getString(context.getString(R.string.ignore_regex_key), "");
-                ignoreRegex = ignoreRegex.replace("*", "[0-9]").replace(" ", "|");
+                String ignoreRegex = mSetting.getIgnoreRegex();
                 mIgnore = incomingNumber.matches(ignoreRegex);
             }
 
@@ -125,11 +112,11 @@ public class IncomingCall extends BroadcastReceiver {
 
                     if (ringStartTime != -1) {
                         ringTime = hookStartTime - ringStartTime;
-                        if (mPrefs.getBoolean(mHideKey, false)) {
+                        if (mSetting.isHidingOffHook()) {
                             hide(incomingNumber);
                         }
                     } else {
-                        if (mPrefs.getBoolean(mOutgoingKey, false)) {
+                        if (mSetting.isShowingOnOutgoing()) {
                             if (TextUtils.isEmpty(incomingNumber)) {
                                 Log.d(TAG, "number is null. " + TextUtils.isEmpty(mIncomingNumber));
                                 incomingNumber = mIncomingNumber;
@@ -157,7 +144,7 @@ public class IncomingCall extends BroadcastReceiver {
 
         void show(String incomingNumber) {
 
-            if (DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.d(TAG, "show window: " + TextUtils.isEmpty(incomingNumber));
             }
 
@@ -174,16 +161,10 @@ public class IncomingCall extends BroadcastReceiver {
             }
 
             if (!isShowing) {
-                mIgnoreContact =
-                        mPrefs.getBoolean(context.getString(R.string.ignore_known_contact_key),
-                                false) && (ContextCompat.checkSelfPermission(context,
-                                Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED);
-
-
-                if (mIgnoreContact && Utils.isContactExists(context, incomingNumber)) {
+                mIgnoreContact = mSetting.isIgnoreKnownContact() && mPermission.canReadContact();
+                if (mIgnoreContact && Utils.isContactExists(mContext, incomingNumber)) {
                     mIsInContacts = true;
-                    if (mPrefs.getBoolean(context.getString(R.string.contact_offline_key),
-                            false)) {
+                    if (mSetting.isShowingContactOffline()) {
                         mShowContactOffline = true;
                     } else {
                         mShowContactOffline = false;
@@ -196,10 +177,8 @@ public class IncomingCall extends BroadcastReceiver {
 
                 isShowing = true;
 
-                final boolean hangup =
-                        mPrefs.getBoolean(context.getString(R.string.auto_hangup_key), false);
-                final boolean saveLog =
-                        mPrefs.getBoolean(context.getString(R.string.add_call_log_key), false);
+                final boolean hangup = mSetting.isAutoHangup();
+                final boolean saveLog = mSetting.isAddingCallLog();
 
                 List<Caller> callers = Caller.find(Caller.class, "number=?", incomingNumber);
 
@@ -209,21 +188,21 @@ public class IncomingCall extends BroadcastReceiver {
                         if (hangup || saveLog) {
                             bindPluginService(hangup, caller);
                         }
-                        Utils.showWindow(context, caller, FloatWindow.CALLER_FRONT);
+                        Utils.showWindow(mContext, caller, FloatWindow.CALLER_FRONT);
                         return;
                     } else {
                         caller.delete();
                     }
                 }
 
-                new PhoneNumber(context, mShowContactOffline, new PhoneNumber.Callback() {
+                new PhoneNumber(mContext, mShowContactOffline, new PhoneNumber.Callback() {
                     @Override
                     public void onResponseOffline(INumber number) {
                         if (isShowing && number != null) {
                             if (hangup || saveLog) {
                                 bindPluginService(hangup, number);
                             }
-                            Utils.showWindow(context, number, FloatWindow.CALLER_FRONT);
+                            Utils.showWindow(mContext, number, FloatWindow.CALLER_FRONT);
                         }
                     }
 
@@ -234,17 +213,17 @@ public class IncomingCall extends BroadcastReceiver {
                             if (hangup || saveLog) {
                                 bindPluginService(hangup, number);
                             }
-                            Utils.showWindow(context, number, FloatWindow.CALLER_FRONT);
+                            Utils.showWindow(mContext, number, FloatWindow.CALLER_FRONT);
                         }
                     }
 
                     @Override
                     public void onResponseFailed(INumber number, boolean isOnline) {
                         if (isOnline) {
-                            Utils.sendData(context, FloatWindow.WINDOW_ERROR,
+                            Utils.sendData(mContext, FloatWindow.WINDOW_ERROR,
                                     R.string.online_failed, FloatWindow.CALLER_FRONT);
                         } else {
-                            Utils.showTextWindow(context, R.string.offline_failed,
+                            Utils.showTextWindow(mContext, R.string.offline_failed,
                                     FloatWindow.CALLER_FRONT);
                         }
                     }
@@ -255,7 +234,7 @@ public class IncomingCall extends BroadcastReceiver {
         void hide(String incomingNumber) {
             Log.d(TAG, "hide");
             if (isShowing) {
-                StandOutWindow.hide(context, FloatWindow.class, FloatWindow.CALLER_FRONT);
+                StandOutWindow.hide(mContext, FloatWindow.class, FloatWindow.CALLER_FRONT);
             }
         }
 
@@ -263,7 +242,7 @@ public class IncomingCall extends BroadcastReceiver {
             Log.d(TAG, "ringStartTime:" + ringStartTime +
                     ", ringTime: " + ringTime + ", duration: " + duration);
 
-            if (DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.d(TAG, "close window: " + TextUtils.isEmpty(incomingNumber));
             }
 
@@ -271,8 +250,7 @@ public class IncomingCall extends BroadcastReceiver {
                 return;
             }
 
-            boolean saveLog =
-                    mPrefs.getBoolean(context.getString(R.string.add_call_log_key), false);
+            boolean saveLog = mSetting.isAddingCallLog();
             if (ringStartTime != -1 && !TextUtils.isEmpty(mIncomingNumber) && !mIsInContacts) {
                 new InCall(mIncomingNumber, ringStartTime, ringTime, duration).save();
                 mIncomingNumber = null;
@@ -283,16 +261,16 @@ public class IncomingCall extends BroadcastReceiver {
                         mLogName = "";
                     }
                     if (mAutoHangup) {
-                        mLogName += " " + context.getString(R.string.auto_hangup);
+                        mLogName += " " + mContext.getString(R.string.auto_hangup);
                     } else {
-                        mLogName += " " + context.getString(R.string.ring_once);
+                        mLogName += " " + mContext.getString(R.string.ring_once);
                     }
                 }
             }
 
             if (isShowing) {
                 isShowing = false;
-                StandOutWindow.closeAll(context, FloatWindow.class);
+                StandOutWindow.closeAll(mContext, FloatWindow.class);
                 if (mLogName != null && mLogNumber != null) {
                     if (saveLog && !mLogName.isEmpty()) {
                         updateCallLog(mLogNumber, mLogName);
@@ -331,8 +309,8 @@ public class IncomingCall extends BroadcastReceiver {
                         "org.xdty.callerinfo.plugin.PluginService"));
             }
 
-            context.startService(mPluginIntent);
-            context.getApplicationContext().bindService(mPluginIntent, mConnection,
+            mContext.startService(mPluginIntent);
+            mContext.getApplicationContext().bindService(mPluginIntent, mConnection,
                     Context.BIND_AUTO_CREATE);
         }
 
@@ -354,11 +332,7 @@ public class IncomingCall extends BroadcastReceiver {
                     mPluginService = IPluginService.Stub.asInterface(service);
                     try {
                         if (hangup) {
-                            String keywords = mPrefs.getString(mKeywordKey, mKeywordDefault);
-                            keywords = keywords.trim();
-                            if (keywords.isEmpty()) {
-                                keywords = mKeywordDefault;
-                            }
+                            String keywords = mSetting.getKeywords();
                             for (String keyword : keywords.split(" ")) {
                                 if (!TextUtils.isEmpty(mLogName) &&
                                         mLogName.contains(keyword)) {
@@ -367,8 +341,7 @@ public class IncomingCall extends BroadcastReceiver {
                                 }
                             }
 
-                            String geoKeywords = mPrefs.getString(mGeoKeywordKey, "");
-                            geoKeywords = geoKeywords.trim();
+                            String geoKeywords = mSetting.getGeoKeyword();
                             if (!geoKeywords.isEmpty() && !TextUtils.isEmpty(mLogGeo)) {
                                 boolean hangUp = false;
                                 for (String keyword : geoKeywords.split(" ")) {
@@ -390,8 +363,7 @@ public class IncomingCall extends BroadcastReceiver {
                                 }
                             }
 
-                            String numberKeywords = mPrefs.getString(mNumberKeywordKey, "");
-                            numberKeywords = numberKeywords.trim();
+                            String numberKeywords = mSetting.getNumberKeyword();
                             if (!numberKeywords.isEmpty()) {
                                 for (String keyword : numberKeywords.split(" ")) {
                                     if (!TextUtils.isEmpty(mLogNumber) &&
@@ -417,8 +389,8 @@ public class IncomingCall extends BroadcastReceiver {
         }
 
         private void unBindPluginService() {
-            context.getApplicationContext().unbindService(mConnection);
-            context.stopService(mPluginIntent);
+            mContext.getApplicationContext().unbindService(mConnection);
+            mContext.stopService(mPluginIntent);
             mLogNumber = null;
             mLogName = null;
         }
