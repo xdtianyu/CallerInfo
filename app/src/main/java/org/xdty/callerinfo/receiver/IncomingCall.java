@@ -34,7 +34,6 @@ public class IncomingCall extends BroadcastReceiver {
 
     private final static String TAG = IncomingCall.class.getSimpleName();
 
-    private static IncomingCallListener mIncomingCallListener;
     private static String mIncomingNumber = null;
 
     @Override
@@ -43,12 +42,10 @@ public class IncomingCall extends BroadcastReceiver {
             Log.d(TAG, "onReceive: " + intent.toString() + " " +
                     Utils.bundleToString(intent.getExtras()));
         }
-        if (mIncomingCallListener == null) {
-            TelephonyManager telephonyManager = (TelephonyManager) context
-                    .getSystemService(Context.TELEPHONY_SERVICE);
-            mIncomingCallListener = new IncomingCallListener(context);
-            telephonyManager.listen(mIncomingCallListener, PhoneStateListener.LISTEN_CALL_STATE);
-        }
+        TelephonyManager telephonyManager = (TelephonyManager) context
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        telephonyManager.listen(IncomingCallListener.getInstance(context),
+                PhoneStateListener.LISTEN_CALL_STATE);
 
         if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
             mIncomingNumber = intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER);
@@ -57,6 +54,7 @@ public class IncomingCall extends BroadcastReceiver {
 
     public static class IncomingCallListener extends PhoneStateListener {
 
+        private static IncomingCallListener mIncomingCallListener;
         private final Context mContext;
         private boolean isShowing = false;
         private long ringStartTime = -1;
@@ -75,14 +73,20 @@ public class IncomingCall extends BroadcastReceiver {
         private String mLogGeo;
         private boolean mAutoHangup = false;
         private boolean mIgnore = false;
-
         private Setting mSetting;
         private Permission mPermission;
 
-        public IncomingCallListener(Context context) {
-            mContext = context.getApplicationContext();
+        private IncomingCallListener(Context context) {
+            mContext = context;
             mSetting = new SettingImpl(mContext);
             mPermission = new PermissionImpl(mContext);
+        }
+
+        public static IncomingCallListener getInstance(Context context) {
+            if (mIncomingCallListener == null) {
+                mIncomingCallListener = new IncomingCallListener(context.getApplicationContext());
+            }
+            return mIncomingCallListener;
         }
 
         @Override
