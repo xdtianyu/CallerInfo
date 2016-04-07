@@ -11,7 +11,7 @@ public class SettingImpl implements Setting {
     private SharedPreferences mPrefs;
 
     public SettingImpl(Context context) {
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
     }
 
     @Override

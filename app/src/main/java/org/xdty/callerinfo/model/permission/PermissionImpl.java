@@ -31,7 +31,9 @@ public class PermissionImpl implements Permission {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                     Uri.parse("package:" + mContext.getPackageName()));
-            ((Activity) mContext).startActivityForResult(intent, requestCode);
+            if (mContext instanceof Activity) {
+                ((Activity) mContext).startActivityForResult(intent, requestCode);
+            }
         }
     }
 
@@ -46,8 +48,10 @@ public class PermissionImpl implements Permission {
     @Override
     public void requestPermissions(@NonNull String[] permissions, int requestCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ((Activity) mContext).requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE},
-                    requestCode);
+            if (mContext instanceof Activity) {
+                ((Activity) mContext).requestPermissions(
+                        new String[]{Manifest.permission.READ_PHONE_STATE}, requestCode);
+            }
         }
     }
 }
