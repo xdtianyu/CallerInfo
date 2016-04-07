@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import org.xdty.callerinfo.contract.MainContact;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
-import org.xdty.callerinfo.permission.Permission;
-import org.xdty.callerinfo.setting.Setting;
+import org.xdty.callerinfo.model.permission.Permission;
+import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 

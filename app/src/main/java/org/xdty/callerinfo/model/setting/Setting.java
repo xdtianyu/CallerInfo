@@ -1,4 +1,4 @@
-package org.xdty.callerinfo.setting;
+package org.xdty.callerinfo.model.setting;
 
 public interface Setting {
 

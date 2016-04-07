@@ -1,4 +1,4 @@
-package org.xdty.callerinfo.permission;
+package org.xdty.callerinfo.model.permission;
 
 import android.Manifest;
 import android.app.Activity;
