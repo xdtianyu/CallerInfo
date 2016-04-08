@@ -54,7 +54,7 @@ public class IncomingCall extends BroadcastReceiver {
 
     public static class IncomingCallListener extends PhoneStateListener {
 
-        private static IncomingCallListener mIncomingCallListener;
+        private static IncomingCallListener sIncomingCallListener;
         private final Context mContext;
         private boolean isShowing = false;
         private long ringStartTime = -1;
@@ -83,10 +83,10 @@ public class IncomingCall extends BroadcastReceiver {
         }
 
         public static IncomingCallListener getInstance(Context context) {
-            if (mIncomingCallListener == null) {
-                mIncomingCallListener = new IncomingCallListener(context.getApplicationContext());
+            if (sIncomingCallListener == null) {
+                sIncomingCallListener = new IncomingCallListener(context.getApplicationContext());
             }
-            return mIncomingCallListener;
+            return sIncomingCallListener;
         }
 
         @Override
