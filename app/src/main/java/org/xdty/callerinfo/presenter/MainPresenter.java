@@ -2,7 +2,7 @@ package org.xdty.callerinfo.presenter;
 
 import android.support.annotation.NonNull;
 
-import org.xdty.callerinfo.contract.MainContact;
+import org.xdty.callerinfo.contract.MainContract;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.permission.Permission;
@@ -13,15 +13,15 @@ import org.xdty.phone.number.model.INumber;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainPresenter implements MainContact.Presenter, PhoneNumber.Callback {
+public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callback {
 
     private final List<InCall> mInCallList = new ArrayList<>();
-    private MainContact.View mView;
+    private MainContract.View mView;
     private Setting mSetting;
     private Permission mPermission;
     private PhoneNumber mPhoneNumber;
 
-    public MainPresenter(MainContact.View view, Setting setting, Permission permission,
+    public MainPresenter(MainContract.View view, Setting setting, Permission permission,
             PhoneNumber phoneNumber) {
         mView = view;
         mSetting = setting;

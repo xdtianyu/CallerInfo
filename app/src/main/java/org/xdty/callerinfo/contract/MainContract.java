@@ -7,7 +7,7 @@ import org.xdty.phone.number.model.INumber;
 
 import java.util.List;
 
-public interface MainContact {
+public interface MainContract {
 
     interface View extends BaseView<Presenter> {
 

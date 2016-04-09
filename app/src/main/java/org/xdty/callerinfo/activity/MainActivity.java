@@ -32,7 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.xdty.callerinfo.R;
-import org.xdty.callerinfo.contract.MainContact;
+import org.xdty.callerinfo.contract.MainContract;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.permission.PermissionImpl;
@@ -48,7 +48,7 @@ import org.xdty.phone.number.model.INumber;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements MainContact.View {
+public class MainActivity extends BaseActivity implements MainContract.View {
 
     public final static int REQUEST_CODE_OVERLAY_PERMISSION = 1001;
     public final static int REQUEST_CODE_ASK_PERMISSIONS = 1002;
@@ -61,7 +61,7 @@ public class MainActivity extends BaseActivity implements MainContact.View {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FrameLayout mMainLayout;
     private long mLastSearchTime;
-    private MainContact.Presenter mPresenter;
+    private MainContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -398,7 +398,7 @@ public class MainActivity extends BaseActivity implements MainContact.View {
     }
 
     @Override
-    public void setPresenter(MainContact.Presenter presenter) {
+    public void setPresenter(MainContract.Presenter presenter) {
         mPresenter = presenter;
     }
 }
