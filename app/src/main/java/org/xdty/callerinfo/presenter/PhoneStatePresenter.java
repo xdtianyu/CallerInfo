@@ -231,6 +231,11 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
         mView.showFailed(isOnline);
     }
 
+    @Override
+    public void setOutGoingNumber(String number) {
+        mIncomingNumber = number;
+    }
+
     private String fixNumber(String number) {
         String fixedNumber = number;
         if (number.startsWith("+86")) {

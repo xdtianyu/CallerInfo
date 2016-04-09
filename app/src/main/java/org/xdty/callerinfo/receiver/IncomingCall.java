@@ -25,8 +25,7 @@ import wei.mark.standout.StandOutWindow;
 public class IncomingCall extends BroadcastReceiver {
 
     private final static String TAG = IncomingCall.class.getSimpleName();
-
-    private static String mIncomingNumber = null;
+    private static IncomingCallListener sIncomingCallListener;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -34,13 +33,17 @@ public class IncomingCall extends BroadcastReceiver {
             Log.d(TAG, "onReceive: " + intent.toString() + " " +
                     Utils.bundleToString(intent.getExtras()));
         }
-        TelephonyManager telephonyManager = (TelephonyManager) context
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        telephonyManager.listen(IncomingCallListener.getInstance(context),
-                PhoneStateListener.LISTEN_CALL_STATE);
+
+        if (sIncomingCallListener == null) {
+            sIncomingCallListener = IncomingCallListener.getInstance(context);
+            TelephonyManager telephonyManager = (TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+            telephonyManager.listen(sIncomingCallListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
 
         if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
-            mIncomingNumber = intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER);
+            sIncomingCallListener.setOutGoingNumber(
+                    intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER));
         }
     }
 
@@ -71,8 +74,16 @@ public class IncomingCall extends BroadcastReceiver {
             return sIncomingCallListener;
         }
 
+        private void setOutGoingNumber(String number) {
+            mPresenter.setOutGoingNumber(number);
+        }
+
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
+
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "onCallStateChanged: " + state + " : " + incomingNumber);
+            }
 
             if (mPresenter.matchIgnore(incomingNumber)) {
                 return;

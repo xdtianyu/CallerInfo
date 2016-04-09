@@ -53,5 +53,7 @@ public interface PhoneStateContract {
 
         void handleResponseFailed(INumber number, boolean isOnline);
 
+        void setOutGoingNumber(String number);
+
     }
 }
