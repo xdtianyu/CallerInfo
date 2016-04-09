@@ -76,12 +76,11 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     @Override
     public void handleOffHook(String number) {
         mCallRecord.hook();
-        if (mCallRecord.ringTime() != -1) {
-            mCallRecord.setRingDuration(true);
+        if (mCallRecord.isIncoming()) {
             if (mSetting.isHidingOffHook()) {
                 mView.hide(number);
             }
-        } else {
+        } else { // outgoing call
             if (mSetting.isShowingOnOutgoing()) {
                 if (TextUtils.isEmpty(number)) {
                     Log.d(TAG, "number is null. " + TextUtils.isEmpty(mIncomingNumber));
@@ -97,13 +96,6 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     @Override
     public void handleIdle(String number) {
         mCallRecord.idle();
-
-        if (mCallRecord.ringDuration() == -1) {
-            mCallRecord.setRingDuration(false);
-            mCallRecord.setCallDuration(false);
-        } else {
-            mCallRecord.setCallDuration(true);
-        }
 
         if (checkClose(number)) {
             return;
@@ -156,18 +148,18 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
     @Override
     public boolean isIncoming(String number) {
-        return mCallRecord.ringTime() != -1 && !TextUtils.isEmpty(mIncomingNumber);
+        return mCallRecord.isIncoming() && !TextUtils.isEmpty(mIncomingNumber);
     }
 
     @Override
     public void saveCallLog() {
-        new InCall(mIncomingNumber, mCallRecord.ringTime(), mCallRecord.ringDuration(),
+        new InCall(mIncomingNumber, mCallRecord.time(), mCallRecord.ringDuration(),
                 mCallRecord.callDuration()).save();
     }
 
     @Override
     public boolean isRingOnce() {
-        return mCallRecord.ringTime() < 3000 && mCallRecord.callDuration() <= 0;
+        return mCallRecord.ringDuration() < 3000 && mCallRecord.callDuration() <= 0;
     }
 
     @Override
