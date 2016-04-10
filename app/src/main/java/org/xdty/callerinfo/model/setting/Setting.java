@@ -26,4 +26,36 @@ public interface Setting {
 
     String getNumberKeyword();
 
+    int getWindowX();
+
+    int getWindowY();
+
+    void setWindow(int x, int y);
+
+    int getScreenWidth();
+
+    int getScreenHeight();
+
+    int getWindowHeight();
+
+    int getDefaultHeight();
+
+    boolean isShowCloseAnim();
+
+    boolean isHidingWhenTouch();
+
+    boolean isTransBackOnly();
+
+    boolean isEnableTextColor();
+
+    int getTextPadding();
+
+    int getTextAlignment();
+
+    int getTextSize();
+
+    int getWindowTransparent();
+
+    boolean isDisableMove();
+
 }
