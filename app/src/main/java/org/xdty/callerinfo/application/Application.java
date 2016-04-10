@@ -3,15 +3,20 @@ package org.xdty.callerinfo.application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 
 public class Application extends com.orm.SugarApp {
     public final static String TAG = Application.class.getSimpleName();
+
     @Override
     public void onCreate() {
         super.onCreate();
+        if (BuildConfig.DEBUG) {
+            BuildConfig.STETHO.init(this);
+        }
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isCatch = pref.getBoolean(getString(R.string.catch_crash_key), false);
         if (isCatch) {

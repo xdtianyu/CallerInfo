@@ -57,3 +57,4 @@
 -keep class android.support.v4.** { public protected *; }
 
 -keep class org.xdty.** { *; }
+-keep class com.facebook.stetho.** {*;}
