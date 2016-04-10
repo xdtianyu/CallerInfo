@@ -1,9 +1,6 @@
 package org.xdty.callerinfo.view;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +15,8 @@ import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.model.permission.Permission;
+import org.xdty.callerinfo.model.permission.PermissionImpl;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
@@ -32,9 +31,11 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
     private final Context mContext;
     private List<InCall> mList;
     private CardView cardView;
+    private Permission mPermission;
 
     public CallerAdapter(Context context, List<InCall> list) {
         mContext = context;
+        mPermission = new PermissionImpl(mContext.getApplicationContext());
         mList = list;
         updateCallerMap();
     }
@@ -71,17 +72,12 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
     private void updateCallerMap() {
         callerMap.clear();
-        boolean hasContactPerm = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            hasContactPerm = mContext.checkSelfPermission(
-                    Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
-        }
-
+        boolean canReadContact = mPermission.canReadContact();
         List<Caller> callers = Caller.listAll(Caller.class);
         for (Caller caller : callers) {
             String number = caller.getNumber();
             if (number != null && !number.isEmpty()) {
-                if (hasContactPerm) {
+                if (canReadContact) {
                     String name = Utils.getContactName(mContext, caller.getNumber());
                     caller.setContactName(name);
                 }
@@ -95,7 +91,8 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener, PhoneNumber.Callback {
 
         final Context context;
         final CardView cardView;
@@ -107,6 +104,8 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         final TextView duration;
         InCall inCall;
 
+        PhoneNumber phoneNumber;
+
         public ViewHolder(Context context, View view) {
             super(view);
             this.context = context;
@@ -114,28 +113,19 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
             text = (TextView) view.findViewById(R.id.text);
             number = (TextView) view.findViewById(R.id.number);
             detail = (LinearLayout) view.findViewById(R.id.detail);
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (detail.getVisibility() == View.VISIBLE) {
-                        detail.setVisibility(View.GONE);
-                        inCall.setExpanded(false);
-                    } else {
-                        detail.setVisibility(View.VISIBLE);
-                        inCall.setExpanded(true);
-                    }
-                }
-            });
+            cardView.setOnClickListener(this);
             time = (TextView) view.findViewById(R.id.time);
             ringTime = (TextView) view.findViewById(R.id.ring_time);
             duration = (TextView) view.findViewById(R.id.duration);
+
+            phoneNumber = new PhoneNumber(context, this);
         }
 
         public void setAlpha(float alpha) {
             cardView.setAlpha(alpha);
         }
 
-        public void bind(final InCall inCall, Caller caller) {
+        public void bind(InCall inCall, Caller caller) {
             if (caller != null) {
                 TextColorPair t = Utils.getTextColorPair(context, caller);
                 text.setText(t.text);
@@ -149,29 +139,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                     cardView.setCardBackgroundColor(
                             ContextCompat.getColor(context, R.color.graphite));
                 } else {
-                    new PhoneNumber(context, new PhoneNumber.Callback() {
-                        @Override
-                        public void onResponseOffline(INumber number) {
-                            new Caller(number, !number.isOnline()).save();
-                            callerMap.put(number.getNumber(), new Caller(number));
-                            notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onResponse(INumber number) {
-                            new Caller(number, !number.isOnline()).save();
-                            inCall.setFetched(true);
-                            updateCallerMap();
-                            notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onResponseFailed(INumber number, boolean isOnline) {
-                            inCall.setFetched(true);
-                            updateCallerMap();
-                            notifyDataSetChanged();
-                        }
-                    }).fetch(inCall.getNumber());
+                    phoneNumber.fetch(inCall.getNumber());
 
                     text.setText(R.string.loading);
                     number.setText(inCall.getNumber());
@@ -190,6 +158,39 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
             time.setText(Utils.readableDate(context, inCall.getTime()));
             ringTime.setText(Utils.readableTime(context, inCall.getRingTime()));
             duration.setText(Utils.readableTime(context, inCall.getDuration()));
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (detail.getVisibility() == View.VISIBLE) {
+                detail.setVisibility(View.GONE);
+                inCall.setExpanded(false);
+            } else {
+                detail.setVisibility(View.VISIBLE);
+                inCall.setExpanded(true);
+            }
+        }
+
+        @Override
+        public void onResponseOffline (INumber number){
+            new Caller(number, !number.isOnline()).save();
+            callerMap.put(number.getNumber(), new Caller(number));
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onResponse (INumber number){
+            new Caller(number, !number.isOnline()).save();
+            inCall.setFetched(true);
+            updateCallerMap();
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onResponseFailed (INumber number,boolean isOnline){
+            inCall.setFetched(true);
+            updateCallerMap();
+            notifyDataSetChanged();
         }
     }
 }
