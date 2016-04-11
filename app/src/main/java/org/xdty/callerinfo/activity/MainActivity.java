@@ -2,12 +2,10 @@ package org.xdty.callerinfo.activity;
 
 import android.Manifest;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -22,11 +20,9 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,10 +32,10 @@ import org.xdty.callerinfo.contract.MainContract;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.permission.PermissionImpl;
-import org.xdty.callerinfo.presenter.MainPresenter;
-import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
+import org.xdty.callerinfo.presenter.MainPresenter;
+import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.view.CallerAdapter;
 import org.xdty.phone.number.PhoneNumber;
@@ -77,13 +73,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         setSupportActionBar(mToolbar);
 
         mPresenter.checkEula();
-
-        WindowManager mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        Display display = mWindowManager.getDefaultDisplay();
-        Point point = new Point();
-        display.getSize(point);
-
-        mScreenWidth = point.x;
+        mScreenWidth = setting.getScreenWidth();
 
         mMainLayout = (FrameLayout) findViewById(R.id.main_layout);
         mEmptyText = (TextView) findViewById(R.id.empty_text);
