@@ -101,11 +101,12 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
         boolean saveLog = mSetting.isAddingCallLog();
         if (isIncoming(mIncomingNumber) && !ignoreContact(mIncomingNumber)) {
-            saveCallLog();
+            saveInCall();
             mIncomingNumber = null;
             if (isRingOnce()) {
                 saveLog = true;
                 if (mAutoHangup) {
+                    // ring once cased by auto hangup
                     mCallRecord.appendName(mView.getContext().getString(R.string.auto_hangup));
                 } else {
                     mCallRecord.appendName(mView.getContext().getString(R.string.ring_once));
@@ -144,7 +145,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     }
 
     @Override
-    public void saveCallLog() {
+    public void saveInCall() {
         new InCall(mIncomingNumber, mCallRecord.time(), mCallRecord.ringDuration(),
                 mCallRecord.callDuration()).save();
     }

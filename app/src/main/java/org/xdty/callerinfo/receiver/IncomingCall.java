@@ -65,6 +65,7 @@ public class IncomingCall extends BroadcastReceiver {
             mPermission = new PermissionImpl(mContext);
             mCallRecord = new CallRecord();
             mPresenter = new PhoneStatePresenter(this, mSetting, mPermission, mCallRecord);
+            Utils.checkLocale(mContext);
         }
 
         public static IncomingCallListener getInstance(Context context) {
@@ -104,14 +105,13 @@ public class IncomingCall extends BroadcastReceiver {
 
         @Override
         public void show(INumber number) {
-            if (!isShowing) {
-                isShowing = true;
-                Utils.showWindow(getContext(), number, FloatWindow.CALLER_FRONT);
-            }
+            isShowing = true;
+            Utils.showWindow(getContext(), number, FloatWindow.CALLER_FRONT);
         }
 
         @Override
         public void showFailed(boolean isOnline) {
+            isShowing = true;
             if (isOnline) {
                 Utils.sendData(getContext(), FloatWindow.WINDOW_ERROR,
                         R.string.online_failed, FloatWindow.CALLER_FRONT);

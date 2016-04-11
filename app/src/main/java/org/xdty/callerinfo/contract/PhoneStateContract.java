@@ -39,7 +39,7 @@ public interface PhoneStateContract {
 
         boolean isIncoming(String number);
 
-        void saveCallLog();
+        void saveInCall();
 
         boolean isRingOnce();
 
