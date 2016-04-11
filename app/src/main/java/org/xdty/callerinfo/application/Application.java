@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.utils.Utils;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 
@@ -13,6 +14,7 @@ public class Application extends com.orm.SugarApp {
     @Override
     public void onCreate() {
         super.onCreate();
+        Utils.checkLocale(getApplicationContext());
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isCatch = pref.getBoolean(getString(R.string.catch_crash_key), false);
         if (isCatch) {
