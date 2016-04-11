@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.application;
 
 import android.content.SharedPreferences;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 
 import com.facebook.stetho.Stetho;
@@ -14,6 +15,18 @@ public class DebugApplication extends com.orm.SugarApp {
 
     @Override
     public void onCreate() {
+
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .build());
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                .detectLeakedSqlLiteObjects()
+                .detectLeakedClosableObjects()
+                .penaltyLog()
+                .penaltyDeath()
+                .build());
+
         super.onCreate();
         Stetho.initialize(
                 Stetho.newInitializerBuilder(this)
