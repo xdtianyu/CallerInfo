@@ -3,6 +3,8 @@ package org.xdty.callerinfo.presenter;
 import android.support.annotation.NonNull;
 
 import org.xdty.callerinfo.contract.MainContract;
+import org.xdty.callerinfo.model.database.Database;
+import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.permission.Permission;
@@ -13,6 +15,8 @@ import org.xdty.phone.number.model.INumber;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.functions.Action1;
+
 public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callback {
 
     private final List<InCall> mInCallList = new ArrayList<>();
@@ -20,6 +24,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     private Setting mSetting;
     private Permission mPermission;
     private PhoneNumber mPhoneNumber;
+    private Database mDatabase;
 
     public MainPresenter(MainContract.View view, Setting setting, Permission permission,
             PhoneNumber phoneNumber) {
@@ -37,16 +42,22 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     @Override
     public void loadInCallList() {
         mInCallList.clear();
-        mInCallList.addAll(InCall.listAll(InCall.class, "time DESC"));
 
-        mView.showCallLogs(mInCallList);
+        mDatabase.fetchInCalls().subscribe(new Action1<List<InCall>>() {
+            @Override
+            public void call(List<InCall> inCalls) {
+                mInCallList.addAll(inCalls);
 
-        if (mInCallList.size() == 0) {
-            mView.showNoCallLog(true);
-        } else {
-            mView.showNoCallLog(false);
-        }
-        mView.showLoading(false);
+                mView.showCallLogs(mInCallList);
+
+                if (mInCallList.size() == 0) {
+                    mView.showNoCallLog(true);
+                } else {
+                    mView.showNoCallLog(false);
+                }
+                mView.showLoading(false);
+            }
+        });
     }
 
     @Override
@@ -57,34 +68,35 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     @Override
     public void removeInCall(int position) {
         InCall inCall = mInCallList.get(position);
-        inCall.delete();
+        mDatabase.removeInCall(inCall);
     }
 
     @Override
     public void clearAll() {
-        for (InCall inCall : mInCallList) {
-            inCall.delete();
-        }
+        mDatabase.clearAllInCalls(mInCallList);
     }
 
     @Override
-    public void search(String number) {
+    public void search(final String number) {
         if (number.isEmpty()) {
             return;
         }
 
-        List<Caller> callers = Caller.find(Caller.class, "number=?", number);
-
-        if (callers.size() > 0) {
-            Caller caller = callers.get(0);
-            if (caller.isUpdated()) {
-                mView.showSearchResult(caller);
-                return;
-            } else {
-                caller.delete();
+        mDatabase.findCaller(number).subscribe(new Action1<Caller>() {
+            @Override
+            public void call(Caller caller) {
+                if (caller != null) {
+                    if (caller.isUpdated()) {
+                        mView.showSearchResult(caller);
+                        return;
+                    } else {
+                        mDatabase.removeCaller(caller);
+                    }
+                }
+                mPhoneNumber.fetch(number);
             }
-        }
-        mPhoneNumber.fetch(number);
+        });
+
     }
 
     @Override
@@ -122,6 +134,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     @Override
     public void start() {
         mPhoneNumber.setCallback(this);
+        mDatabase = DatabaseImpl.getInstance();
         loadInCallList();
     }
 
@@ -129,7 +142,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     public void handleResponse(INumber number, boolean isOnline) {
         if (number != null) {
             if (isOnline && number.isValid()) {
-                new Caller(number, !number.isOnline()).save();
+                mDatabase.saveCaller(new Caller(number, !number.isOnline()));
             }
             mView.showSearchResult(number);
         }

@@ -23,7 +23,7 @@ public interface PhoneStateContract {
 
     }
 
-    interface Presenter {
+    interface Presenter extends BasePresenter {
 
         boolean matchIgnore(String number);
 

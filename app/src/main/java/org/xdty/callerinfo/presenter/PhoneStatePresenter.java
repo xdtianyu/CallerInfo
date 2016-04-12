@@ -13,6 +13,8 @@ import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.contract.PhoneStateContract;
 import org.xdty.callerinfo.model.CallRecord;
 import org.xdty.callerinfo.model.SearchMode;
+import org.xdty.callerinfo.model.database.Database;
+import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.permission.Permission;
@@ -22,7 +24,7 @@ import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 
-import java.util.List;
+import rx.functions.Action1;
 
 public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneNumber.Callback {
 
@@ -32,6 +34,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     private Setting mSetting;
     private Permission mPermission;
     private CallRecord mCallRecord;
+    private Database mDatabase;
 
     private String mIncomingNumber;
 
@@ -146,8 +149,9 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
     @Override
     public void saveInCall() {
-        new InCall(mIncomingNumber, mCallRecord.time(), mCallRecord.ringDuration(),
-                mCallRecord.callDuration()).save();
+        mDatabase.saveInCall(
+                new InCall(mIncomingNumber, mCallRecord.time(), mCallRecord.ringDuration(),
+                        mCallRecord.callDuration()));
     }
 
     @Override
@@ -177,26 +181,28 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     @Override
     public void searchNumber(String number) {
 
-        number = fixNumber(number);
+        final String fixedNumber = fixNumber(number);
+        final SearchMode mode = getSearchMode(fixedNumber);
 
-        SearchMode mode = getSearchMode(number);
         if (mode == SearchMode.IGNORE) {
             return;
         }
 
-        List<Caller> callers = Caller.find(Caller.class, "number=?", number);
-
-        if (callers.size() > 0) {
-            Caller caller = callers.get(0);
-            if (caller.isUpdated()) {
-                showNumber(caller);
-                return;
-            } else {
-                caller.delete();
+        mDatabase.findCaller(number).subscribe(new Action1<Caller>() {
+            @Override
+            public void call(Caller caller) {
+                if (caller != null) {
+                    if (caller.isUpdated()) {
+                        showNumber(caller);
+                        return;
+                    } else {
+                        mDatabase.removeCaller(caller);
+                    }
+                }
+                new PhoneNumber(mView.getContext(), mode == SearchMode.OFFLINE,
+                        PhoneStatePresenter.this).fetch(fixedNumber);
             }
-        }
-
-        new PhoneNumber(mView.getContext(), mode == SearchMode.OFFLINE, this).fetch(number);
+        });
     }
 
     @Override
@@ -205,7 +211,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
             return;
         }
         if (isOnline) {
-            new Caller(number, !number.isOnline()).save();
+            mDatabase.saveCaller(new Caller(number, !number.isOnline()));
         }
 
         showNumber(number);
@@ -365,6 +371,11 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     @Override
     public void onResponseFailed(INumber number, boolean isOnline) {
         handleResponseFailed(number, isOnline);
+    }
+
+    @Override
+    public void start() {
+        mDatabase = DatabaseImpl.getInstance();
     }
 
     interface PluginConnection extends ServiceConnection {
