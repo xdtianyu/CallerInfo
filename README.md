@@ -1,5 +1,5 @@
 # 来电信息
-一个获取来电归属地和其他信息(如推销、诈骗)的安卓应用。[English](https://github.com/xdtianyu/CallerInfo/blob/master/README-EN.md) [Beta 测试社群](https://plus.google.com/communities/109266984412695150545)
+一个获取来电归属地和其他信息(如推销、诈骗)的安卓应用。[Beta 测试社群](https://plus.google.com/communities/109266984412695150545) [English](https://github.com/xdtianyu/CallerInfo/blob/master/README-EN.md)
 
 [![Google Play](https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/en-play-badge.png)](https://play.google.com/store/apps/details?id=org.xdty.callerinfo)
 
