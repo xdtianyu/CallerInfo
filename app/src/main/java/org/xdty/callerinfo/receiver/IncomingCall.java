@@ -66,6 +66,7 @@ public class IncomingCall extends BroadcastReceiver {
             mCallRecord = new CallRecord();
             mPresenter = new PhoneStatePresenter(this, mSetting, mPermission, mCallRecord);
             Utils.checkLocale(mContext);
+            mPresenter.start();
         }
 
         public static IncomingCallListener getInstance(Context context) {
