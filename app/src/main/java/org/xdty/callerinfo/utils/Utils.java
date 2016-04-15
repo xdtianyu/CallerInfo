@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract.PhoneLookup;
+import android.provider.Settings.Secure;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -297,8 +298,7 @@ public class Utils {
         final String tmDevice, tmSerial, androidId;
         tmDevice = "" + tm.getDeviceId();
         tmSerial = "" + tm.getSimSerialNumber();
-        androidId = "" + android.provider.Settings.Secure.getString(
-                context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        androidId = "" + Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 
         UUID deviceUuid = new UUID(androidId.hashCode(),
                 ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
