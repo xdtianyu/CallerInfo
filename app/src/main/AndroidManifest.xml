@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="org.xdty.callerinfo"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.xdty.callerinfo">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -11,7 +10,7 @@
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
 
     <application
-        android:name="org.xdty.callerinfo.application.Application"
+        android:name=".application.Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -31,8 +30,7 @@
         </activity>
         <activity
             android:name=".activity.SettingsActivity"
-            android:label="@string/action_settings">
-        </activity>
+            android:label="@string/action_settings"/>
         <activity
             android:name=".activity.LicensesActivity"
             android:label="@string/license">
@@ -40,11 +38,13 @@
                 <action android:name="org.xdty.callerinfo.action.VIEW_LICENSES"/>
                 <action android:name="org.xdty.callerinfo.action.VIEW_PRIVACY"/>
                 <action android:name="org.xdty.callerinfo.action.VIEW_FEATURE"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <service android:name=".service.FloatWindow"/>
+        <service android:name=".service.MarkWindow"/>
 
         <receiver android:name=".receiver.IncomingCall">
             <intent-filter android:priority="999">

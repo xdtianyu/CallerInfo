@@ -36,6 +36,7 @@ import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.presenter.MainPresenter;
 import org.xdty.callerinfo.service.FloatWindow;
+import org.xdty.callerinfo.service.MarkWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.view.CallerAdapter;
 import org.xdty.phone.number.PhoneNumber;
@@ -184,6 +185,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     protected void onResume() {
         super.onResume();
         mPresenter.start();
+        MarkWindow.show(this, MarkWindow.class, 111);
     }
 
     @Override

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:background="@android:color/transparent">
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:foreground="?android:attr/selectableItemBackground"
+            card_view:cardBackgroundColor="@android:color/white"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="2dp"
+            card_view:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:id="@+id/window_layout"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/number_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:text="02988888888 陕西西安"
+                    android:textColor="#888888"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+
+                <com.pkmmte.view.CircularImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_local_shipping_black_48dp"
+                    app:border="true"
+                    app:border_color="#EEEEEE"
+                    app:border_width="4dp"
+                    app:shadow="true"/>
+
+                <com.pkmmte.view.CircularImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_restaurant_black_48dp"
+                    app:border="true"
+                    app:border_color="#EEEEEE"
+                    app:border_width="4dp"
+                    app:shadow="true"/>
+
+                <com.pkmmte.view.CircularImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_local_grocery_store_black_48dp"
+                    app:border="true"
+                    app:border_color="#EEEEEE"
+                    app:border_width="4dp"
+                    app:shadow="true"/>
+
+                <com.pkmmte.view.CircularImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_record_voice_over_black_48dp"
+                    app:border="true"
+                    app:border_color="#EEEEEE"
+                    app:border_width="4dp"
+                    app:shadow="true"/>
+
+                <com.pkmmte.view.CircularImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_attach_money_black_48dp"
+                    app:border="true"
+                    app:border_color="#EEEEEE"
+                    app:border_width="4dp"
+                    app:shadow="true"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </FrameLayout>
+</merge>

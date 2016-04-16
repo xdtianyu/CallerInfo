@@ -24,13 +24,19 @@
     <string name="license">License</string>
     <string name="developer">Developer</string>
     <string name="developer_summary" translatable="false">tianyu &lt;xdtianyu@gmail.com&gt;</string>
-    <string name="eula_message">CallerInfo uses services from Baidu and JuHe(360) to query caller information. It means that the caller\'s number and any number you search will be sent to Baidu or JuHe(360). Please note that this is not linked to your own phone number or other personal information.</string>
+    <string name="eula_message">CallerInfo uses services from Baidu and JuHe(360) to query caller
+        information. It means that the caller\'s number and any number you search will be sent to
+        Baidu or JuHe(360). Please note that this is not linked to your own phone number or other
+        personal information.
+    </string>
     <string name="eula_title">Use Online Phone Number Service?</string>
     <string name="agree">Agree</string>
     <string name="disagree">Disagree</string>
     <string name="project_url" translatable="false">https://github.com/xdtianyu/CallerInfo</string>
     <string name="project_title">Open source project</string>
-    <string name="app_package_name" translatable="false" tools:ignore="UnusedResources">org.xdty.callerinfo</string>
+    <string name="app_package_name" translatable="false" tools:ignore="UnusedResources">
+        org.xdty.callerinfo
+    </string>
     <string name="advanced">Advanced</string>
     <string name="custom_bd_api_key">Custom BAIDU API key</string>
     <string name="custom_jh_api_key">Custom JUHE API key</string>
@@ -44,7 +50,8 @@
     <string name="window_close_anim">Animation on hide</string>
     <string name="text_size">Drag to change font size.</string>
     <string name="text_transparent">Drag to change transparency.</string>
-    <string name="window_trans_back_only_key" translatable="false">window_trans_back_only_key</string>
+    <string name="window_trans_back_only_key" translatable="false">window_trans_back_only_key
+    </string>
     <string name="window_trans_back_only">Transparency only applies for background</string>
     <string name="close_window">Hide float window</string>
     <string name="undo">undo</string>
@@ -59,19 +66,29 @@
     <string name="display_on_outgoing">Show on outgoing calls</string>
     <string name="display_on_outgoing_key" translatable="false">display_on_outgoing_key</string>
     <string name="fetch">Fetch</string>
-    <string name="baidu_api_url" translatable="false">http://apistore.baidu.com/astore/usercenter</string>
+    <string name="baidu_api_url" translatable="false">http://apistore.baidu.com/astore/usercenter
+    </string>
     <string name="juhe_api_url" translatable="false">https://www.juhe.cn/docs/api/id/72</string>
     <string name="catch_crash_key" translatable="false">catch_crash_key</string>
     <string name="catch_crash">Report crashes</string>
-    <string name="catch_crash_message">This feature allows the app to report technical details to the developer after crash. Please notice that it is not necessary to enable this if you downloaded the app from Play Store, you only need to tap on "Report" button after crash.</string>
+    <string name="catch_crash_message">This feature allows the app to report technical details to
+        the developer after crash. Please notice that it is not necessary to enable this if you
+        downloaded the app from Play Store, you only need to tap on "Report" button after crash.
+    </string>
     <string name="customactivityoncrash_error_activity_close_app">Close app</string>
     <string name="customactivityoncrash_error_activity_error_details">Error details</string>
-    <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Error information</string>
+    <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Error
+        information
+    </string>
     <string name="customactivityoncrash_error_activity_error_details_close">Close</string>
-    <string name="customactivityoncrash_error_activity_error_details_copied">Copied to clipboard</string>
-    <string name="customactivityoncrash_error_activity_error_details_copy">Copy to clipboard</string>
+    <string name="customactivityoncrash_error_activity_error_details_copied">Copied to clipboard
+    </string>
+    <string name="customactivityoncrash_error_activity_error_details_copy">Copy to clipboard
+    </string>
     <string name="customactivityoncrash_error_activity_error_details_title">Error details</string>
-    <string name="customactivityoncrash_error_activity_error_occurred_explanation">An unexpected error occurred.\nSorry for the inconvenience.</string>
+    <string name="customactivityoncrash_error_activity_error_occurred_explanation">An unexpected
+        error occurred.\nSorry for the inconvenience.
+    </string>
     <string name="customactivityoncrash_error_activity_restart_app">Restart app</string>
     <string name="customactivityoncrash_error_activity_unknown_exception">Unknown exception</string>
     <string name="advanced_key" translatable="false">advanced_key</string>
@@ -88,7 +105,9 @@
     <string name="custom_api_url" translatable="false">custom_api_url</string>
     <string name="custom_api">Custom API</string>
     <string name="document">Document</string>
-    <string name="api_document_url" translatable="false">https://github.com/xdtianyu/PhoneNumber/blob/master/CUSTOM.md</string>
+    <string name="api_document_url" translatable="false">
+        https://github.com/xdtianyu/PhoneNumber/blob/master/CUSTOM.md
+    </string>
     <string name="api_url_hint">API URL</string>
     <string name="api_key_hint">API key</string>
     <string name="hide_when_touch_key" translatable="false">hide_when_touch_key</string>
@@ -108,7 +127,8 @@
     <string name="add_call_log">Add number info to call log</string>
     <string name="add_call_log_key" translatable="false">add_call_log_key</string>
     <string name="plugin_package_name" translatable="false">org.xdty.callerinfo.plugin</string>
-    <string name="plugin_not_started">Plugin service not started, please check auto-run permission</string>
+    <string name="plugin_not_started">Plugin service not started, please check auto-run permission
+    </string>
     <string name="hangup_keyword_key" translatable="false">hangup_keyword_key</string>
     <string name="hangup_keyword">Call block keywords</string>
     <string name="hangup_keyword_summary">Hangup when caller info contains keyword</string>
@@ -120,10 +140,12 @@
     <string name="clear_history_message">Clear all call logs?</string>
     <string name="ring_once">Ring once</string>
     <string name="hangup_geo_keyword_key" translatable="false">hangup_geo_keyword_key</string>
-    <string name="hangup_geo_keyword_summary">Hangup when caller geo location contains keyword</string>
+    <string name="hangup_geo_keyword_summary">Hangup when caller geo location contains keyword
+    </string>
     <string name="hangup_geo_keyword">Call block geo location keywords</string>
     <string name="hangup_number_keyword_key" translatable="false">hangup_number_keyword_key</string>
-    <string name="hangup_number_keyword_summary">Hangup when caller number start with keywords</string>
+    <string name="hangup_number_keyword_summary">Hangup when caller number start with keywords
+    </string>
     <string name="hangup_number_keyword">Call block number start with keywords</string>
     <string name="empty_string" translatable="false"/>
     <string name="baidu_advertising" translatable="false">百度糯米</string>
@@ -142,7 +164,10 @@
     <string name="ignore_regex">Ignore number range</string>
     <string name="ignore_regex_hint">Please split keywords with space</string>
     <string name="example">Example</string>
-    <string name="regex_example">Match a number with a star(*), split ranges with a space, To match \"1000–19999\", please enter \"1*** 1****\", to match \"550–579\", please enter \"55* 56* 57*\"</string>
+    <string name="regex_example">Match a number with a star(*), split ranges with a space, To match
+        \"1000–19999\", please enter \"1*** 1****\", to match \"550–579\", please enter \"55* 56*
+        57*\"
+    </string>
     <string name="window_text_padding_key" translatable="false">window_text_padding_key</string>
     <string name="window_text_padding">Window text padding</string>
     <string name="text_padding">Drag to change text padding.</string>
@@ -162,4 +187,7 @@
     <string name="about_more">More</string>
     <string name="privacy_notice">Privacy notice</string>
     <string name="feature_notice">Feature notice</string>
+    <string name="mark">Mark</string>
+    <string name="number">Number</string>
+    <string name="mark_window">Mark window</string>
 </resources>

@@ -116,4 +116,7 @@
     <string name="about_more">其他</string>
     <string name="privacy_notice">隐私权声明</string>
     <string name="feature_notice">功能说明</string>
+    <string name="mark">标记</string>
+    <string name="number">号码</string>
+    <string name="mark_window">标记悬浮窗</string>
 </resources>
