@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/tools">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -38,50 +37,36 @@
                     android:textSize="20sp"
                     android:textStyle="bold"/>
 
-                <com.pkmmte.view.CircularImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_local_shipping_black_48dp"
-                    app:border="true"
-                    app:border_color="#EEEEEE"
-                    app:border_width="4dp"
-                    app:shadow="true"/>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <com.pkmmte.view.CircularImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_restaurant_black_48dp"
-                    app:border="true"
-                    app:border_color="#EEEEEE"
-                    app:border_width="4dp"
-                    app:shadow="true"/>
+                    <com.pkmmte.view.CircularImageView
+                        android:id="@+id/express"
+                        style="@style/circle_image_style"
+                        android:src="@drawable/ic_local_shipping_black_48dp"/>
 
-                <com.pkmmte.view.CircularImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_local_grocery_store_black_48dp"
-                    app:border="true"
-                    app:border_color="#EEEEEE"
-                    app:border_width="4dp"
-                    app:shadow="true"/>
+                    <com.pkmmte.view.CircularImageView
+                        android:id="@+id/takeout"
+                        style="@style/circle_image_style"
+                        android:src="@drawable/ic_restaurant_black_48dp"/>
 
-                <com.pkmmte.view.CircularImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_record_voice_over_black_48dp"
-                    app:border="true"
-                    app:border_color="#EEEEEE"
-                    app:border_width="4dp"
-                    app:shadow="true"/>
+                    <com.pkmmte.view.CircularImageView
+                        android:id="@+id/selling"
+                        style="@style/circle_image_style"
+                        android:src="@drawable/ic_local_grocery_store_black_48dp"/>
 
-                <com.pkmmte.view.CircularImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_attach_money_black_48dp"
-                    app:border="true"
-                    app:border_color="#EEEEEE"
-                    app:border_width="4dp"
-                    app:shadow="true"/>
+                    <com.pkmmte.view.CircularImageView
+                        android:id="@+id/harass"
+                        style="@style/circle_image_style"
+                        android:src="@drawable/ic_record_voice_over_black_48dp"/>
+
+                    <com.pkmmte.view.CircularImageView
+                        android:id="@+id/bilk"
+                        style="@style/circle_image_style"
+                        android:src="@drawable/ic_attach_money_black_48dp"/>
+                </LinearLayout>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>

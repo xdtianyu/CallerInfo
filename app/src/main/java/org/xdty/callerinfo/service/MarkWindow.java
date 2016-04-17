@@ -2,11 +2,14 @@ package org.xdty.callerinfo.service;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+
+import com.pkmmte.view.CircularImageView;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.setting.Setting;
@@ -56,6 +59,28 @@ public class MarkWindow extends StandOutWindow {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.mark_window, frame, true);
+        
+        bindCircleImage(view, R.id.express);
+        bindCircleImage(view, R.id.takeout);
+        bindCircleImage(view, R.id.selling);
+        bindCircleImage(view, R.id.harass);
+        bindCircleImage(view, R.id.bilk);
+    }
+
+    private void bindCircleImage(View view, int id) {
+        final CircularImageView circularImageView = (CircularImageView) view.findViewById(id);
+        circularImageView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                Log.e(TAG, v.toString() + ": " + hasFocus);
+            }
+        });
+        circularImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, v.toString() + "xxx");
+            }
+        });
     }
 
     @Override
@@ -108,7 +133,13 @@ public class MarkWindow extends StandOutWindow {
 
     @Override
     public int getFlags(int id) {
-        return super.getFlags(id) | StandOutFlags.FLAG_BODY_MOVE_ENABLE;
+        return StandOutFlags.FLAG_BODY_MOVE_ENABLE
+                | StandOutFlags.FLAG_WINDOW_FOCUS_INDICATOR_DISABLE;
+    }
+
+    @Override
+    public int getThemeStyle() {
+        return R.style.AppTheme;
     }
 
     @Override
@@ -116,21 +147,4 @@ public class MarkWindow extends StandOutWindow {
         return false;
     }
 
-    @Override
-    public boolean onTouchBody(int id, Window window, View view, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_OUTSIDE:
-                View layout = window.findViewById(R.id.window_layout);
-                if (layout != null) {
-                    layout.setBackgroundResource(0);
-                }
-                break;
-        }
-        return super.onTouchBody(id, window, view, event);
-    }
-
-    @Override
-    public boolean onFocusChange(int id, Window window, boolean focus) {
-        return true;
-    }
 }

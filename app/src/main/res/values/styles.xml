@@ -27,4 +27,19 @@
         <item name="android:windowAnimationStyle">@android:color/transparent</item>
     </style>
 
+    <style name="circle_image_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="border">true</item>
+        <item name="border_color">#D4E157</item>
+        <item name="border_width">4dp</item>
+        <item name="selector_stroke_color">#8BC34A</item>
+        <item name="selector">true</item>
+        <item name="shadow">true</item>
+    </style>
+
 </resources>
