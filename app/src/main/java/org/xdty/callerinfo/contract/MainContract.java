@@ -21,6 +21,8 @@ public interface MainContract {
 
         void showSearchResult(INumber number);
 
+        void showSearching();
+
         void showSearchFailed(boolean isOnline);
     }
 

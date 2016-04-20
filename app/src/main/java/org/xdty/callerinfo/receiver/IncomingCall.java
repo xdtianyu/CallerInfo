@@ -123,6 +123,12 @@ public class IncomingCall extends BroadcastReceiver {
         }
 
         @Override
+        public void showSearching() {
+            Utils.showTextWindow(getContext(), R.string.searching,
+                    FloatWindow.CALLER_FRONT);
+        }
+
+        @Override
         public void hide(String incomingNumber) {
             if (isShowing) {
                 StandOutWindow.hide(mContext, FloatWindow.class, FloatWindow.CALLER_FRONT);

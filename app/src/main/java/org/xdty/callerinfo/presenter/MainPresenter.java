@@ -93,6 +93,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
                         mDatabase.removeCaller(caller);
                     }
                 }
+                mView.showSearching();
                 mPhoneNumber.fetch(number);
             }
         });

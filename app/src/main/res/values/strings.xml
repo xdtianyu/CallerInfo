@@ -190,4 +190,5 @@
     <string name="mark">Mark</string>
     <string name="number">Number</string>
     <string name="mark_window">Mark window</string>
+    <string name="searching">Searching, please wait a second</string>
 </resources>

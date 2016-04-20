@@ -200,6 +200,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
                         mDatabase.removeCaller(caller);
                     }
                 }
+                mView.showSearching();
                 new PhoneNumber(mView.getContext(), mode == SearchMode.OFFLINE,
                         PhoneStatePresenter.this).fetch(fixedNumber);
             }

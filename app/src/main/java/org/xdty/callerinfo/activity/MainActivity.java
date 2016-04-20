@@ -379,6 +379,12 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     }
 
     @Override
+    public void showSearching() {
+        Utils.showTextWindow(MainActivity.this, R.string.searching,
+                FloatWindow.SEARCH_FRONT);
+    }
+
+    @Override
     public void showSearchFailed(boolean isOnline) {
         if (isOnline) {
             Utils.sendData(MainActivity.this, FloatWindow.WINDOW_ERROR,

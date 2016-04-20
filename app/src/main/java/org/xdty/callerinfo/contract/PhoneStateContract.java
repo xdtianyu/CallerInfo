@@ -13,6 +13,8 @@ public interface PhoneStateContract {
 
         void showFailed(boolean isOnline);
 
+        void showSearching();
+
         void hide(String number);
 
         void close(String number);
