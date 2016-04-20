@@ -119,4 +119,8 @@ public class CallRecord {
     public boolean matchNumber(String keyword) {
         return mLogNumber != null && mLogNumber.startsWith(keyword);
     }
+
+    public boolean isActive() {
+        return ring != -1 || hook != -1 || idle != -1;
+    }
 }

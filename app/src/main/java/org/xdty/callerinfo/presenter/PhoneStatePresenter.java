@@ -161,7 +161,8 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
     @Override
     public boolean ignoreContact(String number) {
-        return mSetting.isIgnoreKnownContact() && mPermission.canReadContact() && Utils.isContactExists(
+        return mSetting.isIgnoreKnownContact() && mPermission.canReadContact()
+                && Utils.isContactExists(
                 mView.getContext(), number);
     }
 
@@ -219,7 +220,9 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
     @Override
     public void handleResponseFailed(INumber number, boolean isOnline) {
-        mView.showFailed(isOnline);
+        if (mCallRecord.isActive()) {
+            mView.showFailed(isOnline);
+        }
     }
 
     @Override
@@ -241,7 +244,9 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
     private void showNumber(INumber number) {
         bindPluginService(number);
-        mView.show(number);
+        if (mCallRecord.isActive()) {
+            mView.show(number);
+        }
     }
 
     private void bindPluginService(INumber number) {
