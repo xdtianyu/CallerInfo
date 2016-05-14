@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "org.xdty.callerinfo"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode project.VERSION_CODE.toInteger()
         versionName project.VERSION_NAME
