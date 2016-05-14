@@ -7,11 +7,17 @@ import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.google.gson.Gson;
+
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class SettingImpl implements Setting {
 
+    private static Gson gson = new Gson();
     private final int mScreenWidth;
     private final int mScreenHeight;
     private SharedPreferences mPrefs;
@@ -105,6 +111,41 @@ public class SettingImpl implements Setting {
     @Override
     public boolean isMarkingEnabled() {
         return mPrefs.getBoolean(mContext.getString(R.string.enable_marking_key), true);
+    }
+
+    @Override
+    public void addPaddingMark(String number) {
+        String key = mContext.getString(R.string.padding_mark_numbers_key);
+        ArrayList<String> list = getPaddingMarks();
+        if (list.contains(number)) {
+            return;
+        }
+        list.add(number);
+        String paddingNumbers = gson.toJson(list);
+        mPrefs.edit().putString(key, paddingNumbers).apply();
+    }
+
+    @Override
+    public void removePaddingMark(String number) {
+        String key = mContext.getString(R.string.padding_mark_numbers_key);
+        ArrayList<String> list = getPaddingMarks();
+        if (!list.contains(number)) {
+            return;
+        }
+        list.remove(number);
+        String paddingNumbers = gson.toJson(list);
+        mPrefs.edit().putString(key, paddingNumbers).apply();
+    }
+
+    @Override
+    public ArrayList<String> getPaddingMarks() {
+        String key = mContext.getString(R.string.padding_mark_numbers_key);
+        if (mPrefs.contains(key)) {
+            String paddingNumbers = mPrefs.getString(key, null);
+            return (ArrayList<String>) Arrays.asList(gson.fromJson(paddingNumbers, String[].class));
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     @Override

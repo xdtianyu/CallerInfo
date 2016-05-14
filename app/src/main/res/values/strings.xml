@@ -198,4 +198,6 @@
     <string name="enable_marking_key" translatable="false">enable_marking_key</string>
     <string name="enable_marking">Enable custom marking</string>
     <string name="enable_marking_summary">Show mark dialog when phone answered and failed to search</string>
+    <string name="mark_number">Mark number</string>
+    <string name="padding_mark_numbers_key" translatable="false">padding_mark_numbers_key</string>
 </resources>

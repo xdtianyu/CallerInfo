@@ -1,5 +1,7 @@
 package org.xdty.callerinfo.model.setting;
 
+import java.util.ArrayList;
+
 public interface Setting {
 
     boolean isEulaSet();
@@ -61,5 +63,11 @@ public interface Setting {
     boolean isAutoReportEnabled();
 
     boolean isMarkingEnabled();
+
+    void addPaddingMark(String number);
+
+    void removePaddingMark(String number);
+
+    ArrayList<String> getPaddingMarks();
 
 }

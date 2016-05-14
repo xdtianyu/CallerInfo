@@ -1,6 +1,9 @@
 package org.xdty.callerinfo.utils;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -11,26 +14,34 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.Settings.Secure;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.activity.MarkActivity;
 import org.xdty.callerinfo.model.TextColorPair;
+import org.xdty.callerinfo.model.setting.Setting;
+import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 import java.util.TimeZone;
 import java.util.UUID;
 
 public class Utils {
+
+    public static final int NOTIFICATION_MARK = 0x01;
 
     public static void showTextWindow(Context context, int resId, int frontType) {
         Bundle bundle = new Bundle();
@@ -305,6 +316,38 @@ public class Utils {
         deviceId = deviceUuid.toString();
         pref.edit().putString("device_id", deviceId).apply();
         return deviceId;
+    }
+
+    public static void showMarkNotification(Context context, String number) {
+        Intent intent = new Intent(context, MarkActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        Setting setting = new SettingImpl(context);
+        setting.addPaddingMark(number);
+
+        ArrayList<String> list = setting.getPaddingMarks();
+        String numbers = TextUtils.join(", ", list);
+
+        NotificationManager manager = (NotificationManager) context.getSystemService(
+                Context.NOTIFICATION_SERVICE);
+
+        int requestCode = new Random().nextInt();
+        PendingIntent pIntent = PendingIntent.getActivity(context, requestCode, intent, 0);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.status_icon)
+                .setContentIntent(pIntent)
+                .setContentTitle(context.getString(R.string.mark_number))
+                .setContentText(numbers)
+                .setAutoCancel(true)
+                .setContentIntent(pIntent);
+        manager.notify(NOTIFICATION_MARK, builder.build());
+    }
+
+    public static void startMarkActivity(Context context, String number) {
+        Intent intent = new Intent(context, MarkActivity.class);
+        intent.putExtra(MarkActivity.NUMBER, number);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
 }

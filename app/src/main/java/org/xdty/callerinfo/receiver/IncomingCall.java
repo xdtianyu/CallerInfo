@@ -1,5 +1,6 @@
 package org.xdty.callerinfo.receiver;
 
+import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -151,6 +152,16 @@ public class IncomingCall extends BroadcastReceiver {
         @Override
         public Context getContext() {
             return mContext.getApplicationContext();
+        }
+
+        @Override
+        public void showMark(String number) {
+            if (((KeyguardManager) mContext.getSystemService(
+                    Context.KEYGUARD_SERVICE)).isKeyguardLocked()) {
+                Utils.showMarkNotification(mContext, number);
+            } else {
+                Utils.startMarkActivity(mContext, number);
+            }
         }
     }
 }

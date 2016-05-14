@@ -119,8 +119,17 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
         if (mView.isShowing()) {
             if (mCallRecord.isValid()) {
-                if (saveLog && mCallRecord.isNameValid()) {
-                    updateCallLog(mCallRecord.getLogNumber(), mCallRecord.getLogName());
+                if (mCallRecord.isNameValid()) {
+                    if (saveLog) {
+                        updateCallLog(mCallRecord.getLogNumber(), mCallRecord.getLogName());
+                    }
+                    if (mSetting.isAutoReportEnabled()) {
+                        reportFetchedNumber();
+                    }
+                } else {
+                    if (mSetting.isMarkingEnabled()) {
+                        mView.showMark(mCallRecord.getLogNumber());
+                    }
                 }
                 unBindPluginService();
             }
@@ -181,6 +190,11 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
     @Override
     public void searchNumber(String number) {
+
+        if (TextUtils.isEmpty(number)) {
+            Log.e(TAG, "searchNumber: number is null!");
+            return;
+        }
 
         final String fixedNumber = fixNumber(number);
         final SearchMode mode = getSearchMode(fixedNumber);
@@ -362,6 +376,10 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
                 e.printStackTrace();
             }
         }
+    }
+
+    private void reportFetchedNumber() {
+
     }
 
     @Override

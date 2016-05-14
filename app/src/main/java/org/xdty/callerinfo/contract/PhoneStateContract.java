@@ -23,6 +23,7 @@ public interface PhoneStateContract {
 
         Context getContext();
 
+        void showMark(String number);
     }
 
     interface Presenter extends BasePresenter {

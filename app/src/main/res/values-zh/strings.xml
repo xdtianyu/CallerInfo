@@ -124,4 +124,5 @@
     <string name="auto_report_summary">自动上报百度或360的查询结果</string>
     <string name="enable_marking">启用主动标记功能</string>
     <string name="enable_marking_summary">电话接听且号码查找失败后弹出标记提示</string>
+    <string name="mark_number">标记号码</string>
 </resources>
