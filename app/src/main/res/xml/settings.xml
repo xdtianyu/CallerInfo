@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:tools="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/apk/res-auto">
     <com.jenzz.materialpreference.PreferenceCategory
         android:title="@string/color">
         <org.xdty.preference.ColorPreference
@@ -148,6 +148,23 @@
                 android:key="@string/ignore_regex_key"
                 android:title="@string/ignore_regex">
             </com.jenzz.materialpreference.Preference>
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="@string/mark_key"
+            android:layout="@layout/preference"
+            android:title="@string/mark">
+            <com.jenzz.materialpreference.SwitchPreference
+                android:defaultValue="true"
+                android:key="@string/auto_report_key"
+                android:summary="@string/auto_report_summary"
+                android:title="@string/auto_report">
+            </com.jenzz.materialpreference.SwitchPreference>
+            <com.jenzz.materialpreference.SwitchPreference
+                android:defaultValue="true"
+                android:key="@string/enable_marking_key"
+                android:summary="@string/enable_marking_summary"
+                android:title="@string/enable_marking">
+            </com.jenzz.materialpreference.SwitchPreference>
         </PreferenceScreen>
         <PreferenceScreen
             android:key="@string/plugin_key"

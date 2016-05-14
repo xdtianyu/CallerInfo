@@ -116,8 +116,12 @@
     <string name="about_more">其他</string>
     <string name="privacy_notice">隐私权声明</string>
     <string name="feature_notice">功能说明</string>
-    <string name="mark">标记</string>
+    <string name="mark">主动标记</string>
     <string name="number">号码</string>
     <string name="mark_window">标记悬浮窗</string>
     <string name="searching">正在查找，请稍等</string>
+    <string name="auto_report">自动上报</string>
+    <string name="auto_report_summary">自动上报百度或360的查询结果</string>
+    <string name="enable_marking">启用主动标记功能</string>
+    <string name="enable_marking_summary">电话接听且号码查找失败后弹出标记提示</string>
 </resources>

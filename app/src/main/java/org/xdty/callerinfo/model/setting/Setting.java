@@ -58,4 +58,8 @@ public interface Setting {
 
     boolean isDisableMove();
 
+    boolean isAutoReportEnabled();
+
+    boolean isMarkingEnabled();
+
 }

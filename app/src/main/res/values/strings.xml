@@ -191,4 +191,11 @@
     <string name="number">Number</string>
     <string name="mark_window">Mark window</string>
     <string name="searching">Searching, please wait a second</string>
+    <string name="mark_key" translatable="false">mark_key</string>
+    <string name="auto_report_key" translatable="false">auto_report_key</string>
+    <string name="auto_report">Auto report</string>
+    <string name="auto_report_summary">Auto report baidu or 360\'s result.</string>
+    <string name="enable_marking_key" translatable="false">enable_marking_key</string>
+    <string name="enable_marking">Enable custom marking</string>
+    <string name="enable_marking_summary">Show mark dialog when phone answered and failed to search</string>
 </resources>

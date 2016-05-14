@@ -98,6 +98,16 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public boolean isAutoReportEnabled() {
+        return mPrefs.getBoolean(mContext.getString(R.string.auto_report_key), true);
+    }
+
+    @Override
+    public boolean isMarkingEnabled() {
+        return mPrefs.getBoolean(mContext.getString(R.string.enable_marking_key), true);
+    }
+
+    @Override
     public boolean isHidingWhenTouch() {
         return mPrefs.getBoolean(mContext.getString(R.string.hide_when_touch_key), false);
     }
