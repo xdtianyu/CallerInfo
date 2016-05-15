@@ -4,6 +4,8 @@ import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
 public class MarkedRecord extends SugarRecord {
+    @Ignore
+    private final static int API_ID_USER_MARKED = 2;
     private String uid;
     private String number;
     private int type;
@@ -11,9 +13,8 @@ public class MarkedRecord extends SugarRecord {
     private int count;
     private int source;
     private boolean isReported;
-
     @Ignore
-    private final static int API_ID_USER_MARKED = 2;
+    private String typeName;
 
     public MarkedRecord() {
         source = API_ID_USER_MARKED;
@@ -76,5 +77,13 @@ public class MarkedRecord extends SugarRecord {
 
     public void setReported(boolean reported) {
         isReported = reported;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 }

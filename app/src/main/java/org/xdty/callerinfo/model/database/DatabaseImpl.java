@@ -116,4 +116,22 @@ public class DatabaseImpl implements Database {
                     }
                 });
     }
+
+    @Override
+    public void saveCaller(MarkedRecord markedRecord) {
+        Observable.just(markedRecord)
+                .observeOn(Schedulers.io())
+                .subscribe(new Action1<MarkedRecord>() {
+                    @Override
+                    public void call(MarkedRecord markedRecord) {
+                        Caller caller = new Caller();
+                        caller.setNumber(markedRecord.getNumber());
+                        caller.setName(markedRecord.getTypeName());
+                        caller.setLastUpdate(markedRecord.getTime());
+                        caller.setType("report");
+                        caller.setOffline(false);
+                        caller.save();
+                    }
+                });
+    }
 }

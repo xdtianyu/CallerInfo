@@ -25,4 +25,6 @@ public interface Database {
     void saveInCall(InCall inCall);
 
     void saveMarked(MarkedRecord markedRecord);
+
+    void saveCaller(MarkedRecord markedRecord);
 }

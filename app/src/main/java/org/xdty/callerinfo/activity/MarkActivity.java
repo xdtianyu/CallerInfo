@@ -81,12 +81,13 @@ public class MarkActivity extends BaseActivity implements DialogInterface.OnDism
             public void onClick(DialogInterface dialog, int which) {
                 ListView lv = ((AlertDialog) dialog).getListView();
                 String type = (String) lv.getAdapter().getItem(lv.getCheckedItemPosition());
-                Log.e(TAG, "" + type);
                 MarkedRecord markedRecord = new MarkedRecord();
                 markedRecord.setUid(mSetting.getUid());
                 markedRecord.setNumber(number);
                 markedRecord.setType(lv.getCheckedItemPosition());
+                markedRecord.setTypeName(type);
                 mDatabase.saveMarked(markedRecord);
+                mDatabase.saveCaller(markedRecord);
             }
         });
         mAlertDialog = builder.create();

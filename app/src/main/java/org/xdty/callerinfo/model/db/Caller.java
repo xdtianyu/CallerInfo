@@ -44,6 +44,10 @@ public class Caller extends SugarRecord implements INumber {
         return number;
     }
 
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
     @Override
     public String getProvider() {
         return operators;
@@ -53,8 +57,16 @@ public class Caller extends SugarRecord implements INumber {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getCount() {
         return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     @Override
@@ -81,6 +93,10 @@ public class Caller extends SugarRecord implements INumber {
         return Type.fromString(type);
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getOperators() {
         return operators;
     }
@@ -91,6 +107,10 @@ public class Caller extends SugarRecord implements INumber {
 
     public long getLastUpdate() {
         return lastUpdate;
+    }
+
+    public void setLastUpdate(long lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public String toString() {
