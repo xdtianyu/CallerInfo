@@ -127,7 +127,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
                         reportFetchedNumber();
                     }
                 } else {
-                    if (mSetting.isMarkingEnabled()) {
+                    if (mSetting.isMarkingEnabled() && mCallRecord.isAnswered()) {
                         mView.showMark(mCallRecord.getLogNumber());
                     }
                 }

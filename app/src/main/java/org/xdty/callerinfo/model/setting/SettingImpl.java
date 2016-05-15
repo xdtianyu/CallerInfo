@@ -142,7 +142,8 @@ public class SettingImpl implements Setting {
         String key = mContext.getString(R.string.padding_mark_numbers_key);
         if (mPrefs.contains(key)) {
             String paddingNumbers = mPrefs.getString(key, null);
-            return (ArrayList<String>) Arrays.asList(gson.fromJson(paddingNumbers, String[].class));
+            return new ArrayList<>(
+                    Arrays.asList(gson.fromJson(paddingNumbers, String[].class)));
         } else {
             return new ArrayList<>();
         }

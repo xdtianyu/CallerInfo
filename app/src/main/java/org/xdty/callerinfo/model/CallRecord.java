@@ -123,4 +123,8 @@ public class CallRecord {
     public boolean isActive() {
         return ring != -1 || hook != -1 || idle != -1;
     }
+
+    public boolean isAnswered() {
+        return isIncoming() && callDuration > 0;
+    }
 }
