@@ -39,6 +39,17 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
+    public Observable<List<Caller>> fetchCallers() {
+        return Observable.create(new Observable.OnSubscribe<List<Caller>>() {
+            @Override
+            public void call(Subscriber<? super List<Caller>> subscriber) {
+                subscriber.onNext(Caller.listAll(Caller.class));
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
     public void clearAllInCalls(List<InCall> inCallList) {
         Observable.from(inCallList).observeOn(Schedulers.io()).subscribe(
                 new Action1<InCall>() {

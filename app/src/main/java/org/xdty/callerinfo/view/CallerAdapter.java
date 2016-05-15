@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.view;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.TextColorPair;
+import org.xdty.callerinfo.model.database.Database;
+import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.permission.Permission;
@@ -25,18 +28,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import rx.functions.Action1;
+
 public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder> {
 
     private static final Map<String, Caller> callerMap = new HashMap<>();
     private final Context mContext;
     private List<InCall> mList;
-    private CardView cardView;
     private Permission mPermission;
+    private Database mDatabase;
+    private Handler mHandler;
 
     public CallerAdapter(Context context, List<InCall> list) {
         mContext = context;
         mPermission = new PermissionImpl(mContext.getApplicationContext());
+        mDatabase = DatabaseImpl.getInstance();
         mList = list;
+        mHandler = new Handler(mContext.getMainLooper());
         updateCallerMap();
     }
 
@@ -71,19 +79,33 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
     }
 
     private void updateCallerMap() {
-        callerMap.clear();
-        boolean canReadContact = mPermission.canReadContact();
-        List<Caller> callers = Caller.listAll(Caller.class);
-        for (Caller caller : callers) {
-            String number = caller.getNumber();
-            if (number != null && !number.isEmpty()) {
-                if (canReadContact) {
-                    String name = Utils.getContactName(mContext, caller.getNumber());
-                    caller.setContactName(name);
+        mDatabase.fetchCallers().subscribe(new Action1<List<Caller>>() {
+            @Override
+            public void call(List<Caller> callers) {
+                boolean canReadContact = mPermission.canReadContact();
+                callerMap.clear();
+                for (Caller caller : callers) {
+                    String number = caller.getNumber();
+                    if (number != null && !number.isEmpty()) {
+                        if (canReadContact) {
+                            String name = Utils.getContactName(mContext, caller.getNumber());
+                            caller.setContactName(name);
+                        }
+                        callerMap.put(caller.getNumber(), caller);
+                    }
                 }
-                callerMap.put(caller.getNumber(), caller);
+                notifyDataSetChanged();
             }
-        }
+        });
+    }
+
+    private void updateListDelayed() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                updateCallerMap();
+            }
+        }, 300);
     }
 
     public void replaceData(List<InCall> inCalls) {
@@ -172,25 +194,23 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         }
 
         @Override
-        public void onResponseOffline (INumber number){
-            new Caller(number, !number.isOnline()).save();
+        public void onResponseOffline(INumber number) {
+            mDatabase.saveCaller(new Caller(number, !number.isOnline()));
             callerMap.put(number.getNumber(), new Caller(number));
             notifyDataSetChanged();
         }
 
         @Override
-        public void onResponse (INumber number){
-            new Caller(number, !number.isOnline()).save();
+        public void onResponse(INumber number) {
+            mDatabase.saveCaller(new Caller(number, !number.isOnline()));
             inCall.setFetched(true);
-            updateCallerMap();
-            notifyDataSetChanged();
+            updateListDelayed();
         }
 
         @Override
-        public void onResponseFailed (INumber number,boolean isOnline){
+        public void onResponseFailed(INumber number, boolean isOnline) {
             inCall.setFetched(true);
-            updateCallerMap();
-            notifyDataSetChanged();
+            updateListDelayed();
         }
     }
 }
