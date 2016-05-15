@@ -97,7 +97,7 @@ public class CallRecord {
     }
 
     public boolean isValid() {
-        return mLogName != null && mLogNumber != null;
+        return mLogNumber != null && !mLogNumber.isEmpty();
     }
 
     public boolean isNameValid() {

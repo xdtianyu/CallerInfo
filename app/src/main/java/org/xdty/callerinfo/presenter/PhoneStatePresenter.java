@@ -70,6 +70,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
         if (!TextUtils.isEmpty(number)) {
             mIncomingNumber = number;
+            mCallRecord.setLogNumber(number);
             searchNumber(number);
         }
     }
@@ -86,6 +87,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
                 if (TextUtils.isEmpty(number)) {
                     Log.d(TAG, "number is null. " + TextUtils.isEmpty(mIncomingNumber));
                     number = mIncomingNumber;
+                    mCallRecord.setLogNumber(number);
                     mIncomingNumber = null;
                 }
                 searchNumber(number);
@@ -363,6 +365,9 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     }
 
     private void unBindPluginService() {
+        if (mPluginService == null) {
+            return;
+        }
         mView.getContext().getApplicationContext().unbindService(mConnection);
         mView.getContext().stopService(mPluginIntent);
     }
