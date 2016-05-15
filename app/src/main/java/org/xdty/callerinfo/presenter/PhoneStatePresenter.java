@@ -262,6 +262,11 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     }
 
     private void showNumber(INumber number) {
+
+        mCallRecord.setLogNumber(number.getNumber());
+        mCallRecord.setLogName(number.getName());
+        mCallRecord.setLogGeo(number.getProvince() + " " + number.getCity());
+
         bindPluginService(number);
         if (mCallRecord.isActive()) {
             mView.show(number);
@@ -274,9 +279,6 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
             return;
         }
 
-        mCallRecord.setLogNumber(number.getNumber());
-        mCallRecord.setLogName(number.getName());
-        mCallRecord.setLogGeo(number.getProvince() + " " + number.getCity());
         mAutoHangup = false;
 
         if (mConnection == null) {
