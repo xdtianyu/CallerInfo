@@ -133,7 +133,7 @@
     <string name="hangup_keyword">Call block keywords</string>
     <string name="hangup_keyword_summary">Hangup when caller info contains keyword</string>
     <string name="hangup_keyword_hint">Please split keywords with space</string>
-    <string name="hangup_keyword_default" translatable="false">诈骗 广告</string>
+    <string name="hangup_keyword_default" translatable="false">诈骗 广告 骚扰</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="action_clear_history">Clear call log</string>
@@ -205,5 +205,10 @@
     <string name="advertising">Advertising</string>
     <string name="express_delivery">Express delivery</string>
     <string name="restaurant_deliver">Restaurant deliver</string>
-    <string name="uid_key" translatable="false">uid_ke</string>
+    <string name="uid_key" translatable="false">uid_key</string>
+    <string name="type_harassment" translatable="false">骚扰</string>
+    <string name="type_fraud" translatable="false">诈骗|欺诈</string>
+    <string name="type_advertising" translatable="false">广告|推销</string>
+    <string name="type_express_delivery" translatable="false">快递</string>
+    <string name="type_restaurant_deliver" translatable="false">外卖</string>
 </resources>

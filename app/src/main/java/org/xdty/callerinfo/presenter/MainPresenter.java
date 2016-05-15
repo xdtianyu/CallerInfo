@@ -7,6 +7,7 @@ import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.phone.number.PhoneNumber;
@@ -144,6 +145,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
         if (number != null) {
             if (isOnline && number.isValid()) {
                 mDatabase.saveCaller(new Caller(number, !number.isOnline()));
+                MarkedRecord.trySave(number, mSetting, mDatabase);
             }
             mView.showSearchResult(number);
         }

@@ -163,6 +163,11 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public int getTypeFromName(String name) {
+        return Utils.typeFromString(mContext, name);
+    }
+
+    @Override
     public boolean isHidingWhenTouch() {
         return mPrefs.getBoolean(mContext.getString(R.string.hide_when_touch_key), false);
     }

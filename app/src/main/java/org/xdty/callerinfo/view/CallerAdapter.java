@@ -18,8 +18,11 @@ import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.permission.PermissionImpl;
+import org.xdty.callerinfo.model.setting.Setting;
+import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
@@ -37,12 +40,14 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
     private List<InCall> mList;
     private Permission mPermission;
     private Database mDatabase;
+    private Setting mSetting;
     private Handler mHandler;
 
     public CallerAdapter(Context context, List<InCall> list) {
         mContext = context;
         mPermission = new PermissionImpl(mContext.getApplicationContext());
         mDatabase = DatabaseImpl.getInstance();
+        mSetting = new SettingImpl(mContext);
         mList = list;
         mHandler = new Handler(mContext.getMainLooper());
         updateCallerMap();
@@ -203,6 +208,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         @Override
         public void onResponse(INumber number) {
             mDatabase.saveCaller(new Caller(number, !number.isOnline()));
+            MarkedRecord.trySave(number, mSetting, mDatabase);
             inCall.setFetched(true);
             updateListDelayed();
         }

@@ -32,4 +32,12 @@
         <item>@string/express_delivery</item>
         <item>@string/restaurant_deliver</item>
     </string-array>
+
+    <string-array name="mark_type_source">
+        <item>@string/type_harassment</item>
+        <item>@string/type_fraud</item>
+        <item>@string/type_advertising</item>
+        <item>@string/type_express_delivery</item>
+        <item>@string/type_restaurant_deliver</item>
+    </string-array>
 </resources>

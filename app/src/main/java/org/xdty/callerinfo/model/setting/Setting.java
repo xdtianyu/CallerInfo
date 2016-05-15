@@ -72,4 +72,6 @@ public interface Setting {
 
     String getUid();
 
+    int getTypeFromName(String name);
+
 }

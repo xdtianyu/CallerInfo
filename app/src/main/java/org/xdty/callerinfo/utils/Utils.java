@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.activity.MarkActivity;
@@ -42,6 +43,7 @@ import java.util.UUID;
 public class Utils {
 
     public static final int NOTIFICATION_MARK = 0x01;
+    private static final String TAG = Utils.class.getSimpleName();
 
     public static void showTextWindow(Context context, int resId, int frontType) {
         Bundle bundle = new Bundle();
@@ -350,4 +352,15 @@ public class Utils {
         context.startActivity(intent);
     }
 
+    public static int typeFromString(Context context, String type) {
+        ArrayList<String> types = new ArrayList<>(
+                Arrays.asList(context.getResources().getStringArray(R.array.mark_type_source)));
+        for (String t : types) {
+            if (t.contains(type) || type.contains(t)) {
+                return types.indexOf(t);
+            }
+        }
+        Log.e(TAG, "typeFromString failed: " + type);
+        return -1;
+    }
 }

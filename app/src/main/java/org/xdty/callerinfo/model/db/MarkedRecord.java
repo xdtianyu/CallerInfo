@@ -3,9 +3,14 @@ package org.xdty.callerinfo.model.db;
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
+import org.xdty.callerinfo.model.database.Database;
+import org.xdty.callerinfo.model.setting.Setting;
+import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.Type;
+
 public class MarkedRecord extends SugarRecord {
     @Ignore
-    private final static int API_ID_USER_MARKED = 2;
+    private final static int API_ID_USER_MARKED = 8;
     private String uid;
     private String number;
     private int type;
@@ -21,6 +26,21 @@ public class MarkedRecord extends SugarRecord {
         time = System.currentTimeMillis();
         count = 0;
         isReported = false;
+    }
+
+    public static void trySave(INumber number, Setting setting, Database database) {
+        if (setting.isAutoReportEnabled() && number.getType() == Type.REPORT) {
+            int type = setting.getTypeFromName(number.getName());
+            if (type >= 0) {
+                MarkedRecord markedRecord = new MarkedRecord();
+                markedRecord.setNumber(number.getNumber());
+                markedRecord.setUid(setting.getUid());
+                markedRecord.setSource(number.getApiId());
+                markedRecord.setType(type);
+                markedRecord.setCount(number.getCount());
+                database.saveMarked(markedRecord);
+            }
+        }
     }
 
     public String getUid() {
