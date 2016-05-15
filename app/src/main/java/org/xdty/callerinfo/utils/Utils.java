@@ -299,12 +299,6 @@ public class Utils {
     }
 
     public static String getDeviceId(Context context) {
-        context = context.getApplicationContext();
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        String deviceId = pref.getString("device_id", "");
-        if (!deviceId.isEmpty()) {
-            return deviceId;
-        }
         final TelephonyManager tm =
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -315,9 +309,7 @@ public class Utils {
 
         UUID deviceUuid = new UUID(androidId.hashCode(),
                 ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
-        deviceId = deviceUuid.toString();
-        pref.edit().putString("device_id", deviceId).apply();
-        return deviceId;
+        return deviceUuid.toString();
     }
 
     public static void showMarkNotification(Context context, String number) {
