@@ -2,6 +2,7 @@ package org.xdty.callerinfo.model.database;
 
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.model.db.MarkedRecord;
 
 import java.util.List;
 
@@ -23,4 +24,5 @@ public interface Database {
 
     void saveInCall(InCall inCall);
 
+    void saveMarked(MarkedRecord markedRecord);
 }

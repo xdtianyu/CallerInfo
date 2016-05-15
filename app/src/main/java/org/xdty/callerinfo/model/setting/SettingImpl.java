@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -146,6 +147,18 @@ public class SettingImpl implements Setting {
                     Arrays.asList(gson.fromJson(paddingNumbers, String[].class)));
         } else {
             return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public String getUid() {
+        String key = mContext.getString(R.string.uid_key);
+        if (mPrefs.contains(key)) {
+            return mPrefs.getString(key, "");
+        } else {
+            String uid = Utils.getDeviceId(mContext);
+            mPrefs.edit().putString(key, uid).apply();
+            return uid;
         }
     }
 

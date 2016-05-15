@@ -125,4 +125,9 @@
     <string name="enable_marking">启用主动标记功能</string>
     <string name="enable_marking_summary">电话接听且号码查找失败后弹出标记提示</string>
     <string name="mark_number">标记号码</string>
+    <string name="advertising">广告</string>
+    <string name="express_delivery">快递</string>
+    <string name="fraud">诈骗</string>
+    <string name="harassment">骚扰</string>
+    <string name="restaurant_deliver">外卖</string>
 </resources>

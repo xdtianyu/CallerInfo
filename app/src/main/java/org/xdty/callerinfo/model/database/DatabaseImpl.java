@@ -2,6 +2,7 @@ package org.xdty.callerinfo.model.database;
 
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.model.db.MarkedRecord;
 
 import java.util.List;
 
@@ -102,5 +103,17 @@ public class DatabaseImpl implements Database {
                 inCall.save();
             }
         });
+    }
+
+    @Override
+    public void saveMarked(MarkedRecord markedRecord) {
+        Observable.just(markedRecord)
+                .observeOn(Schedulers.io())
+                .subscribe(new Action1<MarkedRecord>() {
+                    @Override
+                    public void call(MarkedRecord markedRecord) {
+                        markedRecord.save();
+                    }
+                });
     }
 }

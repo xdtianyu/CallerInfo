@@ -70,4 +70,6 @@ public interface Setting {
 
     ArrayList<String> getPaddingMarks();
 
+    String getUid();
+
 }

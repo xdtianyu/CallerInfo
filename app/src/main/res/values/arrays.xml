@@ -25,4 +25,11 @@
         <item>@string/align_center</item>
         <item>@string/align_right</item>
     </string-array>
+    <string-array name="mark_type">
+        <item>@string/harassment</item>
+        <item>@string/fraud</item>
+        <item>@string/advertising</item>
+        <item>@string/express_delivery</item>
+        <item>@string/restaurant_deliver</item>
+    </string-array>
 </resources>

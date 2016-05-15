@@ -42,4 +42,11 @@
         <item name="shadow">true</item>
     </style>
 
+    <style name="MarkDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">#FFC107</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:background">#4CAF50</item>
+        <item name="android:windowMinWidthMinor">85%</item>
+    </style>
+
 </resources>

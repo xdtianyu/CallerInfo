@@ -7,8 +7,12 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.ListView;
 
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.model.database.Database;
+import org.xdty.callerinfo.model.database.DatabaseImpl;
+import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
 
@@ -21,6 +25,15 @@ public class MarkActivity extends BaseActivity implements DialogInterface.OnDism
     private AlertDialog mAlertDialog;
     private Setting mSetting;
     private ArrayList<String> mNumberList;
+    private Database mDatabase;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setTitle("");
+        mSetting = new SettingImpl(this);
+        mDatabase = DatabaseImpl.getInstance();
+    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -50,21 +63,36 @@ public class MarkActivity extends BaseActivity implements DialogInterface.OnDism
 
     private void showAlertDialog(final String number) {
         String title = getString(R.string.mark_number) + " (" + number + ")";
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MarkDialogStyle);
         builder.setTitle(title);
-        builder.setIcon(R.drawable.status_icon);
         builder.setOnDismissListener(this);
         builder.setNegativeButton(R.string.cancel, null);
         builder.setCancelable(false);
+        builder.setSingleChoiceItems(R.array.mark_type, -1,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                                .setEnabled(true);
+                    }
+                });
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                ListView lv = ((AlertDialog) dialog).getListView();
+                String type = (String) lv.getAdapter().getItem(lv.getCheckedItemPosition());
+                Log.e(TAG, "" + type);
+                MarkedRecord markedRecord = new MarkedRecord();
+                markedRecord.setUid(mSetting.getUid());
+                markedRecord.setNumber(number);
+                markedRecord.setType(lv.getCheckedItemPosition());
+                mDatabase.saveMarked(markedRecord);
             }
         });
         mAlertDialog = builder.create();
         mAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         mAlertDialog.show();
+        mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
     }
 
     @Override
@@ -81,12 +109,6 @@ public class MarkActivity extends BaseActivity implements DialogInterface.OnDism
             mAlertDialog.cancel();
         }
         finish();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mSetting = new SettingImpl(this);
     }
 
     @Override

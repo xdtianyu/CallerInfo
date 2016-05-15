@@ -200,4 +200,10 @@
     <string name="enable_marking_summary">Show mark dialog when phone answered and failed to search</string>
     <string name="mark_number">Mark number</string>
     <string name="padding_mark_numbers_key" translatable="false">padding_mark_numbers_key</string>
+    <string name="harassment">Harassment</string>
+    <string name="fraud">Fraud</string>
+    <string name="advertising">Advertising</string>
+    <string name="express_delivery">Express delivery</string>
+    <string name="restaurant_deliver">Restaurant deliver</string>
+    <string name="uid_key" translatable="false">uid_ke</string>
 </resources>
