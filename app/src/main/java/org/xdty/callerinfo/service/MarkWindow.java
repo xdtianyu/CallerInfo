@@ -34,7 +34,7 @@ public class MarkWindow extends StandOutWindow {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            mSettings = new SettingImpl(getApplicationContext());
+            mSettings = SettingImpl.getInstance();
             return super.onStartCommand(intent, flags, startId);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();

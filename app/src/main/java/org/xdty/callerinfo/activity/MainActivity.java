@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Setting setting = new SettingImpl(getApplicationContext());
+        Setting setting = SettingImpl.getInstance();
         Permission permission = new PermissionImpl(this);
         PhoneNumber phoneNumber = new PhoneNumber(this);
 

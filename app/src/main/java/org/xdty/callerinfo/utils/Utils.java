@@ -225,11 +225,8 @@ public class Utils {
     }
 
     public static void checkLocale(Context context) {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean isForceChinese =
-                pref.getBoolean(context.getString(R.string.force_chinese_key), false);
 
-        if (isForceChinese) {
+        if (SettingImpl.getInstance().isForceChinese()) {
             Locale locale = new Locale("zh");
             Locale.setDefault(locale);
             Configuration config = context.getResources().getConfiguration();
@@ -316,7 +313,7 @@ public class Utils {
         Intent intent = new Intent(context, MarkActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        Setting setting = new SettingImpl(context);
+        Setting setting = SettingImpl.getInstance();
         setting.addPaddingMark(number);
 
         ArrayList<String> list = setting.getPaddingMarks();
@@ -348,8 +345,15 @@ public class Utils {
         ArrayList<String> types = new ArrayList<>(
                 Arrays.asList(context.getResources().getStringArray(R.array.mark_type_source)));
         for (String t : types) {
-            if (t.contains(type) || type.contains(t)) {
+            if (t.contains(type)) {
                 return types.indexOf(t);
+            }
+
+            ArrayList<String> ts = new ArrayList<>(Arrays.asList(t.split("|")));
+            for (String s : ts) {
+                if (type.contains(s)) {
+                    return types.indexOf(t);
+                }
             }
         }
         Log.e(TAG, "typeFromString failed: " + type);

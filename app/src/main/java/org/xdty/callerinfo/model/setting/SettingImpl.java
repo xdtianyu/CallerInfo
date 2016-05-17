@@ -19,13 +19,14 @@ import java.util.Arrays;
 public class SettingImpl implements Setting {
 
     private static Gson gson = new Gson();
+    private static Setting sSetting;
     private final int mScreenWidth;
     private final int mScreenHeight;
     private SharedPreferences mPrefs;
     private SharedPreferences mWindowPrefs;
     private Context mContext;
 
-    public SettingImpl(Context context) {
+    private SettingImpl(Context context) {
         mContext = context.getApplicationContext();
         mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         mWindowPrefs = mContext.getSharedPreferences("window", Context.MODE_PRIVATE);
@@ -37,6 +38,19 @@ public class SettingImpl implements Setting {
         display.getSize(point);
         mScreenWidth = point.x;
         mScreenHeight = point.y;
+    }
+
+    public static void init(Context context) {
+        if (sSetting == null) {
+            sSetting = new SettingImpl(context.getApplicationContext());
+        }
+    }
+
+    public static Setting getInstance() {
+        if (sSetting == null) {
+            throw new IllegalStateException("Setting is not initialized!");
+        }
+        return sSetting;
     }
 
     @Override
@@ -215,6 +229,16 @@ public class SettingImpl implements Setting {
     @Override
     public boolean isAddingCallLog() {
         return mPrefs.getBoolean(mContext.getString(R.string.add_call_log_key), false);
+    }
+
+    @Override
+    public boolean isCatchCrash() {
+        return mPrefs.getBoolean(mContext.getString(R.string.catch_crash_key), false);
+    }
+
+    @Override
+    public boolean isForceChinese() {
+        return mPrefs.getBoolean(mContext.getString(R.string.force_chinese_key), false);
     }
 
     @Override

@@ -22,6 +22,10 @@ public interface Setting {
 
     boolean isAddingCallLog();
 
+    boolean isCatchCrash();
+
+    boolean isForceChinese();
+
     String getKeywords();
 
     String getGeoKeyword();

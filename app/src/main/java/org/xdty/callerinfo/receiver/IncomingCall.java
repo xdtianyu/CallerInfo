@@ -62,7 +62,7 @@ public class IncomingCall extends BroadcastReceiver {
 
         private IncomingCallListener(Context context) {
             mContext = context;
-            mSetting = new SettingImpl(mContext);
+            mSetting = SettingImpl.getInstance();
             mPermission = new PermissionImpl(mContext);
             mCallRecord = new CallRecord();
             mPresenter = new PhoneStatePresenter(this, mSetting, mPermission, mCallRecord);

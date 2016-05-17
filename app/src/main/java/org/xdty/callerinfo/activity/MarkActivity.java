@@ -31,7 +31,7 @@ public class MarkActivity extends BaseActivity implements DialogInterface.OnDism
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("");
-        mSetting = new SettingImpl(this);
+        mSetting = SettingImpl.getInstance();
         mDatabase = DatabaseImpl.getInstance();
     }
 

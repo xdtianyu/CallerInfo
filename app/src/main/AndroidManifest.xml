@@ -53,6 +53,7 @@
 
         <service android:name=".service.FloatWindow"/>
         <service android:name=".service.MarkWindow"/>
+        <service android:name=".service.ScheduleService"/>
 
         <receiver android:name=".receiver.IncomingCall">
             <intent-filter android:priority="999">

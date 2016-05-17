@@ -1,9 +1,15 @@
 package org.xdty.callerinfo.application;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.job.JobScheduler;
+import android.content.Context;
+import android.content.Intent;
 
-import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.BuildConfig;
+import org.xdty.callerinfo.model.setting.Setting;
+import org.xdty.callerinfo.model.setting.SettingImpl;
+import org.xdty.callerinfo.service.ScheduleService;
 import org.xdty.callerinfo.utils.Utils;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
@@ -14,11 +20,22 @@ public class Application extends com.orm.SugarApp {
     @Override
     public void onCreate() {
         super.onCreate();
+        SettingImpl.init(this);
         Utils.checkLocale(getApplicationContext());
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isCatch = pref.getBoolean(getString(R.string.catch_crash_key), false);
-        if (isCatch) {
+        Setting setting = SettingImpl.getInstance();
+
+        if (setting.isCatchCrash() || BuildConfig.DEBUG) {
             CustomActivityOnCrash.install(this);
+        }
+
+        if (setting.isAutoReportEnabled() || setting.isMarkingEnabled()) {
+            Intent intent = new Intent(this, ScheduleService.class);
+            PendingIntent pIntent = PendingIntent.getService(this, 0, intent, 0);
+            AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarm.cancel(pIntent);
+            long now = System.currentTimeMillis();
+            alarm.setRepeating(AlarmManager.RTC_WAKEUP, now, 60 * 60 * 1000, pIntent);
+            JobScheduler s;
         }
     }
 }

@@ -47,7 +47,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         mContext = context;
         mPermission = new PermissionImpl(mContext.getApplicationContext());
         mDatabase = DatabaseImpl.getInstance();
-        mSetting = new SettingImpl(mContext);
+        mSetting = SettingImpl.getInstance();
         mList = list;
         mHandler = new Handler(mContext.getMainLooper());
         updateCallerMap();
