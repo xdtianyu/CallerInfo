@@ -21,6 +21,7 @@ import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.plugin.IPluginService;
+import org.xdty.callerinfo.utils.AlarmUtils;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
@@ -232,6 +233,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
         if (isOnline) {
             mDatabase.saveCaller(new Caller(number, !number.isOnline()));
             MarkedRecord.trySave(number, mSetting, mDatabase);
+            AlarmUtils.alarm();
         }
 
         showNumber(number);

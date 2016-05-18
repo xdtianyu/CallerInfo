@@ -15,6 +15,7 @@ import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
+import org.xdty.callerinfo.utils.AlarmUtils;
 
 import java.util.ArrayList;
 
@@ -88,6 +89,7 @@ public class MarkActivity extends BaseActivity implements DialogInterface.OnDism
                 markedRecord.setTypeName(type);
                 mDatabase.saveMarked(markedRecord);
                 mDatabase.saveCaller(markedRecord);
+                AlarmUtils.alarm();
             }
         });
         mAlertDialog = builder.create();

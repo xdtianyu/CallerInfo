@@ -166,6 +166,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                     cardView.setCardBackgroundColor(
                             ContextCompat.getColor(context, R.color.graphite));
                 } else {
+                    // FIXME: fetched several times on same number
                     phoneNumber.fetch(inCall.getNumber());
 
                     text.setText(R.string.loading);

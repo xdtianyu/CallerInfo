@@ -1,15 +1,9 @@
 package org.xdty.callerinfo.application;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.app.job.JobScheduler;
-import android.content.Context;
-import android.content.Intent;
-
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
-import org.xdty.callerinfo.service.ScheduleService;
+import org.xdty.callerinfo.utils.AlarmUtils;
 import org.xdty.callerinfo.utils.Utils;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
@@ -29,13 +23,8 @@ public class Application extends com.orm.SugarApp {
         }
 
         if (setting.isAutoReportEnabled() || setting.isMarkingEnabled()) {
-            Intent intent = new Intent(this, ScheduleService.class);
-            PendingIntent pIntent = PendingIntent.getService(this, 0, intent, 0);
-            AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarm.cancel(pIntent);
-            long now = System.currentTimeMillis();
-            alarm.setRepeating(AlarmManager.RTC_WAKEUP, now, 60 * 60 * 1000, pIntent);
-            JobScheduler s;
+            AlarmUtils.install(this);
+            AlarmUtils.alarm();
         }
     }
 }
