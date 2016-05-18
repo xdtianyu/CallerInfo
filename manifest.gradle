@@ -1,7 +1,9 @@
 def manifestProperties = "manifest.properties"
 def manifestKeys = [
         API_KEY    : { x -> x },
-        JUHE_API_KEY: { x -> x }
+        JUHE_API_KEY: { x -> x },
+        LEANCLOUD_APP_ID: { x -> x },
+        LEANCLOUD_APP_KEY: { x -> x }
 ]
 
 // Find manifest.properties in project root, or in $HOME/.gradle
@@ -28,4 +30,6 @@ if (f) {
     logger.info "Missing ${manifestProperties} file"
     android.defaultConfig.manifestPlaceholders["API_KEY"] = "${System.env.API_KEY}"
     android.defaultConfig.manifestPlaceholders["JUHE_API_KEY"] = "${System.env.JUHE_API_KEY}"
+    android.defaultConfig.manifestPlaceholders["LEANCLOUD_APP_ID"] = "${System.env.LEANCLOUD_APP_ID}"
+    android.defaultConfig.manifestPlaceholders["LEANCLOUD_APP_KEY"] = "${System.env.LEANCLOUD_APP_KEY}"
 }

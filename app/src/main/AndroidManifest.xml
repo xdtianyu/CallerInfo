@@ -69,6 +69,12 @@
             android:name="org.xdty.phone.number.JUHE_API_KEY"
             android:value="${JUHE_API_KEY}"/>
         <meta-data
+            android:name="org.xdty.phone.number.LEANCLOUD_APP_ID"
+            android:value="${LEANCLOUD_APP_ID}"/>
+        <meta-data
+            android:name="org.xdty.phone.number.LEANCLOUD_APP_KEY"
+            android:value="${LEANCLOUD_APP_KEY}"/>
+        <meta-data
             android:name="DATABASE"
             android:value="phone_number.db"/>
         <meta-data

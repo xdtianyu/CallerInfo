@@ -7,6 +7,7 @@ import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
+import org.xdty.phone.number.model.cloud.CloudNumber;
 
 public class MarkedRecord extends SugarRecord {
     @Ignore
@@ -18,7 +19,6 @@ public class MarkedRecord extends SugarRecord {
     private int count;
     private int source;
     private boolean isReported;
-    @Ignore
     private String typeName;
 
     public MarkedRecord() {
@@ -38,6 +38,7 @@ public class MarkedRecord extends SugarRecord {
                 markedRecord.setSource(number.getApiId());
                 markedRecord.setType(type);
                 markedRecord.setCount(number.getCount());
+                markedRecord.setTypeName(number.getName());
                 database.saveMarked(markedRecord);
             }
         }
@@ -105,5 +106,16 @@ public class MarkedRecord extends SugarRecord {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public CloudNumber toNumber() {
+        CloudNumber number = new CloudNumber();
+        number.setNumber(getNumber());
+        number.setCount(getCount());
+        number.setType(getType());
+        number.setFrom(getSource());
+        number.setName(getTypeName());
+        number.setUid(getUid());
+        return number;
     }
 }

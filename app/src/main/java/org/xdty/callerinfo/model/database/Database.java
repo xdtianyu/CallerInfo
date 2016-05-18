@@ -29,4 +29,10 @@ public interface Database {
     void saveMarked(MarkedRecord markedRecord);
 
     void saveCaller(MarkedRecord markedRecord);
+
+    Observable<List<MarkedRecord>> fetchMarkedRecords();
+
+    Observable<MarkedRecord> findMarkedRecord(String number);
+
+    void updateMarkedRecord(String number);
 }

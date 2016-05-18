@@ -211,4 +211,5 @@
     <string name="type_advertising" translatable="false">广告|推销</string>
     <string name="type_express_delivery" translatable="false">快递</string>
     <string name="type_restaurant_deliver" translatable="false">外卖</string>
+    <string name="last_schedule_time_key" translatable="false">last_schedule_time_key</string>
 </resources>

@@ -182,6 +182,23 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public void updateLastScheduleTime() {
+        updateLastScheduleTime(System.currentTimeMillis());
+    }
+
+    @Override
+    public void updateLastScheduleTime(long timestamp) {
+        mPrefs.edit()
+                .putLong(mContext.getString(R.string.last_schedule_time_key), timestamp)
+                .apply();
+    }
+
+    @Override
+    public long lastScheduleTime() {
+        return mPrefs.getLong(mContext.getString(R.string.last_schedule_time_key), 0);
+    }
+
+    @Override
     public boolean isHidingWhenTouch() {
         return mPrefs.getBoolean(mContext.getString(R.string.hide_when_touch_key), false);
     }
