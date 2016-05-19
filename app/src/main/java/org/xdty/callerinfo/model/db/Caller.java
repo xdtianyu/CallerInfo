@@ -2,12 +2,14 @@ package org.xdty.callerinfo.model.db;
 
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
+import com.orm.dsl.Unique;
 
 import org.xdty.callerinfo.utils.Config;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 
 public class Caller extends SugarRecord implements INumber {
+    @Unique
     private String number;
     private String name;
     private String type;

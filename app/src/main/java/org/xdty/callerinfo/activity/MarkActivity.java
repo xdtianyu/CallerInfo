@@ -88,7 +88,7 @@ public class MarkActivity extends BaseActivity implements DialogInterface.OnDism
                 markedRecord.setType(lv.getCheckedItemPosition());
                 markedRecord.setTypeName(type);
                 mDatabase.saveMarked(markedRecord);
-                mDatabase.saveCaller(markedRecord);
+                mDatabase.updateCaller(markedRecord);
                 AlarmUtils.alarm();
             }
         });

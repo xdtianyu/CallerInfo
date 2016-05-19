@@ -99,11 +99,11 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
-    public void saveCaller(Caller caller) {
+    public void updateCaller(Caller caller) {
         Observable.just(caller).observeOn(Schedulers.io()).subscribe(new Action1<Caller>() {
             @Override
             public void call(Caller caller) {
-                caller.save();
+                caller.update();
             }
         });
     }
@@ -131,7 +131,7 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
-    public void saveCaller(MarkedRecord markedRecord) {
+    public void updateCaller(MarkedRecord markedRecord) {
         Observable.just(markedRecord)
                 .observeOn(Schedulers.io())
                 .subscribe(new Action1<MarkedRecord>() {
@@ -143,7 +143,7 @@ public class DatabaseImpl implements Database {
                         caller.setLastUpdate(markedRecord.getTime());
                         caller.setType("report");
                         caller.setOffline(false);
-                        caller.save();
+                        caller.update();
                     }
                 });
     }

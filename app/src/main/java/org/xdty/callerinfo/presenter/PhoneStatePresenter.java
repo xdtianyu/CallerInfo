@@ -231,7 +231,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
             return;
         }
         if (isOnline) {
-            mDatabase.saveCaller(new Caller(number, !number.isOnline()));
+            mDatabase.updateCaller(new Caller(number, !number.isOnline()));
             MarkedRecord.trySave(number, mSetting, mDatabase);
             AlarmUtils.alarm();
         }

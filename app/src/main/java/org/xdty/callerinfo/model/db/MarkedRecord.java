@@ -2,6 +2,7 @@ package org.xdty.callerinfo.model.db;
 
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
+import com.orm.dsl.Unique;
 
 import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.setting.Setting;
@@ -13,6 +14,7 @@ public class MarkedRecord extends SugarRecord {
     @Ignore
     private final static int API_ID_USER_MARKED = 8;
     private String uid;
+    @Unique
     private String number;
     private int type;
     private long time;

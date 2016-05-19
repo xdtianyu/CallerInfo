@@ -145,7 +145,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     public void handleResponse(INumber number, boolean isOnline) {
         if (number != null) {
             if (isOnline && number.isValid()) {
-                mDatabase.saveCaller(new Caller(number, !number.isOnline()));
+                mDatabase.updateCaller(new Caller(number, !number.isOnline()));
                 MarkedRecord.trySave(number, mSetting, mDatabase);
                 AlarmUtils.alarm();
             }

@@ -22,13 +22,13 @@ public interface Database {
 
     void removeCaller(Caller caller);
 
-    void saveCaller(Caller caller);
+    void updateCaller(Caller caller);
 
     void saveInCall(InCall inCall);
 
     void saveMarked(MarkedRecord markedRecord);
 
-    void saveCaller(MarkedRecord markedRecord);
+    void updateCaller(MarkedRecord markedRecord);
 
     Observable<List<MarkedRecord>> fetchMarkedRecords();
 

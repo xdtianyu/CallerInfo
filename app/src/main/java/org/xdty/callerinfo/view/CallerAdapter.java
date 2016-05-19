@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +38,9 @@ import rx.functions.Action1;
 public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder> {
 
     private static final Map<String, Caller> callerMap = new HashMap<>();
+    private static final String TAG = CallerAdapter.class.getSimpleName();
     private final Context mContext;
-    private List<InCall> mList;
+    private List<InCall> mList = new ArrayList<>();
     private Permission mPermission;
     private Database mDatabase;
     private Setting mSetting;
@@ -48,9 +51,8 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         mPermission = new PermissionImpl(mContext.getApplicationContext());
         mDatabase = DatabaseImpl.getInstance();
         mSetting = SettingImpl.getInstance();
-        mList = list;
         mHandler = new Handler(mContext.getMainLooper());
-        updateCallerMap();
+        updateCallerMap(list);
     }
 
     @Override
@@ -84,6 +86,11 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
     }
 
     private void updateCallerMap() {
+        updateCallerMap(null);
+    }
+
+    private void updateCallerMap(final List<InCall> list) {
+        Log.v(TAG, "updateCallerMap: " + list);
         mDatabase.fetchCallers().subscribe(new Action1<List<Caller>>() {
             @Override
             public void call(List<Caller> callers) {
@@ -98,6 +105,9 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                         }
                         callerMap.put(caller.getNumber(), caller);
                     }
+                }
+                if (list != null) {
+                    mList = list;
                 }
                 notifyDataSetChanged();
             }
@@ -201,14 +211,16 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
         @Override
         public void onResponseOffline(INumber number) {
-            mDatabase.saveCaller(new Caller(number, !number.isOnline()));
+            Log.v(TAG, "onResponseOffline: " + number);
+            mDatabase.updateCaller(new Caller(number, !number.isOnline()));
             callerMap.put(number.getNumber(), new Caller(number));
             notifyDataSetChanged();
         }
 
         @Override
         public void onResponse(INumber number) {
-            mDatabase.saveCaller(new Caller(number, !number.isOnline()));
+            Log.v(TAG, "onResponse: " + number);
+            mDatabase.updateCaller(new Caller(number, !number.isOnline()));
             MarkedRecord.trySave(number, mSetting, mDatabase);
             inCall.setFetched(true);
             updateListDelayed();
@@ -216,6 +228,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
         @Override
         public void onResponseFailed(INumber number, boolean isOnline) {
+            Log.v(TAG, "onResponse: " + number + ", " + isOnline);
             inCall.setFetched(true);
             updateListDelayed();
         }

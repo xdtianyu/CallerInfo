@@ -4,10 +4,13 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import org.xdty.callerinfo.service.ScheduleService;
 
 public class AlarmUtils {
+
+    private static final String TAG = AlarmUtils.class.getSimpleName();
 
     private static Context sContext;
 
@@ -16,7 +19,7 @@ public class AlarmUtils {
     }
 
     public static void alarm() {
-        // FIXME: cancel not working
+        Log.v(TAG, "alarm");
         Intent intent = new Intent(sContext, ScheduleService.class);
         PendingIntent pIntent = PendingIntent.getService(sContext, 0, intent, 0);
         AlarmManager alarm = (AlarmManager) sContext.getSystemService(Context.ALARM_SERVICE);
