@@ -91,7 +91,7 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
 
     @Override
     public void onPutResult(CloudNumber number, boolean result) {
-        Log.d(TAG, "onPutResult: " + number.getNumber() + ", result: " + result);
+        Log.e(TAG, "onPutResult: " + number.getNumber() + ", result: " + result);
         if (result) {
             mDatabase.updateMarkedRecord(number.getNumber());
         } else {

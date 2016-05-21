@@ -277,6 +277,8 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
     private void bindPluginService(INumber number) {
 
+        Log.e(TAG, "bindPluginService");
+
         if (!mSetting.isAutoHangup() && !mSetting.isAddingCallLog()) {
             return;
         }
@@ -296,8 +298,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
         }
 
         mView.getContext().startService(mPluginIntent);
-        mView.getContext().bindService(mPluginIntent, mConnection,
-                Context.BIND_AUTO_CREATE);
+        mView.getContext().bindService(mPluginIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     private PluginConnection newConnection() {
@@ -371,11 +372,13 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     }
 
     private void unBindPluginService() {
+        Log.e(TAG, "unBindPluginService");
         if (mPluginService == null) {
             return;
         }
         mView.getContext().getApplicationContext().unbindService(mConnection);
         mView.getContext().stopService(mPluginIntent);
+        mPluginService = null;
     }
 
     private void updateCallLog(String number, String name) {

@@ -11,11 +11,14 @@ import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.utils.AlarmUtils;
+import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.functions.Action1;
 
@@ -58,6 +61,30 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
                     mView.showNoCallLog(false);
                 }
                 mView.showLoading(false);
+            }
+        });
+    }
+
+    @Override
+    public void loadCallerMap() {
+        final Map<String, Caller> callerMap = new HashMap<>();
+        final boolean canReadContact = mPermission.canReadContact();
+        mDatabase.fetchCallers().subscribe(new Action1<List<Caller>>() {
+            @Override
+            public void call(List<Caller> callers) {
+
+                for (Caller caller : callers) {
+                    String number = caller.getNumber();
+                    if (number != null && !number.isEmpty()) {
+                        if (canReadContact) {
+                            String name = Utils.getContactName(mView.getContext(),
+                                    caller.getNumber());
+                            caller.setContactName(name);
+                        }
+                        callerMap.put(caller.getNumber(), caller);
+                    }
+                }
+                mView.attachCallerMap(callerMap);
             }
         });
     }
@@ -138,7 +165,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     public void start() {
         mPhoneNumber.setCallback(this);
         mDatabase = DatabaseImpl.getInstance();
-        loadInCallList();
+        loadCallerMap();
     }
 
     @Override

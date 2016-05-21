@@ -18,7 +18,7 @@ public class DebugApplication extends Application {
                 .detectLeakedSqlLiteObjects()
                 .detectLeakedClosableObjects()
                 .penaltyLog()
-                .penaltyDeath()
+                //.penaltyDeath()
                 .build());
 
         Stetho.initialize(

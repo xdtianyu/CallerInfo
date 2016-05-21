@@ -10,6 +10,8 @@ import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 
+import rx.functions.Action1;
+
 public class MarkedRecord extends SugarRecord {
     @Ignore
     private final static int API_ID_USER_MARKED = 8;
@@ -30,19 +32,26 @@ public class MarkedRecord extends SugarRecord {
         isReported = false;
     }
 
-    public static void trySave(INumber number, Setting setting, Database database) {
+    public static void trySave(final INumber number, final Setting setting, final Database db) {
         if (setting.isAutoReportEnabled() && number.getType() == Type.REPORT) {
-            int type = setting.getTypeFromName(number.getName());
-            if (type >= 0) {
-                MarkedRecord markedRecord = new MarkedRecord();
-                markedRecord.setNumber(number.getNumber());
-                markedRecord.setUid(setting.getUid());
-                markedRecord.setSource(number.getApiId());
-                markedRecord.setType(type);
-                markedRecord.setCount(number.getCount());
-                markedRecord.setTypeName(number.getName());
-                database.saveMarked(markedRecord);
-            }
+            db.findMarkedRecord(number.getNumber()).subscribe(new Action1<MarkedRecord>() {
+                @Override
+                public void call(MarkedRecord record) {
+                    if (record == null) {
+                        int type = setting.getTypeFromName(number.getName());
+                        if (type >= 0) {
+                            MarkedRecord markedRecord = new MarkedRecord();
+                            markedRecord.setNumber(number.getNumber());
+                            markedRecord.setUid(setting.getUid());
+                            markedRecord.setSource(number.getApiId());
+                            markedRecord.setType(type);
+                            markedRecord.setCount(number.getCount());
+                            markedRecord.setTypeName(number.getName());
+                            db.saveMarked(markedRecord);
+                        }
+                    }
+                }
+            });
         }
     }
 

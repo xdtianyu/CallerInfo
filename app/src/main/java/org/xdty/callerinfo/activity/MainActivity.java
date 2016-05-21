@@ -2,6 +2,7 @@ package org.xdty.callerinfo.activity;
 
 import android.Manifest;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.contract.MainContract;
+import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.permission.PermissionImpl;
@@ -43,6 +45,7 @@ import org.xdty.phone.number.model.INumber;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends BaseActivity implements MainContract.View {
 
@@ -196,7 +199,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
         int res = mPresenter.checkPermission(Manifest.permission.READ_PHONE_STATE);
         if (res != PackageManager.PERMISSION_GRANTED) {
-            mPresenter.requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE},
+            mPresenter.requestPermissions(new String[] { Manifest.permission.READ_PHONE_STATE },
                     REQUEST_CODE_ASK_PERMISSIONS);
         }
     }
@@ -391,6 +394,17 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             Utils.showTextWindow(MainActivity.this, R.string.offline_failed,
                     FloatWindow.SEARCH_FRONT);
         }
+    }
+
+    @Override
+    public Context getContext() {
+        return this.getApplicationContext();
+    }
+
+    @Override
+    public void attachCallerMap(Map<String, Caller> callers) {
+        mCallerAdapter.attachCallerMap(callers);
+        mPresenter.loadInCallList();
     }
 
     @Override

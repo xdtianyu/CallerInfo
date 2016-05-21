@@ -1,7 +1,6 @@
 package org.xdty.callerinfo.view;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -28,31 +27,27 @@ import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import rx.functions.Action1;
-
 public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder> {
 
-    private static final Map<String, Caller> callerMap = new HashMap<>();
     private static final String TAG = CallerAdapter.class.getSimpleName();
     private final Context mContext;
-    private List<InCall> mList = new ArrayList<>();
+    private Map<String, Caller> mCallerMap;
+    private List<InCall> mList;
     private Permission mPermission;
     private Database mDatabase;
     private Setting mSetting;
-    private Handler mHandler;
 
     public CallerAdapter(Context context, List<InCall> list) {
         mContext = context;
         mPermission = new PermissionImpl(mContext.getApplicationContext());
         mDatabase = DatabaseImpl.getInstance();
         mSetting = SettingImpl.getInstance();
-        mHandler = new Handler(mContext.getMainLooper());
-        updateCallerMap(list);
+        mCallerMap = new HashMap<>();
+        mList = list;
     }
 
     @Override
@@ -75,52 +70,18 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
     }
 
     private Caller getCaller(String number) {
-        Caller caller = callerMap.get(number);
+        Caller caller = mCallerMap.get(number);
 
         if (caller == null) {
             if (number.contains("+86")) {
-                caller = callerMap.get(number.replace("+86", ""));
+                caller = mCallerMap.get(number.replace("+86", ""));
             }
         }
         return caller;
     }
 
-    private void updateCallerMap() {
-        updateCallerMap(null);
-    }
-
-    private void updateCallerMap(final List<InCall> list) {
-        Log.v(TAG, "updateCallerMap: " + list);
-        mDatabase.fetchCallers().subscribe(new Action1<List<Caller>>() {
-            @Override
-            public void call(List<Caller> callers) {
-                boolean canReadContact = mPermission.canReadContact();
-                callerMap.clear();
-                for (Caller caller : callers) {
-                    String number = caller.getNumber();
-                    if (number != null && !number.isEmpty()) {
-                        if (canReadContact) {
-                            String name = Utils.getContactName(mContext, caller.getNumber());
-                            caller.setContactName(name);
-                        }
-                        callerMap.put(caller.getNumber(), caller);
-                    }
-                }
-                if (list != null) {
-                    mList = list;
-                }
-                notifyDataSetChanged();
-            }
-        });
-    }
-
-    private void updateListDelayed() {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                updateCallerMap();
-            }
-        }, 300);
+    public void attachCallerMap(Map<String, Caller> callerMap) {
+        mCallerMap = callerMap;
     }
 
     public void replaceData(List<InCall> inCalls) {
@@ -213,24 +174,26 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         public void onResponseOffline(INumber number) {
             Log.v(TAG, "onResponseOffline: " + number);
             mDatabase.updateCaller(new Caller(number, !number.isOnline()));
-            callerMap.put(number.getNumber(), new Caller(number));
+            mCallerMap.put(number.getNumber(), new Caller(number));
             notifyDataSetChanged();
         }
 
         @Override
         public void onResponse(INumber number) {
             Log.v(TAG, "onResponse: " + number);
-            mDatabase.updateCaller(new Caller(number, !number.isOnline()));
+            Caller caller = new Caller(number, !number.isOnline());
+            mDatabase.updateCaller(caller);
+            mCallerMap.put(number.getNumber(), caller);
             MarkedRecord.trySave(number, mSetting, mDatabase);
             inCall.setFetched(true);
-            updateListDelayed();
+            notifyDataSetChanged();
         }
 
         @Override
         public void onResponseFailed(INumber number, boolean isOnline) {
             Log.v(TAG, "onResponse: " + number + ", " + isOnline);
             inCall.setFetched(true);
-            updateListDelayed();
+            notifyDataSetChanged();
         }
     }
 }

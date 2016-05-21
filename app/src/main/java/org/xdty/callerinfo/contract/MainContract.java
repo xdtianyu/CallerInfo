@@ -1,11 +1,14 @@
 package org.xdty.callerinfo.contract;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
+import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.phone.number.model.INumber;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MainContract {
 
@@ -24,6 +27,10 @@ public interface MainContract {
         void showSearching();
 
         void showSearchFailed(boolean isOnline);
+
+        void attachCallerMap(Map<String, Caller> callerMap);
+
+        Context getContext();
     }
 
     interface Presenter extends BasePresenter {
@@ -31,6 +38,8 @@ public interface MainContract {
         void result(int requestCode, int resultCode);
 
         void loadInCallList();
+
+        void loadCallerMap();
 
         void removeInCallFromList(int position);
 
