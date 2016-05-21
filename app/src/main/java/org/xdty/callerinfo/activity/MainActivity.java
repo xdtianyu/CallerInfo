@@ -168,7 +168,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.loadInCallList();
+                mPresenter.loadCallerMap();
             }
         });
     }
