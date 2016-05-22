@@ -35,4 +35,16 @@ public interface Database {
     Observable<MarkedRecord> findMarkedRecord(String number);
 
     void updateMarkedRecord(String number);
+
+    List<Caller> fetchCallersSync();
+
+    List<InCall> fetchInCallsSync();
+
+    List<MarkedRecord> fetchMarkedRecordsSync();
+
+    void addCallers(List<Caller> callers);
+
+    void addInCallers(List<InCall> inCalls);
+
+    void addMarkedRecords(List<MarkedRecord> markedRecords);
 }

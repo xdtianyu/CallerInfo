@@ -81,7 +81,8 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
             }
         }
 
-        // 2. download offline marked number data
+        // 2. check offline marked number data
+
 
         // 3. check app update
 

@@ -12,6 +12,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class DatabaseImpl implements Database {
@@ -198,4 +199,77 @@ public class DatabaseImpl implements Database {
                     }
                 });
     }
+
+    @Override
+    public List<Caller> fetchCallersSync() {
+        return Caller.listAll(Caller.class);
+    }
+
+    @Override
+    public List<InCall> fetchInCallsSync() {
+        return InCall.listAll(InCall.class, "time DESC");
+    }
+
+    @Override
+    public List<MarkedRecord> fetchMarkedRecordsSync() {
+        return MarkedRecord.listAll(MarkedRecord.class);
+    }
+
+    @Override
+    public void addCallers(List<Caller> callers) {
+        Observable.from(callers)
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Func1<Caller, Observable<Caller>>() {
+                    @Override
+                    public Observable<Caller> call(Caller caller) {
+                        return Observable.just(caller);
+                    }
+                })
+                .subscribe(new Action1<Caller>() {
+                    @Override
+                    public void call(Caller caller) {
+                        caller.save();
+                    }
+                });
+    }
+
+    @Override
+    public void addInCallers(List<InCall> inCalls) {
+        Observable.from(inCalls)
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Func1<InCall, Observable<InCall>>() {
+                    @Override
+                    public Observable<InCall> call(InCall inCall) {
+                        return Observable.just(inCall);
+                    }
+                })
+                .subscribe(new Action1<InCall>() {
+                    @Override
+                    public void call(InCall inCall) {
+                        inCall.save();
+                    }
+                });
+    }
+
+    @Override
+    public void addMarkedRecords(List<MarkedRecord> markedRecords) {
+        Observable.from(markedRecords)
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Func1<MarkedRecord, Observable<MarkedRecord>>() {
+                    @Override
+                    public Observable<MarkedRecord> call(MarkedRecord record) {
+                        return Observable.just(record);
+                    }
+                })
+                .subscribe(new Action1<MarkedRecord>() {
+                    @Override
+                    public void call(MarkedRecord record) {
+                        record.save();
+                    }
+                });
+    }
+
 }

@@ -79,7 +79,7 @@ public class PluginService extends Service {
                     ContentValues content = new ContentValues();
                     content.put(CallLog.Calls.NUMBER, mName + " (" + mNumber + ")");
                     getContentResolver().update(CallLog.Calls.CONTENT_URI, content,
-                            CallLog.Calls.NUMBER + "=?", new String[]{mNumber});
+                            CallLog.Calls.NUMBER + "=?", new String[] { mNumber });
                 }
             }, 500);
 
@@ -89,6 +89,16 @@ public class PluginService extends Service {
         public void registerCallback(IPluginServiceCallback callback) throws RemoteException {
             Log.d(TAG, "registerCallback: ");
             mCallback = callback;
+        }
+
+        @Override
+        public void exportSetting(String setting) throws RemoteException {
+
+        }
+
+        @Override
+        public String importSetting() throws RemoteException {
+            return null;
         }
     };
 
