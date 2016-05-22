@@ -59,19 +59,36 @@ public final class Exporter {
         return gson.toJson(data);
     }
 
-    public void fromString(String s) {
-        Data data = gson.fromJson(s, Data.class);
-        for (Map.Entry<String, ?> entry : data.setting.entrySet()) {
-            Object value = entry.getValue();
-            addPref(mPrefs, entry.getKey(), value);
+    public Observable<String> fromString(final String s) {
+        return Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                subscriber.onNext(fromStringSync(s));
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public String fromStringSync(String s) {
+        String res = null;
+        try {
+            Data data = gson.fromJson(s, Data.class);
+            for (Map.Entry<String, ?> entry : data.setting.entrySet()) {
+                Object value = entry.getValue();
+                addPref(mPrefs, entry.getKey(), value);
+            }
+            for (Map.Entry<String, ?> entry : data.window.entrySet()) {
+                Object value = entry.getValue();
+                addPref(mWindowPrefs, entry.getKey(), value);
+            }
+            mDatabase.addCallers(data.callers);
+            mDatabase.addInCallers(data.inCalls);
+            mDatabase.addMarkedRecords(data.markedRecords);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = e.getMessage();
         }
-        for (Map.Entry<String, ?> entry : data.window.entrySet()) {
-            Object value = entry.getValue();
-            addPref(mWindowPrefs, entry.getKey(), value);
-        }
-        mDatabase.addCallers(data.callers);
-        mDatabase.addInCallers(data.inCalls);
-        mDatabase.addMarkedRecords(data.markedRecords);
+        return res;
     }
 
     private void addPref(SharedPreferences prefs, String key, Object value) {

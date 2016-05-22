@@ -177,4 +177,6 @@
     <string name="storage_permission_failed">Plugin has no to writie external storage permission.</string>
     <string name="export_failed">Export failed.\n\n %1$s</string>
     <string name="export_succeed">Exported to file\n\n %1$s</string>
+    <string name="import_failed">Import failed.\n\n %1$s</string>
+    <string name="import_succeed">Import succeed.</string>
 </resources>

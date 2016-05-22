@@ -682,7 +682,33 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     return false;
                 case R.string.import_key:
-
+                    try {
+                        if (mPluginService != null) {
+                            String data = mPluginService.importData();
+                            if (data.contains("Error:")) {
+                                showTextDialog(R.string.import_data,
+                                        getString(R.string.import_failed, data));
+                            } else {
+                                Exporter exporter = new Exporter(getActivity());
+                                exporter.fromString(data).subscribe(new Action1<String>() {
+                                    @Override
+                                    public void call(String s) {
+                                        if (s == null) {
+                                            showTextDialog(R.string.import_data,
+                                                    R.string.import_succeed);
+                                        } else {
+                                            showTextDialog(R.string.import_data,
+                                                    getString(R.string.import_failed, s));
+                                        }
+                                    }
+                                });
+                            }
+                        } else {
+                            Log.e(TAG, "PluginService is stopped!!");
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     return false;
             }
 

@@ -16,6 +16,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -127,7 +128,45 @@ public class PluginService extends Service {
 
         @Override
         public String importData() throws RemoteException {
-            return null;
+            String filename = "CallerInfo.json";
+            File file = new File(Environment.getExternalStorageDirectory(), filename);
+            String res = file.getAbsolutePath();
+            Log.e(TAG, "import from: " + res);
+            if (isExternalStorageWritable()) {
+                if (file.exists()) {
+                    FileInputStream inputStream = null;
+                    try {
+                        inputStream = new FileInputStream(file);
+                        StringBuilder fileContent = new StringBuilder("");
+
+                        byte[] buffer = new byte[1024];
+                        int n;
+
+                        while ((n = inputStream.read(buffer)) != -1) {
+                            fileContent.append(new String(buffer, 0, n));
+                        }
+                        res = fileContent.toString();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        res = "Error: " + e.getMessage();
+                    } finally {
+                        if (inputStream != null) {
+                            try {
+                                inputStream.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                } else {
+                    res = "Error: " + res + " not exist.";
+                }
+
+            } else {
+                Log.e(TAG, "external storage is not mounted!!");
+                res = "Error: external storage is not mounted!!";
+            }
+            return res;
         }
 
         @Override
