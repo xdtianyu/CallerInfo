@@ -184,6 +184,8 @@ public class PluginService extends Service {
                 } else {
                     mCallback.onStoragePermissionResult(true);
                 }
+            } else {
+                mCallback.onStoragePermissionResult(true);
             }
         }
     };
