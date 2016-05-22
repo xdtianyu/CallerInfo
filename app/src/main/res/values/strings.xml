@@ -19,7 +19,6 @@
     <string name="color_report">Reported number</string>
     <string name="about">About</string>
     <string name="author" tools:ignore="UnusedResources">Author</string>
-    <string name="version_key" translatable="false">version</string>
     <string name="version">Version</string>
     <string name="license">License</string>
     <string name="developer">Developer</string>
@@ -40,36 +39,25 @@
     <string name="advanced">Advanced</string>
     <string name="custom_bd_api_key">Custom BAIDU API key</string>
     <string name="custom_jh_api_key">Custom JUHE API key</string>
-    <string name="baidu_api_key" translatable="false">baidu_api_key</string>
     <string name="float_window">Float window</string>
     <string name="window_transparent">Transparency</string>
-    <string name="window_transparent_key" translatable="false">window_transparent_key</string>
     <string name="window_text_size">Font size</string>
-    <string name="window_text_size_key" translatable="false">window_text_size_key</string>
-    <string name="window_close_anim_key" translatable="false">window_close_anim_key</string>
     <string name="window_close_anim">Animation on hide</string>
     <string name="text_size">Drag to change font size.</string>
     <string name="text_transparent">Drag to change transparency.</string>
-    <string name="window_trans_back_only_key" translatable="false">window_trans_back_only_key
-    </string>
     <string name="window_trans_back_only">Transparency only applies for background</string>
     <string name="close_window">Hide float window</string>
     <string name="undo">undo</string>
     <string name="deleted">Deleted</string>
-    <string name="api_type_key" translatable="false">api_type</string>
     <string name="api_type">Data source</string>
     <string name="api_baidu">BAIDU Phone Number Service</string>
     <string name="api_juhe">JUHE Phone Service (360)</string>
-    <string name="juhe_api_key" translatable="false">juhe_api_key</string>
     <string name="ignore_known_contact">Ignore calls from contact list</string>
-    <string name="ignore_known_contact_key" translatable="false">ignore_known_contact_key</string>
     <string name="display_on_outgoing">Show on outgoing calls</string>
-    <string name="display_on_outgoing_key" translatable="false">display_on_outgoing_key</string>
     <string name="fetch">Fetch</string>
     <string name="baidu_api_url" translatable="false">http://apistore.baidu.com/astore/usercenter
     </string>
     <string name="juhe_api_url" translatable="false">https://www.juhe.cn/docs/api/id/72</string>
-    <string name="catch_crash_key" translatable="false">catch_crash_key</string>
     <string name="catch_crash">Report crashes</string>
     <string name="catch_crash_message">This feature allows the app to report technical details to
         the developer after crash. Please notice that it is not necessary to enable this if you
@@ -91,17 +79,9 @@
     </string>
     <string name="customactivityoncrash_error_activity_restart_app">Restart app</string>
     <string name="customactivityoncrash_error_activity_unknown_exception">Unknown exception</string>
-    <string name="advanced_key" translatable="false">advanced_key</string>
-    <string name="about_key" translatable="false">about_key</string>
-    <string name="developer_key" translatable="false">developer_key</string>
-    <string name="show_hidden_setting_key" translatable="false">show_hidden_setting_key</string>
     <string name="show_hidden_toast">Tap %1$s more times to show hidden settings</string>
-    <string name="force_chinese_key" translatable="false">force_chinese_key</string>
     <string name="force_chinese">Use Chinese as app language</string>
     <string name="hide_when_off_hook">Hide after accepting</string>
-    <string name="hide_when_off_hook_key" translatable="false">hide_when_off_hook_key</string>
-    <string name="float_window_key" translatable="false">float_window_key</string>
-    <string name="custom_api_key" translatable="false">custom_api_key</string>
     <string name="custom_api_url" translatable="false">custom_api_url</string>
     <string name="custom_api">Custom API</string>
     <string name="document">Document</string>
@@ -110,26 +90,19 @@
     </string>
     <string name="api_url_hint">API URL</string>
     <string name="api_key_hint">API key</string>
-    <string name="hide_when_touch_key" translatable="false">hide_when_touch_key</string>
     <string name="hide_when_touch">Hide on tap</string>
     <string name="only_offline">Only use offline database</string>
     <string name="contact_offline">Show contact location when offline</string>
-    <string name="contact_offline_key" translatable="false">contact_offline_key</string>
     <string name="online_failed">Online fetch failed</string>
     <string name="offline_failed">Number not found in offline data</string>
     <string name="window_visibility">Show and hide</string>
-    <string name="custom_data_key" translatable="false">custom_data_key</string>
     <string name="custom_data">Custom data source</string>
     <string name="plugin">Plugin</string>
-    <string name="plugin_key" translatable="false">plugin_key</string>
-    <string name="auto_hangup_key" translatable="false">auto_hangup_key</string>
     <string name="auto_hangup">Call block</string>
     <string name="add_call_log">Add number info to call log</string>
-    <string name="add_call_log_key" translatable="false">add_call_log_key</string>
     <string name="plugin_package_name" translatable="false">org.xdty.callerinfo.plugin</string>
     <string name="plugin_not_started">Plugin service not started, please check auto-run permission
     </string>
-    <string name="hangup_keyword_key" translatable="false">hangup_keyword_key</string>
     <string name="hangup_keyword">Call block keywords</string>
     <string name="hangup_keyword_summary">Hangup when caller info contains keyword</string>
     <string name="hangup_keyword_hint">Please split keywords with space</string>
@@ -139,28 +112,22 @@
     <string name="action_clear_history">Clear call log</string>
     <string name="clear_history_message">Clear all call logs?</string>
     <string name="ring_once">Ring once</string>
-    <string name="hangup_geo_keyword_key" translatable="false">hangup_geo_keyword_key</string>
     <string name="hangup_geo_keyword_summary">Hangup when caller geo location contains keyword
     </string>
     <string name="hangup_geo_keyword">Call block geo location keywords</string>
-    <string name="hangup_number_keyword_key" translatable="false">hangup_number_keyword_key</string>
     <string name="hangup_number_keyword_summary">Hangup when caller number start with keywords
     </string>
     <string name="hangup_number_keyword">Call block number start with keywords</string>
     <string name="empty_string" translatable="false"/>
     <string name="baidu_advertising" translatable="false">百度糯米</string>
-    <string name="window_text_alignment_key" translatable="false">window_text_alignment_key</string>
     <string name="window_text_alignment">Window text alignment</string>
     <string name="align_left">Align left</string>
     <string name="align_center">Align center</string>
     <string name="align_right">Align right</string>
-    <string name="window_height_key" translatable="false">window_height_key</string>
     <string name="window_height">Window height</string>
     <string name="window_height_message">Drag to change window height.</string>
     <string name="window_text_style">Text style</string>
-    <string name="window_text_color_key" translatable="false">window_text_color_key</string>
     <string name="window_text_color">Enable text color</string>
-    <string name="ignore_regex_key" translatable="false">ignore_regex_key</string>
     <string name="ignore_regex">Ignore number range</string>
     <string name="ignore_regex_hint">Please split keywords with space</string>
     <string name="example">Example</string>
@@ -168,14 +135,11 @@
         \"1000–19999\", please enter \"1*** 1****\", to match \"550–579\", please enter \"55* 56*
         57*\"
     </string>
-    <string name="window_text_padding_key" translatable="false">window_text_padding_key</string>
     <string name="window_text_padding">Window text padding</string>
     <string name="text_padding">Drag to change text padding.</string>
     <string name="icon">Icon</string>
     <string name="action_bar_up_description">Navigate up</string>
-    <string name="disable_notify_key" translatable="false">disable_notify_key</string>
     <string name="disable_notify">Disable notification</string>
-    <string name="disable_move_key" translatable="false">disable_move_key</string>
     <string name="disable_move">Disable move</string>
     <string name="readable_second">%1$s s</string>
     <string name="readable_minute">%1$s m %2$s s</string>
@@ -183,7 +147,6 @@
     <string name="readable_today">Today</string>
     <string name="readable_yesterday">Yesterday</string>
     <string name="readable_date">MM/dd/yyyy</string>
-    <string name="about_more_key" translatable="false">about_more_key</string>
     <string name="about_more">More</string>
     <string name="privacy_notice">Privacy notice</string>
     <string name="feature_notice">Feature notice</string>
@@ -191,25 +154,24 @@
     <string name="number">Number</string>
     <string name="mark_window">Mark window</string>
     <string name="searching">Searching, please wait a second</string>
-    <string name="mark_key" translatable="false">mark_key</string>
-    <string name="auto_report_key" translatable="false">auto_report_key</string>
     <string name="auto_report">Auto report</string>
     <string name="auto_report_summary">Auto report baidu or 360\'s result.</string>
-    <string name="enable_marking_key" translatable="false">enable_marking_key</string>
     <string name="enable_marking">Enable custom marking</string>
     <string name="enable_marking_summary">Show mark dialog when phone answered and failed to search</string>
     <string name="mark_number">Mark number</string>
-    <string name="padding_mark_numbers_key" translatable="false">padding_mark_numbers_key</string>
     <string name="harassment">Harassment</string>
     <string name="fraud">Fraud</string>
     <string name="advertising">Advertising</string>
     <string name="express_delivery">Express delivery</string>
     <string name="restaurant_deliver">Restaurant deliver</string>
-    <string name="uid_key" translatable="false">uid_key</string>
     <string name="type_harassment" translatable="false">骚扰</string>
     <string name="type_fraud" translatable="false">诈骗|欺诈</string>
     <string name="type_advertising" translatable="false">广告|推销</string>
     <string name="type_express_delivery" translatable="false">快递</string>
     <string name="type_restaurant_deliver" translatable="false">外卖</string>
-    <string name="last_schedule_time_key" translatable="false">last_schedule_time_key</string>
+    <string name="import_summary">Import history data and settings from external storage</string>
+    <string name="import_data">Import data and settings</string>
+    <string name="export_summary">Export history data and settings to external storage</string>
+    <string name="export_data">Export data and settings</string>
+    <string name="plugin_too_old">Feature is not supported by current plugin, please update to the latest.</string>
 </resources>

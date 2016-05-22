@@ -171,8 +171,20 @@ public class SettingsActivity extends AppCompatActivity {
                         R.string.hangup_geo_keyword_summary);
                 bindPreference(R.string.hangup_number_keyword_key,
                         R.string.hangup_number_keyword_summary);
+
+                bindPreference(R.string.import_key);
+                bindPreference(R.string.export_key);
             } else {
                 removePreference(R.string.advanced_key, R.string.plugin_key);
+            }
+
+            if (Utils.getVersionCode(getActivity(), getString(R.string.plugin_package_name)) < 3) {
+                Preference exportPref = findPreference(getString(R.string.export_key));
+                exportPref.setEnabled(false);
+                exportPref.setSummary(R.string.plugin_too_old);
+                Preference importPref = findPreference(getString(R.string.import_key));
+                importPref.setEnabled(false);
+                importPref.setSummary(R.string.plugin_too_old);
             }
         }
 
@@ -573,7 +585,7 @@ public class SettingsActivity extends AppCompatActivity {
                         int res = getActivity().checkSelfPermission(
                                 Manifest.permission.READ_CONTACTS);
                         if (res != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
+                            requestPermissions(new String[] { Manifest.permission.READ_CONTACTS },
                                     REQUEST_CODE_CONTACTS_PERMISSION);
                             return true;
                         }
@@ -585,7 +597,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 Manifest.permission.PROCESS_OUTGOING_CALLS);
                         if (res != PackageManager.PERMISSION_GRANTED) {
                             requestPermissions(
-                                    new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS},
+                                    new String[] { Manifest.permission.PROCESS_OUTGOING_CALLS },
                                     REQUEST_CODE_OUTGOING_PERMISSION);
                             return true;
                         }
@@ -651,6 +663,12 @@ public class SettingsActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT);
                         toast.show();
                     }
+                    return false;
+                case R.string.export_key:
+
+                    return false;
+                case R.string.import_key:
+
                     return false;
             }
 

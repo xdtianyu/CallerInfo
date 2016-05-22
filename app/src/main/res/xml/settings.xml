@@ -195,6 +195,16 @@
                 android:summary="@string/hangup_number_keyword_summary"
                 android:title="@string/hangup_number_keyword">
             </com.jenzz.materialpreference.Preference>
+            <com.jenzz.materialpreference.Preference
+                android:key="@string/import_key"
+                android:summary="@string/import_summary"
+                android:title="@string/import_data">
+            </com.jenzz.materialpreference.Preference>
+            <com.jenzz.materialpreference.Preference
+                android:key="@string/export_key"
+                android:summary="@string/export_summary"
+                android:title="@string/export_data">
+            </com.jenzz.materialpreference.Preference>
         </PreferenceScreen>
         <com.jenzz.materialpreference.SwitchPreference
             android:defaultValue="false"
