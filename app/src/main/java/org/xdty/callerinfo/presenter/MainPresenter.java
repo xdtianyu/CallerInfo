@@ -111,6 +111,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
             return;
         }
 
+        // FIXME: 16-5-22 search failed at first time.
         mDatabase.findCaller(number).subscribe(new Action1<Caller>() {
             @Override
             public void call(Caller caller) {
