@@ -52,6 +52,7 @@
     <string name="api_type">Data source</string>
     <string name="api_baidu">BAIDU Phone Number Service</string>
     <string name="api_juhe">JUHE Phone Service (360)</string>
+    <string name="api_sogou">SOGOU Phone Number Service</string>
     <string name="ignore_known_contact">Ignore calls from contact list</string>
     <string name="display_on_outgoing">Show on outgoing calls</string>
     <string name="fetch">Fetch</string>

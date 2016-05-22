@@ -19,6 +19,7 @@
     <array name="api_type">
         <item>@string/api_baidu</item>
         <item>@string/api_juhe</item>
+        <item>@string/api_sogou</item>
     </array>
     <string-array name="align_type">
         <item>@string/align_left</item>

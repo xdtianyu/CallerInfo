@@ -140,4 +140,5 @@
     <string name="export_succeed">已导出到文件\n\n %1$s</string>
     <string name="import_failed">导入失败 \n\n %1$s</string>
     <string name="import_succeed">导入成功</string>
+    <string name="api_sogou">搜狗号码通服务</string>
 </resources>
