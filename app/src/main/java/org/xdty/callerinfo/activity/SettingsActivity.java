@@ -176,17 +176,18 @@ public class SettingsActivity extends AppCompatActivity {
 
                 bindPreference(R.string.import_key);
                 bindPreference(R.string.export_key);
+
+                if (Utils.getVersionCode(getActivity(), getString(R.string.plugin_package_name))
+                        < 3) {
+                    Preference exportPref = findPreference(getString(R.string.export_key));
+                    exportPref.setEnabled(false);
+                    exportPref.setSummary(R.string.plugin_too_old);
+                    Preference importPref = findPreference(getString(R.string.import_key));
+                    importPref.setEnabled(false);
+                    importPref.setSummary(R.string.plugin_too_old);
+                }
             } else {
                 removePreference(R.string.advanced_key, R.string.plugin_key);
-            }
-
-            if (Utils.getVersionCode(getActivity(), getString(R.string.plugin_package_name)) < 3) {
-                Preference exportPref = findPreference(getString(R.string.export_key));
-                exportPref.setEnabled(false);
-                exportPref.setSummary(R.string.plugin_too_old);
-                Preference importPref = findPreference(getString(R.string.import_key));
-                importPref.setEnabled(false);
-                importPref.setSummary(R.string.plugin_too_old);
             }
         }
 
