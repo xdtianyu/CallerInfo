@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.model.database.Database;
@@ -16,9 +17,14 @@ import org.xdty.callerinfo.model.db.MarkedRecord;
 import java.util.List;
 import java.util.Map;
 
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 public final class Exporter {
 
-    private static Gson gson = new Gson();
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private SharedPreferences mPrefs;
     private SharedPreferences mWindowPrefs;
     private Database mDatabase;
@@ -30,7 +36,17 @@ public final class Exporter {
         mDatabase = DatabaseImpl.getInstance();
     }
 
-    public String export() {
+    public Observable<String> export() {
+        return Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                subscriber.onNext(exportSync());
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public String exportSync() {
         Data data = new Data();
         data.setting = mPrefs.getAll();
         data.window = mWindowPrefs.getAll();

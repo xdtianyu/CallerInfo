@@ -174,4 +174,7 @@
     <string name="export_summary">Export history data and settings to external storage</string>
     <string name="export_data">Export data and settings</string>
     <string name="plugin_too_old">Feature is not supported by current plugin, please update to the latest.</string>
+    <string name="storage_permission_failed">Plugin has no to writie external storage permission.</string>
+    <string name="export_failed">Export failed.\n\n %1$s</string>
+    <string name="export_succeed">Exported to file\n\n %1$s</string>
 </resources>

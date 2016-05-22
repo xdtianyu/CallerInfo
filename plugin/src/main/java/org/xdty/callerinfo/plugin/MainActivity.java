@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
 
     public final static int REQUEST_CODE_CALL_PERMISSION = 2001;
     public final static int REQUEST_CODE_CALL_LOG_PERMISSION = 2002;
+    public final static int REQUEST_CODE_STORAGE_PERMISSION = 2003;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -25,15 +26,19 @@ public class MainActivity extends AppCompatActivity {
             switch (type) {
                 case REQUEST_CODE_CALL_PERMISSION:
                     requestPermissions(
-                            new String[]{Manifest.permission.CALL_PHONE},
+                            new String[] { Manifest.permission.CALL_PHONE },
                             REQUEST_CODE_CALL_PERMISSION);
                     break;
                 case REQUEST_CODE_CALL_LOG_PERMISSION:
                     requestPermissions(
-                            new String[]{Manifest.permission.READ_CALL_LOG,
-                                    Manifest.permission.WRITE_CALL_LOG},
+                            new String[] { Manifest.permission.READ_CALL_LOG,
+                                    Manifest.permission.WRITE_CALL_LOG },
                             REQUEST_CODE_CALL_LOG_PERMISSION);
                     break;
+                case REQUEST_CODE_STORAGE_PERMISSION:
+                    requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                            REQUEST_CODE_STORAGE_PERMISSION);
             }
         }
     }
@@ -50,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
             case REQUEST_CODE_CALL_LOG_PERMISSION:
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "onRequestPermissionsResult: call log " + false);
+                }
+                break;
+            case REQUEST_CODE_STORAGE_PERMISSION:
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "onRequestPermissionsResult: storage " + false);
                 }
                 break;
             default:

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -14,6 +15,9 @@ import android.provider.CallLog;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 public class PluginService extends Service {
@@ -92,13 +96,56 @@ public class PluginService extends Service {
         }
 
         @Override
-        public void exportSetting(String setting) throws RemoteException {
-
+        public String exportData(String data) throws RemoteException {
+            String filename = "CallerInfo.json";
+            File file = new File(Environment.getExternalStorageDirectory(), filename);
+            String res = file.getAbsolutePath();
+            Log.e(TAG, "export to: " + res);
+            if (isExternalStorageWritable()) {
+                FileOutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(file);
+                    outputStream.write(data.getBytes());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    res = "Error: " + e.getMessage();
+                } finally {
+                    if (outputStream != null) {
+                        try {
+                            outputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            } else {
+                Log.e(TAG, "external storage is not mounted!!");
+                res = "Error: external storage is not mounted!!";
+            }
+            return res;
         }
 
         @Override
-        public String importSetting() throws RemoteException {
+        public String importData() throws RemoteException {
             return null;
+        }
+
+        @Override
+        public void checkStoragePermission() throws RemoteException {
+            Log.d(TAG, "checkWritePermission");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                int res = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                int res2 = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+                if (res != PackageManager.PERMISSION_GRANTED ||
+                        res2 != PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(PluginService.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("type", MainActivity.REQUEST_CODE_STORAGE_PERMISSION);
+                    startActivity(intent);
+                } else {
+                    mCallback.onStoragePermissionResult(true);
+                }
+            }
         }
     };
 
@@ -118,6 +165,9 @@ public class PluginService extends Service {
                         break;
                     case MainActivity.REQUEST_CODE_CALL_LOG_PERMISSION:
                         mCallback.onCallLogPermissionResult(result);
+                        break;
+                    case MainActivity.REQUEST_CODE_STORAGE_PERMISSION:
+                        mCallback.onStoragePermissionResult(result);
                         break;
                 }
             } catch (RemoteException e) {
@@ -150,5 +200,16 @@ public class PluginService extends Service {
             return false;
         }
         return true;
+    }
+
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 }

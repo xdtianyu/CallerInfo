@@ -46,6 +46,7 @@ import com.jenzz.materialpreference.SwitchPreference;
 
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.exporter.Exporter;
 import org.xdty.callerinfo.plugin.IPluginService;
 import org.xdty.callerinfo.plugin.IPluginServiceCallback;
 import org.xdty.callerinfo.service.FloatWindow;
@@ -56,6 +57,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
+import rx.functions.Action1;
 
 import static org.xdty.callerinfo.utils.Utils.closeWindow;
 import static org.xdty.callerinfo.utils.Utils.mask;
@@ -434,6 +436,10 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         private void showTextDialog(int title, int text) {
+            showTextDialog(title, getString(text));
+        }
+
+        private void showTextDialog(int title, String text) {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
@@ -441,7 +447,7 @@ public class SettingsActivity extends AppCompatActivity {
             builder.setView(layout);
 
             TextView textView = (TextView) layout.findViewById(R.id.text);
-            textView.setText(getString(text));
+            textView.setText(text);
 
             builder.setPositiveButton(R.string.ok, null);
             builder.show();
@@ -665,7 +671,15 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     return false;
                 case R.string.export_key:
-
+                    try {
+                        if (mPluginService != null) {
+                            mPluginService.checkStoragePermission();
+                        } else {
+                            Log.e(TAG, "PluginService is stopped!!");
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     return false;
                 case R.string.import_key:
 
@@ -780,6 +794,34 @@ public class SettingsActivity extends AppCompatActivity {
                                 setChecked(R.string.add_call_log_key, success);
                             }
                         });
+                    }
+
+                    @Override
+                    public void onStoragePermissionResult(boolean success) throws RemoteException {
+                        Log.d(TAG, "onStoragePermissionResult: " + success);
+                        if (success) {
+                            Exporter exporter = new Exporter(getActivity());
+                            exporter.export().subscribe(new Action1<String>() {
+                                @Override
+                                public void call(String s) {
+                                    try {
+                                        String res = mPluginService.exportData(s);
+                                        if (res.contains("Error")) {
+                                            showTextDialog(R.string.export_data,
+                                                    getString(R.string.export_failed, res));
+                                        } else {
+                                            showTextDialog(R.string.export_data,
+                                                    getString(R.string.export_succeed, res));
+                                        }
+                                    } catch (RemoteException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getActivity(), R.string.storage_permission_failed,
+                                    Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
                 enablePluginPreference();

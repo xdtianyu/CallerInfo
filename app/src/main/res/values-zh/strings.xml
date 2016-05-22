@@ -135,4 +135,7 @@
     <string name="import_data">导入数据和设置</string>
     <string name="import_summary">从外部存储导入历史数据和设置</string>
     <string name="plugin_too_old">当前插件不支持此功能，请更新到最新版本</string>
+    <string name="storage_permission_failed">插件没有写入外部存储的权限</string>
+    <string name="export_failed">导出失败\n\n %1$s</string>
+    <string name="export_succeed">已导出到文件\n\n %1$s</string>
 </resources>
