@@ -103,6 +103,7 @@ public class SettingsActivity extends AppCompatActivity {
         private Point mPoint;
         private HashMap<String, Integer> keyMap = new HashMap<>();
         private HashMap<String, Preference> prefMap = new HashMap<>();
+        private boolean isCheckStorageExport = false;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -706,27 +707,10 @@ public class SettingsActivity extends AppCompatActivity {
         private void onConfirmed(int key) {
             switch (key) {
                 case R.string.import_key:
+                    isCheckStorageExport = false;
                     try {
                         if (mPluginService != null) {
-                            String data = mPluginService.importData();
-                            if (data.contains("Error:")) {
-                                showTextDialog(R.string.import_data,
-                                        getString(R.string.import_failed, data));
-                            } else {
-                                Exporter exporter = new Exporter(getActivity());
-                                exporter.fromString(data).subscribe(new Action1<String>() {
-                                    @Override
-                                    public void call(String s) {
-                                        if (s == null) {
-                                            showTextDialog(R.string.import_data,
-                                                    R.string.import_succeed);
-                                        } else {
-                                            showTextDialog(R.string.import_data,
-                                                    getString(R.string.import_failed, s));
-                                        }
-                                    }
-                                });
-                            }
+                            mPluginService.checkStoragePermission();
                         } else {
                             Log.e(TAG, "PluginService is stopped!!");
                         }
@@ -735,6 +719,7 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     break;
                 case R.string.export_key:
+                    isCheckStorageExport = true;
                     try {
                         if (mPluginService != null) {
                             mPluginService.checkStoragePermission();
@@ -746,6 +731,57 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     break;
             }
+        }
+
+        private void importData() {
+            try {
+                if (mPluginService != null) {
+                    String data = mPluginService.importData();
+                    if (data.contains("Error:")) {
+                        showTextDialog(R.string.import_data,
+                                getString(R.string.import_failed, data));
+                    } else {
+                        Exporter exporter = new Exporter(getActivity());
+                        exporter.fromString(data).subscribe(new Action1<String>() {
+                            @Override
+                            public void call(String s) {
+                                if (s == null) {
+                                    showTextDialog(R.string.import_data,
+                                            R.string.import_succeed);
+                                } else {
+                                    showTextDialog(R.string.import_data,
+                                            getString(R.string.import_failed, s));
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    Log.e(TAG, "PluginService is stopped!!");
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void exportData() {
+            Exporter exporter = new Exporter(getActivity());
+            exporter.export().subscribe(new Action1<String>() {
+                @Override
+                public void call(String s) {
+                    try {
+                        String res = mPluginService.exportData(s);
+                        if (res.contains("Error")) {
+                            showTextDialog(R.string.export_data,
+                                    getString(R.string.export_failed, res));
+                        } else {
+                            showTextDialog(R.string.export_data,
+                                    getString(R.string.export_succeed, res));
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
 
         private void bindPreference(int keyId) {
@@ -859,24 +895,11 @@ public class SettingsActivity extends AppCompatActivity {
                     public void onStoragePermissionResult(boolean success) throws RemoteException {
                         Log.d(TAG, "onStoragePermissionResult: " + success);
                         if (success) {
-                            Exporter exporter = new Exporter(getActivity());
-                            exporter.export().subscribe(new Action1<String>() {
-                                @Override
-                                public void call(String s) {
-                                    try {
-                                        String res = mPluginService.exportData(s);
-                                        if (res.contains("Error")) {
-                                            showTextDialog(R.string.export_data,
-                                                    getString(R.string.export_failed, res));
-                                        } else {
-                                            showTextDialog(R.string.export_data,
-                                                    getString(R.string.export_succeed, res));
-                                        }
-                                    } catch (RemoteException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
+                            if (isCheckStorageExport) {
+                                exportData();
+                            } else {
+                                importData();
+                            }
                         } else {
                             Toast.makeText(getActivity(), R.string.storage_permission_failed,
                                     Toast.LENGTH_LONG).show();
