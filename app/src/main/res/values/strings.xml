@@ -180,4 +180,6 @@
     <string name="export_succeed">Exported to file\n\n %1$s</string>
     <string name="import_failed">Import failed.\n\n %1$s</string>
     <string name="import_succeed">Import succeed.</string>
+    <string name="export_confirm">Export history data and settings to file, this operation will overwrite old CallerInfo.json file.</string>
+    <string name="import_confirm">Import history data and settings from CallerInfo.json, this operation will overwrite current settings and add history records to main list.</string>
 </resources>

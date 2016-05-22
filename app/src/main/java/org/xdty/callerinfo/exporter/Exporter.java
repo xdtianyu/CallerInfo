@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.xdty.callerinfo.BuildConfig;
+import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.Caller;
@@ -28,12 +29,14 @@ public final class Exporter {
     private SharedPreferences mPrefs;
     private SharedPreferences mWindowPrefs;
     private Database mDatabase;
+    private String uidKey;
 
     public Exporter(Context context) {
         context = context.getApplicationContext();
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         mWindowPrefs = context.getSharedPreferences("window", Context.MODE_PRIVATE);
         mDatabase = DatabaseImpl.getInstance();
+        uidKey = context.getString(R.string.uid_key);
     }
 
     public Observable<String> export() {
@@ -92,6 +95,11 @@ public final class Exporter {
     }
 
     private void addPref(SharedPreferences prefs, String key, Object value) {
+        // ignore uid
+        if (key.equals(uidKey)) {
+            return;
+        }
+
         if (value instanceof String) {
             prefs.edit().putString(key, (String) value).apply();
         } else if (value instanceof Integer) {

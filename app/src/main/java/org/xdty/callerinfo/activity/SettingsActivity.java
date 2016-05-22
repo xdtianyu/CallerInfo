@@ -454,6 +454,25 @@ public class SettingsActivity extends AppCompatActivity {
             builder.show();
         }
 
+        private void showConfirmDialog(int title, int text, final int key) {
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(title));
+            View layout = View.inflate(getActivity(), R.layout.dialog_text, null);
+            builder.setView(layout);
+
+            TextView textView = (TextView) layout.findViewById(R.id.text);
+            textView.setText(getString(text));
+            builder.setNegativeButton(R.string.cancel, null);
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    onConfirmed(key);
+                }
+            });
+            builder.show();
+        }
+
         private void showCustomApiDialog() {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(R.string.custom_api));
@@ -672,16 +691,20 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     return false;
                 case R.string.export_key:
-                    try {
-                        if (mPluginService != null) {
-                            mPluginService.checkStoragePermission();
-                        } else {
-                            Log.e(TAG, "PluginService is stopped!!");
-                        }
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
+                    showConfirmDialog(R.string.export_data, R.string.export_confirm,
+                            R.string.export_key);
                     return false;
+                case R.string.import_key:
+                    showConfirmDialog(R.string.import_data, R.string.import_confirm,
+                            R.string.import_key);
+                    return false;
+            }
+
+            return true;
+        }
+
+        private void onConfirmed(int key) {
+            switch (key) {
                 case R.string.import_key:
                     try {
                         if (mPluginService != null) {
@@ -710,10 +733,19 @@ public class SettingsActivity extends AppCompatActivity {
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
-                    return false;
+                    break;
+                case R.string.export_key:
+                    try {
+                        if (mPluginService != null) {
+                            mPluginService.checkStoragePermission();
+                        } else {
+                            Log.e(TAG, "PluginService is stopped!!");
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
-
-            return true;
         }
 
         private void bindPreference(int keyId) {
