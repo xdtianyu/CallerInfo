@@ -154,13 +154,13 @@
             android:layout="@layout/preference"
             android:title="@string/mark">
             <com.jenzz.materialpreference.SwitchPreference
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:key="@string/auto_report_key"
                 android:summary="@string/auto_report_summary"
                 android:title="@string/auto_report">
             </com.jenzz.materialpreference.SwitchPreference>
             <com.jenzz.materialpreference.SwitchPreference
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:key="@string/enable_marking_key"
                 android:summary="@string/enable_marking_summary"
                 android:title="@string/enable_marking">

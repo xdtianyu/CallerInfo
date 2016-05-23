@@ -131,6 +131,8 @@ public class SettingsActivity extends AppCompatActivity {
             bindPreference(R.string.catch_crash_key);
             bindPreference(R.string.ignore_regex_key, false);
             bindPreference(R.string.custom_api_url);
+            bindPreference(R.string.auto_report_key);
+            bindPreference(R.string.enable_marking_key);
 
             bindVersionPreference();
             bindPluginPreference();
@@ -464,7 +466,12 @@ public class SettingsActivity extends AppCompatActivity {
 
             TextView textView = (TextView) layout.findViewById(R.id.text);
             textView.setText(getString(text));
-            builder.setNegativeButton(R.string.cancel, null);
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    onConfirmCanceled(key);
+                }
+            });
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -699,6 +706,18 @@ public class SettingsActivity extends AppCompatActivity {
                     showConfirmDialog(R.string.import_data, R.string.import_confirm,
                             R.string.import_key);
                     return false;
+                case R.string.auto_report_key:
+                    if (sharedPrefs.getBoolean(getString(R.string.auto_report_key), false)) {
+                        showConfirmDialog(R.string.auto_report, R.string.auto_report_confirm,
+                                R.string.auto_report_key);
+                    }
+                    return false;
+                case R.string.enable_marking_key:
+                    if (sharedPrefs.getBoolean(getString(R.string.enable_marking_key), false)) {
+                        showConfirmDialog(R.string.enable_marking, R.string.mark_confirm,
+                                R.string.enable_marking_key);
+                    }
+                    return false;
             }
 
             return true;
@@ -729,6 +748,19 @@ public class SettingsActivity extends AppCompatActivity {
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
+                    break;
+            }
+        }
+
+        private void onConfirmCanceled(int key) {
+            switch (key) {
+                case R.string.auto_report_key:
+                    ((SwitchPreference) findPreference(
+                            getString(R.string.auto_report_key))).setChecked(false);
+                    break;
+                case R.string.enable_marking_key:
+                    ((SwitchPreference) findPreference(
+                            getString(R.string.enable_marking_key))).setChecked(false);
                     break;
             }
         }
