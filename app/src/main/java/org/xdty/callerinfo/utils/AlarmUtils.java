@@ -20,6 +20,10 @@ public class AlarmUtils {
 
     public static void alarm() {
         Log.v(TAG, "alarm");
+        if (sContext == null) {
+            Log.v(TAG, "alarm is not installed");
+            return;
+        }
         Intent intent = new Intent(sContext, ScheduleService.class);
         PendingIntent pIntent = PendingIntent.getService(sContext, 0, intent, 0);
         AlarmManager alarm = (AlarmManager) sContext.getSystemService(Context.ALARM_SERVICE);
