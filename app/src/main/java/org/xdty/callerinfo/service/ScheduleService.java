@@ -74,15 +74,18 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
 
         // 1. upload marked number
         List<MarkedRecord> records = MarkedRecord.listAll(MarkedRecord.class);
+        boolean isAutoReport = mSetting.isAutoReportEnabled();
 
         for (MarkedRecord record : records) {
             if (!record.isReported()) {
+                if (!isAutoReport && record.getSource() != MarkedRecord.API_ID_USER_MARKED) {
+                    continue;
+                }
                 mPhoneNumber.put(record.toNumber());
             }
         }
 
         // 2. check offline marked number data
-
 
         // 3. check app update
 

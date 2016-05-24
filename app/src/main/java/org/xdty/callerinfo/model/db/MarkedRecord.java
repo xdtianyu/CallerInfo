@@ -14,7 +14,7 @@ import rx.functions.Action1;
 
 public class MarkedRecord extends SugarRecord {
     @Ignore
-    private final static int API_ID_USER_MARKED = 8;
+    public final static int API_ID_USER_MARKED = 8;
     private String uid;
     @Unique
     private String number;
