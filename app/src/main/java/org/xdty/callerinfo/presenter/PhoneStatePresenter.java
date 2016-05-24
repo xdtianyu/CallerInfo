@@ -394,7 +394,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     }
 
     private void reportFetchedNumber() {
-
+        // Currently do noting, let the alarm handle marked number.
     }
 
     @Override
