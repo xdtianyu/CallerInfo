@@ -38,7 +38,6 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
 
         HandlerThread handlerThread = new HandlerThread(TAG);
         handlerThread.start();
-        PhoneNumber.init(this);
         mThreadHandler = new Handler(handlerThread.getLooper());
         mMainHandler = new Handler(getMainLooper());
         mDatabase = DatabaseImpl.getInstance();

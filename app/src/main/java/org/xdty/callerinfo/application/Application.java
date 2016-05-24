@@ -5,6 +5,7 @@ import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.utils.AlarmUtils;
 import org.xdty.callerinfo.utils.Utils;
+import org.xdty.phone.number.PhoneNumber;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 
@@ -15,6 +16,7 @@ public class Application extends com.orm.SugarApp {
     public void onCreate() {
         super.onCreate();
         SettingImpl.init(this);
+        PhoneNumber.init(this);
         Utils.checkLocale(getApplicationContext());
         Setting setting = SettingImpl.getInstance();
 

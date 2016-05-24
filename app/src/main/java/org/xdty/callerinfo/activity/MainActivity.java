@@ -40,7 +40,6 @@ import org.xdty.callerinfo.presenter.MainPresenter;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.view.CallerAdapter;
-import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 
 import java.util.ArrayList;
@@ -68,9 +67,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
         Setting setting = SettingImpl.getInstance();
         Permission permission = new PermissionImpl(this);
-        PhoneNumber phoneNumber = new PhoneNumber(this);
 
-        mPresenter = new MainPresenter(this, setting, permission, phoneNumber);
+        mPresenter = new MainPresenter(this, setting, permission);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);

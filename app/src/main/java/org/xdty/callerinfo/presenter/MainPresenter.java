@@ -32,12 +32,11 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     private PhoneNumber mPhoneNumber;
     private Database mDatabase;
 
-    public MainPresenter(MainContract.View view, Setting setting, Permission permission,
-            PhoneNumber phoneNumber) {
+    public MainPresenter(MainContract.View view, Setting setting, Permission permission) {
         mView = view;
         mSetting = setting;
         mPermission = permission;
-        mPhoneNumber = phoneNumber;
+        mPhoneNumber = PhoneNumber.getInstance();
     }
 
     @Override
@@ -113,7 +112,6 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
             return;
         }
 
-        // FIXME: 16-5-22 search failed at first time.
         mDatabase.findCaller(number).subscribe(new Action1<Caller>() {
             @Override
             public void call(Caller caller) {
@@ -166,7 +164,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
 
     @Override
     public void start() {
-        mPhoneNumber.setCallback(this);
+        mPhoneNumber.addCallback(this);
         mDatabase = DatabaseImpl.getInstance();
         loadCallerMap();
     }
@@ -190,7 +188,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
 
     @Override
     public void clearSearch() {
-        mPhoneNumber.clear();
+        mPhoneNumber.removeCallback(this);
     }
 
     @Override
