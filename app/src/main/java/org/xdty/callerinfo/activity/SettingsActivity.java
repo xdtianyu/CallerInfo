@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -251,7 +252,24 @@ public class SettingsActivity extends AppCompatActivity {
 
             AppBarLayout appBarLayout;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            if (Build.VERSION.RELEASE.equals("N")) {
+                ListView listView = (ListView) dialog.findViewById(android.R.id.list);
+                FrameLayout root = (FrameLayout) listView.getParent();
+
+                appBarLayout = (AppBarLayout) LayoutInflater.from(getActivity()).inflate(
+                        R.layout.settings_toolbar, root, false);
+
+                int height;
+                TypedValue tv = new TypedValue();
+                if (getActivity().getTheme().resolveAttribute(R.attr.actionBarSize, tv, true)) {
+                    height = TypedValue.complexToDimensionPixelSize(tv.data,
+                            getResources().getDisplayMetrics());
+                } else {
+                    height = appBarLayout.getHeight();
+                }
+                listView.setPadding(0, height, 0, 0);
+                root.addView(appBarLayout, 0);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 LinearLayout root =
                         (LinearLayout) dialog.findViewById(android.R.id.list).getParent();
                 appBarLayout = (AppBarLayout) LayoutInflater.from(getActivity()).inflate(
