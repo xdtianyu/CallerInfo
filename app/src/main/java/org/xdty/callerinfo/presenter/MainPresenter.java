@@ -25,6 +25,7 @@ import rx.functions.Action1;
 public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callback {
 
     private final List<InCall> mInCallList = new ArrayList<>();
+    private final Map<Integer, InCall> mPaddingRemoveMap = new HashMap<>();
     private MainContract.View mView;
     private Setting mSetting;
     private Permission mPermission;
@@ -46,11 +47,10 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
 
     @Override
     public void loadInCallList() {
-        mInCallList.clear();
-
         mDatabase.fetchInCalls().subscribe(new Action1<List<InCall>>() {
             @Override
             public void call(List<InCall> inCalls) {
+                mInCallList.clear();
                 mInCallList.addAll(inCalls);
 
                 mView.showCallLogs(mInCallList);
@@ -91,13 +91,15 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
 
     @Override
     public void removeInCallFromList(int position) {
+        mPaddingRemoveMap.put(position, mInCallList.get(position));
         mInCallList.remove(position);
     }
 
     @Override
     public void removeInCall(int position) {
-        InCall inCall = mInCallList.get(position);
+        InCall inCall = mPaddingRemoveMap.get(position);
         mDatabase.removeInCall(inCall);
+        mPaddingRemoveMap.remove(position);
     }
 
     @Override
