@@ -53,14 +53,17 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
-    public void clearAllInCalls(List<InCall> inCallList) {
-        Observable.from(inCallList).observeOn(Schedulers.io()).subscribe(
-                new Action1<InCall>() {
-                    @Override
-                    public void call(InCall inCall) {
-                        inCall.delete();
-                    }
-                });
+    public Observable<Void> clearAllInCalls(final List<InCall> inCallList) {
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                for (InCall inCall : inCallList) {
+                    inCall.delete();
+                }
+                subscriber.onNext(null);
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override

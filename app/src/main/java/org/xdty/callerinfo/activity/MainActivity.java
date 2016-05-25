@@ -326,7 +326,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mPresenter.clearAll();
-                        mPresenter.loadInCallList();
                     }
                 });
         builder.setNegativeButton(getString(R.string.cancel), null);

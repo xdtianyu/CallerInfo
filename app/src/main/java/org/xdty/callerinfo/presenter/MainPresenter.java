@@ -103,7 +103,12 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
 
     @Override
     public void clearAll() {
-        mDatabase.clearAllInCalls(mInCallList);
+        mDatabase.clearAllInCalls(mInCallList).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                loadInCallList();
+            }
+        });
     }
 
     @Override

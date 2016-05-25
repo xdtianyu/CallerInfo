@@ -14,7 +14,7 @@ public interface Database {
 
     Observable<List<Caller>> fetchCallers();
 
-    void clearAllInCalls(List<InCall> inCallList);
+    Observable<Void> clearAllInCalls(List<InCall> inCallList);
 
     void removeInCall(InCall inCall);
 
