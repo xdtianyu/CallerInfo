@@ -25,7 +25,6 @@ import rx.functions.Action1;
 public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callback {
 
     private final List<InCall> mInCallList = new ArrayList<>();
-    private final Map<Integer, InCall> mPaddingRemoveMap = new HashMap<>();
     private MainContract.View mView;
     private Setting mSetting;
     private Permission mPermission;
