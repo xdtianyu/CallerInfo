@@ -42,7 +42,6 @@ import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.view.CallerAdapter;
 import org.xdty.phone.number.model.INumber;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -85,7 +84,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mCallerAdapter = new CallerAdapter(this, new ArrayList<InCall>());
+        mCallerAdapter = new CallerAdapter(this);
         mRecyclerView.setAdapter(mCallerAdapter);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -113,8 +112,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                final int position = viewHolder.getAdapterPosition();
-                mPresenter.removeInCallFromList(position);
+                final InCall inCall = mCallerAdapter.getItem(viewHolder.getAdapterPosition());
+                mPresenter.removeInCallFromList(inCall);
                 mCallerAdapter.notifyDataSetChanged();
                 final Snackbar snackbar = Snackbar.make(mToolbar, R.string.deleted,
                         Snackbar.LENGTH_LONG);
@@ -134,7 +133,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                             case DISMISS_EVENT_ACTION:
                                 break;
                             default:
-                                mPresenter.removeInCall(position);
+                                mPresenter.removeInCall(inCall);
                                 break;
                         }
                         super.onDismissed(snackbar, event);

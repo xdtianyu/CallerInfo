@@ -89,16 +89,13 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     }
 
     @Override
-    public void removeInCallFromList(int position) {
-        mPaddingRemoveMap.put(position, mInCallList.get(position));
-        mInCallList.remove(position);
+    public void removeInCallFromList(InCall inCall) {
+        mInCallList.remove(inCall);
     }
 
     @Override
-    public void removeInCall(int position) {
-        InCall inCall = mPaddingRemoveMap.get(position);
+    public void removeInCall(InCall inCall) {
         mDatabase.removeInCall(inCall);
-        mPaddingRemoveMap.remove(position);
     }
 
     @Override

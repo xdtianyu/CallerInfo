@@ -41,9 +41,9 @@ public interface MainContract {
 
         void loadCallerMap();
 
-        void removeInCallFromList(int position);
+        void removeInCallFromList(InCall inCall);
 
-        void removeInCall(int position);
+        void removeInCall(InCall inCall);
 
         void clearAll();
 

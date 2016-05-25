@@ -27,6 +27,7 @@ import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,13 +42,13 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
     private Database mDatabase;
     private Setting mSetting;
 
-    public CallerAdapter(Context context, List<InCall> list) {
+    public CallerAdapter(Context context) {
         mContext = context;
         mPermission = new PermissionImpl(mContext.getApplicationContext());
         mDatabase = DatabaseImpl.getInstance();
         mSetting = SettingImpl.getInstance();
         mCallerMap = new HashMap<>();
-        mList = list;
+        mList = new ArrayList<>();
     }
 
     @Override
@@ -87,6 +88,10 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
     public void replaceData(List<InCall> inCalls) {
         mList = inCalls;
         notifyDataSetChanged();
+    }
+
+    public InCall getItem(int position) {
+        return mList.get(position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
