@@ -20,19 +20,18 @@ public class SettingImpl implements Setting {
 
     private static Gson gson = new Gson();
     private static Setting sSetting;
+    private static Context sContext;
     private final int mScreenWidth;
     private final int mScreenHeight;
     private SharedPreferences mPrefs;
     private SharedPreferences mWindowPrefs;
-    private Context mContext;
 
-    private SettingImpl(Context context) {
-        mContext = context.getApplicationContext();
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        mWindowPrefs = mContext.getSharedPreferences("window", Context.MODE_PRIVATE);
+    private SettingImpl() {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(sContext);
+        mWindowPrefs = sContext.getSharedPreferences("window", Context.MODE_PRIVATE);
 
         WindowManager mWindowManager =
-                (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+                (WindowManager) sContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = mWindowManager.getDefaultDisplay();
         Point point = new Point();
         display.getSize(point);
@@ -41,16 +40,14 @@ public class SettingImpl implements Setting {
     }
 
     public static void init(Context context) {
-        if (sSetting == null) {
-            sSetting = new SettingImpl(context.getApplicationContext());
-        }
+        sContext = context.getApplicationContext();
     }
 
     public static Setting getInstance() {
-        if (sSetting == null) {
+        if (sContext == null) {
             throw new IllegalStateException("Setting is not initialized!");
         }
-        return sSetting;
+        return SingletonHelper.INSTANCE;
     }
 
     @Override
@@ -70,7 +67,7 @@ public class SettingImpl implements Setting {
 
     @Override
     public int getWindowHeight() {
-        return mPrefs.getInt(mContext.getString(R.string.window_height_key), getDefaultHeight());
+        return mPrefs.getInt(sContext.getString(R.string.window_height_key), getDefaultHeight());
     }
 
     @Override
@@ -80,57 +77,57 @@ public class SettingImpl implements Setting {
 
     @Override
     public boolean isShowCloseAnim() {
-        return mPrefs.getBoolean(mContext.getString(R.string.window_close_anim_key), true);
+        return mPrefs.getBoolean(sContext.getString(R.string.window_close_anim_key), true);
     }
 
     @Override
     public boolean isTransBackOnly() {
-        return mPrefs.getBoolean(mContext.getString(R.string.window_trans_back_only_key), true);
+        return mPrefs.getBoolean(sContext.getString(R.string.window_trans_back_only_key), true);
     }
 
     @Override
     public boolean isEnableTextColor() {
-        return mPrefs.getBoolean(mContext.getString(R.string.window_text_color_key), false);
+        return mPrefs.getBoolean(sContext.getString(R.string.window_text_color_key), false);
     }
 
     @Override
     public int getTextPadding() {
-        return mPrefs.getInt(mContext.getString(R.string.window_text_padding_key), 0);
+        return mPrefs.getInt(sContext.getString(R.string.window_text_padding_key), 0);
     }
 
     @Override
     public int getTextAlignment() {
-        return mPrefs.getInt(mContext.getString(R.string.window_text_alignment_key), 1);
+        return mPrefs.getInt(sContext.getString(R.string.window_text_alignment_key), 1);
     }
 
     @Override
     public int getTextSize() {
-        return mPrefs.getInt(mContext.getString(R.string.window_text_size_key), 20);
+        return mPrefs.getInt(sContext.getString(R.string.window_text_size_key), 20);
     }
 
     @Override
     public int getWindowTransparent() {
-        return mPrefs.getInt(mContext.getString(R.string.window_transparent_key), 80);
+        return mPrefs.getInt(sContext.getString(R.string.window_transparent_key), 80);
     }
 
     @Override
     public boolean isDisableMove() {
-        return mPrefs.getBoolean(mContext.getString(R.string.disable_move_key), false);
+        return mPrefs.getBoolean(sContext.getString(R.string.disable_move_key), false);
     }
 
     @Override
     public boolean isAutoReportEnabled() {
-        return mPrefs.getBoolean(mContext.getString(R.string.auto_report_key), true);
+        return mPrefs.getBoolean(sContext.getString(R.string.auto_report_key), true);
     }
 
     @Override
     public boolean isMarkingEnabled() {
-        return mPrefs.getBoolean(mContext.getString(R.string.enable_marking_key), true);
+        return mPrefs.getBoolean(sContext.getString(R.string.enable_marking_key), true);
     }
 
     @Override
     public void addPaddingMark(String number) {
-        String key = mContext.getString(R.string.padding_mark_numbers_key);
+        String key = sContext.getString(R.string.padding_mark_numbers_key);
         ArrayList<String> list = getPaddingMarks();
         if (list.contains(number)) {
             return;
@@ -142,7 +139,7 @@ public class SettingImpl implements Setting {
 
     @Override
     public void removePaddingMark(String number) {
-        String key = mContext.getString(R.string.padding_mark_numbers_key);
+        String key = sContext.getString(R.string.padding_mark_numbers_key);
         ArrayList<String> list = getPaddingMarks();
         if (!list.contains(number)) {
             return;
@@ -154,7 +151,7 @@ public class SettingImpl implements Setting {
 
     @Override
     public ArrayList<String> getPaddingMarks() {
-        String key = mContext.getString(R.string.padding_mark_numbers_key);
+        String key = sContext.getString(R.string.padding_mark_numbers_key);
         if (mPrefs.contains(key)) {
             String paddingNumbers = mPrefs.getString(key, null);
             return new ArrayList<>(
@@ -166,11 +163,11 @@ public class SettingImpl implements Setting {
 
     @Override
     public String getUid() {
-        String key = mContext.getString(R.string.uid_key);
+        String key = sContext.getString(R.string.uid_key);
         if (mPrefs.contains(key)) {
             return mPrefs.getString(key, "");
         } else {
-            String uid = Utils.getDeviceId(mContext);
+            String uid = Utils.getDeviceId(sContext);
             mPrefs.edit().putString(key, uid).apply();
             return uid;
         }
@@ -178,7 +175,7 @@ public class SettingImpl implements Setting {
 
     @Override
     public int getTypeFromName(String name) {
-        return Utils.typeFromString(mContext, name);
+        return Utils.typeFromString(sContext, name);
     }
 
     @Override
@@ -189,18 +186,18 @@ public class SettingImpl implements Setting {
     @Override
     public void updateLastScheduleTime(long timestamp) {
         mPrefs.edit()
-                .putLong(mContext.getString(R.string.last_schedule_time_key), timestamp)
+                .putLong(sContext.getString(R.string.last_schedule_time_key), timestamp)
                 .apply();
     }
 
     @Override
     public long lastScheduleTime() {
-        return mPrefs.getLong(mContext.getString(R.string.last_schedule_time_key), 0);
+        return mPrefs.getLong(sContext.getString(R.string.last_schedule_time_key), 0);
     }
 
     @Override
     public boolean isHidingWhenTouch() {
-        return mPrefs.getBoolean(mContext.getString(R.string.hide_when_touch_key), false);
+        return mPrefs.getBoolean(sContext.getString(R.string.hide_when_touch_key), false);
     }
 
     @Override
@@ -214,54 +211,54 @@ public class SettingImpl implements Setting {
 
     @Override
     public String getIgnoreRegex() {
-        return mPrefs.getString(mContext.getString(R.string.ignore_regex_key), "").replace("*",
+        return mPrefs.getString(sContext.getString(R.string.ignore_regex_key), "").replace("*",
                 "[0-9]").replace(" ", "|");
     }
 
     @Override
     public boolean isHidingOffHook() {
-        return mPrefs.getBoolean(mContext.getString(R.string.hide_when_off_hook_key), false);
+        return mPrefs.getBoolean(sContext.getString(R.string.hide_when_off_hook_key), false);
     }
 
     @Override
     public boolean isShowingOnOutgoing() {
-        return mPrefs.getBoolean(mContext.getString(R.string.display_on_outgoing_key), false);
+        return mPrefs.getBoolean(sContext.getString(R.string.display_on_outgoing_key), false);
     }
 
     @Override
     public boolean isIgnoreKnownContact() {
-        return mPrefs.getBoolean(mContext.getString(R.string.ignore_known_contact_key), false);
+        return mPrefs.getBoolean(sContext.getString(R.string.ignore_known_contact_key), false);
     }
 
     @Override
     public boolean isShowingContactOffline() {
-        return mPrefs.getBoolean(mContext.getString(R.string.contact_offline_key), false);
+        return mPrefs.getBoolean(sContext.getString(R.string.contact_offline_key), false);
     }
 
     @Override
     public boolean isAutoHangup() {
-        return mPrefs.getBoolean(mContext.getString(R.string.auto_hangup_key), false);
+        return mPrefs.getBoolean(sContext.getString(R.string.auto_hangup_key), false);
     }
 
     @Override
     public boolean isAddingCallLog() {
-        return mPrefs.getBoolean(mContext.getString(R.string.add_call_log_key), false);
+        return mPrefs.getBoolean(sContext.getString(R.string.add_call_log_key), false);
     }
 
     @Override
     public boolean isCatchCrash() {
-        return mPrefs.getBoolean(mContext.getString(R.string.catch_crash_key), false);
+        return mPrefs.getBoolean(sContext.getString(R.string.catch_crash_key), false);
     }
 
     @Override
     public boolean isForceChinese() {
-        return mPrefs.getBoolean(mContext.getString(R.string.force_chinese_key), false);
+        return mPrefs.getBoolean(sContext.getString(R.string.force_chinese_key), false);
     }
 
     @Override
     public String getKeywords() {
-        String keywordKey = mContext.getString(R.string.hangup_keyword_key);
-        String keywordDefault = mContext.getString(R.string.hangup_keyword_default);
+        String keywordKey = sContext.getString(R.string.hangup_keyword_key);
+        String keywordDefault = sContext.getString(R.string.hangup_keyword_default);
         String keywords = mPrefs.getString(keywordKey, keywordDefault).trim();
         if (keywords.isEmpty()) {
             keywords = keywordDefault;
@@ -271,12 +268,12 @@ public class SettingImpl implements Setting {
 
     @Override
     public String getGeoKeyword() {
-        return mPrefs.getString(mContext.getString(R.string.hangup_geo_keyword_key), "").trim();
+        return mPrefs.getString(sContext.getString(R.string.hangup_geo_keyword_key), "").trim();
     }
 
     @Override
     public String getNumberKeyword() {
-        return mPrefs.getString(mContext.getString(R.string.hangup_number_keyword_key), "").trim();
+        return mPrefs.getString(sContext.getString(R.string.hangup_number_keyword_key), "").trim();
     }
 
     @Override
@@ -295,5 +292,9 @@ public class SettingImpl implements Setting {
         editor.putInt("x", x);
         editor.putInt("y", y);
         editor.apply();
+    }
+
+    private static class SingletonHelper {
+        private final static SettingImpl INSTANCE = new SettingImpl();
     }
 }

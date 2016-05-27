@@ -17,17 +17,12 @@ import rx.schedulers.Schedulers;
 
 public class DatabaseImpl implements Database {
 
-    private static DatabaseImpl sDatabase;
-
     private DatabaseImpl() {
 
     }
 
     public static DatabaseImpl getInstance() {
-        if (sDatabase == null) {
-            sDatabase = new DatabaseImpl();
-        }
-        return sDatabase;
+        return SingletonHelper.INSTANCE;
     }
 
     @Override
@@ -273,6 +268,10 @@ public class DatabaseImpl implements Database {
                         record.save();
                     }
                 });
+    }
+
+    private static class SingletonHelper {
+        private final static DatabaseImpl INSTANCE = new DatabaseImpl();
     }
 
 }
