@@ -26,7 +26,6 @@ import wei.mark.standout.StandOutWindow;
 public class IncomingCall extends BroadcastReceiver {
 
     private final static String TAG = IncomingCall.class.getSimpleName();
-    private static IncomingCallListener sIncomingCallListener;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -35,15 +34,8 @@ public class IncomingCall extends BroadcastReceiver {
                     Utils.bundleToString(intent.getExtras()));
         }
 
-        if (sIncomingCallListener == null) {
-            sIncomingCallListener = IncomingCallListener.getInstance(context);
-            TelephonyManager telephonyManager = (TelephonyManager) context
-                    .getSystemService(Context.TELEPHONY_SERVICE);
-            telephonyManager.listen(sIncomingCallListener, PhoneStateListener.LISTEN_CALL_STATE);
-        }
-
         if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
-            sIncomingCallListener.setOutGoingNumber(
+            IncomingCallListener.getInstance().setOutGoingNumber(
                     intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER));
         }
     }
@@ -51,8 +43,7 @@ public class IncomingCall extends BroadcastReceiver {
     public static class IncomingCallListener extends PhoneStateListener implements
             PhoneStateContract.View {
 
-        private static IncomingCallListener sIncomingCallListener;
-        private final Context mContext;
+        private static Context sContext;
         private boolean isShowing = false;
 
         private Setting mSetting;
@@ -60,21 +51,25 @@ public class IncomingCall extends BroadcastReceiver {
         private CallRecord mCallRecord;
         private PhoneStateContract.Presenter mPresenter;
 
-        private IncomingCallListener(Context context) {
-            mContext = context;
+        private IncomingCallListener() {
             mSetting = SettingImpl.getInstance();
-            mPermission = new PermissionImpl(mContext);
+            mPermission = new PermissionImpl(sContext);
             mCallRecord = new CallRecord();
             mPresenter = new PhoneStatePresenter(this, mSetting, mPermission, mCallRecord);
-            Utils.checkLocale(mContext);
+            Utils.checkLocale(sContext);
             mPresenter.start();
         }
 
-        public static IncomingCallListener getInstance(Context context) {
-            if (sIncomingCallListener == null) {
-                sIncomingCallListener = new IncomingCallListener(context.getApplicationContext());
-            }
-            return sIncomingCallListener;
+        public static void init(Context context) {
+            sContext = context.getApplicationContext();
+            IncomingCallListener.getInstance();
+            TelephonyManager telephonyManager = (TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+            telephonyManager.listen(getInstance(), PhoneStateListener.LISTEN_CALL_STATE);
+        }
+
+        public static IncomingCallListener getInstance() {
+            return SingletonHelper.INSTANCE;
         }
 
         private void setOutGoingNumber(String number) {
@@ -132,7 +127,7 @@ public class IncomingCall extends BroadcastReceiver {
         @Override
         public void hide(String incomingNumber) {
             if (isShowing) {
-                StandOutWindow.hide(mContext, FloatWindow.class, FloatWindow.CALLER_FRONT);
+                StandOutWindow.hide(sContext, FloatWindow.class, FloatWindow.CALLER_FRONT);
             }
         }
 
@@ -140,7 +135,7 @@ public class IncomingCall extends BroadcastReceiver {
         public void close(String incomingNumber) {
             if (isShowing) {
                 isShowing = false;
-                StandOutWindow.closeAll(mContext, FloatWindow.class);
+                StandOutWindow.closeAll(sContext, FloatWindow.class);
             }
         }
 
@@ -151,17 +146,21 @@ public class IncomingCall extends BroadcastReceiver {
 
         @Override
         public Context getContext() {
-            return mContext.getApplicationContext();
+            return sContext.getApplicationContext();
         }
 
         @Override
         public void showMark(String number) {
-            if (((KeyguardManager) mContext.getSystemService(
+            if (((KeyguardManager) sContext.getSystemService(
                     Context.KEYGUARD_SERVICE)).isKeyguardLocked()) {
-                Utils.showMarkNotification(mContext, number);
+                Utils.showMarkNotification(sContext, number);
             } else {
-                Utils.startMarkActivity(mContext, number);
+                Utils.startMarkActivity(sContext, number);
             }
+        }
+
+        private static class SingletonHelper {
+            private final static IncomingCallListener INSTANCE = new IncomingCallListener();
         }
     }
 }

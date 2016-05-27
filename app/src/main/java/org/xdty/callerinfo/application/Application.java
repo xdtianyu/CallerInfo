@@ -3,6 +3,7 @@ package org.xdty.callerinfo.application;
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
+import org.xdty.callerinfo.receiver.IncomingCall.IncomingCallListener;
 import org.xdty.callerinfo.utils.AlarmUtils;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
@@ -17,6 +18,7 @@ public class Application extends com.orm.SugarApp {
         super.onCreate();
         SettingImpl.init(this);
         PhoneNumber.init(this);
+        IncomingCallListener.init(this);
         Utils.checkLocale(getApplicationContext());
         Setting setting = SettingImpl.getInstance();
 
