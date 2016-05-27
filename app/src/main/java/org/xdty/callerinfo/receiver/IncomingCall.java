@@ -81,6 +81,7 @@ public class IncomingCall extends BroadcastReceiver {
 
             if (BuildConfig.DEBUG) {
                 Log.d(TAG, "onCallStateChanged: " + state + " : " + incomingNumber);
+                Log.d(TAG, "onCallStateChanged: permission -> " + mPermission.canReadPhoneState());
             }
 
             if (mPresenter.matchIgnore(incomingNumber)) {

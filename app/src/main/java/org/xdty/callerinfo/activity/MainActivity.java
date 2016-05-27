@@ -37,6 +37,7 @@ import org.xdty.callerinfo.model.permission.PermissionImpl;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.presenter.MainPresenter;
+import org.xdty.callerinfo.receiver.IncomingCall;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.view.CallerAdapter;
@@ -236,6 +237,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(MainActivity.this, "READ_PHONE_STATE Denied", Toast.LENGTH_SHORT)
                             .show();
+                } else {
+                    IncomingCall.IncomingCallListener.init(this);
                 }
                 break;
             default:
