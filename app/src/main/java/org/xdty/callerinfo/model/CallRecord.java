@@ -131,4 +131,9 @@ public class CallRecord {
     public boolean isAnswered() {
         return isIncoming() && callDuration > 0;
     }
+
+    public boolean isEqual(String number) {
+        return (mLogNumber == null && number == null)
+                || (mLogNumber != null && number != null && mLogNumber.equals(number));
+    }
 }

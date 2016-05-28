@@ -80,7 +80,8 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     @Override
     public void handleOffHook(String number) {
 
-        if (System.currentTimeMillis() - mCallRecord.getHook() < 1000) {
+        if (System.currentTimeMillis() - mCallRecord.getHook() < 1000 &&
+                mCallRecord.isEqual(number)) {
             Log.e(TAG, "duplicate hook, ignore.");
             return;
         }

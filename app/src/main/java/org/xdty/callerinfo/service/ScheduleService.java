@@ -68,6 +68,12 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
         return null;
     }
 
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        super.onDestroy();
+    }
+
     // run in background thread
     private void runScheduledJobs() {
 
