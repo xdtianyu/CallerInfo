@@ -77,6 +77,19 @@ public class MarkActivity extends BaseActivity implements DialogInterface.OnDism
                                 .setEnabled(true);
                     }
                 });
+        builder.setNeutralButton(R.string.ignore, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // ignore number
+                MarkedRecord markedRecord = new MarkedRecord();
+                markedRecord.setUid(mSetting.getUid());
+                markedRecord.setNumber(number);
+                markedRecord.setType(MarkedRecord.TYPE_IGNORE);
+                markedRecord.setTypeName(getString(R.string.ignore_number));
+                mDatabase.saveMarked(markedRecord);
+                mDatabase.updateCaller(markedRecord);
+            }
+        });
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

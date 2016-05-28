@@ -145,4 +145,6 @@
     <string name="import_confirm">从 CallerInfo.json 文件导入历史数据和配置，此操作会覆盖当前的设置并将历史记录增加到主列表中。</string>
     <string name="auto_report_confirm">打开此设置后会将百度或其他服务查询到的号码信息自动上传到标记服务器，请注意此操作不会上传您的任何个人信息，是否继续？</string>
     <string name="mark_confirm">打开此设置后会在未知来电接听并挂断后弹出标记对话框，然后将您的标记数据上传到标记服务器，请注意此操作不会上传您的任何个人信息，是否继续？</string>
+    <string name="ignore">忽略</string>
+    <string name="ignore_number">已忽略号码</string>
 </resources>

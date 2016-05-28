@@ -184,4 +184,6 @@
     <string name="import_confirm">Import history data and settings from CallerInfo.json, this operation will overwrite current settings and add history records to main list.</string>
     <string name="auto_report_confirm">This will auto upload number information searched from baidu or other services to mark service. Please note this operation will not upload any of your private data, continue?</string>
     <string name="mark_confirm">This will show a mark dialog while incoming call is unknown and answered, and then upload marked information to mark service. Please note this operation will not upload any of your private data, continue?</string>
+    <string name="ignore">Ignore</string>
+    <string name="ignore_number">Ignore number</string>
 </resources>

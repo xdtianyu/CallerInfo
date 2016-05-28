@@ -15,6 +15,8 @@ import rx.functions.Action1;
 public class MarkedRecord extends SugarRecord {
     @Ignore
     public final static int API_ID_USER_MARKED = 8;
+    @Ignore
+    public final static int TYPE_IGNORE = 32;
     private String uid;
     @Unique
     private String number;
@@ -128,5 +130,9 @@ public class MarkedRecord extends SugarRecord {
         number.setName(getTypeName());
         number.setUid(getUid());
         return number;
+    }
+
+    public boolean isIgnore() {
+        return type == TYPE_IGNORE;
     }
 }
