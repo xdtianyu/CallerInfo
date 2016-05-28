@@ -15,6 +15,8 @@ import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ScheduleService extends Service implements PhoneNumber.CloudListener {
@@ -27,6 +29,7 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
     private Database mDatabase;
     private Setting mSetting;
     private PhoneNumber mPhoneNumber;
+    private List<String> mPutList;
 
     public ScheduleService() {
     }
@@ -42,6 +45,7 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
         mMainHandler = new Handler(getMainLooper());
         mDatabase = DatabaseImpl.getInstance();
         mSetting = SettingImpl.getInstance();
+        mPutList = Collections.synchronizedList(new ArrayList<String>());
         mThreadHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -86,6 +90,8 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
                 if (!isAutoReport && record.getSource() != MarkedRecord.API_ID_USER_MARKED) {
                     continue;
                 }
+                mPutList.add(record.getNumber());
+                // this put operation is asynchronous
                 mPhoneNumber.put(record.toNumber());
             }
         }
@@ -96,6 +102,8 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
 
         // update last schedule time
         mSetting.updateLastScheduleTime();
+
+        checkStopSelf();
     }
 
     @Override
@@ -106,6 +114,13 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
         } else {
             mSetting.updateLastScheduleTime(0);
         }
+        mPutList.remove(number.getNumber());
+        checkStopSelf();
+    }
 
+    private void checkStopSelf() {
+        if (mPutList.size() == 0) {
+            stopSelf();
+        }
     }
 }
