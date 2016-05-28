@@ -234,6 +234,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
+                if (grantResults.length == 0) {
+                    Log.e(TAG, "grantResults is empty!");
+                    return;
+                }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(MainActivity.this, "READ_PHONE_STATE Denied", Toast.LENGTH_SHORT)
                             .show();
