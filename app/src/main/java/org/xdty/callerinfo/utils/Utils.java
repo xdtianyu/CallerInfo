@@ -51,6 +51,7 @@ public class Utils {
         bundle.putString(FloatWindow.NUMBER_INFO, context.getString(resId));
         bundle.putInt(FloatWindow.WINDOW_COLOR, ContextCompat.getColor(context,
                 R.color.colorPrimary));
+        Log.d(TAG, "showTextWindow: " + Utils.bundleToString(bundle));
         FloatWindow.show(context, FloatWindow.class, frontType);
         FloatWindow.sendData(context, FloatWindow.class,
                 frontType, 0, bundle, FloatWindow.class, 0);
@@ -65,6 +66,7 @@ public class Utils {
     }
 
     public static void closeWindow(Context context) {
+        Log.d(TAG, "closeWindow");
         FloatWindow.closeAll(context, FloatWindow.class);
     }
 
@@ -75,6 +77,7 @@ public class Utils {
         Bundle bundle = new Bundle();
         bundle.putString(FloatWindow.NUMBER_INFO, textColor.text);
         bundle.putInt(FloatWindow.WINDOW_COLOR, textColor.color);
+        Log.d(TAG, "showWindow: " + Utils.bundleToString(bundle));
         FloatWindow.show(context, FloatWindow.class,
                 frontType);
         FloatWindow.sendData(context, FloatWindow.class,
