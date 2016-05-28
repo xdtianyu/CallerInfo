@@ -74,29 +74,30 @@ public class IncomingCall extends BroadcastReceiver {
 
         private void setOutGoingNumber(String number) {
             mPresenter.setOutGoingNumber(number);
+            onCallStateChanged(TelephonyManager.CALL_STATE_OFFHOOK, number);
         }
 
         @Override
-        public void onCallStateChanged(int state, String incomingNumber) {
+        public void onCallStateChanged(int state, String number) {
 
             if (BuildConfig.DEBUG) {
-                Log.d(TAG, "onCallStateChanged: " + state + " : " + incomingNumber);
+                Log.d(TAG, "onCallStateChanged: " + state + " : " + number);
                 Log.d(TAG, "onCallStateChanged: permission -> " + mPermission.canReadPhoneState());
             }
 
-            if (mPresenter.matchIgnore(incomingNumber)) {
+            if (mPresenter.matchIgnore(number)) {
                 return;
             }
 
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
-                    mPresenter.handleRinging(incomingNumber);
+                    mPresenter.handleRinging(number);
                     break;
                 case TelephonyManager.CALL_STATE_OFFHOOK:
-                    mPresenter.handleOffHook(incomingNumber);
+                    mPresenter.handleOffHook(number);
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:
-                    mPresenter.handleIdle(incomingNumber);
+                    mPresenter.handleIdle(number);
                     break;
             }
         }

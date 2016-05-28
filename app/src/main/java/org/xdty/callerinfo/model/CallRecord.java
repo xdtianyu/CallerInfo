@@ -36,6 +36,10 @@ public class CallRecord {
         hook = System.currentTimeMillis();
     }
 
+    public long getHook() {
+        return hook;
+    }
+
     public void idle() {
         idle = System.currentTimeMillis();
 
