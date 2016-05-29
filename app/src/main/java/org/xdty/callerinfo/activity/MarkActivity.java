@@ -86,6 +86,7 @@ public class MarkActivity extends BaseActivity implements DialogInterface.OnDism
                 markedRecord.setNumber(number);
                 markedRecord.setType(MarkedRecord.TYPE_IGNORE);
                 markedRecord.setTypeName(getString(R.string.ignore_number));
+                markedRecord.setReported(true);
                 mDatabase.saveMarked(markedRecord);
                 mDatabase.updateCaller(markedRecord);
             }
