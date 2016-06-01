@@ -44,6 +44,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     private Intent mPluginIntent;
     private PluginConnection mConnection;
     private boolean mAutoHangup = false;
+    private boolean mWaitingCheckHangup = false;
 
     public PhoneStatePresenter(PhoneStateContract.View view, Setting setting,
             Permission permission, CallRecord callRecord) {
@@ -143,7 +144,6 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
                         mView.showMark(mCallRecord.getLogNumber());
                     }
                 }
-                unBindPluginService();
             }
         }
 
@@ -151,6 +151,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
         mAutoHangup = false;
 
         mView.close(number);
+        unBindPluginService();
     }
 
     @Override
@@ -215,6 +216,10 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
             return;
         }
 
+        if (mSetting.isAutoHangup() || mSetting.isAddingCallLog()) {
+            bindPluginService();
+        }
+
         mDatabase.findCaller(number).subscribe(new Action1<Caller>() {
             @Override
             public void call(Caller caller) {
@@ -277,17 +282,24 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
         mCallRecord.setLogName(number.getName());
         mCallRecord.setLogGeo(number.getProvince() + " " + number.getCity());
 
-        bindPluginService(number);
         if (mCallRecord.isActive()) {
             mView.show(number);
         }
+
+        checkAutoHangUp();
     }
 
-    private void bindPluginService(INumber number) {
+    private void bindPluginService() {
 
         Log.e(TAG, "bindPluginService");
 
+        if (mPluginService != null) {
+            Log.d(TAG, "plugin service have been started.");
+            return;
+        }
+
         if (!mSetting.isAutoHangup() && !mSetting.isAddingCallLog()) {
+            Log.d(TAG, "Plugin function is not enabled.");
             return;
         }
 
@@ -297,78 +309,26 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
             mConnection = newConnection();
         }
 
-        mConnection.update(number);
-
         if (mPluginIntent == null) {
             mPluginIntent = new Intent().setComponent(new ComponentName(
                     "org.xdty.callerinfo.plugin",
                     "org.xdty.callerinfo.plugin.PluginService"));
         }
 
-        mView.getContext().startService(mPluginIntent);
         mView.getContext().bindService(mPluginIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     private PluginConnection newConnection() {
         return new PluginConnection() {
 
-            INumber number;
-
-            @Override
-            public void update(INumber number) {
-                this.number = number;
-            }
-
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 Log.d(TAG, "onServiceConnected: " + name.toString());
                 mPluginService = IPluginService.Stub.asInterface(service);
-                try {
-                    if (mSetting.isAutoHangup()) {
-                        String keywords = mSetting.getKeywords();
-                        for (String keyword : keywords.split(" ")) {
-                            if (mCallRecord.matchName(keyword)) {
-                                mPluginService.hangUpPhoneCall();
-                                mAutoHangup = true;
-                            }
-                        }
-
-                        String geoKeywords = mSetting.getGeoKeyword();
-                        if (!geoKeywords.isEmpty() && mCallRecord.isGeoValid()) {
-                            boolean hangUp = false;
-                            for (String keyword : geoKeywords.split(" ")) {
-                                if (!keyword.startsWith("!")) {
-                                    if (mCallRecord.matchGeo(keyword)) {
-                                        hangUp = true;
-                                        break;
-                                    }
-                                } else if (mCallRecord.matchGeo(keyword.replace("!", ""))) {
-                                    hangUp = false;
-                                    break;
-                                } else {
-                                    hangUp = true;
-                                }
-                            }
-                            if (hangUp) {
-                                mPluginService.hangUpPhoneCall();
-                                mAutoHangup = true;
-                            }
-                        }
-
-                        String numberKeywords = mSetting.getNumberKeyword();
-                        if (!numberKeywords.isEmpty()) {
-                            for (String keyword : numberKeywords.split(" ")) {
-                                if (mCallRecord.matchNumber(keyword)) {
-                                    mPluginService.hangUpPhoneCall();
-                                    mAutoHangup = true;
-                                }
-                            }
-                        }
-                    }
-
-                } catch (RemoteException e) {
-                    e.printStackTrace();
+                if (mWaitingCheckHangup) {
+                    checkAutoHangUp();
                 }
+                mWaitingCheckHangup = false;
             }
 
             @Override
@@ -382,11 +342,77 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     private void unBindPluginService() {
         Log.e(TAG, "unBindPluginService");
         if (mPluginService == null) {
+            Log.d(TAG, "unBindPluginService: plugin service is not started.");
             return;
         }
         mView.getContext().getApplicationContext().unbindService(mConnection);
-        mView.getContext().stopService(mPluginIntent);
         mPluginService = null;
+    }
+
+    private void checkAutoHangUp() {
+        Log.d(TAG, "checkAutoHangUp");
+
+        if (mPluginService == null) {
+            Log.d(TAG, "checkAutoHangUp: plugin service is not started.");
+            mWaitingCheckHangup = true;
+            return;
+        }
+
+        try {
+            if (mSetting.isAutoHangup()) {
+                // hang up phone call which number name contains key words
+                String keywords = mSetting.getKeywords();
+                for (String keyword : keywords.split(" ")) {
+                    if (mCallRecord.matchName(keyword)) {
+                        mAutoHangup = true;
+                        break;
+                    }
+                }
+
+                // hang up phone call which number geo in black list
+                String geoKeywords = mSetting.getGeoKeyword();
+                if (!geoKeywords.isEmpty() && mCallRecord.isGeoValid()) {
+                    boolean hangUp = false;
+                    for (String keyword : geoKeywords.split(" ")) {
+                        if (!keyword.startsWith("!")) {
+                            // number geo is in black list
+                            if (mCallRecord.matchGeo(keyword)) {
+                                hangUp = true;
+                                break;
+                            }
+                        } else if (mCallRecord.matchGeo(keyword.replace("!", ""))) {
+                            // number geo is in white list
+                            hangUp = false;
+                            break;
+                        } else {
+                            // number geo is not in white list
+                            hangUp = true;
+                        }
+                    }
+                    if (hangUp) {
+                        mAutoHangup = true;
+                    }
+                }
+
+                // hang up phone call which number start with keyword
+                String numberKeywords = mSetting.getNumberKeyword();
+                if (!numberKeywords.isEmpty()) {
+                    for (String keyword : numberKeywords.split(" ")) {
+                        if (mCallRecord.matchNumber(keyword)) {
+                            mAutoHangup = true;
+                        }
+                    }
+                }
+
+                // hang up phone call
+                if (mAutoHangup && mPluginService != null) {
+                    mPluginService.hangUpPhoneCall();
+                }
+            }
+
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateCallLog(String number, String name) {
@@ -424,7 +450,5 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
         mDatabase = DatabaseImpl.getInstance();
     }
 
-    interface PluginConnection extends ServiceConnection {
-        void update(INumber number);
-    }
+    interface PluginConnection extends ServiceConnection {}
 }
