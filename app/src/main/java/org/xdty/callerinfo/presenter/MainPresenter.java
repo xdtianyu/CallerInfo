@@ -14,6 +14,7 @@ import org.xdty.callerinfo.utils.AlarmUtils;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.caller.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +23,8 @@ import java.util.Map;
 
 import rx.functions.Action1;
 
-public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callback {
+public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callback,
+        PhoneNumber.CheckUpdateCallback {
 
     private final List<InCall> mInCallList = new ArrayList<>();
     private MainContract.View mView;
@@ -166,8 +168,13 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     @Override
     public void start() {
         mPhoneNumber.addCallback(this);
+        mPhoneNumber.setCheckUpdateCallback(this);
         mDatabase = DatabaseImpl.getInstance();
         loadCallerMap();
+
+        if (System.currentTimeMillis() - mSetting.lastCheckDataUpdateTime() > 3600 * 24 * 1000) {
+            mPhoneNumber.checkUpdate();
+        }
     }
 
     @Override
@@ -193,6 +200,12 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     }
 
     @Override
+    public void dispatchUpdate(Status status) {
+        mView.showUpdateData(status);
+        mPhoneNumber.upgradeData();
+    }
+
+    @Override
     public void onResponseOffline(INumber number) {
         handleResponse(number, false);
     }
@@ -205,5 +218,20 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     @Override
     public void onResponseFailed(INumber number, boolean isOnline) {
         handleResponseFailed(number, isOnline);
+    }
+
+    @Override
+    public void onCheckResult(Status status) {
+        if (status != null) {
+            mView.notifyUpdateData(status);
+        }
+    }
+
+    @Override
+    public void onUpgradeData(boolean result) {
+        mView.updateDataFinished(result);
+        if (result) {
+            mSetting.updateLastCheckDataUpdateTime(System.currentTimeMillis());
+        }
     }
 }

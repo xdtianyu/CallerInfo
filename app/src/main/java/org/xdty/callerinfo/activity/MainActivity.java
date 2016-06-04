@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,7 +14,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -27,6 +27,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.contract.MainContract;
@@ -42,6 +45,7 @@ import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.view.CallerAdapter;
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.caller.Status;
 
 import java.util.List;
 import java.util.Map;
@@ -60,6 +64,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     private FrameLayout mMainLayout;
     private long mLastSearchTime;
     private MainContract.Presenter mPresenter;
+    private MaterialDialog mUpdateDataDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,6 +213,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             Utils.closeWindow(this);
         }
         mPresenter.clearSearch();
+        if (mUpdateDataDialog != null && mUpdateDataDialog.isShowing()) {
+            mUpdateDataDialog.cancel();
+        }
         super.onStop();
     }
 
@@ -402,6 +410,54 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     public Context getContext() {
         return this.getApplicationContext();
+    }
+
+    @Override
+    public void notifyUpdateData(final Status status) {
+        final Snackbar snackbar = Snackbar.make(mToolbar, R.string.new_offline_data,
+                Snackbar.LENGTH_LONG);
+
+        snackbar.setAction(getString(R.string.update), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+                mPresenter.dispatchUpdate(status);
+            }
+        });
+        snackbar.show();
+    }
+
+    @Override
+    public void showUpdateData(Status status) {
+
+        if (mUpdateDataDialog != null && mUpdateDataDialog.isShowing()) {
+            mUpdateDataDialog.dismiss();
+            mUpdateDataDialog = null;
+        }
+
+        mUpdateDataDialog = new MaterialDialog.Builder(this)
+                .cancelable(true)
+                .theme(Theme.LIGHT)
+                .title(R.string.offline_data_update)
+                .content(getString(R.string.offline_data_status))
+                .progress(true, 0).build();
+        mUpdateDataDialog.show();
+    }
+
+    @Override
+    public void updateDataFinished(boolean result) {
+        if (mUpdateDataDialog != null && mUpdateDataDialog.isShowing()) {
+            mUpdateDataDialog.dismiss();
+        }
+        int message = result ? R.string.offline_data_success : R.string.offline_data_failed;
+        final Snackbar snackbar = Snackbar.make(mToolbar, message, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.ok), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        });
+        snackbar.show();
     }
 
     @Override

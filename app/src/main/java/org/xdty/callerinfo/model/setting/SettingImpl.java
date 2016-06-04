@@ -196,6 +196,18 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public long lastCheckDataUpdateTime() {
+        return mPrefs.getLong(sContext.getString(R.string.last_check_data_update_time_key), 0);
+    }
+
+    @Override
+    public void updateLastCheckDataUpdateTime(long timestamp) {
+        mPrefs.edit()
+                .putLong(sContext.getString(R.string.last_check_data_update_time_key), timestamp)
+                .apply();
+    }
+
+    @Override
     public boolean isHidingWhenTouch() {
         return mPrefs.getBoolean(sContext.getString(R.string.hide_when_touch_key), false);
     }

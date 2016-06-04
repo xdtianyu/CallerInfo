@@ -84,4 +84,8 @@ public interface Setting {
 
     long lastScheduleTime();
 
+    long lastCheckDataUpdateTime();
+
+    void updateLastCheckDataUpdateTime(long timestamp);
+
 }

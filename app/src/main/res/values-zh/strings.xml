@@ -147,4 +147,10 @@
     <string name="mark_confirm">打开此设置后会在未知来电接听并挂断后弹出标记对话框，然后将您的标记数据上传到标记服务器，请注意此操作不会上传您的任何个人信息，是否继续？</string>
     <string name="ignore">忽略</string>
     <string name="ignore_number">已忽略号码</string>
+    <string name="new_offline_data">有新离线数据</string>
+    <string name="update">更新</string>
+    <string name="offline_data_update">离线数据更新</string>
+    <string name="offline_data_status">正在更新，请稍等</string>
+    <string name="offline_data_failed">离线数据更新失败，请稍后再试。</string>
+    <string name="offline_data_success">已更新到最新的离线数据</string>
 </resources>

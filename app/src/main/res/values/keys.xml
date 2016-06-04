@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources >
+<resources>
     <string name="mark_key" translatable="false">mark_key</string>
     <string name="auto_report_key" translatable="false">auto_report_key</string>
     <string name="version_key" translatable="false">version</string>
@@ -44,4 +44,5 @@
     <string name="last_schedule_time_key" translatable="false">last_schedule_time_key</string>
     <string name="import_key" translatable="false">import_key</string>
     <string name="export_key" translatable="false">export_key</string>
+    <string name="last_check_data_update_time_key" translatable="false">last_check_data_update_time_key</string>
 </resources>

@@ -186,4 +186,10 @@
     <string name="mark_confirm">This will show a mark dialog while incoming call is unknown and answered, and then upload marked information to mark service. Please note this operation will not upload any of your private data, continue?</string>
     <string name="ignore">Ignore</string>
     <string name="ignore_number">Ignore number</string>
+    <string name="new_offline_data">New offline data available</string>
+    <string name="update">update</string>
+    <string name="offline_data_update">Offline data update</string>
+    <string name="offline_data_status">Updating now, please wait a second.</string>
+    <string name="offline_data_failed">Offline data update failed, please try again later.</string>
+    <string name="offline_data_success">Offline data has been updated to latest</string>
 </resources>

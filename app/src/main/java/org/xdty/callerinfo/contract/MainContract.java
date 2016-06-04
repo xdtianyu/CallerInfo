@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.caller.Status;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,12 @@ public interface MainContract {
         void attachCallerMap(Map<String, Caller> callerMap);
 
         Context getContext();
+
+        void notifyUpdateData(Status status);
+
+        void showUpdateData(Status status);
+
+        void updateDataFinished(boolean result);
     }
 
     interface Presenter extends BasePresenter {
@@ -66,5 +73,7 @@ public interface MainContract {
         void handleResponseFailed(INumber number, boolean isOnline);
 
         void clearSearch();
+
+        void dispatchUpdate(Status status);
     }
 }
