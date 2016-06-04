@@ -48,10 +48,12 @@ import com.jenzz.materialpreference.SwitchPreference;
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.exporter.Exporter;
+import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.plugin.IPluginService;
 import org.xdty.callerinfo.plugin.IPluginServiceCallback;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
+import org.xdty.phone.number.model.caller.Status;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -135,8 +137,18 @@ public class SettingsActivity extends AppCompatActivity {
             bindPreference(R.string.auto_report_key);
             bindPreference(R.string.enable_marking_key);
 
+            bindDataVersionPreference();
             bindVersionPreference();
             bindPluginPreference();
+        }
+
+        private void bindDataVersionPreference() {
+            bindPreference(R.string.offline_data_version_key);
+            Preference dataVersion = findPreference(getString(R.string.offline_data_version_key));
+            Status status = SettingImpl.getInstance().getStatus();
+            String summary = getString(R.string.offline_data_version_summary, status.version,
+                    status.count, Utils.getDate(status.timestamp*1000));
+            dataVersion.setSummary(summary);
         }
 
         private void bindVersionPreference() {

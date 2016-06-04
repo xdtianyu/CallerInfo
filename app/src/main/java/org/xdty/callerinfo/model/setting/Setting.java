@@ -1,5 +1,7 @@
 package org.xdty.callerinfo.model.setting;
 
+import org.xdty.phone.number.model.caller.Status;
+
 import java.util.ArrayList;
 
 public interface Setting {
@@ -88,4 +90,7 @@ public interface Setting {
 
     void updateLastCheckDataUpdateTime(long timestamp);
 
+    Status getStatus();
+
+    void setStatus(Status status);
 }

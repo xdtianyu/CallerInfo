@@ -224,6 +224,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     public void onCheckResult(Status status) {
         if (status != null) {
             mView.notifyUpdateData(status);
+            mSetting.setStatus(status);
         }
     }
 

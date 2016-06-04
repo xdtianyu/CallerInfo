@@ -192,4 +192,6 @@
     <string name="offline_data_status">Updating now, please wait a second.</string>
     <string name="offline_data_failed">Offline data update failed, please try again later.</string>
     <string name="offline_data_success">Offline data has been updated to latest</string>
+    <string name="offline_data_version">Offline data status</string>
+    <string name="offline_data_version_summary">Version %1$s, count %2$s, updated at %3$s</string>
 </resources>

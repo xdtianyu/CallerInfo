@@ -165,6 +165,9 @@
                 android:summary="@string/enable_marking_summary"
                 android:title="@string/enable_marking">
             </com.jenzz.materialpreference.SwitchPreference>
+            <com.jenzz.materialpreference.Preference
+                android:key="@string/offline_data_version_key"
+                android:title="@string/offline_data_version"/>
         </PreferenceScreen>
         <PreferenceScreen
             android:key="@string/plugin_key"

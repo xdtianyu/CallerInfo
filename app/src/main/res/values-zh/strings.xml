@@ -153,4 +153,6 @@
     <string name="offline_data_status">正在更新，请稍等</string>
     <string name="offline_data_failed">离线数据更新失败，请稍后再试。</string>
     <string name="offline_data_success">已更新到最新的离线数据</string>
+    <string name="offline_data_version">离线数据状态</string>
+    <string name="offline_data_version_summary">版本 %1$s, 号码数 %2$s, 更新时间 %3$s</string>
 </resources>

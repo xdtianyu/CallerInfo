@@ -45,4 +45,9 @@
     <string name="import_key" translatable="false">import_key</string>
     <string name="export_key" translatable="false">export_key</string>
     <string name="last_check_data_update_time_key" translatable="false">last_check_data_update_time_key</string>
+    <string name="offline_data_version_key" translatable="false">offline_data_version_key</string>
+    <string name="offline_status_version_key" translatable="false">offline_status_version_key</string>
+    <string name="offline_status_count_key" translatable="false">offline_status_count_key</string>
+    <string name="offline_status_new_count_key" translatable="false">offline_status_new_count_key</string>
+    <string name="offline_status_timestamp_key" translatable="false">offline_status_timestamp_key</string>
 </resources>
