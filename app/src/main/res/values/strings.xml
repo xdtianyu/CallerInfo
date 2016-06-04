@@ -194,4 +194,5 @@
     <string name="offline_data_success">Offline data has been updated to latest</string>
     <string name="offline_data_version">Offline data status</string>
     <string name="offline_data_version_summary">Version %1$s, count %2$s, updated at %3$s</string>
+    <string name="no_offline_data">No offline data</string>
 </resources>

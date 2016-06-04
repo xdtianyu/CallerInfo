@@ -147,7 +147,10 @@ public class SettingsActivity extends AppCompatActivity {
             Preference dataVersion = findPreference(getString(R.string.offline_data_version_key));
             Status status = SettingImpl.getInstance().getStatus();
             String summary = getString(R.string.offline_data_version_summary, status.version,
-                    status.count, Utils.getDate(status.timestamp*1000));
+                    status.count, Utils.getDate(status.timestamp * 1000));
+            if (status.version == 0) {
+                summary = getString(R.string.no_offline_data);
+            }
             dataVersion.setSummary(summary);
         }
 

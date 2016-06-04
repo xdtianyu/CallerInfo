@@ -155,4 +155,5 @@
     <string name="offline_data_success">已更新到最新的离线数据</string>
     <string name="offline_data_version">离线数据状态</string>
     <string name="offline_data_version_summary">版本 %1$s, 号码数 %2$s, 更新时间 %3$s</string>
+    <string name="no_offline_data">无离线数据</string>
 </resources>
