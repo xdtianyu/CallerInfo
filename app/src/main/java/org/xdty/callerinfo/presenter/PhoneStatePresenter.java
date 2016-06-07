@@ -188,6 +188,10 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
                 mView.getContext(), number);
     }
 
+    private boolean isTriggeredRepeatIncomingCall(String number) {
+        return mDatabase.getInCallCount(number) >= mSetting.getRepeatedCount() - 1;
+    }
+
     @Override
     public boolean ignoreContact(String number) {
         return mSetting.isIgnoreKnownContact() && mPermission.canReadContact()
@@ -367,6 +371,12 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
         if (!mCallRecord.isIncoming() && mSetting.isDisableOutGoingHangup()) {
             Log.d(TAG, "checkAutoHangUp: auto hangup is disabled when outgoing.");
+            return;
+        }
+
+        if (mCallRecord.isIncoming() && mSetting.isTemporaryDisableHangup()
+                && isTriggeredRepeatIncomingCall(mCallRecord.getLogNumber())) {
+            Log.d(TAG, "checkAutoHangUp: auto hangup is disabled when repeated.");
             return;
         }
 

@@ -97,4 +97,8 @@ public interface Setting {
     boolean isNotMarkContact();
 
     boolean isDisableOutGoingHangup();
+
+    boolean isTemporaryDisableHangup();
+
+    int getRepeatedCount();
 }

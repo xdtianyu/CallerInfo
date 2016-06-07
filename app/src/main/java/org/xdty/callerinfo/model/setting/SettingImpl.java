@@ -244,6 +244,16 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public boolean isTemporaryDisableHangup() {
+        return mPrefs.getBoolean(getString(R.string.temporary_disable_blacklist_key), false);
+    }
+
+    @Override
+    public int getRepeatedCount() {
+        return mPrefs.getInt(getString(R.string.repeated_incoming_count_key), 3);
+    }
+
+    @Override
     public boolean isHidingWhenTouch() {
         return mPrefs.getBoolean(getString(R.string.hide_when_touch_key), false);
     }

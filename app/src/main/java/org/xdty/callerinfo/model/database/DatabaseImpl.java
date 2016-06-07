@@ -2,6 +2,9 @@ package org.xdty.callerinfo.model.database;
 
 import android.util.Log;
 
+import com.orm.query.Condition;
+import com.orm.query.Select;
+
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.db.MarkedRecord;
@@ -268,6 +271,15 @@ public class DatabaseImpl implements Database {
                         record.save();
                     }
                 });
+    }
+
+    @Override
+    public int getInCallCount(String number) {
+        long time = System.currentTimeMillis() - 24 * 60 * 60 * 1000;
+        return Select.from(InCall.class)
+                .where(Condition.prop("number").eq(number), Condition.prop("time").gt(time))
+                .list()
+                .size();
     }
 
     private static class SingletonHelper {

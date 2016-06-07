@@ -47,4 +47,6 @@ public interface Database {
     void addInCallers(List<InCall> inCalls);
 
     void addMarkedRecords(List<MarkedRecord> markedRecords);
+
+    int getInCallCount(String number);
 }
