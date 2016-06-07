@@ -162,4 +162,8 @@
     <string name="import_export">导入与导出</string>
     <string name="white_list">白名单</string>
     <string name="data_source">数据源</string>
+    <string name="temporary_disable_blacklist">临时禁用自动挂断</string>
+    <string name="temporary_disable_blacklist_summary">号码在24小时内多次来电时临时禁用自动挂断功能</string>
+    <string name="disable_outgoing_blacklist">禁用去电时自动挂断</string>
+    <string name="disable_outgoing_blacklist_summary">去电时不使用自动挂断功能</string>
 </resources>

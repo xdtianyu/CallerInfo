@@ -365,6 +365,11 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
             return;
         }
 
+        if (!mCallRecord.isIncoming() && mSetting.isDisableOutGoingHangup()) {
+            Log.d(TAG, "checkAutoHangUp: auto hangup is disabled when outgoing.");
+            return;
+        }
+
         try {
             if (mSetting.isAutoHangup()) {
                 // hang up phone call which number name contains key words

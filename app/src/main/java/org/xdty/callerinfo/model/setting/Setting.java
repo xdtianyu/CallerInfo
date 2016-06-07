@@ -95,4 +95,6 @@ public interface Setting {
     void setStatus(Status status);
 
     boolean isNotMarkContact();
+
+    boolean isDisableOutGoingHangup();
 }

@@ -214,6 +214,16 @@
                     android:summary="@string/hangup_number_keyword_summary"
                     android:title="@string/hangup_number_keyword">
                 </com.jenzz.materialpreference.Preference>
+                <com.jenzz.materialpreference.SwitchPreference
+                    android:key="@string/disable_outgoing_blacklist_key"
+                    android:summary="@string/disable_outgoing_blacklist_summary"
+                    android:title="@string/disable_outgoing_blacklist">
+                </com.jenzz.materialpreference.SwitchPreference>
+                <com.jenzz.materialpreference.SwitchPreference
+                    android:key="@string/temporary_disable_blacklist_key"
+                    android:summary="@string/temporary_disable_blacklist_summary"
+                    android:title="@string/temporary_disable_blacklist">
+                </com.jenzz.materialpreference.SwitchPreference>
             </com.jenzz.materialpreference.PreferenceCategory>
             <com.jenzz.materialpreference.PreferenceCategory
                 android:title="@string/import_export">

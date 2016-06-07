@@ -239,6 +239,11 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public boolean isDisableOutGoingHangup() {
+        return mPrefs.getBoolean(getString(R.string.disable_outgoing_blacklist_key), false);
+    }
+
+    @Override
     public boolean isHidingWhenTouch() {
         return mPrefs.getBoolean(getString(R.string.hide_when_touch_key), false);
     }

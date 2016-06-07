@@ -201,4 +201,8 @@
     <string name="import_export">Import and export</string>
     <string name="white_list">White list</string>
     <string name="data_source">Data source</string>
+    <string name="temporary_disable_blacklist_summary">Disable auto hangup if received repeatedly incoming calls 24 hours.</string>
+    <string name="temporary_disable_blacklist">Temporary disable black list</string>
+    <string name="disable_outgoing_blacklist_summary">Disable auto hangup if it\'s outgoing call</string>
+    <string name="disable_outgoing_blacklist">Disable outgoing hangup</string>
 </resources>
