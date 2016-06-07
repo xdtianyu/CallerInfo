@@ -93,4 +93,6 @@ public interface Setting {
     Status getStatus();
 
     void setStatus(Status status);
+
+    boolean isNotMarkContact();
 }

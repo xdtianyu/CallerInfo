@@ -234,6 +234,11 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public boolean isNotMarkContact() {
+        return mPrefs.getBoolean(getString(R.string.not_mark_contact_key), false);
+    }
+
+    @Override
     public boolean isHidingWhenTouch() {
         return mPrefs.getBoolean(getString(R.string.hide_when_touch_key), false);
     }

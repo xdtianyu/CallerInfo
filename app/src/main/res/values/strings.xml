@@ -195,4 +195,6 @@
     <string name="offline_data_version">Offline data status</string>
     <string name="offline_data_version_summary">Version %1$s, count %2$s, updated at %3$s</string>
     <string name="no_offline_data">No offline data</string>
+    <string name="not_mark_contact">Not mark contact</string>
+    <string name="not_mark_contact_summary">Don\'t show mark notice if number is in contacts</string>
 </resources>

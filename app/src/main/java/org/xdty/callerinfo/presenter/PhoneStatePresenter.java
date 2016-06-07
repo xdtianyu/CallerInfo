@@ -140,7 +140,8 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
                     }
                 } else {
                     if (mSetting.isMarkingEnabled() && mCallRecord.isAnswered() &&
-                            !ignoreContact(mCallRecord.getLogNumber())) {
+                            !ignoreContact(mCallRecord.getLogNumber()) &&
+                            !isNotMarkContact(mCallRecord.getLogNumber())) {
                         mView.showMark(mCallRecord.getLogNumber());
                     }
                 }
@@ -179,6 +180,12 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     @Override
     public boolean isRingOnce() {
         return mCallRecord.ringDuration() < 3000 && mCallRecord.callDuration() <= 0;
+    }
+
+    private boolean isNotMarkContact(String number) {
+        return mSetting.isNotMarkContact() && mPermission.canReadContact()
+                && Utils.isContactExists(
+                mView.getContext(), number);
     }
 
     @Override

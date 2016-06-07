@@ -87,9 +87,6 @@ public class SettingsActivity extends AppCompatActivity {
     public static class SettingsFragment extends PreferenceFragment
             implements OnPreferenceClickListener, ServiceConnection {
 
-        public final static int REQUEST_CODE_CONTACTS_PERMISSION = 1003;
-        public final static int REQUEST_CODE_OUTGOING_PERMISSION = 1004;
-
         private final static int SUMMARY_FLAG_NORMAL = 0x00000001;
         private final static int SUMMARY_FLAG_MASK = 0x00000002;
         private final static int SUMMARY_FLAG_NULL = 0x00000004;
@@ -136,6 +133,7 @@ public class SettingsActivity extends AppCompatActivity {
             bindPreference(R.string.custom_api_url);
             bindPreference(R.string.auto_report_key);
             bindPreference(R.string.enable_marking_key);
+            bindPreference(R.string.not_mark_contact_key);
 
             bindDataVersionPreference();
             bindVersionPreference();
@@ -328,14 +326,11 @@ public class SettingsActivity extends AppCompatActivity {
         public void onRequestPermissionsResult(int requestCode,
                 @NonNull String[] permissions, @NonNull int[] grantResults) {
             switch (requestCode) {
-                case REQUEST_CODE_CONTACTS_PERMISSION:
+                case R.string.ignore_known_contact_key:
+                case R.string.not_mark_contact_key:
+                case R.string.display_on_outgoing_key:
                     if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                        setChecked(R.string.ignore_known_contact_key, false);
-                    }
-                    break;
-                case REQUEST_CODE_OUTGOING_PERMISSION:
-                    if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                        setChecked(R.string.display_on_outgoing_key, false);
+                        setChecked(requestCode, false);
                     }
                     break;
                 default:
@@ -648,12 +643,13 @@ public class SettingsActivity extends AppCompatActivity {
                     showRadioDialog(R.string.api_type_key, R.string.api_type, apiList, 0);
                     break;
                 case R.string.ignore_known_contact_key:
+                case R.string.not_mark_contact_key:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         int res = getActivity().checkSelfPermission(
                                 Manifest.permission.READ_CONTACTS);
                         if (res != PackageManager.PERMISSION_GRANTED) {
                             requestPermissions(new String[] { Manifest.permission.READ_CONTACTS },
-                                    REQUEST_CODE_CONTACTS_PERMISSION);
+                                    keyId);
                             return true;
                         }
                     }
@@ -665,7 +661,7 @@ public class SettingsActivity extends AppCompatActivity {
                         if (res != PackageManager.PERMISSION_GRANTED) {
                             requestPermissions(
                                     new String[] { Manifest.permission.PROCESS_OUTGOING_CALLS },
-                                    REQUEST_CODE_OUTGOING_PERMISSION);
+                                    keyId);
                             return true;
                         }
                     }

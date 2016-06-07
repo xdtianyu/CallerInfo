@@ -165,6 +165,13 @@
                 android:summary="@string/enable_marking_summary"
                 android:title="@string/enable_marking">
             </com.jenzz.materialpreference.SwitchPreference>
+            <com.jenzz.materialpreference.SwitchPreference
+                android:defaultValue="false"
+                android:key="@string/not_mark_contact_key"
+                android:dependency="@string/enable_marking_key"
+                android:title="@string/not_mark_contact"
+                android:summary="@string/not_mark_contact_summary">
+            </com.jenzz.materialpreference.SwitchPreference>
             <com.jenzz.materialpreference.Preference
                 android:key="@string/offline_data_version_key"
                 android:title="@string/offline_data_version"/>

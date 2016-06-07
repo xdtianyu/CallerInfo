@@ -156,4 +156,6 @@
     <string name="offline_data_version">离线数据状态</string>
     <string name="offline_data_version_summary">版本 %1$s, 号码数 %2$s, 更新时间 %3$s</string>
     <string name="no_offline_data">无离线数据</string>
+    <string name="not_mark_contact">不标记联系人号码</string>
+    <string name="not_mark_contact_summary">号码在联系人中时，不弹出标记提示</string>
 </resources>

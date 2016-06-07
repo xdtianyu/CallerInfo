@@ -50,4 +50,5 @@
     <string name="offline_status_count_key" translatable="false">offline_status_count_key</string>
     <string name="offline_status_new_count_key" translatable="false">offline_status_new_count_key</string>
     <string name="offline_status_timestamp_key" translatable="false">offline_status_timestamp_key</string>
+    <string name="not_mark_contact_key" translatable="false">not_mark_contact_key</string>
 </resources>
