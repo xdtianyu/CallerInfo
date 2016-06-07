@@ -134,6 +134,7 @@ public class SettingsActivity extends AppCompatActivity {
             bindPreference(R.string.auto_report_key);
             bindPreference(R.string.enable_marking_key);
             bindPreference(R.string.not_mark_contact_key);
+            bindPreference(R.string.temporary_disable_blacklist_key);
 
             bindDataVersionPreference();
             bindVersionPreference();
@@ -424,9 +425,9 @@ public class SettingsActivity extends AppCompatActivity {
             builder.show();
         }
 
-        private void showRadioDialog(int keyId, int title, final List<String> list,
-                int defValue) {
+        private void showRadioDialog(int keyId, int title, int listId, int defValue) {
             final String key = getString(keyId);
+            final List<String> list = Arrays.asList(getResources().getStringArray(listId));
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(title));
             View layout = View.inflate(getActivity(), R.layout.dialog_radio, null);
@@ -457,7 +458,10 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     int index = group.indexOfChild(group.findViewById(checkedId));
-                    findPreference(key).setSummary(list.get(index));
+                    Preference preference = findPreference(key);
+                    if (preference != null) {
+                        preference.setSummary(list.get(index));
+                    }
                     SharedPreferences.Editor editor = sharedPrefs.edit();
                     editor.putInt(key, index);
                     editor.apply();
@@ -623,10 +627,8 @@ public class SettingsActivity extends AppCompatActivity {
                             R.string.window_height_message);
                     break;
                 case R.string.window_text_alignment_key:
-                    List<String> alignList = Arrays.asList(
-                            getResources().getStringArray(R.array.align_type));
                     showRadioDialog(R.string.window_text_alignment_key,
-                            R.string.window_text_alignment, alignList, 1);
+                            R.string.window_text_alignment, R.array.align_type, 1);
                     break;
                 case R.string.window_transparent_key:
                     showSeekBarDialog(R.string.window_transparent_key, FloatWindow.WINDOW_TRANS, 80,
@@ -638,9 +640,7 @@ public class SettingsActivity extends AppCompatActivity {
                             R.string.window_text_padding, R.string.text_padding);
                     break;
                 case R.string.api_type_key:
-                    List<String> apiList = Arrays.asList(
-                            getResources().getStringArray(R.array.api_type));
-                    showRadioDialog(R.string.api_type_key, R.string.api_type, apiList, 0);
+                    showRadioDialog(R.string.api_type_key, R.string.api_type, R.array.api_type, 0);
                     break;
                 case R.string.ignore_known_contact_key:
                 case R.string.not_mark_contact_key:
@@ -688,6 +688,14 @@ public class SettingsActivity extends AppCompatActivity {
                 case R.string.hangup_geo_keyword_key:
                     showEditDialog(R.string.hangup_geo_keyword_key, R.string.hangup_geo_keyword,
                             R.string.empty_string, R.string.hangup_keyword_hint);
+                    return false;
+                case R.string.temporary_disable_blacklist_key:
+                    if (sharedPrefs.getBoolean(getString(R.string.temporary_disable_blacklist_key),
+                            false)) {
+                        showRadioDialog(R.string.repeated_incoming_count_key,
+                                R.string.temporary_disable_blacklist,
+                                R.array.repeated_incoming_count, 1);
+                    }
                     return false;
                 case R.string.custom_api_url:
                     showCustomApiDialog();

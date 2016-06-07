@@ -100,5 +100,5 @@ public interface Setting {
 
     boolean isTemporaryDisableHangup();
 
-    int getRepeatedCount();
+    int getRepeatedCountIndex();
 }

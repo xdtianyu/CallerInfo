@@ -205,5 +205,8 @@
     <string name="temporary_disable_blacklist">Temporary disable black list</string>
     <string name="disable_outgoing_blacklist_summary">Disable auto hangup if it\'s outgoing call</string>
     <string name="disable_outgoing_blacklist">Disable outgoing hangup</string>
-    <string name="repeated_incoming_count_key">repeated_incoming_count_key</string>
+    <string name="repeated_incoming_twice">Twice</string>
+    <string name="repeated_incoming_third">Third</string>
+    <string name="repeated_incoming_fourth">Fourth</string>
+    <string name="repeated_incoming_fifth">Fifth</string>
 </resources>

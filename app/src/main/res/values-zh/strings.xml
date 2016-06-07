@@ -166,4 +166,8 @@
     <string name="temporary_disable_blacklist_summary">号码在24小时内多次来电时临时禁用自动挂断功能</string>
     <string name="disable_outgoing_blacklist">禁用去电时自动挂断</string>
     <string name="disable_outgoing_blacklist_summary">去电时不使用自动挂断功能</string>
+    <string name="repeated_incoming_fifth">第五次</string>
+    <string name="repeated_incoming_fourth">第四次</string>
+    <string name="repeated_incoming_third">第三次</string>
+    <string name="repeated_incoming_twice">第二次</string>
 </resources>

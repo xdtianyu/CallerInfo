@@ -189,7 +189,8 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     }
 
     private boolean isTriggeredRepeatIncomingCall(String number) {
-        return mDatabase.getInCallCount(number) >= mSetting.getRepeatedCount() - 1;
+        // 0 -> twice, 1 -> third, ...
+        return mDatabase.getInCallCount(number) >= mSetting.getRepeatedCountIndex() + 1;
     }
 
     @Override

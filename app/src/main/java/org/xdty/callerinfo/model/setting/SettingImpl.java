@@ -249,8 +249,8 @@ public class SettingImpl implements Setting {
     }
 
     @Override
-    public int getRepeatedCount() {
-        return mPrefs.getInt(getString(R.string.repeated_incoming_count_key), 3);
+    public int getRepeatedCountIndex() {
+        return mPrefs.getInt(getString(R.string.repeated_incoming_count_key), 1);
     }
 
     @Override

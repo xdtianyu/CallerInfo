@@ -41,4 +41,10 @@
         <item>@string/type_express_delivery</item>
         <item>@string/type_restaurant_deliver</item>
     </string-array>
+    <array name="repeated_incoming_count">
+        <item>@string/repeated_incoming_twice</item>
+        <item>@string/repeated_incoming_third</item>
+        <item>@string/repeated_incoming_fourth</item>
+        <item>@string/repeated_incoming_fifth</item>
+    </array>
 </resources>
