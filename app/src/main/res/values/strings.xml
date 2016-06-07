@@ -197,4 +197,8 @@
     <string name="no_offline_data">No offline data</string>
     <string name="not_mark_contact">Not mark contact</string>
     <string name="not_mark_contact_summary">Don\'t show mark notice if number is in contacts</string>
+    <string name="blacklist">Blacklist</string>
+    <string name="import_export">Import and export</string>
+    <string name="white_list">White list</string>
+    <string name="data_source">Data source</string>
 </resources>
