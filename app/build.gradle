@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 24
+    buildToolsVersion "24"
 
     defaultConfig {
         applicationId "org.xdty.callerinfo"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode project.VERSION_CODE.toInteger()
         versionName project.VERSION_NAME
         setProperty("archivesBaseName", "CallerInfo-v$versionName")
@@ -46,10 +46,10 @@ dependencies {
     compile project(':standOut')
     //    compile 'com.github.sherpya:standout:1.0.3'
 
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:cardview-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:cardview-v7:24.0.0'
+    compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:support-v4:24.0.0'
     compile 'com.github.satyan:sugar:1.5'
     compile 'org.xdty.phone.number:phone-number:0.6.7'
     compile 'org.xdty.preference:color-picker:0.0.4'
