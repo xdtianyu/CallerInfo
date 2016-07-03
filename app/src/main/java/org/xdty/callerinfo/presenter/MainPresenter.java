@@ -172,7 +172,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
         mDatabase = DatabaseImpl.getInstance();
         loadCallerMap();
 
-        if (System.currentTimeMillis() - mSetting.lastCheckDataUpdateTime() > 3600 * 24 * 1000) {
+        if (System.currentTimeMillis() - mSetting.lastCheckDataUpdateTime() > 6 * 3600 * 1000) {
             mPhoneNumber.checkUpdate();
         }
     }
