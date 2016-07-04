@@ -119,12 +119,12 @@ public class SettingImpl implements Setting {
 
     @Override
     public boolean isAutoReportEnabled() {
-        return mPrefs.getBoolean(getString(R.string.auto_report_key), true);
+        return mPrefs.getBoolean(getString(R.string.auto_report_key), false);
     }
 
     @Override
     public boolean isMarkingEnabled() {
-        return mPrefs.getBoolean(getString(R.string.enable_marking_key), true);
+        return mPrefs.getBoolean(getString(R.string.enable_marking_key), false);
     }
 
     @Override
