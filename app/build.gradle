@@ -14,6 +14,8 @@ android {
         versionCode project.VERSION_CODE.toInteger()
         versionName project.VERSION_NAME
         setProperty("archivesBaseName", "CallerInfo-v$versionName")
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -44,6 +46,16 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+
+    androidTestCompile "com.android.support:support-annotations:${rootProject.ext.supportVersion}"
+
+    androidTestCompile 'com.android.support.test:runner:0.4.1'
+    // UiAutomator Testing
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
+    androidTestCompile 'org.hamcrest:hamcrest-integration:1.3'
+
+    androidTestCompile 'com.android.support.test:rules:0.4.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
 
     compile project(':standOut')
     //    compile 'com.github.sherpya:standout:1.0.3'
