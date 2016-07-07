@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
@@ -13,7 +16,9 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
+import android.view.View;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,28 +30,53 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
 public class MainActivityTest {
 
-    private static final String BASIC_PACKAGE
-            = "org.xdty.callerinfo";
+    private static final String BASIC_PACKAGE = "org.xdty.callerinfo";
 
     private static final int LAUNCH_TIMEOUT = 5000;
 
     private static final String STRING_TO_BE_TYPED = "UiAutomator";
-
-    private UiDevice mDevice;
-
     @Rule
     public IntentsTestRule<MainActivity> mActivityRule = new IntentsTestRule<>(
             MainActivity.class);
+    private UiDevice mDevice;
+
+    public static ViewAction clickChildViewWithId(final int id) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return null;
+            }
+
+            @Override
+            public String getDescription() {
+                return "Click on a child view with specified id.";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                View v = view.findViewById(id);
+                if (v != null) {
+                    v.performClick();
+                }
+            }
+        };
+    }
 
     @Before
     public void startMainActivityFromHomeScreen() {
@@ -71,7 +101,6 @@ public class MainActivityTest {
         mDevice.wait(Until.hasObject(By.pkg(BASIC_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
     }
 
-
     @Test
     public void testPreconditions() {
         assertThat(mDevice, notNullValue());
@@ -94,16 +123,28 @@ public class MainActivityTest {
     @Test
     public void testActionSetting() {
         openActionBarOverflowOrOptionsMenu(getTargetContext());
-        onView(withText("Settings"))
+        onView(withText(R.string.action_settings))
                 .perform(click());
         intended(hasComponent(new ComponentName(getTargetContext(), SettingsActivity.class)));
         //pressBack();
     }
 
+    @Test
+    public void testRecyclerViewItemClick() {
+        onView(withId(R.id.history_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0,
+                clickChildViewWithId(R.id.card_view)));
+        onView(allOf(withId(R.id.time),
+                hasSibling(withText("17 秒")))).check(matches(isDisplayed()));
+        onView(withId(R.id.history_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0,
+                clickChildViewWithId(R.id.card_view)));
+        onView(allOf(withId(R.id.time),
+                hasSibling(withText("17 秒")))).check(matches(not(isDisplayed())));
+    }
+
     /**
      * Uses package manager to find the package name of the device launcher. Usually this package
      * is "com.android.launcher" but can be different at times. This is a generic solution which
-     * works on all platforms.`
+     * works on all platforms.
      */
     private String getLauncherPackageName() {
         // Create launcher Intent
