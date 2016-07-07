@@ -16,7 +16,10 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -30,11 +33,16 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressKey;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
+import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
@@ -139,6 +147,18 @@ public class MainActivityTest {
                 clickChildViewWithId(R.id.card_view)));
         onView(allOf(withId(R.id.time),
                 hasSibling(withText("17 秒")))).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testActionSearch() {
+        onView(withId(R.id.action_search)).perform(click());
+        onView(withId(R.id.search_src_text)).check(matches(isDisplayed()));
+        onView(withId(R.id.search_src_text)).check(matches(withHint(R.string.search_hint)));
+        onView(isAssignableFrom(ImageButton.class)).perform(click());
+        onView(withId(R.id.search_src_text)).check(doesNotExist());
+        onView(withId(R.id.action_search)).perform(click());
+        onView(isAssignableFrom(EditText.class)).perform(typeText("10086"),
+                pressKey(KeyEvent.KEYCODE_ENTER));
     }
 
     /**
