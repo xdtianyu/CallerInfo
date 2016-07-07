@@ -39,12 +39,14 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.allOf;
@@ -139,6 +141,7 @@ public class MainActivityTest {
 
     @Test
     public void testRecyclerViewItemClick() {
+        // Todo: may use mock data
         onView(withId(R.id.history_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0,
                 clickChildViewWithId(R.id.card_view)));
         onView(allOf(withId(R.id.time),
@@ -159,6 +162,21 @@ public class MainActivityTest {
         onView(withId(R.id.action_search)).perform(click());
         onView(isAssignableFrom(EditText.class)).perform(typeText("10086"),
                 pressKey(KeyEvent.KEYCODE_ENTER));
+
+        onView(withId(R.id.window_layout)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(withText("中国移动客服")));
+
+        onView(withId(R.id.history_list)).check(matches(not(isDisplayed())));
+
+        onView(isAssignableFrom(ImageButton.class)).perform(click());
+        onView(withId(R.id.window_layout)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(doesNotExist());
+        onView(withId(R.id.history_list)).check(matches(isDisplayed()));
     }
 
     /**
