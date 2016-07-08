@@ -8,6 +8,10 @@ import android.content.pm.ResolveInfo;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.action.GeneralLocation;
+import android.support.test.espresso.action.GeneralSwipeAction;
+import android.support.test.espresso.action.Press;
+import android.support.test.espresso.action.Swipe;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.filters.SdkSuppress;
@@ -18,16 +22,21 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.xdty.callerinfo.activity.MainActivity;
 import org.xdty.callerinfo.activity.SettingsActivity;
+import org.xdty.callerinfo.model.setting.Setting;
+import org.xdty.callerinfo.model.setting.SettingImpl;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -66,6 +75,8 @@ public class MainActivityTest {
             MainActivity.class);
     private UiDevice mDevice;
 
+    private Setting mSetting;
+
     public static ViewAction clickChildViewWithId(final int id) {
         return new ViewAction() {
             @Override
@@ -84,6 +95,42 @@ public class MainActivityTest {
                 if (v != null) {
                     v.performClick();
                 }
+            }
+        };
+    }
+
+    public static ViewAction swipeUp() {
+        return new GeneralSwipeAction(Swipe.FAST, GeneralLocation.BOTTOM_CENTER,
+                GeneralLocation.TOP_CENTER, Press.FINGER);
+    }
+
+    public static ViewAction swipeDown() {
+        return new GeneralSwipeAction(Swipe.FAST, GeneralLocation.TOP_CENTER,
+                GeneralLocation.BOTTOM_CENTER, Press.FINGER);
+    }
+
+    public static Matcher<View> isWindowAtPosition(final int x, final int y) {
+        return new TypeSafeMatcher<View>() {
+
+            int rootX = -1;
+            int rootY = -1;
+
+            @Override
+            protected boolean matchesSafely(View view) {
+                if (view.getRootView().getLayoutParams() instanceof WindowManager.LayoutParams) {
+                    WindowManager.LayoutParams params = (WindowManager.LayoutParams) view.getRootView()
+                            .getLayoutParams();
+                    rootX = params.x;
+                    rootY = params.y;
+                    return rootX == x && rootY == y;
+                }
+                return false;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("view is at position: (" + rootX + " ," + rootY
+                        + "), but should at x=" + x + ", y=" + y + "");
             }
         };
     }
@@ -109,6 +156,9 @@ public class MainActivityTest {
 
         // Wait for the app to appear
         mDevice.wait(Until.hasObject(By.pkg(BASIC_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
+
+        SettingImpl.init(getTargetContext());
+        mSetting = SettingImpl.getInstance();
     }
 
     @Test
@@ -177,6 +227,33 @@ public class MainActivityTest {
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(doesNotExist());
         onView(withId(R.id.history_list)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testActionMoveWindowPosition() {
+        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        onView(withText(R.string.action_float_window))
+                .perform(click());
+        onView(withId(R.id.window_layout)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(withText(R.string.float_window_hint)));
+
+        onView(withId(R.id.number_info)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .perform(swipeUp());
+        onView(withId(R.id.window_layout)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isWindowAtPosition(mSetting.getWindowX(), mSetting.getWindowY())));
+
+        onView(withId(R.id.number_info)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .perform(swipeDown());
+        onView(withId(R.id.window_layout)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isWindowAtPosition(mSetting.getWindowX(), mSetting.getWindowY())));
     }
 
     /**
