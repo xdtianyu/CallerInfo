@@ -18,7 +18,10 @@ import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObject2;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,8 +38,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.xdty.callerinfo.activity.MainActivity;
 import org.xdty.callerinfo.activity.SettingsActivity;
+import org.xdty.callerinfo.model.database.Database;
+import org.xdty.callerinfo.model.database.DatabaseImpl;
+import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
+import org.xdty.callerinfo.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -60,6 +70,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
@@ -76,6 +87,8 @@ public class MainActivityTest {
     private UiDevice mDevice;
 
     private Setting mSetting;
+    private Database mDatabase;
+    private List<InCall> mInCalls;
 
     public static ViewAction clickChildViewWithId(final int id) {
         return new ViewAction() {
@@ -159,6 +172,20 @@ public class MainActivityTest {
 
         SettingImpl.init(getTargetContext());
         mSetting = SettingImpl.getInstance();
+        mDatabase = DatabaseImpl.getInstance();
+
+        mDatabase.clearAllInCallSync();
+        mDatabase.clearAllCallerSync();
+        mDatabase.clearAllMarkedRecordSync();
+
+        long time = System.currentTimeMillis();
+
+        mInCalls = new ArrayList<>();
+        mInCalls.add(new InCall("10086", time - 10000, 10332, 17223));
+        mInCalls.add(new InCall("4001016172", time - 86400000, 2112, 0));
+        mInCalls.add(new InCall("075583763333", time - 86400000 * 2, 3234, 15112));
+
+        mDatabase.addInCallers(mInCalls);
     }
 
     @Test
@@ -191,15 +218,26 @@ public class MainActivityTest {
 
     @Test
     public void testRecyclerViewItemClick() {
-        // Todo: may use mock data
+
+        String text = Utils.readableTime(getTargetContext(), mInCalls.get(0).getDuration());
+
         onView(withId(R.id.history_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0,
                 clickChildViewWithId(R.id.card_view)));
         onView(allOf(withId(R.id.time),
-                hasSibling(withText("17 秒")))).check(matches(isDisplayed()));
+                hasSibling(withText(text)))).check(matches(isDisplayed()));
         onView(withId(R.id.history_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0,
                 clickChildViewWithId(R.id.card_view)));
         onView(allOf(withId(R.id.time),
-                hasSibling(withText("17 秒")))).check(matches(not(isDisplayed())));
+                hasSibling(withText(text)))).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testRecyclerViewItemSwap() {
+
+    }
+
+    @Test
+    public void testActionClear() {
     }
 
     @Test
@@ -230,7 +268,9 @@ public class MainActivityTest {
     }
 
     @Test
-    public void testActionMoveWindowPosition() {
+    public void testActionMoveWindowPosition() throws UiObjectNotFoundException {
+
+        // click move window menu and check window visibility
         openActionBarOverflowOrOptionsMenu(getTargetContext());
         onView(withText(R.string.action_float_window))
                 .perform(click());
@@ -241,6 +281,7 @@ public class MainActivityTest {
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(withText(R.string.float_window_hint)));
 
+        // swipe up window and check position
         onView(withId(R.id.number_info)).inRoot(
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .perform(swipeUp());
@@ -248,12 +289,45 @@ public class MainActivityTest {
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isWindowAtPosition(mSetting.getWindowX(), mSetting.getWindowY())));
 
+        // swipe down window and check position
         onView(withId(R.id.number_info)).inRoot(
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .perform(swipeDown());
         onView(withId(R.id.window_layout)).inRoot(
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isWindowAtPosition(mSetting.getWindowX(), mSetting.getWindowY())));
+
+        // click close window menu and check window visibility
+        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        onView(withText(R.string.close_window))
+                .perform(click());
+        onView(withId(R.id.window_layout)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(doesNotExist());
+
+        // click move window menu and check notification
+        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        onView(withText(R.string.action_float_window))
+                .perform(click());
+        onView(withId(R.id.window_layout)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        mDevice.openNotification();
+        mDevice.wait(Until.hasObject(By.pkg("com.android.systemui")), 10000);
+        UiSelector notificationStackScroller = new UiSelector().packageName("com.android.systemui")
+                .className("android.view.ViewGroup")
+                .resourceId("com.android.systemui:id/notification_stack_scroller");
+        UiObject notificationStackScrollerUiObject = mDevice.findObject(notificationStackScroller);
+        assertTrue(notificationStackScrollerUiObject.exists());
+
+        String text = getTargetContext().getString(R.string.app_name);
+        UiObject notify = notificationStackScrollerUiObject.getChild(new UiSelector().text(text));
+        assertTrue(notify.exists());
+        notify.click();
+        onView(withId(R.id.window_layout)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(doesNotExist());
     }
 
     /**

@@ -16,11 +16,15 @@ public interface Database {
 
     Observable<Void> clearAllInCalls(List<InCall> inCallList);
 
+    void clearAllInCallSync();
+
     void removeInCall(InCall inCall);
 
     Observable<Caller> findCaller(String number);
 
     void removeCaller(Caller caller);
+
+    void clearAllCallerSync();
 
     void updateCaller(Caller caller);
 
@@ -47,6 +51,8 @@ public interface Database {
     void addInCallers(List<InCall> inCalls);
 
     void addMarkedRecords(List<MarkedRecord> markedRecords);
+
+    void clearAllMarkedRecordSync();
 
     int getInCallCount(String number);
 }

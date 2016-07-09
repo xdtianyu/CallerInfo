@@ -65,6 +65,11 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
+    public void clearAllInCallSync() {
+        InCall.deleteAll(InCall.class);
+    }
+
+    @Override
     public void removeInCall(InCall inCall) {
         Observable.just(inCall).observeOn(Schedulers.io()).subscribe(new Action1<InCall>() {
             @Override
@@ -98,6 +103,11 @@ public class DatabaseImpl implements Database {
                 caller.delete();
             }
         });
+    }
+
+    @Override
+    public void clearAllCallerSync() {
+        Caller.deleteAll(Caller.class);
     }
 
     @Override
@@ -271,6 +281,11 @@ public class DatabaseImpl implements Database {
                         record.save();
                     }
                 });
+    }
+
+    @Override
+    public void clearAllMarkedRecordSync() {
+        MarkedRecord.deleteAll(MarkedRecord.class);
     }
 
     @Override
