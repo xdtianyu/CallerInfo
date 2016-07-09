@@ -51,13 +51,11 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
-    public Observable<Void> clearAllInCalls(final List<InCall> inCallList) {
+    public Observable<Void> clearAllInCalls() {
         return Observable.create(new Observable.OnSubscribe<Void>() {
             @Override
             public void call(Subscriber<? super Void> subscriber) {
-                for (InCall inCall : inCallList) {
-                    inCall.delete();
-                }
+                InCall.deleteAll(InCall.class);
                 subscriber.onNext(null);
                 subscriber.onCompleted();
             }
@@ -295,6 +293,13 @@ public class DatabaseImpl implements Database {
                 .where(Condition.prop("number").eq(number), Condition.prop("time").gt(time))
                 .list()
                 .size();
+    }
+
+    @Override
+    public void addInCallersSync(List<InCall> inCalls) {
+        for (InCall inCall : inCalls) {
+            inCall.save();
+        }
     }
 
     private static class SingletonHelper {

@@ -14,7 +14,7 @@ public interface Database {
 
     Observable<List<Caller>> fetchCallers();
 
-    Observable<Void> clearAllInCalls(List<InCall> inCallList);
+    Observable<Void> clearAllInCalls();
 
     void clearAllInCallSync();
 
@@ -55,4 +55,6 @@ public interface Database {
     void clearAllMarkedRecordSync();
 
     int getInCallCount(String number);
+
+    void addInCallersSync(List<InCall> inCalls);
 }

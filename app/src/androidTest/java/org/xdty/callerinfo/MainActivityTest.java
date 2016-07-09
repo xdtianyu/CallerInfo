@@ -23,6 +23,7 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -58,6 +59,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
@@ -89,6 +91,10 @@ public class MainActivityTest {
     private Setting mSetting;
     private Database mDatabase;
     private List<InCall> mInCalls;
+
+    public MainActivityTest() {
+        init();
+    }
 
     public static ViewAction clickChildViewWithId(final int id) {
         return new ViewAction() {
@@ -148,6 +154,25 @@ public class MainActivityTest {
         };
     }
 
+    private void init() {
+        SettingImpl.init(getTargetContext());
+        mSetting = SettingImpl.getInstance();
+        mDatabase = DatabaseImpl.getInstance();
+
+        mDatabase.clearAllInCallSync();
+        mDatabase.clearAllCallerSync();
+        mDatabase.clearAllMarkedRecordSync();
+
+        long time = System.currentTimeMillis();
+
+        mInCalls = new ArrayList<>();
+        mInCalls.add(new InCall("10086", time - 10000, 10332, 17223));
+        mInCalls.add(new InCall("4001016172", time - 86400000, 2112, 0));
+        mInCalls.add(new InCall("075583763333", time - 86400000 * 2, 3234, 15112));
+
+        mDatabase.addInCallersSync(mInCalls);
+    }
+
     @Before
     public void startMainActivityFromHomeScreen() {
         // Initialize UiDevice instance
@@ -169,23 +194,6 @@ public class MainActivityTest {
 
         // Wait for the app to appear
         mDevice.wait(Until.hasObject(By.pkg(BASIC_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
-
-        SettingImpl.init(getTargetContext());
-        mSetting = SettingImpl.getInstance();
-        mDatabase = DatabaseImpl.getInstance();
-
-        mDatabase.clearAllInCallSync();
-        mDatabase.clearAllCallerSync();
-        mDatabase.clearAllMarkedRecordSync();
-
-        long time = System.currentTimeMillis();
-
-        mInCalls = new ArrayList<>();
-        mInCalls.add(new InCall("10086", time - 10000, 10332, 17223));
-        mInCalls.add(new InCall("4001016172", time - 86400000, 2112, 0));
-        mInCalls.add(new InCall("075583763333", time - 86400000 * 2, 3234, 15112));
-
-        mDatabase.addInCallers(mInCalls);
     }
 
     @Test
@@ -238,6 +246,44 @@ public class MainActivityTest {
 
     @Test
     public void testActionClear() {
+
+        onView(withId(R.id.history_list)).check(matches(isDisplayed()));
+        onView(withId(R.id.empty_text)).check(matches(not(isDisplayed())));
+
+        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        onView(withText(R.string.action_clear_history))
+                .perform(click());
+
+        // check confirm dialog and click cancel
+        onView(withText(R.string.clear_history_message))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.cancel))
+                .inRoot(isDialog())
+                .perform(click());
+
+        // check list exist
+        onView(withId(R.id.history_list)).check(matches(isDisplayed()));
+        onView(withId(R.id.empty_text)).check(matches(not(isDisplayed())));
+
+        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        onView(withText(R.string.action_clear_history))
+                .perform(click());
+
+        // check confirm dialog and click ok
+        onView(withText(R.string.clear_history_message))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.ok))
+                .inRoot(isDialog())
+                .perform(click());
+
+        // check list not exist
+        onView(withId(R.id.history_list)).check(matches(isDisplayed()));
+        onView(withId(R.id.empty_text)).check(matches(isDisplayed()));
+
+        // reinsert data for other tests
+        mDatabase.addInCallers(mInCalls);
     }
 
     @Test
@@ -268,7 +314,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void testActionMoveWindowPosition() throws UiObjectNotFoundException {
+    public void testActionMoveWindowPosition() {
 
         // click move window menu and check window visibility
         openActionBarOverflowOrOptionsMenu(getTargetContext());
@@ -304,7 +350,10 @@ public class MainActivityTest {
         onView(withId(R.id.window_layout)).inRoot(
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(doesNotExist());
+    }
 
+    @Test
+    public void testNotificationClick() throws UiObjectNotFoundException {
         // click move window menu and check notification
         openActionBarOverflowOrOptionsMenu(getTargetContext());
         onView(withText(R.string.action_float_window))
