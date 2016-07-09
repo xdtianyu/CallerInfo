@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.NoMatchingViewException;
@@ -273,11 +274,6 @@ public class MainActivityTest {
     }
 
     @Test
-    public void testRecyclerViewItemSwap() {
-
-    }
-
-    @Test
     public void testActionClear() {
 
         onView(withId(R.id.history_list)).check(matches(isDisplayed()));
@@ -413,7 +409,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void testRecyclerViewItemSwipe() {
+    public void testRecyclerViewItemSwipe() throws UiObjectNotFoundException {
 
         // swipe and undo
         onView(withId(R.id.history_list))
@@ -439,6 +435,17 @@ public class MainActivityTest {
                 matches(atPosition(0, hasDescendant(withText(mInCalls.get(0).getNumber())))));
         onView(withId(R.id.history_list)).check(
                 matches(atPosition(1, hasDescendant(withText(mInCalls.get(2).getNumber())))));
+
+        // swipe and wait snack bar gone
+        onView(withId(R.id.history_list))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeLeft()));
+        onView(withId(R.id.history_list))
+                .check(itemsCountIs(1));
+        SystemClock.sleep(5000);
+
+        onView(withId(R.id.history_list)).check(
+                matches(atPosition(0, hasDescendant(withText(
+                        mDatabase.fetchInCallsSync().get(0).getNumber())))));
     }
 
     @Test
