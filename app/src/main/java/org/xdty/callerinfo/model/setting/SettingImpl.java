@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.preference.PreferenceManager;
 import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -251,6 +252,28 @@ public class SettingImpl implements Setting {
     @Override
     public int getRepeatedCountIndex() {
         return mPrefs.getInt(getString(R.string.repeated_incoming_count_key), 1);
+    }
+
+    @Override
+    public void clear() {
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.clear();
+        editor.apply();
+    }
+
+    @Override
+    public int getNormalColor() {
+        return mPrefs.getInt("color_normal", ContextCompat.getColor(sContext, R.color.blue_light));
+    }
+
+    @Override
+    public int getPoiColor() {
+        return mPrefs.getInt("color_poi", ContextCompat.getColor(sContext, R.color.orange_dark));
+    }
+
+    @Override
+    public int getReportColor() {
+        return mPrefs.getInt("color_report", ContextCompat.getColor(sContext, R.color.red_light));
     }
 
     @Override

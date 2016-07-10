@@ -101,4 +101,12 @@ public interface Setting {
     boolean isTemporaryDisableHangup();
 
     int getRepeatedCountIndex();
+
+    void clear();
+
+    int getNormalColor();
+
+    int getPoiColor();
+
+    int getReportColor();
 }
