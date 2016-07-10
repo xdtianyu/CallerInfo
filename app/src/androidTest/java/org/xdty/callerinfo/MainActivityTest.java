@@ -49,6 +49,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.xdty.callerinfo.TestUtils.atPosition;
+import static org.xdty.callerinfo.TestUtils.childWithBackgroundColor;
 import static org.xdty.callerinfo.TestUtils.clickChildViewWithId;
 import static org.xdty.callerinfo.TestUtils.isWindowAtPosition;
 import static org.xdty.callerinfo.TestUtils.itemsCountIs;
@@ -94,6 +95,22 @@ public class MainActivityTest extends ActivityTestBase {
                 clickChildViewWithId(R.id.card_view)));
         onView(allOf(withId(R.id.time),
                 hasSibling(withText(text)))).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testRecyclerViewItemColor() {
+        onView(withId(R.id.history_list)).check(
+                matches(atPosition(0,
+                        childWithBackgroundColor(R.id.card_view, mSetting.getPoiColor()))));
+        onView(withId(R.id.history_list)).check(
+                matches(atPosition(1,
+                        childWithBackgroundColor(R.id.card_view, mSetting.getReportColor()))));
+        onView(withId(R.id.history_list)).check(
+                matches(atPosition(2,
+                        childWithBackgroundColor(R.id.card_view, mSetting.getReportColor()))));
+        onView(withId(R.id.history_list)).check(
+                matches(atPosition(3,
+                        childWithBackgroundColor(R.id.card_view, mSetting.getNormalColor()))));
     }
 
     @Test
