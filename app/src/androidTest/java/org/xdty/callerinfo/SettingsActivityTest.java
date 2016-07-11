@@ -37,6 +37,8 @@ public class SettingsActivityTest extends ActivityTestBase {
 
     @Test
     public void testColorSettings() {
+
+        // normal color
         onView(withText(R.string.color_normal)).perform(click());
         onView(withContentDescription("Color 6"))
                 .inRoot(isDialog())
@@ -45,6 +47,31 @@ public class SettingsActivityTest extends ActivityTestBase {
         onView(withId(R.id.history_list)).check(
                 matches(atPosition(3,
                         childWithBackgroundColor(R.id.card_view, mSetting.getNormalColor()))));
+
+        // poi color
+        navigateToSetting();
+        onView(withText(R.string.color_poi)).perform(click());
+        onView(withContentDescription("Color 8"))
+                .inRoot(isDialog())
+                .perform(click());
+        pressBack();
+        onView(withId(R.id.history_list)).check(
+                matches(atPosition(0,
+                        childWithBackgroundColor(R.id.card_view, mSetting.getPoiColor()))));
+
+        // report color
+        navigateToSetting();
+        onView(withText(R.string.color_report)).perform(click());
+        onView(withContentDescription("Color 3"))
+                .inRoot(isDialog())
+                .perform(click());
+        pressBack();
+        onView(withId(R.id.history_list)).check(
+                matches(atPosition(1,
+                        childWithBackgroundColor(R.id.card_view, mSetting.getReportColor()))));
+        onView(withId(R.id.history_list)).check(
+                matches(atPosition(2,
+                        childWithBackgroundColor(R.id.card_view, mSetting.getReportColor()))));
     }
 
 }
