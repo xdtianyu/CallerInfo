@@ -14,11 +14,14 @@ import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.not;
 import static org.xdty.callerinfo.TestUtils.atPosition;
 import static org.xdty.callerinfo.TestUtils.childWithBackgroundColor;
+import static org.xdty.callerinfo.TestUtils.setProgress;
 
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
@@ -72,6 +75,21 @@ public class SettingsActivityTest extends ActivityTestBase {
         onView(withId(R.id.history_list)).check(
                 matches(atPosition(2,
                         childWithBackgroundColor(R.id.card_view, mSetting.getReportColor()))));
+    }
+
+    @Test
+    public void testWindowTextStyleSettings() {
+        onView(withText(R.string.window_text_style)).perform(click());
+        onView(withText(R.string.window_text_size)).perform(click());
+
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(10));
+
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText(R.string.text_size)));
     }
 
 }

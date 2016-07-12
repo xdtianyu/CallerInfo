@@ -13,10 +13,12 @@ import android.support.test.espresso.action.Press;
 import android.support.test.espresso.action.Swipe;
 import android.support.test.espresso.intent.Checks;
 import android.support.test.espresso.matcher.BoundedMatcher;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.hamcrest.Description;
@@ -117,11 +119,24 @@ public class TestUtils {
     }
 
     public static Matcher<View> withTextColor(final int color) {
-        Checks.checkNotNull(color);
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
             public boolean matchesSafely(TextView textView) {
                 return color == textView.getCurrentTextColor();
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with text color: ");
+            }
+        };
+    }
+
+    public static Matcher<View> withTextSize(final int size) {
+        return new BoundedMatcher<View, TextView>(TextView.class) {
+            @Override
+            public boolean matchesSafely(TextView textView) {
+                return size == textView.getTextSize();
             }
 
             @Override
@@ -156,6 +171,26 @@ public class TestUtils {
             @Override
             public void describeTo(Description description) {
                 description.appendText("with background color: " + mColor);
+            }
+        };
+    }
+
+    public static ViewAction setProgress(final int progress) {
+        return new ViewAction() {
+            @Override
+            public void perform(UiController uiController, View view) {
+                SeekBar seekBar = (SeekBar) view;
+                seekBar.setProgress(progress);
+            }
+
+            @Override
+            public String getDescription() {
+                return "Set a progress on a SeekBar";
+            }
+
+            @Override
+            public Matcher<View> getConstraints() {
+                return ViewMatchers.isAssignableFrom(SeekBar.class);
             }
         };
     }
