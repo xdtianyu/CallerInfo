@@ -1,5 +1,7 @@
 package org.xdty.callerinfo;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -16,6 +18,7 @@ import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.SeekBar;
@@ -136,12 +139,23 @@ public class TestUtils {
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
             public boolean matchesSafely(TextView textView) {
-                return size == textView.getTextSize();
+
+                Context c = textView.getContext();
+                Resources r;
+
+                if (c == null) {
+                    r = Resources.getSystem();
+                } else {
+                    r = c.getResources();
+                }
+
+                return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, size,
+                        r.getDisplayMetrics()) == textView.getTextSize();
             }
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("with text color: ");
+                description.appendText("with text size: ");
             }
         };
     }

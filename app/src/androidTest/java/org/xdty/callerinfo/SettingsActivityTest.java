@@ -14,14 +14,17 @@ import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.xdty.callerinfo.TestUtils.atPosition;
 import static org.xdty.callerinfo.TestUtils.childWithBackgroundColor;
 import static org.xdty.callerinfo.TestUtils.setProgress;
+import static org.xdty.callerinfo.TestUtils.withTextSize;
 
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
@@ -90,6 +93,55 @@ public class SettingsActivityTest extends ActivityTestBase {
                 .check(matches(isDisplayed()));
         onView(withId(R.id.number_info)).inRoot(not(isDialog()))
                 .check(matches(withText(R.string.text_size)));
+
+        // check preview window text size
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withTextSize(10)));
+
+        // set another value
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(40));
+
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withTextSize(40)));
+
+        // cancel size setting
+        onView(withText(R.string.cancel))
+                .inRoot(isDialog())
+                .perform(click());
+
+        // check text size setting not performed
+        onView(withText(R.string.window_text_size)).perform(click());
+
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(not(withTextSize(10))));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(not(withTextSize(40))));
+
+        // set text size value and click ok
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(30));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withTextSize(30)));
+
+        onView(withText(R.string.ok))
+                .inRoot(isDialog())
+                .perform(click());
+
+        // check text size setting
+        pressBack();
+        pressBack();
+
+        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        onView(withText(R.string.action_float_window))
+                .perform(click());
+
+        onView(withId(R.id.number_info)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(withTextSize(mSetting.getTextSize())));
+
     }
 
 }
