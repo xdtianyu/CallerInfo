@@ -27,6 +27,7 @@ import static org.xdty.callerinfo.TestUtils.checkRadioItem;
 import static org.xdty.callerinfo.TestUtils.childWithBackgroundColor;
 import static org.xdty.callerinfo.TestUtils.setProgress;
 import static org.xdty.callerinfo.TestUtils.withTextAlign;
+import static org.xdty.callerinfo.TestUtils.withTextPadding;
 import static org.xdty.callerinfo.TestUtils.withTextSize;
 
 @RunWith(AndroidJUnit4.class)
@@ -171,6 +172,72 @@ public class SettingsActivityTest extends ActivityTestBase {
         onView(withId(R.id.number_info)).inRoot(not(isDialog()))
                 .check(matches(withTextAlign(alignment)));
         pressBack();
+    }
+
+    @Test
+    public void testWindowTextPaddingSetting() {
+        onView(withText(R.string.window_text_style)).perform(click());
+
+        int align = mSetting.getTextAlignment();
+
+        // open text padding setting dialog
+        onView(withText(R.string.window_text_padding)).perform(click());
+
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(10));
+
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText(R.string.text_padding)));
+
+        // check preview window text padding
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withTextPadding(align, 10)));
+
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(20));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withTextPadding(align, 20)));
+
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(40));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withTextPadding(align, 40)));
+
+        // cancel padding setting
+        onView(withText(R.string.cancel))
+                .inRoot(isDialog())
+                .perform(click());
+
+        // check text padding setting not performed
+        onView(withText(R.string.window_text_padding)).perform(click());
+
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(not(withTextPadding(align, 10))));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(not(withTextPadding(align, 20))));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(not(withTextPadding(align, 40))));
+
+        // set text padding value and click ok
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(30));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withTextPadding(align, 30)));
+
+        onView(withText(R.string.ok))
+                .inRoot(isDialog())
+                .perform(click());
+
+        // check text padding in text size setting
+        onView(withText(R.string.window_text_size)).perform(click());
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withTextPadding(align, 30)));
     }
 
 }

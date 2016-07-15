@@ -189,7 +189,30 @@ public class TestUtils {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("with text size: ");
+                description.appendText("with text align: ");
+            }
+        };
+    }
+
+    public static Matcher<View> withTextPadding(final int align, final int padding) {
+        return new BoundedMatcher<View, TextView>(TextView.class) {
+            @Override
+            public boolean matchesSafely(TextView textView) {
+                switch (align) {
+                    case FloatWindow.TEXT_ALIGN_LEFT:
+                        return textView.getPaddingLeft() == padding;
+                    case FloatWindow.TEXT_ALIGN_CENTER:
+                        return textView.getPaddingTop() == padding;
+                    case FloatWindow.TEXT_ALIGN_RIGHT:
+                        return textView.getPaddingRight() == padding;
+                    default:
+                        return textView.getPaddingTop() == padding;
+                }
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with text padding: ");
             }
         };
     }
