@@ -19,14 +19,18 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.xdty.callerinfo.service.FloatWindow;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -160,6 +164,36 @@ public class TestUtils {
         };
     }
 
+    public static Matcher<View> withTextAlign(final int align) {
+        return new BoundedMatcher<View, TextView>(TextView.class) {
+            @Override
+            public boolean matchesSafely(TextView textView) {
+                int gravity;
+                switch (align) {
+                    case FloatWindow.TEXT_ALIGN_LEFT:
+                        gravity = Gravity.START | Gravity.CENTER;
+                        break;
+                    case FloatWindow.TEXT_ALIGN_CENTER:
+                        gravity = Gravity.CENTER;
+                        break;
+                    case FloatWindow.TEXT_ALIGN_RIGHT:
+                        gravity = Gravity.END | Gravity.CENTER;
+                        break;
+                    default:
+                        gravity = Gravity.CENTER;
+                        break;
+                }
+
+                return textView.getGravity() == gravity;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with text size: ");
+            }
+        };
+    }
+
     public static Matcher<View> childWithBackgroundColor(final int childId, final int color) {
         Checks.checkNotNull(color);
         return new BoundedMatcher<View, View>(View.class) {
@@ -205,6 +239,26 @@ public class TestUtils {
             @Override
             public Matcher<View> getConstraints() {
                 return ViewMatchers.isAssignableFrom(SeekBar.class);
+            }
+        };
+    }
+
+    public static ViewAction checkRadioItem(final int index) {
+        return new ViewAction() {
+            @Override
+            public void perform(UiController uiController, View view) {
+                RadioGroup radioGroup = (RadioGroup) view;
+                ((RadioButton)radioGroup.getChildAt(index)).setChecked(true);
+            }
+
+            @Override
+            public String getDescription() {
+                return "Check a RadioGroup at index";
+            }
+
+            @Override
+            public Matcher<View> getConstraints() {
+                return ViewMatchers.isAssignableFrom(RadioGroup.class);
             }
         };
     }

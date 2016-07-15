@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.xdty.callerinfo.service.FloatWindow;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -22,8 +23,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.xdty.callerinfo.TestUtils.atPosition;
+import static org.xdty.callerinfo.TestUtils.checkRadioItem;
 import static org.xdty.callerinfo.TestUtils.childWithBackgroundColor;
 import static org.xdty.callerinfo.TestUtils.setProgress;
+import static org.xdty.callerinfo.TestUtils.withTextAlign;
 import static org.xdty.callerinfo.TestUtils.withTextSize;
 
 @RunWith(AndroidJUnit4.class)
@@ -81,8 +84,10 @@ public class SettingsActivityTest extends ActivityTestBase {
     }
 
     @Test
-    public void testWindowTextStyleSettings() {
+    public void testWindowTextSizeSetting() {
         onView(withText(R.string.window_text_style)).perform(click());
+
+        // open text size setting dialog
         onView(withText(R.string.window_text_size)).perform(click());
 
         onView(withId(R.id.seek_bar))
@@ -142,6 +147,30 @@ public class SettingsActivityTest extends ActivityTestBase {
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(withTextSize(mSetting.getTextSize())));
 
+    }
+
+    @Test
+    public void testWindowTextAlignmentSetting() {
+        onView(withText(R.string.window_text_style)).perform(click());
+
+        testWindowTextAlignmentSetting(0, FloatWindow.TEXT_ALIGN_LEFT);
+        testWindowTextAlignmentSetting(1, FloatWindow.TEXT_ALIGN_CENTER);
+        testWindowTextAlignmentSetting(2, FloatWindow.TEXT_ALIGN_RIGHT);
+
+    }
+
+    private void testWindowTextAlignmentSetting(int itemId, int alignment) {
+        // open text alignment setting dialog
+        onView(withText(R.string.window_text_alignment)).perform(click());
+
+        onView(withId(R.id.radio))
+                .inRoot(isDialog())
+                .perform(checkRadioItem(itemId));
+        // check text style alignment
+        onView(withText(R.string.window_text_size)).perform(click());
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withTextAlign(alignment)));
+        pressBack();
     }
 
 }

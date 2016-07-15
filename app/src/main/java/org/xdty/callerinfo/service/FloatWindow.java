@@ -41,9 +41,9 @@ public class FloatWindow extends StandOutWindow {
     private final static int STATUS_SHOWING = 1;
     private final static int STATUS_HIDE = 2;
 
-    private final static int TEXT_ALIGN_LEFT = 0;
-    private final static int TEXT_ALIGN_CENTER = 1;
-    private final static int TEXT_ALIGN_RIGHT = 2;
+    public final static int TEXT_ALIGN_LEFT = 0;
+    public final static int TEXT_ALIGN_CENTER = 1;
+    public final static int TEXT_ALIGN_RIGHT = 2;
 
     private static int mShowingStatus = STATUS_CLOSE;
 
@@ -243,7 +243,7 @@ public class FloatWindow extends StandOutWindow {
                     break;
                 default:
                     gravity = Gravity.CENTER;
-                    textView.setPadding(padding, 0, 0, 0);
+                    textView.setPadding(0, padding, 0, 0);
                     break;
             }
             errorText.setGravity(gravity);
