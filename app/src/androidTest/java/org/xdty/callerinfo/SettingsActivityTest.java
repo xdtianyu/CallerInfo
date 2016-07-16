@@ -1,5 +1,6 @@
 package org.xdty.callerinfo;
 
+import android.os.SystemClock;
 import android.support.test.filters.LargeTest;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
@@ -253,6 +254,8 @@ public class SettingsActivityTest extends ActivityTestBase {
     @Test
     public void testWindowHeightSetting() {
         onView(withText(R.string.window_height)).perform(click());
+
+        SystemClock.sleep(1000);
 
         onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
                 .check(matches(isDisplayed()));
