@@ -26,6 +26,7 @@ import static org.xdty.callerinfo.TestUtils.atPosition;
 import static org.xdty.callerinfo.TestUtils.checkRadioItem;
 import static org.xdty.callerinfo.TestUtils.childWithBackgroundColor;
 import static org.xdty.callerinfo.TestUtils.setProgress;
+import static org.xdty.callerinfo.TestUtils.withHeight;
 import static org.xdty.callerinfo.TestUtils.withTextAlign;
 import static org.xdty.callerinfo.TestUtils.withTextPadding;
 import static org.xdty.callerinfo.TestUtils.withTextSize;
@@ -238,6 +239,75 @@ public class SettingsActivityTest extends ActivityTestBase {
         onView(withText(R.string.window_text_size)).perform(click());
         onView(withId(R.id.number_info)).inRoot(not(isDialog()))
                 .check(matches(withTextPadding(align, 30)));
+    }
+
+    @Test
+    public void testWindowTextColorSetting() {
+        onView(withText(R.string.window_text_style)).perform(click());
+
+        onView(withText(R.string.window_text_color)).perform(click());
+
+        // TODO: test incoming window text color
+    }
+
+    @Test
+    public void testWindowHeightSetting() {
+        onView(withText(R.string.window_height)).perform(click());
+
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText(R.string.window_height_message)));
+
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(60));
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(withHeight(60)));
+
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(90));
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(withHeight(90)));
+
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(120));
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(withHeight(120)));
+
+        // cancel height setting
+        onView(withText(R.string.cancel))
+                .inRoot(isDialog())
+                .perform(click());
+
+        // check text height setting not performed
+        onView(withText(R.string.window_transparent)).perform(click());
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(not(withHeight(60))));
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(not(withHeight(90))));
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(not(withHeight(120))));
+
+        pressBack();
+
+        onView(withText(R.string.window_height)).perform(click());
+
+        // set height setting and click ok
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(110));
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(withHeight(110)));
+        onView(withText(R.string.ok))
+                .inRoot(isDialog())
+                .perform(click());
+
+        onView(withText(R.string.window_transparent)).perform(click());
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(withHeight(110)));
     }
 
 }

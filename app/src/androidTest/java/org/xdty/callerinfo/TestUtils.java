@@ -194,6 +194,20 @@ public class TestUtils {
         };
     }
 
+    public static Matcher<View> withHeight(final int height) {
+        return new BoundedMatcher<View, View>(View.class) {
+            @Override
+            public boolean matchesSafely(View view) {
+                return view.getHeight() == height;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with height: ");
+            }
+        };
+    }
+
     public static Matcher<View> withTextPadding(final int align, final int padding) {
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
