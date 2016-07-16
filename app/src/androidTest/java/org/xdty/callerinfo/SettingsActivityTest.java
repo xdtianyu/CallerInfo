@@ -31,6 +31,7 @@ import static org.xdty.callerinfo.TestUtils.withHeight;
 import static org.xdty.callerinfo.TestUtils.withTextAlign;
 import static org.xdty.callerinfo.TestUtils.withTextPadding;
 import static org.xdty.callerinfo.TestUtils.withTextSize;
+import static org.xdty.callerinfo.TestUtils.withTransparency;
 
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
@@ -45,6 +46,7 @@ public class SettingsActivityTest extends ActivityTestBase {
     public void navigateToSetting() {
         openActionBarOverflowOrOptionsMenu(getTargetContext());
         onView(withText(R.string.action_settings)).perform(click());
+        SystemClock.sleep(1000);
     }
 
     @Test
@@ -311,6 +313,69 @@ public class SettingsActivityTest extends ActivityTestBase {
         onView(withText(R.string.window_transparent)).perform(click());
         onView(withId(R.id.content)).inRoot(not(isDialog()))
                 .check(matches(withHeight(110)));
+    }
+
+    @Test
+    public void testWindowTransparentSetting() {
+        onView(withText(R.string.window_transparent)).perform(click());
+
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText(R.string.text_transparent)));
+
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(60));
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(withTransparency(60)));
+
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(20));
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(withTransparency(20)));
+
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(90));
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(withTransparency(90)));
+
+        // cancel the change
+        onView(withText(R.string.cancel))
+                .inRoot(isDialog())
+                .perform(click());
+
+        // check window transparency
+        onView(withText(R.string.window_height))
+                .perform(click());
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(not(withTransparency(60))));
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(not(withTransparency(20))));
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(not(withTransparency(90))));
+
+        pressBack();
+
+        // save the change
+        onView(withText(R.string.window_transparent)).perform(click());
+        onView(withId(R.id.seek_bar))
+                .inRoot(isDialog())
+                .perform(setProgress(50));
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(withTransparency(50)));
+
+        onView(withText(R.string.ok))
+                .inRoot(isDialog())
+                .perform(click());
+
+        // check the transparency is performed
+        onView(withText(R.string.window_height))
+                .perform(click());
+        onView(withId(R.id.content)).inRoot(not(isDialog()))
+                .check(matches(withTransparency(50)));
     }
 
 }

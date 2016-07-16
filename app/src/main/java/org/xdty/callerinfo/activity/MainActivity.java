@@ -210,6 +210,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     protected void onStop() {
         if (FloatWindow.status() != FloatWindow.STATUS_CLOSE) {
+            // FixME: window in other ui may close because async
             Utils.closeWindow(this);
         }
         mPresenter.clearSearch();

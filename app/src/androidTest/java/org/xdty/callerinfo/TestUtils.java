@@ -16,6 +16,7 @@ import android.support.test.espresso.action.Swipe;
 import android.support.test.espresso.intent.Checks;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -208,6 +209,24 @@ public class TestUtils {
         };
     }
 
+    public static Matcher<View> withTransparency(final int trans) {
+        return new BoundedMatcher<View, View>(View.class) {
+            @Override
+            public boolean matchesSafely(View view) {
+                if (view.getBackground() != null) {
+                    return Math.abs(DrawableCompat.getAlpha(view.getBackground()) -
+                            (int) (trans / 100.0 * 255)) < 3;
+                }
+                return view.getAlpha() == trans;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with transparency: ");
+            }
+        };
+    }
+
     public static Matcher<View> withTextPadding(final int align, final int padding) {
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
@@ -285,7 +304,7 @@ public class TestUtils {
             @Override
             public void perform(UiController uiController, View view) {
                 RadioGroup radioGroup = (RadioGroup) view;
-                ((RadioButton)radioGroup.getChildAt(index)).setChecked(true);
+                ((RadioButton) radioGroup.getChildAt(index)).setChecked(true);
             }
 
             @Override
