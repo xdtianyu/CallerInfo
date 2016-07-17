@@ -4,9 +4,11 @@ import android.os.SystemClock;
 import android.support.test.filters.LargeTest;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
+import android.telephony.TelephonyManager;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.xdty.callerinfo.receiver.IncomingCall;
 import org.xdty.callerinfo.service.FloatWindow;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -14,6 +16,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
@@ -38,9 +41,12 @@ import static org.xdty.callerinfo.TestUtils.withTransparency;
 @LargeTest
 public class SettingsActivityTest extends ActivityTestBase {
 
+    IncomingCall.IncomingCallListener mIncomingCallListener;
+
     @Override
     public void beforeTest() {
         navigateToSetting();
+        mIncomingCallListener = IncomingCall.IncomingCallListener.getInstance();
     }
 
     public void navigateToSetting() {
@@ -376,6 +382,96 @@ public class SettingsActivityTest extends ActivityTestBase {
                 .perform(click());
         onView(withId(R.id.content)).inRoot(not(isDialog()))
                 .check(matches(withTransparency(50)));
+    }
+
+    @Test
+    public void testWindowOutgoingVisibilitySetting() {
+        onView(withText(R.string.window_visibility))
+                .perform(click());
+
+        // test outgoing window
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_OFFHOOK, "10086");
+        onView(withId(R.id.window_layout)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(doesNotExist());
+
+        onView(withText(R.string.display_on_outgoing)).perform(click());
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_OFFHOOK, "10086");
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText("中国移动客服")));
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_IDLE, "10086");
+    }
+
+    @Test
+    public void testWindowHideAfterAcceptSetting() {
+        onView(withText(R.string.window_visibility))
+                .perform(click());
+
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_RINGING, "10086");
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText("中国移动客服")));
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_OFFHOOK, "10086");
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText("中国移动客服")));
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_IDLE, "10086");
+
+        onView(withText(R.string.hide_when_off_hook)).perform(click());
+
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_RINGING, "10086");
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText("中国移动客服")));
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_OFFHOOK, "10086");
+        onView(withId(R.id.window_layout)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(doesNotExist());
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_IDLE, "10086");
+    }
+
+    @Test
+    public void testWindowHideAfterTapSetting() {
+        onView(withText(R.string.window_visibility))
+                .perform(click());
+
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_RINGING, "10086");
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText("中国移动客服")));
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_OFFHOOK, "10086");
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText("中国移动客服")));
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_IDLE, "10086");
+
+        onView(withText(R.string.hide_when_touch)).perform(click());
+
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_RINGING, "10086");
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText("中国移动客服")));
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_OFFHOOK, "10086");
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText("中国移动客服")));
+
+        // click outside the window
+        mDevice.click(500, 500);
+        onView(withId(R.id.window_layout)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(doesNotExist());
+
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_IDLE, "10086");
     }
 
 }
