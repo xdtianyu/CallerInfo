@@ -256,9 +256,8 @@ public class SettingImpl implements Setting {
 
     @Override
     public void clear() {
-        SharedPreferences.Editor editor = mPrefs.edit();
-        editor.clear();
-        editor.apply();
+        mPrefs.edit().clear().apply();
+        mWindowPrefs.edit().clear().apply();
     }
 
     @Override

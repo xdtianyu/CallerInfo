@@ -36,7 +36,10 @@ import static org.junit.Assert.assertTrue;
 import static org.xdty.callerinfo.TestUtils.atPosition;
 import static org.xdty.callerinfo.TestUtils.checkRadioItem;
 import static org.xdty.callerinfo.TestUtils.childWithBackgroundColor;
+import static org.xdty.callerinfo.TestUtils.isWindowAtPosition;
 import static org.xdty.callerinfo.TestUtils.setProgress;
+import static org.xdty.callerinfo.TestUtils.swipeDown;
+import static org.xdty.callerinfo.TestUtils.swipeUp;
 import static org.xdty.callerinfo.TestUtils.withHeight;
 import static org.xdty.callerinfo.TestUtils.withTextAlign;
 import static org.xdty.callerinfo.TestUtils.withTextPadding;
@@ -521,6 +524,7 @@ public class SettingsActivityTest extends ActivityTestBase {
         onView(withId(R.id.number_info)).inRoot(not(isDialog()))
                 .check(matches(withText("中国移动客服")));
 
+        // check notification not exist
         mDevice.openNotification();
         mDevice.wait(Until.hasObject(By.pkg("com.android.systemui")), 10000);
         notificationStackScrollerUiObject = mDevice.findObject(notificationStackScroller);
@@ -532,7 +536,48 @@ public class SettingsActivityTest extends ActivityTestBase {
 
     @Test
     public void testWindowMoveSetting() {
+        onView(withText(R.string.window_visibility))
+                .perform(click());
 
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_RINGING, "10086");
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText("中国移动客服")));
+
+        // test movement
+        int oldY = mSetting.getWindowY();
+
+        onView(withId(R.id.number_info))
+                .inRoot(not(isDialog()))
+                .perform(swipeUp());
+        onView(withId(R.id.window_layout))
+                .inRoot(not(isDialog()))
+                .check(matches(isWindowAtPosition(mSetting.getWindowX(), mSetting.getWindowY())));
+
+        // window position is changed.
+        assertTrue(oldY != mSetting.getWindowY());
+
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_IDLE, "10086");
+
+        oldY = mSetting.getWindowY();
+
+        // disable move
+        onView(withText(R.string.disable_move)).perform(click());
+
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_RINGING, "10086");
+
+        onView(withId(R.id.number_info))
+                .inRoot(not(isDialog()))
+                .perform(swipeDown());
+        onView(withId(R.id.window_layout))
+                .inRoot(not(isDialog()))
+                .check(matches(isWindowAtPosition(mSetting.getWindowX(), mSetting.getWindowY())));
+
+        // window position is not changed.
+        assertTrue(oldY == mSetting.getWindowY());
+
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_IDLE, "10086");
     }
 
 }
