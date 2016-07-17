@@ -4,6 +4,11 @@ import android.os.SystemClock;
 import android.support.test.filters.LargeTest;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
+import android.support.test.uiautomator.Until;
 import android.telephony.TelephonyManager;
 
 import org.junit.Test;
@@ -26,6 +31,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.xdty.callerinfo.TestUtils.atPosition;
 import static org.xdty.callerinfo.TestUtils.checkRadioItem;
 import static org.xdty.callerinfo.TestUtils.childWithBackgroundColor;
@@ -472,6 +479,60 @@ public class SettingsActivityTest extends ActivityTestBase {
                 .check(doesNotExist());
 
         mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_IDLE, "10086");
+    }
+
+    @Test
+    public void testWindowCloseAnimationSetting() {
+        // do nothing
+    }
+
+    @Test
+    public void testWindowNotificationSetting() throws UiObjectNotFoundException {
+        onView(withText(R.string.window_visibility))
+                .perform(click());
+
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_RINGING, "10086");
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText("中国移动客服")));
+
+        mDevice.openNotification();
+        mDevice.wait(Until.hasObject(By.pkg("com.android.systemui")), 10000);
+        UiSelector notificationStackScroller = new UiSelector().packageName("com.android.systemui")
+                .className("android.view.ViewGroup")
+                .resourceId("com.android.systemui:id/notification_stack_scroller");
+
+        UiObject notificationStackScrollerUiObject = mDevice.findObject(notificationStackScroller);
+        assertTrue(notificationStackScrollerUiObject.exists());
+
+        String text = getTargetContext().getString(R.string.app_name);
+        UiObject notify = notificationStackScrollerUiObject.getChild(new UiSelector().text(text));
+        assertTrue(notify.exists());
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_IDLE, "10086");
+
+        mDevice.pressBack();
+
+        // disable notification
+        onView(withText(R.string.disable_notify)).perform(click());
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_RINGING, "10086");
+        onView(withId(R.id.window_layout)).inRoot(not(isDialog()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.number_info)).inRoot(not(isDialog()))
+                .check(matches(withText("中国移动客服")));
+
+        mDevice.openNotification();
+        mDevice.wait(Until.hasObject(By.pkg("com.android.systemui")), 10000);
+        notificationStackScrollerUiObject = mDevice.findObject(notificationStackScroller);
+        assertTrue(notificationStackScrollerUiObject.exists());
+        notify = notificationStackScrollerUiObject.getChild(new UiSelector().text(text));
+        assertFalse(notify.exists());
+        mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_IDLE, "10086");
+    }
+
+    @Test
+    public void testWindowMoveSetting() {
+
     }
 
 }
