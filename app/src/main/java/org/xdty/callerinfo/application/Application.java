@@ -1,6 +1,8 @@
 package org.xdty.callerinfo.application;
 
+import org.xdty.callerinfo.AppComponent;
 import org.xdty.callerinfo.BuildConfig;
+import org.xdty.callerinfo.DaggerAppComponent;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.receiver.IncomingCall.IncomingCallListener;
@@ -13,9 +15,14 @@ import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 public class Application extends com.orm.SugarApp {
     public final static String TAG = Application.class.getSimpleName();
 
+    private static AppComponent sAppComponent;
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        sAppComponent = DaggerAppComponent.create();
+
         SettingImpl.init(this);
         PhoneNumber.init(this);
         IncomingCallListener.init(this);

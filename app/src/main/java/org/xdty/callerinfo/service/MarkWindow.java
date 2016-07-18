@@ -20,6 +20,7 @@ import wei.mark.standout.StandOutWindow;
 import wei.mark.standout.constants.StandOutFlags;
 import wei.mark.standout.ui.Window;
 
+// MarkWindow is not used
 public class MarkWindow extends StandOutWindow {
     private static final String TAG = MarkWindow.class.getSimpleName();
     private WindowManager mWindowManager;
