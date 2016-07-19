@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.application;
 
 import org.xdty.callerinfo.AppComponent;
+import org.xdty.callerinfo.AppModule;
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.DaggerAppComponent;
 import org.xdty.callerinfo.model.setting.Setting;
@@ -17,11 +18,15 @@ public class Application extends com.orm.SugarApp {
 
     private static AppComponent sAppComponent;
 
+    public static AppComponent getAppComponent() {
+        return sAppComponent;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        sAppComponent = DaggerAppComponent.create();
+        sAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
 
         SettingImpl.init(this);
         PhoneNumber.init(this);

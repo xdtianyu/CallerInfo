@@ -2,6 +2,7 @@ package org.xdty.callerinfo.presenter;
 
 import android.support.annotation.NonNull;
 
+import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.MainContract;
 import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.database.DatabaseImpl;
@@ -21,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import rx.functions.Action1;
 
 public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callback,
@@ -28,16 +31,19 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
 
     private final List<InCall> mInCallList = new ArrayList<>();
     private MainContract.View mView;
-    private Setting mSetting;
-    private Permission mPermission;
-    private PhoneNumber mPhoneNumber;
-    private Database mDatabase;
+
+    @Inject
+    Setting mSetting;
+    Permission mPermission;
+    @Inject
+    PhoneNumber mPhoneNumber;
+    @Inject
+    Database mDatabase;
 
     public MainPresenter(MainContract.View view, Setting setting, Permission permission) {
         mView = view;
-        mSetting = setting;
         mPermission = permission;
-        mPhoneNumber = PhoneNumber.getInstance();
+        Application.getAppComponent().inject(this);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package org.xdty.callerinfo;
 
 import org.xdty.callerinfo.application.Application;
+import org.xdty.callerinfo.model.database.Database;
+import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.phone.number.PhoneNumber;
@@ -19,6 +21,7 @@ public class AppModule {
         app = application;
     }
 
+    @Singleton
     @Provides
     public Application provideApplication() {
         return app;
@@ -31,10 +34,17 @@ public class AppModule {
         return PhoneNumber.getInstance();
     }
 
+    @Singleton
     @Provides
     public Setting provideSetting() {
         SettingImpl.init(app);
         return SettingImpl.getInstance();
+    }
+
+    @Singleton
+    @Provides
+    public Database provideDatabase() {
+        return DatabaseImpl.getInstance();
     }
 
 }
