@@ -1,9 +1,9 @@
 package org.xdty.callerinfo.application;
 
-import org.xdty.callerinfo.di.AppComponent;
-import org.xdty.callerinfo.di.modules.AppModule;
 import org.xdty.callerinfo.BuildConfig;
-import org.xdty.callerinfo.DaggerAppComponent;
+import org.xdty.callerinfo.di.AppComponent;
+import org.xdty.callerinfo.di.DaggerAppComponent;
+import org.xdty.callerinfo.di.modules.AppModule;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.receiver.IncomingCall.IncomingCallListener;
 import org.xdty.callerinfo.utils.AlarmUtils;

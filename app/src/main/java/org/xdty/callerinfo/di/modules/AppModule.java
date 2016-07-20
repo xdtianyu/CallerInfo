@@ -3,6 +3,8 @@ package org.xdty.callerinfo.di.modules;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.database.DatabaseImpl;
+import org.xdty.callerinfo.model.permission.Permission;
+import org.xdty.callerinfo.model.permission.PermissionImpl;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.phone.number.PhoneNumber;
@@ -45,6 +47,12 @@ public class AppModule {
     @Provides
     public Database provideDatabase() {
         return DatabaseImpl.getInstance();
+    }
+
+    @Singleton
+    @Provides
+    public Permission providePermission() {
+        return new PermissionImpl(app);
     }
 
 }

@@ -34,15 +34,15 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
 
     @Inject
     Setting mSetting;
+    @Inject
     Permission mPermission;
     @Inject
     PhoneNumber mPhoneNumber;
     @Inject
     Database mDatabase;
 
-    public MainPresenter(MainContract.View view, Setting setting, Permission permission) {
+    public MainPresenter(MainContract.View view) {
         mView = view;
-        mPermission = permission;
         Application.getAppComponent().inject(this);
     }
 
@@ -158,6 +158,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
 
     @Override
     public void requestDrawOverlays(int requestCode) {
+        // TODO: move permission request in view
         mPermission.requestDrawOverlays(requestCode);
     }
 

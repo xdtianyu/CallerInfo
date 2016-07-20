@@ -33,13 +33,14 @@ import com.afollestad.materialdialogs.Theme;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.contract.MainContract;
+import org.xdty.callerinfo.di.DaggerMainComponent;
+import org.xdty.callerinfo.di.modules.MainModule;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.permission.PermissionImpl;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
-import org.xdty.callerinfo.presenter.MainPresenter;
 import org.xdty.callerinfo.receiver.IncomingCall;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
@@ -50,11 +51,17 @@ import org.xdty.phone.number.model.caller.Status;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 public class MainActivity extends BaseActivity implements MainContract.View {
 
     public final static int REQUEST_CODE_OVERLAY_PERMISSION = 1001;
     public final static int REQUEST_CODE_ASK_PERMISSIONS = 1002;
     private final static String TAG = MainActivity.class.getSimpleName();
+
+    @Inject
+    MainContract.Presenter mPresenter;
+
     private Toolbar mToolbar;
     private int mScreenWidth;
     private TextView mEmptyText;
@@ -63,17 +70,16 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FrameLayout mMainLayout;
     private long mLastSearchTime;
-    private MainContract.Presenter mPresenter;
     private MaterialDialog mUpdateDataDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        DaggerMainComponent.builder().mainModule(new MainModule(this)).build().inject(this);
+
         Setting setting = SettingImpl.getInstance();
         Permission permission = new PermissionImpl(this);
-
-        mPresenter = new MainPresenter(this, setting, permission);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
