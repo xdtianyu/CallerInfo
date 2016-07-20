@@ -1,15 +1,15 @@
 package org.xdty.callerinfo.application;
 
-import org.xdty.callerinfo.AppComponent;
-import org.xdty.callerinfo.AppModule;
+import org.xdty.callerinfo.di.AppComponent;
+import org.xdty.callerinfo.di.modules.AppModule;
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.DaggerAppComponent;
 import org.xdty.callerinfo.model.setting.Setting;
-import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.receiver.IncomingCall.IncomingCallListener;
 import org.xdty.callerinfo.utils.AlarmUtils;
 import org.xdty.callerinfo.utils.Utils;
-import org.xdty.phone.number.PhoneNumber;
+
+import javax.inject.Inject;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 
@@ -17,6 +17,9 @@ public class Application extends com.orm.SugarApp {
     public final static String TAG = Application.class.getSimpleName();
 
     private static AppComponent sAppComponent;
+
+    @Inject
+    Setting mSetting;
 
     public static AppComponent getAppComponent() {
         return sAppComponent;
@@ -27,18 +30,16 @@ public class Application extends com.orm.SugarApp {
         super.onCreate();
 
         sAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
+        sAppComponent.inject(this);
 
-        SettingImpl.init(this);
-        PhoneNumber.init(this);
         IncomingCallListener.init(this);
         Utils.checkLocale(getApplicationContext());
-        Setting setting = SettingImpl.getInstance();
 
-        if (setting.isCatchCrash() || BuildConfig.DEBUG) {
+        if (mSetting.isCatchCrash() || BuildConfig.DEBUG) {
             CustomActivityOnCrash.install(this);
         }
 
-        if (setting.isAutoReportEnabled() || setting.isMarkingEnabled()) {
+        if (mSetting.isAutoReportEnabled() || mSetting.isMarkingEnabled()) {
             AlarmUtils.install(this);
             AlarmUtils.alarm();
         }

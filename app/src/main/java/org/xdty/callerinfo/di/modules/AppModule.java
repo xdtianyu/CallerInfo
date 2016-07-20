@@ -1,4 +1,4 @@
-package org.xdty.callerinfo;
+package org.xdty.callerinfo.di.modules;
 
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.database.Database;
