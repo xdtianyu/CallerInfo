@@ -18,6 +18,8 @@ public class Application extends com.orm.SugarApp {
 
     private static AppComponent sAppComponent;
 
+    private static Application sApplication;
+
     @Inject
     Setting mSetting;
 
@@ -25,9 +27,15 @@ public class Application extends com.orm.SugarApp {
         return sAppComponent;
     }
 
+    public static Application getApplication() {
+        return sApplication;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        sApplication = this;
 
         sAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         sAppComponent.inject(this);

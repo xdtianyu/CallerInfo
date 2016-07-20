@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         super.onCreate(savedInstanceState);
 
         DaggerMainComponent.builder()
-                .appModule(new AppModule((Application) getApplication()))
+                .appModule(new AppModule(Application.getApplication()))
                 .mainModule(new MainModule(this))
                 .build()
                 .inject(this);
