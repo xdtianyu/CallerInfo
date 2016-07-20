@@ -32,15 +32,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.MainContract;
 import org.xdty.callerinfo.di.DaggerMainComponent;
+import org.xdty.callerinfo.di.modules.AppModule;
 import org.xdty.callerinfo.di.modules.MainModule;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.permission.Permission;
-import org.xdty.callerinfo.model.permission.PermissionImpl;
 import org.xdty.callerinfo.model.setting.Setting;
-import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.receiver.IncomingCall;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
@@ -62,6 +62,12 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Inject
     MainContract.Presenter mPresenter;
 
+    @Inject
+    Permission mPermission;
+
+    @Inject
+    Setting mSetting;
+
     private Toolbar mToolbar;
     private int mScreenWidth;
     private TextView mEmptyText;
@@ -76,16 +82,17 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DaggerMainComponent.builder().mainModule(new MainModule(this)).build().inject(this);
-
-        Setting setting = SettingImpl.getInstance();
-        Permission permission = new PermissionImpl(this);
+        DaggerMainComponent.builder()
+                .appModule(new AppModule((Application) getApplication()))
+                .mainModule(new MainModule(this))
+                .build()
+                .inject(this);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
         mPresenter.checkEula();
-        mScreenWidth = setting.getScreenWidth();
+        mScreenWidth = mSetting.getScreenWidth();
 
         mMainLayout = (FrameLayout) findViewById(R.id.main_layout);
         mEmptyText = (TextView) findViewById(R.id.empty_text);
