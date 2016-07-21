@@ -11,15 +11,13 @@ import android.util.Log;
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.contract.PhoneStateContract;
-import org.xdty.callerinfo.model.CallRecord;
-import org.xdty.callerinfo.model.permission.Permission;
-import org.xdty.callerinfo.model.permission.PermissionImpl;
-import org.xdty.callerinfo.model.setting.Setting;
-import org.xdty.callerinfo.model.setting.SettingImpl;
-import org.xdty.callerinfo.presenter.PhoneStatePresenter;
+import org.xdty.callerinfo.di.DaggerPhoneStatusComponent;
+import org.xdty.callerinfo.di.modules.PhoneStatusModule;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.model.INumber;
+
+import javax.inject.Inject;
 
 import wei.mark.standout.StandOutWindow;
 
@@ -44,19 +42,18 @@ public class IncomingCall extends BroadcastReceiver {
             PhoneStateContract.View {
 
         private static Context sContext;
+
+        @Inject
+        PhoneStateContract.Presenter mPresenter;
+
         private boolean isShowing = false;
 
-        private Setting mSetting;
-        private Permission mPermission;
-        private CallRecord mCallRecord;
-        private PhoneStateContract.Presenter mPresenter;
-
         private IncomingCallListener() {
-            mSetting = SettingImpl.getInstance();
-            mPermission = new PermissionImpl(sContext);
-            mCallRecord = new CallRecord();
-            mPresenter = new PhoneStatePresenter(this, mSetting, mPermission, mCallRecord);
             Utils.checkLocale(sContext);
+            DaggerPhoneStatusComponent.builder()
+                    .phoneStatusModule(new PhoneStatusModule(this))
+                    .build()
+                    .inject(this);
             mPresenter.start();
         }
 
@@ -82,7 +79,7 @@ public class IncomingCall extends BroadcastReceiver {
 
             if (BuildConfig.DEBUG) {
                 Log.d(TAG, "onCallStateChanged: " + state + " : " + number);
-                Log.d(TAG, "onCallStateChanged: permission -> " + mPermission.canReadPhoneState());
+                Log.d(TAG, "onCallStateChanged: permission -> " + mPresenter.canReadPhoneState());
             }
 
             if (mPresenter.matchIgnore(number)) {

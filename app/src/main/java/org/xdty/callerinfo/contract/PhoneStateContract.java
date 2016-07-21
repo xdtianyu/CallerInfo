@@ -58,5 +58,6 @@ public interface PhoneStateContract {
 
         void setOutGoingNumber(String number);
 
+        boolean canReadPhoneState();
     }
 }

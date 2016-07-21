@@ -21,7 +21,7 @@ public class MainModule {
     }
 
     @Provides
-    MainContract.Presenter providerPresenter() {
+    MainContract.Presenter providePresenter() {
         return new MainPresenter(mView);
     }
 }

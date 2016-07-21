@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.PhoneStateContract;
 import org.xdty.callerinfo.model.CallRecord;
 import org.xdty.callerinfo.model.SearchMode;
@@ -26,18 +27,21 @@ import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 
+import javax.inject.Inject;
+
 import rx.functions.Action1;
 
 public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneNumber.Callback {
 
     private final static String TAG = PhoneStatePresenter.class.getSimpleName();
-
+    @Inject
+    Setting mSetting;
+    @Inject
+    Permission mPermission;
+    @Inject
+    Database mDatabase;
+    CallRecord mCallRecord;
     private PhoneStateContract.View mView;
-    private Setting mSetting;
-    private Permission mPermission;
-    private CallRecord mCallRecord;
-    private Database mDatabase;
-
     private String mIncomingNumber;
 
     private IPluginService mPluginService;
@@ -46,12 +50,10 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     private boolean mAutoHangup = false;
     private boolean mWaitingCheckHangup = false;
 
-    public PhoneStatePresenter(PhoneStateContract.View view, Setting setting,
-            Permission permission, CallRecord callRecord) {
+    public PhoneStatePresenter(PhoneStateContract.View view) {
         mView = view;
-        mSetting = setting;
-        mPermission = permission;
-        mCallRecord = callRecord;
+        mCallRecord = new CallRecord();
+        Application.getAppComponent().inject(this);
     }
 
     @Override
@@ -274,6 +276,11 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     @Override
     public void setOutGoingNumber(String number) {
         mIncomingNumber = number;
+    }
+
+    @Override
+    public boolean canReadPhoneState() {
+        return mPermission.canReadPhoneState();
     }
 
     private String fixNumber(String number) {
