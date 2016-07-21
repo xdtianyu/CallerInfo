@@ -1,7 +1,6 @@
 package org.xdty.callerinfo.contract;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
@@ -62,11 +61,7 @@ public interface MainContract {
 
         boolean canDrawOverlays();
 
-        void requestDrawOverlays(int requestCode);
-
         int checkPermission(String permission);
-
-        void requestPermissions(@NonNull String[] permissions, int requestCode);
 
         void handleResponse(INumber number, boolean isOnline);
 

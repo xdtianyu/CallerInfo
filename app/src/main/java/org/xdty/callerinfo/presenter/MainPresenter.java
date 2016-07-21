@@ -1,7 +1,5 @@
 package org.xdty.callerinfo.presenter;
 
-import android.support.annotation.NonNull;
-
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.MainContract;
 import org.xdty.callerinfo.model.database.Database;
@@ -157,19 +155,8 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     }
 
     @Override
-    public void requestDrawOverlays(int requestCode) {
-        // TODO: move permission request in view
-        mPermission.requestDrawOverlays(requestCode);
-    }
-
-    @Override
     public int checkPermission(String permission) {
         return mPermission.checkPermission(permission);
-    }
-
-    @Override
-    public void requestPermissions(@NonNull String[] permissions, int requestCode) {
-        mPermission.requestPermissions(permissions, requestCode);
     }
 
     @Override

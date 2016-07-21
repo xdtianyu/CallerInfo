@@ -210,12 +210,13 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         super.onStart();
 
         if (!mPresenter.canDrawOverlays()) {
-            mPresenter.requestDrawOverlays(REQUEST_CODE_OVERLAY_PERMISSION);
+            mPermission.requestDrawOverlays(this, REQUEST_CODE_OVERLAY_PERMISSION);
         }
 
         int res = mPresenter.checkPermission(Manifest.permission.READ_PHONE_STATE);
         if (res != PackageManager.PERMISSION_GRANTED) {
-            mPresenter.requestPermissions(new String[] { Manifest.permission.READ_PHONE_STATE },
+            mPermission.requestPermissions(this,
+                    new String[] { Manifest.permission.READ_PHONE_STATE },
                     REQUEST_CODE_ASK_PERMISSIONS);
         }
     }

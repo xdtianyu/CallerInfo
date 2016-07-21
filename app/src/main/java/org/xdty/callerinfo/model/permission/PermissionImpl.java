@@ -27,12 +27,12 @@ public class PermissionImpl implements Permission {
     }
 
     @Override
-    public void requestDrawOverlays(int requestCode) {
+    public void requestDrawOverlays(Context context, int requestCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + mContext.getPackageName()));
-            if (mContext instanceof Activity) {
-                ((Activity) mContext).startActivityForResult(intent, requestCode);
+                    Uri.parse("package:" + context.getPackageName()));
+            if (context instanceof Activity) {
+                ((Activity) context).startActivityForResult(intent, requestCode);
             }
         }
     }
@@ -46,11 +46,12 @@ public class PermissionImpl implements Permission {
     }
 
     @Override
-    public void requestPermissions(@NonNull String[] permissions, int requestCode) {
+    public void requestPermissions(Context context, @NonNull String[] permissions,
+            int requestCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (mContext instanceof Activity) {
-                ((Activity) mContext).requestPermissions(
-                        new String[]{Manifest.permission.READ_PHONE_STATE}, requestCode);
+            if (context instanceof Activity) {
+                ((Activity) context).requestPermissions(
+                        new String[] { Manifest.permission.READ_PHONE_STATE }, requestCode);
             }
         }
     }
