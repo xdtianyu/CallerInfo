@@ -4,6 +4,7 @@ import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.di.modules.AppModule;
 import org.xdty.callerinfo.presenter.MainPresenter;
 import org.xdty.callerinfo.presenter.PhoneStatePresenter;
+import org.xdty.callerinfo.view.CallerAdapter;
 
 import javax.inject.Singleton;
 
@@ -17,4 +18,6 @@ public interface AppComponent {
     void inject(PhoneStatePresenter presenter);
 
     void inject(Application application);
+
+    void inject(CallerAdapter adapter);
 }

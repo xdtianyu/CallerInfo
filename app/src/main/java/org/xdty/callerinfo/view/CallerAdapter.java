@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.database.DatabaseImpl;
@@ -32,23 +33,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder> {
 
     private static final String TAG = CallerAdapter.class.getSimpleName();
     private final Context mContext;
+
+    @Inject
+    Database mDatabase;
+
+    @Inject
+    Setting mSetting;
+
     private Map<String, Caller> mCallerMap;
     private List<InCall> mList;
-    private Permission mPermission;
-    private Database mDatabase;
-    private Setting mSetting;
 
     public CallerAdapter(Context context) {
         mContext = context;
-        mPermission = new PermissionImpl(mContext.getApplicationContext());
-        mDatabase = DatabaseImpl.getInstance();
-        mSetting = SettingImpl.getInstance();
         mCallerMap = new HashMap<>();
         mList = new ArrayList<>();
+
+        Application.getAppComponent().inject(this);
     }
 
     @Override
