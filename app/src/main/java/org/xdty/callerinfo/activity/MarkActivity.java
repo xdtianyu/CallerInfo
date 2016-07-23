@@ -10,30 +10,39 @@ import android.view.WindowManager;
 import android.widget.ListView;
 
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.database.Database;
-import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.setting.Setting;
-import org.xdty.callerinfo.model.setting.SettingImpl;
-import org.xdty.callerinfo.utils.AlarmUtils;
+import org.xdty.callerinfo.utils.Alarm;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 public class MarkActivity extends BaseActivity implements DialogInterface.OnDismissListener {
     public static final String NUMBER = "number";
     private static final String TAG = MarkActivity.class.getSimpleName();
     boolean isPaused = false;
+
+    @Inject
+    Setting mSetting;
+
+    @Inject
+    Database mDatabase;
+    
+    @Inject
+    Alarm mAlarm;
+
     private AlertDialog mAlertDialog;
-    private Setting mSetting;
     private ArrayList<String> mNumberList;
-    private Database mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("");
-        mSetting = SettingImpl.getInstance();
-        mDatabase = DatabaseImpl.getInstance();
+
+        Application.getAppComponent().inject(this);
     }
 
     @Override
@@ -103,7 +112,7 @@ public class MarkActivity extends BaseActivity implements DialogInterface.OnDism
                 markedRecord.setTypeName(type);
                 mDatabase.saveMarked(markedRecord);
                 mDatabase.updateCaller(markedRecord);
-                AlarmUtils.alarm();
+                mAlarm.alarm();
             }
         });
         mAlertDialog = builder.create();

@@ -7,6 +7,7 @@ import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.permission.PermissionImpl;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
+import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.phone.number.PhoneNumber;
 
 import javax.inject.Singleton;
@@ -53,6 +54,12 @@ public class AppModule {
     @Provides
     public Permission providePermission() {
         return new PermissionImpl(app);
+    }
+
+    @Singleton
+    @Provides
+    public Alarm provideAlarm() {
+        return new Alarm();
     }
 
 }

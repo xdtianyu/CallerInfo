@@ -48,7 +48,7 @@ public final class Utils {
     private static final String TAG = Utils.class.getSimpleName();
 
     private Utils() {
-        throw new AssertionError("Utils class is not meant to be instantiated.");
+        throw new AssertionError("Utils class is not meant to be instantiated or subclassed.");
     }
 
     public static void showTextWindow(Context context, int resId, int frontType) {

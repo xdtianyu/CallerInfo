@@ -8,7 +8,7 @@ import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.setting.Setting;
-import org.xdty.callerinfo.utils.AlarmUtils;
+import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
@@ -35,6 +35,9 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     PhoneNumber mPhoneNumber;
     @Inject
     Database mDatabase;
+    @Inject
+    Alarm mAlarm;
+
     private MainContract.View mView;
 
     public MainPresenter(MainContract.View view) {
@@ -176,7 +179,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
                 mDatabase.updateCaller(new Caller(number, !number.isOnline()));
                 if (mSetting.isAutoReportEnabled()) {
                     mDatabase.saveMarkedRecord(number, mSetting.getUid());
-                    AlarmUtils.alarm();
+                    mAlarm.alarm();
                 }
             }
             mView.showSearchResult(number);
