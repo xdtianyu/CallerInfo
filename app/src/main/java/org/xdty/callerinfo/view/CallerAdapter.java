@@ -16,14 +16,9 @@ import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.database.Database;
-import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
-import org.xdty.callerinfo.model.db.MarkedRecord;
-import org.xdty.callerinfo.model.permission.Permission;
-import org.xdty.callerinfo.model.permission.PermissionImpl;
 import org.xdty.callerinfo.model.setting.Setting;
-import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
@@ -113,6 +108,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         final TextView duration;
         InCall inCall;
 
+        // FIXME: remove phone number callback
         PhoneNumber phoneNumber;
 
         public ViewHolder(Context context, View view) {
@@ -138,7 +134,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
             if (caller != null) {
                 TextColorPair t = Utils.getTextColorPair(context, caller);
                 text.setText(t.text);
-                cardView.setCardBackgroundColor(t.color);
+                cardView.setCardBackgroundColor(ContextCompat.getColor(context, t.color));
                 number.setText(TextUtils.isEmpty(
                         caller.getContactName()) ? caller.getNumber() : caller.getContactName());
             } else {
@@ -195,7 +191,9 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
             Caller caller = new Caller(number, !number.isOnline());
             mDatabase.updateCaller(caller);
             mCallerMap.put(number.getNumber(), caller);
-            MarkedRecord.trySave(number, mSetting, mDatabase);
+            if (mSetting.isAutoReportEnabled()) {
+                mDatabase.saveMarkedRecord(number, mSetting.getUid());
+            }
             inCall.setFetched(true);
             notifyDataSetChanged();
         }

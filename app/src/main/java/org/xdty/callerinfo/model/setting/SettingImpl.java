@@ -177,11 +177,6 @@ public class SettingImpl implements Setting {
     }
 
     @Override
-    public int getTypeFromName(String name) {
-        return Utils.typeFromString(sContext, name);
-    }
-
-    @Override
     public void updateLastScheduleTime() {
         updateLastScheduleTime(System.currentTimeMillis());
     }

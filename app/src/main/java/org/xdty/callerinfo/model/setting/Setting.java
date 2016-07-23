@@ -78,8 +78,6 @@ public interface Setting {
 
     String getUid();
 
-    int getTypeFromName(String name);
-
     void updateLastScheduleTime();
 
     void updateLastScheduleTime(long timestamp);

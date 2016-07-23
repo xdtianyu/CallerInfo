@@ -6,7 +6,6 @@ import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
-import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.utils.AlarmUtils;
@@ -28,8 +27,6 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
         PhoneNumber.CheckUpdateCallback {
 
     private final List<InCall> mInCallList = new ArrayList<>();
-    private MainContract.View mView;
-
     @Inject
     Setting mSetting;
     @Inject
@@ -38,6 +35,7 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     PhoneNumber mPhoneNumber;
     @Inject
     Database mDatabase;
+    private MainContract.View mView;
 
     public MainPresenter(MainContract.View view) {
         mView = view;
@@ -176,8 +174,10 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
         if (number != null) {
             if (isOnline && number.isValid()) {
                 mDatabase.updateCaller(new Caller(number, !number.isOnline()));
-                MarkedRecord.trySave(number, mSetting, mDatabase);
-                AlarmUtils.alarm();
+                if (mSetting.isAutoReportEnabled()) {
+                    mDatabase.saveMarkedRecord(number, mSetting.getUid());
+                    AlarmUtils.alarm();
+                }
             }
             mView.showSearchResult(number);
         }

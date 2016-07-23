@@ -3,6 +3,7 @@ package org.xdty.callerinfo.model.database;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.db.MarkedRecord;
+import org.xdty.phone.number.model.INumber;
 
 import java.util.List;
 
@@ -57,4 +58,6 @@ public interface Database {
     int getInCallCount(String number);
 
     void addInCallersSync(List<InCall> inCalls);
+
+    void saveMarkedRecord(final INumber number, final String uid);
 }

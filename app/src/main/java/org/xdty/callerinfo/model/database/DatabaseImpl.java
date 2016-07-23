@@ -8,6 +8,9 @@ import com.orm.query.Select;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.db.MarkedRecord;
+import org.xdty.callerinfo.utils.Utils;
+import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.Type;
 
 import java.util.List;
 
@@ -299,6 +302,29 @@ public class DatabaseImpl implements Database {
     public void addInCallersSync(List<InCall> inCalls) {
         for (InCall inCall : inCalls) {
             inCall.save();
+        }
+    }
+
+    public void saveMarkedRecord(final INumber number, final String uid) {
+        if (number.getType() == Type.REPORT) {
+            findMarkedRecord(number.getNumber()).subscribe(new Action1<MarkedRecord>() {
+                @Override
+                public void call(MarkedRecord record) {
+                    if (record == null) {
+                        int type = Utils.typeFromString(number.getName());
+                        if (type >= 0) {
+                            MarkedRecord markedRecord = new MarkedRecord();
+                            markedRecord.setNumber(number.getNumber());
+                            markedRecord.setUid(uid);
+                            markedRecord.setSource(number.getApiId());
+                            markedRecord.setType(type);
+                            markedRecord.setCount(number.getCount());
+                            markedRecord.setTypeName(number.getName());
+                            saveMarked(markedRecord);
+                        }
+                    }
+                }
+            });
         }
     }
 

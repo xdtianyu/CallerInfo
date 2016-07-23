@@ -24,6 +24,7 @@ import android.util.Log;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.activity.MarkActivity;
+import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
@@ -354,9 +355,11 @@ public class Utils {
         context.startActivity(intent);
     }
 
-    public static int typeFromString(Context context, String type) {
+    public static int typeFromString(String type) {
         ArrayList<String> types = new ArrayList<>(
-                Arrays.asList(context.getResources().getStringArray(R.array.mark_type_source)));
+                Arrays.asList(Application.getApplication()
+                        .getResources()
+                        .getStringArray(R.array.mark_type_source)));
         for (String t : types) {
             if (t.contains(type)) {
                 return types.indexOf(t);

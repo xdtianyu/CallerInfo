@@ -18,7 +18,6 @@ import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
-import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.plugin.IPluginService;
@@ -259,8 +258,10 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
         }
         if (isOnline) {
             mDatabase.updateCaller(new Caller(number, !number.isOnline()));
-            MarkedRecord.trySave(number, mSetting, mDatabase);
-            AlarmUtils.alarm();
+            if (mSetting.isAutoReportEnabled()) {
+                mDatabase.saveMarkedRecord(number, mSetting.getUid());
+                AlarmUtils.alarm();
+            }
         }
 
         showNumber(number);
