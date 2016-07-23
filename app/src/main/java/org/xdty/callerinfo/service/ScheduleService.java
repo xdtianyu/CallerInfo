@@ -7,11 +7,10 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.util.Log;
 
+import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.database.Database;
-import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.setting.Setting;
-import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 
@@ -19,19 +18,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class ScheduleService extends Service implements PhoneNumber.CloudListener {
 
     private static final String TAG = ScheduleService.class.getSimpleName();
 
+    @Inject
+    Database mDatabase;
+
+    @Inject
+    Setting mSetting;
+
+    @Inject
+    PhoneNumber mPhoneNumber;
+
     private Handler mThreadHandler;
     private Handler mMainHandler;
-
-    private Database mDatabase;
-    private Setting mSetting;
-    private PhoneNumber mPhoneNumber;
     private List<String> mPutList;
 
     public ScheduleService() {
+        Application.getAppComponent().inject(this);
     }
 
     @Override
@@ -43,16 +50,9 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
         handlerThread.start();
         mThreadHandler = new Handler(handlerThread.getLooper());
         mMainHandler = new Handler(getMainLooper());
-        mDatabase = DatabaseImpl.getInstance();
-        mSetting = SettingImpl.getInstance();
+
         mPutList = Collections.synchronizedList(new ArrayList<String>());
-        mThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                mPhoneNumber = PhoneNumber.getInstance();
-                mPhoneNumber.addCloudListener(ScheduleService.this);
-            }
-        });
+        mPhoneNumber.addCloudListener(ScheduleService.this);
     }
 
     @Override
@@ -75,6 +75,11 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
+
+        mPhoneNumber.removeCloudListener(ScheduleService.this);
+        mThreadHandler.removeCallbacksAndMessages(null);
+        mThreadHandler.getLooper().quit();
+
         super.onDestroy();
     }
 

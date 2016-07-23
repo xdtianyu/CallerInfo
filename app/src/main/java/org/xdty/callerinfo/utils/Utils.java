@@ -42,10 +42,14 @@ import java.util.Random;
 import java.util.TimeZone;
 import java.util.UUID;
 
-public class Utils {
+public final class Utils {
 
     public static final int NOTIFICATION_MARK = 0x01;
     private static final String TAG = Utils.class.getSimpleName();
+
+    private Utils() {
+        throw new AssertionError("Utils class is not meant to be instantiated.");
+    }
 
     public static void showTextWindow(Context context, int resId, int frontType) {
         Bundle bundle = new Bundle();

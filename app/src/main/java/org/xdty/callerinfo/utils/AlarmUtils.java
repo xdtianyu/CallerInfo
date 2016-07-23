@@ -8,11 +8,15 @@ import android.util.Log;
 
 import org.xdty.callerinfo.service.ScheduleService;
 
-public class AlarmUtils {
+public final class AlarmUtils {
 
     private static final String TAG = AlarmUtils.class.getSimpleName();
 
     private static Context sContext;
+
+    private AlarmUtils() {
+        throw new AssertionError("AlarmUtils class is not meant to be instantiated.");
+    }
 
     public static void install(Context context) {
         sContext = context.getApplicationContext();

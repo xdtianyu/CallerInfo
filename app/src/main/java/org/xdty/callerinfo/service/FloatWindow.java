@@ -14,9 +14,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.setting.Setting;
-import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.utils.Utils;
+
+import javax.inject.Inject;
 
 import wei.mark.standout.StandOutWindow;
 import wei.mark.standout.constants.StandOutFlags;
@@ -38,19 +40,18 @@ public class FloatWindow extends StandOutWindow {
     public final static int SETTING_FRONT = 1002;
     public final static int SEARCH_FRONT = 1003;
     public final static int STATUS_CLOSE = 0;
-    private final static int STATUS_SHOWING = 1;
-    private final static int STATUS_HIDE = 2;
-
     public final static int TEXT_ALIGN_LEFT = 0;
     public final static int TEXT_ALIGN_CENTER = 1;
     public final static int TEXT_ALIGN_RIGHT = 2;
-
+    private final static int STATUS_SHOWING = 1;
+    private final static int STATUS_HIDE = 2;
     private static int mShowingStatus = STATUS_CLOSE;
+
+    @Inject
+    Setting mSettings;
 
     private boolean isFirstShow = false;
     private boolean isFocused = false;
-
-    private Setting mSettings;
 
     public static int status() {
         return mShowingStatus;
@@ -59,7 +60,7 @@ public class FloatWindow extends StandOutWindow {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            mSettings = SettingImpl.getInstance();
+            Application.getAppComponent().inject(this);
             return super.onStartCommand(intent, flags, startId);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
