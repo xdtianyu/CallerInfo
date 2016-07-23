@@ -134,7 +134,8 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
             if (caller != null) {
                 TextColorPair t = Utils.getTextColorPair(context, caller);
                 text.setText(t.text);
-                cardView.setCardBackgroundColor(ContextCompat.getColor(context, t.color));
+                //noinspection ResourceAsColor
+                cardView.setCardBackgroundColor(t.color);
                 number.setText(TextUtils.isEmpty(
                         caller.getContactName()) ? caller.getNumber() : caller.getContactName());
             } else {
