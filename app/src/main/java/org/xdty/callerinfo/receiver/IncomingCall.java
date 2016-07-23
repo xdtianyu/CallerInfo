@@ -10,11 +10,14 @@ import android.util.Log;
 
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.PhoneStateContract;
 import org.xdty.callerinfo.di.DaggerPhoneStatusComponent;
+import org.xdty.callerinfo.di.modules.AppModule;
 import org.xdty.callerinfo.di.modules.PhoneStatusModule;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
+import org.xdty.callerinfo.utils.Window;
 import org.xdty.phone.number.model.INumber;
 
 import javax.inject.Inject;
@@ -46,11 +49,14 @@ public class IncomingCall extends BroadcastReceiver {
         @Inject
         PhoneStateContract.Presenter mPresenter;
 
+        @Inject Window mWindow;
+
         private boolean isShowing = false;
 
         private IncomingCallListener() {
             Utils.checkLocale(sContext);
             DaggerPhoneStatusComponent.builder()
+                    .appModule(new AppModule(Application.getApplication()))
                     .phoneStatusModule(new PhoneStatusModule(this))
                     .build()
                     .inject(this);
@@ -102,24 +108,24 @@ public class IncomingCall extends BroadcastReceiver {
         @Override
         public void show(INumber number) {
             isShowing = true;
-            Utils.showWindow(getContext(), number, FloatWindow.CALLER_FRONT);
+            mWindow.showWindow(getContext(), number, FloatWindow.CALLER_FRONT);
         }
 
         @Override
         public void showFailed(boolean isOnline) {
             isShowing = true;
             if (isOnline) {
-                Utils.sendData(getContext(), FloatWindow.WINDOW_ERROR,
+                mWindow.sendData(getContext(), FloatWindow.WINDOW_ERROR,
                         R.string.online_failed, FloatWindow.CALLER_FRONT);
             } else {
-                Utils.showTextWindow(getContext(), R.string.offline_failed,
+                mWindow.showTextWindow(getContext(), R.string.offline_failed,
                         FloatWindow.CALLER_FRONT);
             }
         }
 
         @Override
         public void showSearching() {
-            Utils.showTextWindow(getContext(), R.string.searching,
+            mWindow.showTextWindow(getContext(), R.string.searching,
                     FloatWindow.CALLER_FRONT);
         }
 

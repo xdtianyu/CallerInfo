@@ -53,6 +53,7 @@ public class FloatWindow extends StandOutWindow {
     private boolean isFirstShow = false;
     private boolean isFocused = false;
 
+    // TODO: move status at utils
     public static int status() {
         return mShowingStatus;
     }

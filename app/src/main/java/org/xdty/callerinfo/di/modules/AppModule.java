@@ -8,6 +8,7 @@ import org.xdty.callerinfo.model.permission.PermissionImpl;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.utils.Alarm;
+import org.xdty.callerinfo.utils.Window;
 import org.xdty.phone.number.PhoneNumber;
 
 import javax.inject.Singleton;
@@ -60,6 +61,12 @@ public class AppModule {
     @Provides
     public Alarm provideAlarm() {
         return new Alarm();
+    }
+
+    @Singleton
+    @Provides
+    public Window provideWindow() {
+        return new Window();
     }
 
 }

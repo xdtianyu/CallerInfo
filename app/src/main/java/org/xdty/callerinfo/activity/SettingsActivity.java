@@ -47,25 +47,26 @@ import com.jenzz.materialpreference.SwitchPreference;
 
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.exporter.Exporter;
 import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.plugin.IPluginService;
 import org.xdty.callerinfo.plugin.IPluginServiceCallback;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
+import org.xdty.callerinfo.utils.Window;
 import org.xdty.phone.number.model.caller.Status;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
 import rx.functions.Action1;
 
-import static org.xdty.callerinfo.utils.Utils.closeWindow;
 import static org.xdty.callerinfo.utils.Utils.mask;
-import static org.xdty.callerinfo.utils.Utils.sendData;
-import static org.xdty.callerinfo.utils.Utils.showTextWindow;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -95,6 +96,9 @@ public class SettingsActivity extends AppCompatActivity {
                 "org.xdty.callerinfo.plugin",
                 "org.xdty.callerinfo.plugin.PluginService"));
 
+        @Inject
+        Window mWindow;
+
         int versionClickCount;
         Toast toast;
         SharedPreferences sharedPrefs;
@@ -108,6 +112,9 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
+            Application.getAppComponent().inject(this);
+
             addPreferencesFromResource(R.xml.settings);
 
             sharedPrefs = getPreferenceManager().getSharedPreferences();
@@ -358,7 +365,7 @@ public class SettingsActivity extends AppCompatActivity {
                     if (progress == 0) {
                         progress = 1;
                     }
-                    sendData(getActivity(), bundleKey, progress, FloatWindow.SETTING_FRONT);
+                    mWindow.sendData(getActivity(), bundleKey, progress, FloatWindow.SETTING_FRONT);
                 }
 
                 @Override
@@ -385,12 +392,12 @@ public class SettingsActivity extends AppCompatActivity {
             builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    closeWindow(getActivity());
+                    mWindow.closeWindow(getActivity());
                 }
             });
             builder.show();
 
-            showTextWindow(getActivity(), textRes, FloatWindow.SETTING_FRONT);
+            mWindow.showTextWindow(getActivity(), textRes, FloatWindow.SETTING_FRONT);
         }
 
         private void showApiDialog(int keyId, int title, final int url) {

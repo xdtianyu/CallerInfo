@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.di;
 
 import org.xdty.callerinfo.activity.MarkActivity;
+import org.xdty.callerinfo.activity.SettingsActivity;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.di.modules.AppModule;
 import org.xdty.callerinfo.presenter.MainPresenter;
@@ -32,4 +33,6 @@ public interface AppComponent {
     void inject(Alarm alarm);
 
     void inject(MarkActivity markActivity);
+
+    void inject(SettingsActivity.SettingsFragment settingsFragment);
 }

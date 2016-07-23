@@ -28,7 +28,6 @@ import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
-import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 
@@ -49,44 +48,6 @@ public final class Utils {
 
     private Utils() {
         throw new AssertionError("Utils class is not meant to be instantiated or subclassed.");
-    }
-
-    public static void showTextWindow(Context context, int resId, int frontType) {
-        Bundle bundle = new Bundle();
-        bundle.putString(FloatWindow.NUMBER_INFO, context.getString(resId));
-        bundle.putInt(FloatWindow.WINDOW_COLOR, ContextCompat.getColor(context,
-                R.color.colorPrimary));
-        Log.d(TAG, "showTextWindow: " + Utils.bundleToString(bundle));
-        FloatWindow.show(context, FloatWindow.class, frontType);
-        FloatWindow.sendData(context, FloatWindow.class,
-                frontType, 0, bundle, FloatWindow.class, 0);
-    }
-
-    public static void sendData(Context context, String key, int value, int frontType) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(key, value);
-        FloatWindow.show(context, FloatWindow.class, frontType);
-        FloatWindow.sendData(context, FloatWindow.class,
-                frontType, 0, bundle, FloatWindow.class, 0);
-    }
-
-    public static void closeWindow(Context context) {
-        Log.d(TAG, "closeWindow");
-        FloatWindow.closeAll(context, FloatWindow.class);
-    }
-
-    public static void showWindow(Context context, INumber number, int frontType) {
-
-        TextColorPair textColor = Utils.getTextColorPair(context, number);
-
-        Bundle bundle = new Bundle();
-        bundle.putString(FloatWindow.NUMBER_INFO, textColor.text);
-        bundle.putInt(FloatWindow.WINDOW_COLOR, textColor.color);
-        Log.d(TAG, "showWindow: " + Utils.bundleToString(bundle));
-        FloatWindow.show(context, FloatWindow.class,
-                frontType);
-        FloatWindow.sendData(context, FloatWindow.class,
-                frontType, 0, bundle, FloatWindow.class, 0);
     }
 
     public static TextColorPair getTextColorPair(Context context, INumber number) {

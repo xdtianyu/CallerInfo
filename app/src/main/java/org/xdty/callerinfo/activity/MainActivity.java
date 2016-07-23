@@ -43,7 +43,7 @@ import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.receiver.IncomingCall;
 import org.xdty.callerinfo.service.FloatWindow;
-import org.xdty.callerinfo.utils.Utils;
+import org.xdty.callerinfo.utils.Window;
 import org.xdty.callerinfo.view.CallerAdapter;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.caller.Status;
@@ -67,6 +67,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Inject
     Setting mSetting;
+
+    @Inject
+    Window mWindow;
 
     private Toolbar mToolbar;
     private int mScreenWidth;
@@ -225,7 +228,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     protected void onStop() {
         if (FloatWindow.status() != FloatWindow.STATUS_CLOSE) {
             // FixME: window in other ui may close because async
-            Utils.closeWindow(this);
+            mWindow.closeWindow(this);
         }
         mPresenter.clearSearch();
         if (mUpdateDataDialog != null && mUpdateDataDialog.isShowing()) {
@@ -246,7 +249,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     public void onBackPressed() {
         if (FloatWindow.status() != FloatWindow.STATUS_CLOSE) {
-            Utils.closeWindow(this);
+            mWindow.closeWindow(this);
         } else {
             super.onBackPressed();
         }
@@ -311,7 +314,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Utils.closeWindow(MainActivity.this);
+                mWindow.closeWindow(MainActivity.this);
                 mRecyclerView.setVisibility(View.VISIBLE);
                 mMainLayout.setBackgroundColor(ContextCompat.getColor(MainActivity.this,
                         R.color.transparent));
@@ -330,10 +333,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 break;
             case R.id.action_float_window:
                 if (FloatWindow.status() == FloatWindow.STATUS_CLOSE) {
-                    Utils.showTextWindow(this, R.string.float_window_hint,
+                    mWindow.showTextWindow(this, R.string.float_window_hint,
                             FloatWindow.SET_POSITION_FRONT);
                 } else {
-                    Utils.closeWindow(this);
+                    mWindow.closeWindow(this);
                 }
                 break;
             case R.id.action_clear_history:
@@ -402,22 +405,22 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void showSearchResult(INumber number) {
-        Utils.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
+        mWindow.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
     }
 
     @Override
     public void showSearching() {
-        Utils.showTextWindow(MainActivity.this, R.string.searching,
+        mWindow.showTextWindow(MainActivity.this, R.string.searching,
                 FloatWindow.SEARCH_FRONT);
     }
 
     @Override
     public void showSearchFailed(boolean isOnline) {
         if (isOnline) {
-            Utils.sendData(MainActivity.this, FloatWindow.WINDOW_ERROR,
+            mWindow.sendData(MainActivity.this, FloatWindow.WINDOW_ERROR,
                     R.string.online_failed, FloatWindow.SEARCH_FRONT);
         } else {
-            Utils.showTextWindow(MainActivity.this, R.string.offline_failed,
+            mWindow.showTextWindow(MainActivity.this, R.string.offline_failed,
                     FloatWindow.SEARCH_FRONT);
         }
     }
