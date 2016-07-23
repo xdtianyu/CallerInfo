@@ -365,7 +365,7 @@ public class SettingsActivity extends AppCompatActivity {
                     if (progress == 0) {
                         progress = 1;
                     }
-                    mWindow.sendData(getActivity(), bundleKey, progress, FloatWindow.SETTING_FRONT);
+                    mWindow.sendData(bundleKey, progress, FloatWindow.SETTING_FRONT);
                 }
 
                 @Override
@@ -392,12 +392,12 @@ public class SettingsActivity extends AppCompatActivity {
             builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    mWindow.closeWindow(getActivity());
+                    mWindow.closeWindow();
                 }
             });
             builder.show();
 
-            mWindow.showTextWindow(getActivity(), textRes, FloatWindow.SETTING_FRONT);
+            mWindow.showTextWindow(textRes, FloatWindow.SETTING_FRONT);
         }
 
         private void showApiDialog(int keyId, int title, final int url) {

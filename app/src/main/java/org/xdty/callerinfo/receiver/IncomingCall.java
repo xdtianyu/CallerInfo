@@ -108,25 +108,23 @@ public class IncomingCall extends BroadcastReceiver {
         @Override
         public void show(INumber number) {
             isShowing = true;
-            mWindow.showWindow(getContext(), number, FloatWindow.CALLER_FRONT);
+            mWindow.showWindow(number, FloatWindow.CALLER_FRONT);
         }
 
         @Override
         public void showFailed(boolean isOnline) {
             isShowing = true;
             if (isOnline) {
-                mWindow.sendData(getContext(), FloatWindow.WINDOW_ERROR,
+                mWindow.sendData(FloatWindow.WINDOW_ERROR,
                         R.string.online_failed, FloatWindow.CALLER_FRONT);
             } else {
-                mWindow.showTextWindow(getContext(), R.string.offline_failed,
-                        FloatWindow.CALLER_FRONT);
+                mWindow.showTextWindow(R.string.offline_failed, FloatWindow.CALLER_FRONT);
             }
         }
 
         @Override
         public void showSearching() {
-            mWindow.showTextWindow(getContext(), R.string.searching,
-                    FloatWindow.CALLER_FRONT);
+            mWindow.showTextWindow(R.string.searching, FloatWindow.CALLER_FRONT);
         }
 
         @Override

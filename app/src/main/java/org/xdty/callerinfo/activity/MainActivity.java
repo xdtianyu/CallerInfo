@@ -228,7 +228,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     protected void onStop() {
         if (FloatWindow.status() != FloatWindow.STATUS_CLOSE) {
             // FixME: window in other ui may close because async
-            mWindow.closeWindow(this);
+            mWindow.closeWindow();
         }
         mPresenter.clearSearch();
         if (mUpdateDataDialog != null && mUpdateDataDialog.isShowing()) {
@@ -249,7 +249,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     public void onBackPressed() {
         if (FloatWindow.status() != FloatWindow.STATUS_CLOSE) {
-            mWindow.closeWindow(this);
+            mWindow.closeWindow();
         } else {
             super.onBackPressed();
         }
@@ -314,7 +314,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mWindow.closeWindow(MainActivity.this);
+                mWindow.closeWindow();
                 mRecyclerView.setVisibility(View.VISIBLE);
                 mMainLayout.setBackgroundColor(ContextCompat.getColor(MainActivity.this,
                         R.color.transparent));
@@ -333,10 +333,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 break;
             case R.id.action_float_window:
                 if (FloatWindow.status() == FloatWindow.STATUS_CLOSE) {
-                    mWindow.showTextWindow(this, R.string.float_window_hint,
+                    mWindow.showTextWindow(R.string.float_window_hint,
                             FloatWindow.SET_POSITION_FRONT);
                 } else {
-                    mWindow.closeWindow(this);
+                    mWindow.closeWindow();
                 }
                 break;
             case R.id.action_clear_history:
@@ -405,23 +405,21 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void showSearchResult(INumber number) {
-        mWindow.showWindow(MainActivity.this, number, FloatWindow.SEARCH_FRONT);
+        mWindow.showWindow(number, FloatWindow.SEARCH_FRONT);
     }
 
     @Override
     public void showSearching() {
-        mWindow.showTextWindow(MainActivity.this, R.string.searching,
-                FloatWindow.SEARCH_FRONT);
+        mWindow.showTextWindow(R.string.searching, FloatWindow.SEARCH_FRONT);
     }
 
     @Override
     public void showSearchFailed(boolean isOnline) {
         if (isOnline) {
-            mWindow.sendData(MainActivity.this, FloatWindow.WINDOW_ERROR,
-                    R.string.online_failed, FloatWindow.SEARCH_FRONT);
-        } else {
-            mWindow.showTextWindow(MainActivity.this, R.string.offline_failed,
+            mWindow.sendData(FloatWindow.WINDOW_ERROR, R.string.online_failed,
                     FloatWindow.SEARCH_FRONT);
+        } else {
+            mWindow.showTextWindow(R.string.offline_failed, FloatWindow.SEARCH_FRONT);
         }
     }
 
