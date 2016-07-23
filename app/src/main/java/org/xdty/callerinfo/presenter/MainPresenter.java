@@ -3,7 +3,6 @@ package org.xdty.callerinfo.presenter;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.MainContract;
 import org.xdty.callerinfo.model.database.Database;
-import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.permission.Permission;
@@ -164,7 +163,6 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
     public void start() {
         mPhoneNumber.addCallback(this);
         mPhoneNumber.setCheckUpdateCallback(this);
-        mDatabase = DatabaseImpl.getInstance();
         loadCallerMap();
 
         if (System.currentTimeMillis() - mSetting.lastCheckDataUpdateTime() > 6 * 3600 * 1000) {

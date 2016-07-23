@@ -132,7 +132,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
         public void bind(InCall inCall, Caller caller) {
             if (caller != null) {
-                TextColorPair t = Utils.getTextColorPair(context, caller);
+                TextColorPair t = TextColorPair.from(caller);
                 text.setText(t.text);
                 //noinspection ResourceAsColor
                 cardView.setCardBackgroundColor(t.color);

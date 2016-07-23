@@ -40,7 +40,7 @@ public final class Window {
 
     public void showWindow(Context context, INumber number, int frontType) {
 
-        TextColorPair textColor = Utils.getTextColorPair(context, number);
+        TextColorPair textColor = TextColorPair.from(number);
 
         Bundle bundle = new Bundle();
         bundle.putString(FloatWindow.NUMBER_INFO, textColor.text);

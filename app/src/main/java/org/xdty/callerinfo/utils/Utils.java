@@ -4,7 +4,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -12,11 +11,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.Settings.Secure;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -25,11 +22,8 @@ import android.util.Log;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.activity.MarkActivity;
 import org.xdty.callerinfo.application.Application;
-import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
-import org.xdty.phone.number.model.INumber;
-import org.xdty.phone.number.model.Type;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,66 +42,6 @@ public final class Utils {
 
     private Utils() {
         throw new AssertionError("Utils class is not meant to be instantiated or subclassed.");
-    }
-
-    public static TextColorPair getTextColorPair(Context context, INumber number) {
-
-        String province = number.getProvince();
-        String city = number.getCity();
-        String operators = number.getProvider();
-        return Utils.getTextColorPair(context, number.getType().getText(), province, city,
-                operators, number.getName(), number.getCount());
-    }
-
-    private static TextColorPair getTextColorPair(Context context, String type, String province,
-            String city, String operators, String name, int count) {
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        if (province == null && city == null && operators == null) {
-            province = context.getResources().getString(R.string.unknown);
-            city = "";
-            operators = "";
-        }
-
-        if (!TextUtils.isEmpty(province) && !TextUtils.isEmpty(city) && province.equals(city)) {
-            city = "";
-        }
-
-        TextColorPair t = new TextColorPair();
-        switch (Type.fromString(type)) {
-            case NORMAL:
-                t.text = context.getResources().getString(
-                        R.string.text_normal, province, city, operators);
-                t.color = preferences.getInt("color_normal",
-                        ContextCompat.getColor(context, R.color.blue_light));
-                break;
-            case POI:
-                t.color = preferences.getInt("color_poi",
-                        ContextCompat.getColor(context, R.color.orange_dark));
-                t.text = context.getResources().getString(
-                        R.string.text_poi, name);
-                break;
-            case REPORT:
-                t.color = preferences.getInt("color_report",
-                        ContextCompat.getColor(context, R.color.red_light));
-                if (count == 0) {
-                    t.text = name;
-                } else {
-                    t.text = context.getResources().getString(
-                            R.string.text_report, province, city, operators,
-                            count, name);
-                }
-                break;
-        }
-
-        t.text = t.text.trim();
-
-        if (t.text.isEmpty() || t.text.contains(context.getString(R.string.baidu_advertising))) {
-            t.text = context.getString(R.string.unknown);
-        }
-
-        return t;
     }
 
     public static boolean isContactExists(Context context, String number) {
