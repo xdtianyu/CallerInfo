@@ -79,11 +79,13 @@ public class CallerRepository implements CallerDataSource {
                     }
                 }
 
-                // load from phone number library
+                // load from phone number library offline data
                 INumber iNumber = mPhoneNumber.getOfflineNumber(number);
 
                 if (iNumber != null && iNumber.isValid()) {
                     subscriber.onNext(handleResponse(iNumber, false));
+                } else {
+                    subscriber.onError(new CallerThrowable(number, false));
                 }
 
                 // stop if the number is special

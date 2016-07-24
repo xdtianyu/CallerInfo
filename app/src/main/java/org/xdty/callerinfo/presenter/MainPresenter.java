@@ -12,7 +12,6 @@ import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.callerinfo.utils.Contact;
 import org.xdty.phone.number.PhoneNumber;
-import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.caller.Status;
 
 import java.util.ArrayList;
@@ -120,8 +119,7 @@ public class MainPresenter implements MainContract.Presenter,
         }, new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
-                CallerRepository.CallerThrowable t = (CallerRepository.CallerThrowable) throwable;
-                mView.showSearchFailed(t.isOnline());
+                mView.showSearchFailed(((CallerRepository.CallerThrowable) throwable).isOnline());
             }
         });
     }
@@ -156,25 +154,6 @@ public class MainPresenter implements MainContract.Presenter,
         if (System.currentTimeMillis() - mSetting.lastCheckDataUpdateTime() > 6 * 3600 * 1000) {
             mPhoneNumber.checkUpdate();
         }
-    }
-
-    @Override
-    public void handleResponse(INumber number, boolean isOnline) {
-        if (number != null) {
-            if (isOnline && number.isValid()) {
-                mDatabase.updateCaller(new Caller(number, !number.isOnline()));
-                if (mSetting.isAutoReportEnabled()) {
-                    mDatabase.saveMarkedRecord(number, mSetting.getUid());
-                    mAlarm.alarm();
-                }
-            }
-            mView.showSearchResult(number);
-        }
-    }
-
-    @Override
-    public void handleResponseFailed(INumber number, boolean isOnline) {
-        mView.showSearchFailed(isOnline);
     }
 
     @Override

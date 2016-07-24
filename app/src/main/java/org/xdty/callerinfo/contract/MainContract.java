@@ -63,10 +63,6 @@ public interface MainContract {
 
         int checkPermission(String permission);
 
-        void handleResponse(INumber number, boolean isOnline);
-
-        void handleResponseFailed(INumber number, boolean isOnline);
-
         void clearSearch();
 
         void dispatchUpdate(Status status);
