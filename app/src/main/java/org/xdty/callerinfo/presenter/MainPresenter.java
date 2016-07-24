@@ -3,6 +3,7 @@ package org.xdty.callerinfo.presenter;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.MainContract;
 import org.xdty.callerinfo.data.CallerDataSource;
+import org.xdty.callerinfo.data.CallerRepository;
 import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
@@ -22,7 +23,7 @@ import javax.inject.Inject;
 
 import rx.functions.Action1;
 
-public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callback,
+public class MainPresenter implements MainContract.Presenter,
         PhoneNumber.CheckUpdateCallback {
 
     private final List<InCall> mInCallList = new ArrayList<>();
@@ -109,22 +110,20 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
             return;
         }
 
-        mDatabase.findCaller(number).subscribe(new Action1<Caller>() {
+        mView.showSearching();
+
+        mCallerDataSource.getCaller(number).subscribe(new Action1<Caller>() {
             @Override
             public void call(Caller caller) {
-                if (caller != null) {
-                    if (caller.isUpdated()) {
-                        mView.showSearchResult(caller);
-                        return;
-                    } else {
-                        mDatabase.removeCaller(caller);
-                    }
-                }
-                mView.showSearching();
-                mPhoneNumber.fetch(number);
+                mView.showSearchResult(caller);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                CallerRepository.CallerThrowable t = (CallerRepository.CallerThrowable) throwable;
+                mView.showSearchFailed(t.isOnline());
             }
         });
-
     }
 
     @Override
@@ -151,7 +150,6 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
 
     @Override
     public void start() {
-        mPhoneNumber.addCallback(this);
         mPhoneNumber.setCheckUpdateCallback(this);
         loadCallerMap();
 
@@ -181,28 +179,13 @@ public class MainPresenter implements MainContract.Presenter, PhoneNumber.Callba
 
     @Override
     public void clearSearch() {
-        mPhoneNumber.removeCallback(this);
+
     }
 
     @Override
     public void dispatchUpdate(Status status) {
         mView.showUpdateData(status);
         mPhoneNumber.upgradeData();
-    }
-
-    @Override
-    public void onResponseOffline(INumber number) {
-        handleResponse(number, false);
-    }
-
-    @Override
-    public void onResponse(INumber number) {
-        handleResponse(number, true);
-    }
-
-    @Override
-    public void onResponseFailed(INumber number, boolean isOnline) {
-        handleResponseFailed(number, isOnline);
     }
 
     @Override

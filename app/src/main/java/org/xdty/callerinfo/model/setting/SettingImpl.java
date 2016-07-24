@@ -271,6 +271,11 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public boolean isOnlyOffline() {
+        return mPrefs.getBoolean(sContext.getString(R.string.only_offline_key), false);
+    }
+
+    @Override
     public boolean isHidingWhenTouch() {
         return mPrefs.getBoolean(getString(R.string.hide_when_touch_key), false);
     }

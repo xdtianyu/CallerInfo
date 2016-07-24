@@ -97,6 +97,16 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
+    public Caller findCallerSync(String number) {
+        List<Caller> callers = Caller.find(Caller.class, "number=?", number);
+        Caller caller = null;
+        if (callers.size() > 0) {
+            caller = callers.get(0);
+        }
+        return caller;
+    }
+
+    @Override
     public void removeCaller(Caller caller) {
         Observable.just(caller).observeOn(Schedulers.io()).subscribe(new Action1<Caller>() {
             @Override

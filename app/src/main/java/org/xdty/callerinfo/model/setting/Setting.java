@@ -107,4 +107,6 @@ public interface Setting {
     int getPoiColor();
 
     int getReportColor();
+
+    boolean isOnlyOffline();
 }

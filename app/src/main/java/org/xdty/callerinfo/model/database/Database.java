@@ -23,6 +23,8 @@ public interface Database {
 
     Observable<Caller> findCaller(String number);
 
+    Caller findCallerSync(String number);
+
     void removeCaller(Caller caller);
 
     void clearAllCallerSync();
