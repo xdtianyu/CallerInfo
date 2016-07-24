@@ -7,11 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.provider.ContactsContract.PhoneLookup;
 import android.provider.Settings.Secure;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
@@ -42,48 +39,6 @@ public final class Utils {
 
     private Utils() {
         throw new AssertionError("Utils class is not meant to be instantiated or subclassed.");
-    }
-
-    public static boolean isContactExists(Context context, String number) {
-        Uri lookupUri = Uri.withAppendedPath(
-                PhoneLookup.CONTENT_FILTER_URI,
-                Uri.encode(number));
-        String[] mPhoneNumberProjection = {
-                PhoneLookup._ID, PhoneLookup.NUMBER, PhoneLookup.DISPLAY_NAME
-        };
-        Cursor cur = context.getContentResolver().query(lookupUri, mPhoneNumberProjection, null,
-                null, null);
-        if (cur != null) {
-            try {
-                if (cur.moveToFirst()) {
-                    return true;
-                }
-            } finally {
-                cur.close();
-            }
-        }
-        return false;
-    }
-
-    public static String getContactName(Context context, String number) {
-        Uri lookupUri = Uri.withAppendedPath(
-                PhoneLookup.CONTENT_FILTER_URI,
-                Uri.encode(number));
-        String[] mPhoneNumberProjection = {
-                PhoneLookup._ID, PhoneLookup.NUMBER, PhoneLookup.DISPLAY_NAME
-        };
-        Cursor cur = context.getContentResolver().query(lookupUri, mPhoneNumberProjection, null,
-                null, null);
-        if (cur != null) {
-            try {
-                if (cur.moveToFirst()) {
-                    return cur.getString(cur.getColumnIndex(PhoneLookup.DISPLAY_NAME));
-                }
-            } finally {
-                cur.close();
-            }
-        }
-        return "";
     }
 
     public static String getDate(long time) {

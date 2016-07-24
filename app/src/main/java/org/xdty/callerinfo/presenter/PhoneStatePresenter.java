@@ -22,7 +22,7 @@ import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.plugin.IPluginService;
 import org.xdty.callerinfo.utils.Alarm;
-import org.xdty.callerinfo.utils.Utils;
+import org.xdty.callerinfo.utils.Contact;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 
@@ -41,6 +41,8 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     Database mDatabase;
     @Inject
     Alarm mAlarm;
+    @Inject
+    Contact mContact;
 
     CallRecord mCallRecord;
     private PhoneStateContract.View mView;
@@ -188,8 +190,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
     private boolean isNotMarkContact(String number) {
         return mSetting.isNotMarkContact() && mPermission.canReadContact()
-                && Utils.isContactExists(
-                mView.getContext(), number);
+                && mContact.isExist(number);
     }
 
     private boolean isTriggeredRepeatIncomingCall(String number) {
@@ -200,8 +201,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     @Override
     public boolean ignoreContact(String number) {
         return mSetting.isIgnoreKnownContact() && mPermission.canReadContact()
-                && Utils.isContactExists(
-                mView.getContext(), number);
+                && mContact.isExist(number);
     }
 
     @Override

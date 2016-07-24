@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.application.Application;
+import org.xdty.callerinfo.data.CallerDataSource;
 import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.db.Caller;
@@ -40,6 +41,9 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
     @Inject
     Setting mSetting;
+
+    @Inject
+    CallerDataSource mCallerDataSource;
 
     private Map<String, Caller> mCallerMap;
     private List<InCall> mList;

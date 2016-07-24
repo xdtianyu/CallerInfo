@@ -15,8 +15,12 @@ import javax.inject.Inject;
 public final class Alarm {
 
     private static final String TAG = Alarm.class.getSimpleName();
+
     @Inject
     Setting mSetting;
+
+    @Inject
+    Application mApplication;
 
     public Alarm() {
         Application.getAppComponent().inject(this);
@@ -28,10 +32,10 @@ public final class Alarm {
             Log.v(TAG, "alarm is not installed");
             return;
         }
-        Context context = Application.getApplication();
-        Intent intent = new Intent(context, ScheduleService.class);
-        PendingIntent pIntent = PendingIntent.getService(context, 0, intent, 0);
-        AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(mApplication, ScheduleService.class);
+        PendingIntent pIntent = PendingIntent.getService(mApplication, 0, intent, 0);
+        AlarmManager alarm = (AlarmManager) mApplication.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(pIntent);
         long now = System.currentTimeMillis();
         alarm.setRepeating(AlarmManager.RTC_WAKEUP, now + 5 * 1000, 60 * 60 * 1000, pIntent);
