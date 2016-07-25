@@ -1,5 +1,7 @@
 package org.xdty.callerinfo.data;
 
+import android.util.Log;
+
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.db.Caller;
@@ -12,9 +14,12 @@ import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.caller.CallerNumber;
 import org.xdty.phone.number.model.special.SpecialNumber;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -24,6 +29,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class CallerRepository implements CallerDataSource {
+
+    private static final String TAG = CallerRepository.class.getSimpleName();
 
     @Inject
     Database mDatabase;
@@ -45,9 +52,54 @@ public class CallerRepository implements CallerDataSource {
 
     private Map<String, Caller> mCallerMap;
 
+    private Set<String> mLoadingCache;
+
+    private OnDataUpdateListener mOnDataUpdateListener;
+
+
     public CallerRepository() {
         mCallerMap = new HashMap<>();
+        mLoadingCache = Collections.synchronizedSet(new HashSet<String>());
         Application.getAppComponent().inject(this);
+    }
+
+    @Override
+    public Caller getCallerFromCache(String number) {
+        return getCallerFromCache(number, true);
+    }
+
+    private Caller getCallerFromCache(String number, boolean fetchIfNotExist) {
+        Caller caller = mCallerMap.get(number);
+        if (caller == null && number.contains("+86")) {
+            caller = mCallerMap.get(number.replace("+86", ""));
+        }
+
+        if (caller != null && caller.isUpdated()) {
+            return caller;
+        } else if (fetchIfNotExist) {
+            getCaller(number).subscribe(new Subscriber<Caller>() {
+                @Override
+                public void onCompleted() {}
+
+                @Override
+                public void onError(Throwable throwable) {
+                    CallerThrowable e = (CallerThrowable) throwable;
+                    Log.e(TAG, "onError: " + e.getNumber() + ", is online: " + e.isOnline());
+                    if (mOnDataUpdateListener != null) {
+                        mOnDataUpdateListener.onDataLoadFailed(e.getNumber(), e.isOnline());
+                    }
+                }
+
+                @Override
+                public void onNext(Caller caller) {
+                    Log.e(TAG, "onNext: " + caller.getNumber());
+                    if (mOnDataUpdateListener != null) {
+                        mOnDataUpdateListener.onDataUpdate(caller);
+                    }
+                }
+            });
+        }
+        return null;
     }
 
     @Override
@@ -56,14 +108,18 @@ public class CallerRepository implements CallerDataSource {
             @Override
             public void call(final Subscriber<? super Caller> subscriber) {
 
-                // load from cache
-                Caller caller = mCallerMap.get(number);
-                if (caller == null && number.contains("+86")) {
-                    caller = mCallerMap.get(number.replace("+86", ""));
+                // check loading cache
+                if (mLoadingCache.contains(number)) {
+                    return;
                 }
+                mLoadingCache.add(number);
+
+                // load from cache
+                Caller caller = getCallerFromCache(number, false);
 
                 if (caller != null && caller.isUpdated()) {
                     subscriber.onNext(caller);
+                    mLoadingCache.remove(number);
                     return;
                 }
 
@@ -73,6 +129,7 @@ public class CallerRepository implements CallerDataSource {
                 if (caller != null) {
                     if (caller.isUpdated()) {
                         subscriber.onNext(caller);
+                        mLoadingCache.remove(number);
                         return;
                     } else {
                         mDatabase.removeCaller(caller);
@@ -90,11 +147,13 @@ public class CallerRepository implements CallerDataSource {
 
                 // stop if the number is special
                 if (iNumber instanceof SpecialNumber || iNumber instanceof CallerNumber) {
+                    mLoadingCache.remove(number);
                     return;
                 }
 
                 // stop if only offline is enabled
                 if (mSetting.isOnlyOffline()) {
+                    mLoadingCache.remove(number);
                     return;
                 }
 
@@ -103,8 +162,10 @@ public class CallerRepository implements CallerDataSource {
 
                 if (iNumber != null && iNumber.isValid()) {
                     subscriber.onNext(handleResponse(iNumber, true));
+                    mLoadingCache.remove(number);
                 } else {
                     subscriber.onError(new CallerThrowable(number, true));
+                    mLoadingCache.remove(number);
                 }
                 subscriber.onCompleted();
             }
@@ -136,6 +197,11 @@ public class CallerRepository implements CallerDataSource {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
+    @Override
+    public void setOnDataUpdateListener(OnDataUpdateListener listener) {
+        mOnDataUpdateListener = listener;
+    }
+
     private Caller handleResponse(INumber number, boolean isOnline) {
         if (number != null) {
             Caller caller = new Caller(number, !number.isOnline());
@@ -146,6 +212,9 @@ public class CallerRepository implements CallerDataSource {
                     mAlarm.alarm();
                 }
             }
+
+            mCallerMap.put(caller.getNumber(), caller);
+
             return caller;
         }
         return new Caller();

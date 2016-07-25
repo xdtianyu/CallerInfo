@@ -66,5 +66,7 @@ public interface MainContract {
         void clearSearch();
 
         void dispatchUpdate(Status status);
+
+        Caller getCaller(String number);
     }
 }

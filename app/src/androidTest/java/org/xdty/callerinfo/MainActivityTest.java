@@ -85,7 +85,7 @@ public class MainActivityTest extends ActivityTestBase {
     @Test
     public void testRecyclerViewItemClick() {
 
-        String text = Utils.readableTime(getTargetContext(), mInCalls.get(0).getDuration());
+        String text = Utils.readableTime(mInCalls.get(0).getDuration());
 
         onView(withId(R.id.history_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0,
                 clickChildViewWithId(R.id.card_view)));

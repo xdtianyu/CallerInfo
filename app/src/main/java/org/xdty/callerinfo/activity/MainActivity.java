@@ -106,7 +106,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mCallerAdapter = new CallerAdapter(this);
+        mCallerAdapter = new CallerAdapter(mPresenter);
         mRecyclerView.setAdapter(mCallerAdapter);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -478,7 +478,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void attachCallerMap(Map<String, Caller> callers) {
-        mCallerAdapter.attachCallerMap(callers);
         mPresenter.loadInCallList();
     }
 

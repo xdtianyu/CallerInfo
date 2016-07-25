@@ -50,8 +50,9 @@ public final class Utils {
         return sdf.format(currentTimeZone);
     }
 
-    public static String readableDate(Context context, long time) {
+    public static String readableDate(long time) {
         String result;
+        Context context = Application.getApplication();
         long current = System.currentTimeMillis();
         if (current - time < 60 * 60 * 24 * 1000) {
             result = context.getString(R.string.readable_today);
@@ -64,8 +65,9 @@ public final class Utils {
         return result;
     }
 
-    public static String readableTime(Context context, long time) {
+    public static String readableTime(long time) {
         String result;
+        Context context = Application.getApplication();
         int seconds = (int) (time / 1000) % 60;
         int minutes = (int) ((time / (1000 * 60)) % 60);
         int hours = (int) ((time / (1000 * 60 * 60)) % 24);

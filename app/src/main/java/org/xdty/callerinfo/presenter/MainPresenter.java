@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import rx.functions.Action1;
 
 public class MainPresenter implements MainContract.Presenter,
-        PhoneNumber.CheckUpdateCallback {
+        PhoneNumber.CheckUpdateCallback, CallerDataSource.OnDataUpdateListener {
 
     private final List<InCall> mInCallList = new ArrayList<>();
     @Inject
@@ -149,6 +149,7 @@ public class MainPresenter implements MainContract.Presenter,
     @Override
     public void start() {
         mPhoneNumber.setCheckUpdateCallback(this);
+        mCallerDataSource.setOnDataUpdateListener(this);
         loadCallerMap();
 
         if (System.currentTimeMillis() - mSetting.lastCheckDataUpdateTime() > 6 * 3600 * 1000) {
@@ -168,6 +169,11 @@ public class MainPresenter implements MainContract.Presenter,
     }
 
     @Override
+    public Caller getCaller(String number) {
+        return mCallerDataSource.getCallerFromCache(number);
+    }
+
+    @Override
     public void onCheckResult(Status status) {
         if (status != null) {
             mView.notifyUpdateData(status);
@@ -181,5 +187,21 @@ public class MainPresenter implements MainContract.Presenter,
         if (result) {
             mSetting.updateLastCheckDataUpdateTime(System.currentTimeMillis());
         }
+    }
+
+    @Override
+    public void onDataUpdate(Caller caller) {
+        mView.showCallLogs(mInCallList);
+    }
+
+    @Override
+    public void onDataLoadFailed(String number, boolean isOnline) {
+        for (InCall inCall : mInCallList) {
+            if (inCall.getNumber().equals(number)) {
+                inCall.setFetched(true);
+                break;
+            }
+        }
+        mView.showCallLogs(mInCallList);
     }
 }
