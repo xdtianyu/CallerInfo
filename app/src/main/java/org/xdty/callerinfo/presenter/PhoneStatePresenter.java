@@ -12,6 +12,7 @@ import android.util.Log;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.PhoneStateContract;
+import org.xdty.callerinfo.data.CallerDataSource;
 import org.xdty.callerinfo.model.CallRecord;
 import org.xdty.callerinfo.model.SearchMode;
 import org.xdty.callerinfo.model.database.Database;
@@ -23,14 +24,13 @@ import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.plugin.IPluginService;
 import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.callerinfo.utils.Contact;
-import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 
 import javax.inject.Inject;
 
 import rx.functions.Action1;
 
-public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneNumber.Callback {
+public class PhoneStatePresenter implements PhoneStateContract.Presenter {
 
     private final static String TAG = PhoneStatePresenter.class.getSimpleName();
     @Inject
@@ -43,6 +43,8 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     Alarm mAlarm;
     @Inject
     Contact mContact;
+    @Inject
+    CallerDataSource mCallerDataSource;
 
     CallRecord mCallRecord;
     private PhoneStateContract.View mView;
@@ -218,7 +220,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
     }
 
     @Override
-    public void searchNumber(String number) {
+    public void searchNumber(final String number) {
 
         if (TextUtils.isEmpty(number)) {
             Log.e(TAG, "searchNumber: number is null!");
@@ -248,33 +250,24 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
                     }
                 }
                 mView.showSearching();
-                new PhoneNumber(mView.getContext(), mode == SearchMode.OFFLINE,
-                        PhoneStatePresenter.this).fetch(fixedNumber);
+
+                mCallerDataSource.getCaller(number, mode == SearchMode.OFFLINE)
+                        .subscribe(new Action1<Caller>() {
+                            @Override
+                            public void call(Caller caller) {
+                                Log.d(TAG, "call: " + number + "->" + caller.getNumber() +
+                                        ", offline: " + caller.isOffline());
+                                if (caller.getNumber() != null) {
+                                    showNumber(caller);
+                                } else {
+                                    if (mCallRecord.isActive()) {
+                                        mView.showFailed(!caller.isOffline());
+                                    }
+                                }
+                            }
+                        });
             }
         });
-    }
-
-    @Override
-    public void handleResponse(INumber number, boolean isOnline) {
-        if (number == null) {
-            return;
-        }
-        if (isOnline) {
-            mDatabase.updateCaller(new Caller(number, !number.isOnline()));
-            if (mSetting.isAutoReportEnabled()) {
-                mDatabase.saveMarkedRecord(number, mSetting.getUid());
-                mAlarm.alarm();
-            }
-        }
-
-        showNumber(number);
-    }
-
-    @Override
-    public void handleResponseFailed(INumber number, boolean isOnline) {
-        if (mCallRecord.isActive()) {
-            mView.showFailed(isOnline);
-        }
     }
 
     @Override
@@ -462,21 +455,6 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter, PhoneN
 
     private void reportFetchedNumber() {
         // Currently do noting, let the alarm handle marked number.
-    }
-
-    @Override
-    public void onResponseOffline(INumber number) {
-        handleResponse(number, false);
-    }
-
-    @Override
-    public void onResponse(INumber number) {
-        handleResponse(number, true);
-    }
-
-    @Override
-    public void onResponseFailed(INumber number, boolean isOnline) {
-        handleResponseFailed(number, isOnline);
     }
 
     @Override

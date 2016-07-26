@@ -95,7 +95,15 @@ public class CallerRepository implements CallerDataSource {
     }
 
     @Override
-    public Observable<Caller> getCaller(final String number) {
+    public Observable<Caller> getCaller(String number) {
+        return getCaller(number, false);
+    }
+
+    @Override
+    public Observable<Caller> getCaller(final String number, final boolean forceOffline) {
+
+        Log.d(TAG, "getCaller: " + number + ", forceOffline: " + forceOffline);
+
         return Observable.create(new Observable.OnSubscribe<Caller>() {
             @Override
             public void call(final Subscriber<? super Caller> subscriber) {
@@ -144,7 +152,7 @@ public class CallerRepository implements CallerDataSource {
                 }
 
                 // stop if only offline is enabled
-                if (mSetting.isOnlyOffline()) {
+                if (mSetting.isOnlyOffline() || forceOffline) {
                     mLoadingCache.remove(number);
                     return;
                 }

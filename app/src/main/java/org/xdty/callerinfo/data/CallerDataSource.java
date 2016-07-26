@@ -12,6 +12,8 @@ public interface CallerDataSource {
 
     Observable<Caller> getCaller(String number);
 
+    Observable<Caller> getCaller(String number, boolean forceOffline);
+
     Observable<Map<String, Caller>> loadCallerMap();
 
     void setOnDataUpdateListener(OnDataUpdateListener listener);

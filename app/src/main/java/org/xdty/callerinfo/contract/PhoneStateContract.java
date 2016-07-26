@@ -52,10 +52,6 @@ public interface PhoneStateContract {
 
         void searchNumber(String number);
 
-        void handleResponse(INumber number, boolean isOnline);
-
-        void handleResponseFailed(INumber number, boolean isOnline);
-
         void setOutGoingNumber(String number);
 
         boolean canReadPhoneState();
