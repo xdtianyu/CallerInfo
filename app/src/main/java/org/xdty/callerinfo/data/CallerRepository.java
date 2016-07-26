@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class CallerRepository implements CallerDataSource {
@@ -56,7 +57,6 @@ public class CallerRepository implements CallerDataSource {
 
     private OnDataUpdateListener mOnDataUpdateListener;
 
-
     public CallerRepository() {
         mCallerMap = new HashMap<>();
         mLoadingCache = Collections.synchronizedSet(new HashSet<String>());
@@ -68,7 +68,7 @@ public class CallerRepository implements CallerDataSource {
         return getCallerFromCache(number, true);
     }
 
-    private Caller getCallerFromCache(String number, boolean fetchIfNotExist) {
+    private Caller getCallerFromCache(final String number, boolean fetchIfNotExist) {
         Caller caller = mCallerMap.get(number);
         if (caller == null && number.contains("+86")) {
             caller = mCallerMap.get(number.replace("+86", ""));
@@ -77,24 +77,16 @@ public class CallerRepository implements CallerDataSource {
         if (caller != null && caller.isUpdated()) {
             return caller;
         } else if (fetchIfNotExist) {
-            getCaller(number).subscribe(new Subscriber<Caller>() {
+            getCaller(number).subscribe(new Action1<Caller>() {
                 @Override
-                public void onCompleted() {}
-
-                @Override
-                public void onError(Throwable throwable) {
-                    CallerThrowable e = (CallerThrowable) throwable;
-                    Log.e(TAG, "onError: " + e.getNumber() + ", is online: " + e.isOnline());
+                public void call(Caller caller) {
+                    Log.e(TAG, "call: " + number + "->" + caller.getNumber());
                     if (mOnDataUpdateListener != null) {
-                        mOnDataUpdateListener.onDataLoadFailed(e.getNumber(), e.isOnline());
-                    }
-                }
-
-                @Override
-                public void onNext(Caller caller) {
-                    Log.e(TAG, "onNext: " + caller.getNumber());
-                    if (mOnDataUpdateListener != null) {
-                        mOnDataUpdateListener.onDataUpdate(caller);
+                        if (caller.getNumber() == null) {
+                            mOnDataUpdateListener.onDataLoadFailed(number, !caller.isOffline());
+                        } else {
+                            mOnDataUpdateListener.onDataUpdate(caller);
+                        }
                     }
                 }
             });
@@ -142,7 +134,7 @@ public class CallerRepository implements CallerDataSource {
                 if (iNumber != null && iNumber.isValid()) {
                     subscriber.onNext(handleResponse(iNumber, false));
                 } else {
-                    subscriber.onError(new CallerThrowable(number, false));
+                    subscriber.onNext(new Caller());
                 }
 
                 // stop if the number is special
@@ -164,7 +156,9 @@ public class CallerRepository implements CallerDataSource {
                     subscriber.onNext(handleResponse(iNumber, true));
                     mLoadingCache.remove(number);
                 } else {
-                    subscriber.onError(new CallerThrowable(number, true));
+                    Caller c = new Caller();
+                    c.setOffline(false);
+                    subscriber.onNext(c);
                     mLoadingCache.remove(number);
                 }
                 subscriber.onCompleted();
@@ -218,24 +212,5 @@ public class CallerRepository implements CallerDataSource {
             return caller;
         }
         return new Caller();
-    }
-
-    public static class CallerThrowable extends Throwable {
-
-        private String mNumber;
-        private boolean mIsOnline;
-
-        public CallerThrowable(String number, boolean isOnline) {
-            mNumber = number;
-            mIsOnline = isOnline;
-        }
-
-        public boolean isOnline() {
-            return mIsOnline;
-        }
-
-        public String getNumber() {
-            return mNumber;
-        }
     }
 }

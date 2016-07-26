@@ -405,16 +405,19 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void showSearchResult(INumber number) {
+        Log.d(TAG, "showSearchResult: " + number.getNumber());
         mWindow.showWindow(number, FloatWindow.SEARCH_FRONT);
     }
 
     @Override
     public void showSearching() {
+        Log.d(TAG, "showSearching");
         mWindow.showTextWindow(R.string.searching, FloatWindow.SEARCH_FRONT);
     }
 
     @Override
     public void showSearchFailed(boolean isOnline) {
+        Log.d(TAG, "showSearchFailed: isOnline=" + isOnline);
         if (isOnline) {
             mWindow.sendData(FloatWindow.WINDOW_ERROR, R.string.online_failed,
                     FloatWindow.SEARCH_FRONT);

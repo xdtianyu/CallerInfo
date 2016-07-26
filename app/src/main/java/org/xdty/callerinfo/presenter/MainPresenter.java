@@ -3,7 +3,6 @@ package org.xdty.callerinfo.presenter;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.MainContract;
 import org.xdty.callerinfo.data.CallerDataSource;
-import org.xdty.callerinfo.data.CallerRepository;
 import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
@@ -114,12 +113,11 @@ public class MainPresenter implements MainContract.Presenter,
         mCallerDataSource.getCaller(number).subscribe(new Action1<Caller>() {
             @Override
             public void call(Caller caller) {
-                mView.showSearchResult(caller);
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                mView.showSearchFailed(((CallerRepository.CallerThrowable) throwable).isOnline());
+                if (caller.getNumber() != null) {
+                    mView.showSearchResult(caller);
+                } else {
+                    mView.showSearchFailed(!caller.isOffline());
+                }
             }
         });
     }

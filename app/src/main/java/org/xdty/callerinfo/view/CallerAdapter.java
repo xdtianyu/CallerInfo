@@ -94,6 +94,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
         public void bind(InCall inCall) {
 
+            // TODO: remove isFetched function, add error cache in presenter.
             Caller caller = null;
             if (!inCall.isFetched()) {
                 caller = mPresenter.getCaller(inCall.getNumber());
