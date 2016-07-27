@@ -257,12 +257,10 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
                             public void call(Caller caller) {
                                 Log.d(TAG, "call: " + number + "->" + caller.getNumber() +
                                         ", offline: " + caller.isOffline());
-                                if (caller.getNumber() != null) {
+                                if (caller.isEmpty()) {
                                     showNumber(caller);
-                                } else {
-                                    if (mCallRecord.isActive()) {
-                                        mView.showFailed(!caller.isOffline());
-                                    }
+                                } else if (mCallRecord.isActive()) {
+                                    mView.showFailed(!caller.isOffline());
                                 }
                             }
                         });
