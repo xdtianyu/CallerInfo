@@ -114,7 +114,7 @@ public class MainActivityTest extends ActivityTestBase {
     }
 
     @Test
-    public void testActionClear() {
+    public void testActionClearHistory() {
 
         onView(withId(R.id.history_list)).check(matches(isDisplayed()));
         onView(withId(R.id.empty_text)).check(matches(not(isDisplayed())));
@@ -153,6 +153,26 @@ public class MainActivityTest extends ActivityTestBase {
 
         // reinsert data for other tests
         mDatabase.addInCallers(mInCalls);
+    }
+
+    @Test
+    public void testActionClearCache() {
+
+        onView(withId(R.id.history_list)).check(matches(isDisplayed()));
+        onView(withId(R.id.empty_text)).check(matches(not(isDisplayed())));
+
+        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        onView(withText(R.string.action_clear_cache))
+                .perform(click());
+
+        // check snack bar
+        onView(allOf(withId(android.support.design.R.id.snackbar_text),
+                withText(R.string.clear_cache_message)))
+                .check(matches(isDisplayed()));
+
+        // check list exist
+        onView(withId(R.id.history_list)).check(matches(isDisplayed()));
+        onView(withId(R.id.empty_text)).check(matches(not(isDisplayed())));
     }
 
     @Test
