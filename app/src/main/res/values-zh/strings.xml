@@ -170,4 +170,6 @@
     <string name="repeated_incoming_fourth">第四次</string>
     <string name="repeated_incoming_third">第三次</string>
     <string name="repeated_incoming_twice">第二次</string>
+    <string name="action_clear_cache">清空缓存</string>
+    <string name="clear_cache_message">缓存已清除</string>
 </resources>

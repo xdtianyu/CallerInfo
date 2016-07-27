@@ -225,6 +225,23 @@ public class CallerRepository implements CallerDataSource {
         mOnDataUpdateListener = listener;
     }
 
+    @Override
+    public Observable<Void> clearCache() {
+
+        mCallerMap.clear();
+        mLoadingCache.clear();
+        mErrorCache.clear();
+
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                mDatabase.clearAllCallerSync();
+                subscriber.onNext(null);
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
     private Caller handleResponse(INumber number, boolean isOnline) {
         if (number != null) {
             Caller caller = new Caller(number, !number.isOnline());

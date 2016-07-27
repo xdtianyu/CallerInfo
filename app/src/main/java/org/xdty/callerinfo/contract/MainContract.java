@@ -68,5 +68,7 @@ public interface MainContract {
         void dispatchUpdate(Status status);
 
         Caller getCaller(String number);
+
+        void clearCache();
     }
 }

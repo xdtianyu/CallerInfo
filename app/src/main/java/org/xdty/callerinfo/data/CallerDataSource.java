@@ -18,6 +18,8 @@ public interface CallerDataSource {
 
     void setOnDataUpdateListener(OnDataUpdateListener listener);
 
+    Observable<Void> clearCache();
+
     interface OnDataUpdateListener {
 
         void onDataUpdate(Caller caller);

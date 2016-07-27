@@ -209,4 +209,6 @@
     <string name="repeated_incoming_third">Third</string>
     <string name="repeated_incoming_fourth">Fourth</string>
     <string name="repeated_incoming_fifth">Fifth</string>
+    <string name="action_clear_cache">Clear cache</string>
+    <string name="clear_cache_message">Cache cleared</string>
 </resources>

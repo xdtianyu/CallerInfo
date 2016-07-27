@@ -172,6 +172,16 @@ public class MainPresenter implements MainContract.Presenter,
     }
 
     @Override
+    public void clearCache() {
+        mCallerDataSource.clearCache().subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                loadInCallList();
+            }
+        });
+    }
+
+    @Override
     public void onCheckResult(Status status) {
         if (status != null) {
             mView.notifyUpdateData(status);

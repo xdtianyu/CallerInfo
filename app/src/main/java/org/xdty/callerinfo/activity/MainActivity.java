@@ -342,6 +342,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             case R.id.action_clear_history:
                 clearHistory();
                 break;
+            case R.id.action_clear_cache:
+                clearCache();
+                break;
         }
 
         return true;
@@ -362,6 +365,13 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 });
         builder.setNegativeButton(getString(R.string.cancel), null);
         builder.show();
+    }
+
+    private void clearCache() {
+        mPresenter.clearCache();
+        Snackbar.make(mToolbar, R.string.clear_cache_message, Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.ok), null)
+                .show();
     }
 
     @Override
