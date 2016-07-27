@@ -12,8 +12,6 @@ public class InCall extends SugarRecord {
     private long duration;
 
     @Ignore
-    private boolean isFetched = false;
-    @Ignore
     private boolean isExpanded = false;
 
     public InCall() {
@@ -59,15 +57,6 @@ public class InCall extends SugarRecord {
 
     public void setDuration(long duration) {
         this.duration = duration;
-    }
-
-    public boolean isFetched() {
-        return isFetched;
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    public void setFetched(boolean isFetched) {
-        this.isFetched = isFetched;
     }
 
     public boolean isExpanded() {

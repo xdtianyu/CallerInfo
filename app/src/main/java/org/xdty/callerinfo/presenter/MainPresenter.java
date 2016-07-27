@@ -191,15 +191,4 @@ public class MainPresenter implements MainContract.Presenter,
     public void onDataUpdate(Caller caller) {
         mView.showCallLogs(mInCallList);
     }
-
-    @Override
-    public void onDataLoadFailed(String number, boolean isOnline) {
-        for (InCall inCall : mInCallList) {
-            if (inCall.getNumber().equals(number)) {
-                inCall.setFetched(true);
-                break;
-            }
-        }
-        mView.showCallLogs(mInCallList);
-    }
 }

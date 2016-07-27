@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -55,16 +56,26 @@ public class CallerRepository implements CallerDataSource {
 
     private Set<String> mLoadingCache;
 
+    private Map<String, Long> mErrorCache;
+
     private OnDataUpdateListener mOnDataUpdateListener;
 
     public CallerRepository() {
         mCallerMap = new HashMap<>();
+        mErrorCache = new HashMap<>();
         mLoadingCache = Collections.synchronizedSet(new HashSet<String>());
         Application.getAppComponent().inject(this);
     }
 
     @Override
     public Caller getCallerFromCache(String number) {
+
+        // return empty caller if it's in error cache.
+        if (mErrorCache.containsKey(number) &&
+                System.currentTimeMillis() - mErrorCache.get(number) < 60 * 1000) {
+            return Caller.empty(true);
+        }
+
         return getCallerFromCache(number, true);
     }
 
@@ -82,16 +93,12 @@ public class CallerRepository implements CallerDataSource {
                 public void call(Caller caller) {
                     Log.e(TAG, "call: " + number + "->" + caller.getNumber());
                     if (mOnDataUpdateListener != null) {
-                        if (caller.getNumber() == null) {
-                            mOnDataUpdateListener.onDataLoadFailed(number, !caller.isOffline());
-                        } else {
-                            mOnDataUpdateListener.onDataUpdate(caller);
-                        }
+                        mOnDataUpdateListener.onDataUpdate(caller);
                     }
                 }
             });
         }
-        return null;
+        return Caller.empty(false);
     }
 
     @Override
@@ -108,68 +115,82 @@ public class CallerRepository implements CallerDataSource {
             @Override
             public void call(final Subscriber<? super Caller> subscriber) {
 
-                // check loading cache
-                if (mLoadingCache.contains(number)) {
-                    return;
-                }
-                mLoadingCache.add(number);
-
-                // load from cache
-                Caller caller = getCallerFromCache(number, false);
-
-                if (caller != null && caller.isUpdated()) {
-                    subscriber.onNext(caller);
-                    mLoadingCache.remove(number);
-                    return;
-                }
-
-                // load from database
-                caller = mDatabase.findCallerSync(number);
-
-                if (caller != null) {
-                    if (caller.isUpdated()) {
-                        subscriber.onNext(caller);
-                        mLoadingCache.remove(number);
+                do {
+                    // check loading cache
+                    if (mLoadingCache.contains(number)) {
+                        // return without onCompleted
                         return;
-                    } else {
-                        mDatabase.removeCaller(caller);
                     }
-                }
+                    mLoadingCache.add(number);
 
-                // load from phone number library offline data
-                INumber iNumber = mPhoneNumber.getOfflineNumber(number);
+                    // load from cache
+                    Caller caller = getCallerFromCache(number, false);
 
-                if (iNumber != null && iNumber.isValid()) {
-                    subscriber.onNext(handleResponse(iNumber, false));
-                } else {
-                    subscriber.onNext(new Caller());
-                }
+                    if (caller != null && caller.isUpdated()) {
+                        subscriber.onNext(caller);
+                        break;
+                    }
 
-                // stop if the number is special
-                if (iNumber instanceof SpecialNumber || iNumber instanceof CallerNumber) {
-                    mLoadingCache.remove(number);
-                    return;
-                }
+                    // load from database
+                    caller = mDatabase.findCallerSync(number);
 
-                // stop if only offline is enabled
-                if (mSetting.isOnlyOffline() || forceOffline) {
-                    mLoadingCache.remove(number);
-                    return;
-                }
+                    if (caller != null) {
+                        if (caller.isUpdated()) {
+                            subscriber.onNext(caller);
+                            break;
+                        } else {
+                            mDatabase.removeCaller(caller);
+                        }
+                    }
 
-                // get online number info
-                iNumber = mPhoneNumber.getNumber(number);
+                    // load from phone number library offline data
+                    INumber iNumber = mPhoneNumber.getOfflineNumber(number);
 
-                if (iNumber != null && iNumber.isValid()) {
-                    subscriber.onNext(handleResponse(iNumber, true));
-                    mLoadingCache.remove(number);
-                } else {
-                    Caller c = new Caller();
-                    c.setOffline(false);
-                    subscriber.onNext(c);
-                    mLoadingCache.remove(number);
-                }
+                    if (iNumber != null && iNumber.isValid()) {
+                        subscriber.onNext(handleResponse(iNumber, false));
+                    } else {
+                        subscriber.onNext(Caller.empty(false));
+                    }
+
+                    // stop if the number is special
+                    if (iNumber instanceof SpecialNumber || iNumber instanceof CallerNumber) {
+                        break;
+                    }
+
+                    // stop if only offline is enabled
+                    if (mSetting.isOnlyOffline() || forceOffline) {
+                        break;
+                    }
+
+                    // get online number info
+                    iNumber = mPhoneNumber.getNumber(number);
+
+                    if (iNumber != null && iNumber.isValid()) {
+                        subscriber.onNext(handleResponse(iNumber, true));
+                    } else {
+                        subscriber.onNext(Caller.empty(true));
+                    }
+                } while (false);
+
                 subscriber.onCompleted();
+            }
+        }).doOnNext(new Action1<Caller>() {
+            @Override
+            public void call(Caller caller) {
+                Log.d(TAG, "doOnNext: " + number);
+                // add number to error cache
+                if (caller.isEmpty()) {
+                    mErrorCache.put(number, System.currentTimeMillis());
+                } else {
+                    mErrorCache.remove(number);
+                }
+            }
+        }).doOnCompleted(new Action0() {
+            @Override
+            public void call() {
+                Log.d(TAG, "doOnCompleted: " + number);
+                // remove number in loading cache
+                mLoadingCache.remove(number);
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
@@ -219,6 +240,6 @@ public class CallerRepository implements CallerDataSource {
 
             return caller;
         }
-        return new Caller();
+        return Caller.empty(isOnline);
     }
 }

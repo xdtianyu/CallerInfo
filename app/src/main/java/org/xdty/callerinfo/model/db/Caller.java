@@ -42,6 +42,16 @@ public class Caller extends SugarRecord implements INumber {
         this.isOffline = isOffline;
     }
 
+    public static Caller empty(boolean isOnline) {
+        Caller caller = new Caller();
+        caller.setOffline(!isOnline);
+        return caller;
+    }
+
+    public boolean isEmpty() {
+        return number == null;
+    }
+
     public String getNumber() {
         return number;
     }

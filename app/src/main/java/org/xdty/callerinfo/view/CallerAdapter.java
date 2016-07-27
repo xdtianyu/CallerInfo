@@ -94,13 +94,9 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
         public void bind(InCall inCall) {
 
-            // TODO: remove isFetched function, add error cache in presenter.
-            Caller caller = null;
-            if (!inCall.isFetched()) {
-                caller = mPresenter.getCaller(inCall.getNumber());
-            }
+            Caller caller = mPresenter.getCaller(inCall.getNumber());
 
-            if (caller != null) {
+            if (!caller.isEmpty()) {
                 TextColorPair t = TextColorPair.from(caller);
                 text.setText(t.text);
                 //noinspection ResourceAsColor
@@ -108,7 +104,7 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                 number.setText(TextUtils.isEmpty(
                         caller.getContactName()) ? caller.getNumber() : caller.getContactName());
             } else {
-                if (inCall.isFetched() || TextUtils.isEmpty(inCall.getNumber())) {
+                if (!caller.isOffline()) {
                     text.setText(R.string.loading_error);
                     number.setText(inCall.getNumber());
                     cardView.setCardBackgroundColor(

@@ -21,8 +21,6 @@ public interface CallerDataSource {
     interface OnDataUpdateListener {
 
         void onDataUpdate(Caller caller);
-
-        void onDataLoadFailed(String number, boolean isOnline);
     }
 
 }
