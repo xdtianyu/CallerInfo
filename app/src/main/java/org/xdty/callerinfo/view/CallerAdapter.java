@@ -96,25 +96,25 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
             Caller caller = mPresenter.getCaller(inCall.getNumber());
 
-            if (!caller.isEmpty()) {
+            if (caller.isEmpty()) {
+                if (caller.isOffline()) {
+                    text.setText(R.string.loading);
+                    number.setText(inCall.getNumber());
+                    cardView.setCardBackgroundColor(
+                            ContextCompat.getColor(cardView.getContext(), R.color.blue_light));
+                } else {
+                    text.setText(R.string.loading_error);
+                    number.setText(inCall.getNumber());
+                    cardView.setCardBackgroundColor(
+                            ContextCompat.getColor(cardView.getContext(), R.color.graphite));
+                }
+            } else {
                 TextColorPair t = TextColorPair.from(caller);
                 text.setText(t.text);
                 //noinspection ResourceAsColor
                 cardView.setCardBackgroundColor(t.color);
                 number.setText(TextUtils.isEmpty(
                         caller.getContactName()) ? caller.getNumber() : caller.getContactName());
-            } else {
-                if (!caller.isOffline()) {
-                    text.setText(R.string.loading_error);
-                    number.setText(inCall.getNumber());
-                    cardView.setCardBackgroundColor(
-                            ContextCompat.getColor(cardView.getContext(), R.color.graphite));
-                } else {
-                    text.setText(R.string.loading);
-                    number.setText(inCall.getNumber());
-                    cardView.setCardBackgroundColor(
-                            ContextCompat.getColor(cardView.getContext(), R.color.blue_light));
-                }
             }
             cardView.setAlpha(1f);
             if (inCall.isExpanded()) {
