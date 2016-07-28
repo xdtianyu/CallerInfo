@@ -182,6 +182,11 @@ public class MainPresenter implements MainContract.Presenter,
     }
 
     @Override
+    public void itemOnLongClicked(InCall inCall) {
+        mView.showBottomSheet(inCall);
+    }
+
+    @Override
     public void onCheckResult(Status status) {
         if (status != null) {
             mView.notifyUpdateData(status);

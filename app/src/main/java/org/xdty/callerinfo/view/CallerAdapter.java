@@ -65,7 +65,8 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
         return mList.get(position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener {
 
         final CardView cardView;
         final TextView text;
@@ -82,10 +83,12 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
             text = (TextView) view.findViewById(R.id.text);
             number = (TextView) view.findViewById(R.id.number);
             detail = (LinearLayout) view.findViewById(R.id.detail);
-            cardView.setOnClickListener(this);
             time = (TextView) view.findViewById(R.id.time);
             ringTime = (TextView) view.findViewById(R.id.ring_time);
             duration = (TextView) view.findViewById(R.id.duration);
+
+            cardView.setOnClickListener(this);
+            cardView.setOnLongClickListener(this);
         }
 
         public void setAlpha(float alpha) {
@@ -138,6 +141,12 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
                 detail.setVisibility(View.VISIBLE);
                 inCall.setExpanded(true);
             }
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            mPresenter.itemOnLongClicked(inCall);
+            return true;
         }
     }
 }

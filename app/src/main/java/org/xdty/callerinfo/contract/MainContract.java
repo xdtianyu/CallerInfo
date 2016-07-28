@@ -37,6 +37,8 @@ public interface MainContract {
         void showUpdateData(Status status);
 
         void updateDataFinished(boolean result);
+
+        void showBottomSheet(InCall inCall);
     }
 
     interface Presenter extends BasePresenter {
@@ -70,5 +72,7 @@ public interface MainContract {
         Caller getCaller(String number);
 
         void clearCache();
+
+        void itemOnLongClicked(InCall inCall);
     }
 }

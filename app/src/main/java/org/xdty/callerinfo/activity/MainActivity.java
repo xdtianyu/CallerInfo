@@ -444,7 +444,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     public void notifyUpdateData(final Status status) {
         final Snackbar snackbar = Snackbar.make(mToolbar, R.string.new_offline_data,
-                Snackbar.LENGTH_LONG);
+                Snackbar.LENGTH_INDEFINITE);
 
         snackbar.setAction(getString(R.string.update), new View.OnClickListener() {
             @Override
@@ -487,6 +487,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             }
         });
         snackbar.show();
+    }
+
+    @Override
+    public void showBottomSheet(InCall inCall) {
+        Snackbar.make(mToolbar, "hello: " + inCall.getNumber(), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
