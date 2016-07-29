@@ -44,6 +44,8 @@ public interface Setting {
 
     int getScreenHeight();
 
+    int getStatusBarHeight();
+
     int getWindowHeight();
 
     int getDefaultHeight();

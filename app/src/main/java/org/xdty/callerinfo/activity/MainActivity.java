@@ -37,6 +37,7 @@ import org.xdty.callerinfo.contract.MainContract;
 import org.xdty.callerinfo.di.DaggerMainComponent;
 import org.xdty.callerinfo.di.modules.AppModule;
 import org.xdty.callerinfo.di.modules.MainModule;
+import org.xdty.callerinfo.fragment.MainBottomSheetFragment;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.permission.Permission;
@@ -491,7 +492,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void showBottomSheet(InCall inCall) {
-        Snackbar.make(mToolbar, "hello: " + inCall.getNumber(), Snackbar.LENGTH_LONG).show();
+        // show bottom sheet dialog
+        new MainBottomSheetFragment().show(getSupportFragmentManager(), "dialog");
     }
 
     @Override

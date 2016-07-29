@@ -64,6 +64,17 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = sContext.getResources()
+                .getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = sContext.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    @Override
     public boolean isEulaSet() {
         return mPrefs.getBoolean("eula", false);
     }
