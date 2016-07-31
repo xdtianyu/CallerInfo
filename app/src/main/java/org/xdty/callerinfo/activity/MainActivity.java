@@ -493,7 +493,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     public void showBottomSheet(InCall inCall) {
         // show bottom sheet dialog
-        new MainBottomSheetFragment().show(getSupportFragmentManager(), "dialog");
+        MainBottomSheetFragment.newInstance(inCall).show(getSupportFragmentManager(), "dialog");
     }
 
     @Override

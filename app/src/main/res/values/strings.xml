@@ -211,4 +211,5 @@
     <string name="repeated_incoming_fifth">Fifth</string>
     <string name="action_clear_cache">Clear cache</string>
     <string name="clear_cache_message">Cache cleared</string>
+    <string name="more">More</string>
 </resources>

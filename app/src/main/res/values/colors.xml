@@ -8,4 +8,5 @@
     <color name="red_light">#ffff4444</color>
     <color name="transparent">#00000000</color>
     <color name="dark">#60000000</color>
+    <color name="white">#ffffffff</color>
 </resources>
