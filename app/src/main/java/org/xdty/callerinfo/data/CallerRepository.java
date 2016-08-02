@@ -81,8 +81,12 @@ public class CallerRepository implements CallerDataSource {
 
     private Caller getCallerFromCache(final String number, boolean fetchIfNotExist) {
         Caller caller = mCallerMap.get(number);
-        if (caller == null && number.contains("+86")) {
-            caller = mCallerMap.get(number.replace("+86", ""));
+        if (caller == null) {
+            if (number.contains("+86")) {
+                caller = mCallerMap.get(number.replace("+86", ""));
+            } else if (number.length > 7 && number.substring(0, 5) == "12583") {
+                caller = mCallerMap.get(number.substring(6));
+            }
         }
 
         if (caller != null && caller.isUpdated()) {
@@ -163,7 +167,11 @@ public class CallerRepository implements CallerDataSource {
                     }
 
                     // get online number info
-                    iNumber = mPhoneNumber.getNumber(number);
+                    if (number.length > 7 && number.substring(0, 5) == "12583") {
+                        iNumber = mPhoneNumber.getNumber(number.substring(6));
+                    } else {
+                        iNumber = mPhoneNumber.getNumber(number);
+                    }
 
                     if (iNumber != null && iNumber.isValid()) {
                         subscriber.onNext(handleResponse(iNumber, true));
