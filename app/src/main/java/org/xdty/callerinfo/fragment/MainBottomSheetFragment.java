@@ -39,6 +39,7 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment {
     private TextView mRingTime;
     private TextView mDuration;
     private TextView mName;
+    private TextView mSource;
 
     public MainBottomSheetFragment() {
         Application.getAppComponent().inject(this);
@@ -75,6 +76,7 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment {
         mRingTime = (TextView) dialog.findViewById(R.id.ring_time);
         mDuration = (TextView) dialog.findViewById(R.id.duration);
         mName = (TextView) dialog.findViewById(R.id.name);
+        mSource = (TextView) dialog.findViewById(R.id.source);
 
         mNumber.setText(mInCall.getNumber());
         mGeo.setText(mCaller.getGeo());
@@ -82,6 +84,7 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment {
         mRingTime.setText(Utils.readableTime(mInCall.getRingTime()));
         mDuration.setText(Utils.readableTime(mInCall.getDuration()));
         mName.setText(mCaller.getName());
+        mSource.setText(mCaller.getSource());
 
         // set bottom sheet background
         TextColorPair colorPair = TextColorPair.from(mCaller);

@@ -212,4 +212,15 @@
     <string name="action_clear_cache">Clear cache</string>
     <string name="clear_cache_message">Cache cleared</string>
     <string name="more">More</string>
+    <string name="source_special">Special number</string>
+    <string name="source_common">Common number</string>
+    <string name="source_caller">CallerInfo number</string>
+    <string name="source_marked">Marked number</string>
+    <string name="source_offline">Offline number</string>
+    <string name="source_google">Google offline data</string>
+    <string name="source_baidu">Baidu data source</string>
+    <string name="source_juhe">Juhe(360) data source</string>
+    <string name="source_soguo">Sogou data source</string>
+    <string name="source_cloud">Cloud data source</string>
+    <string name="source_custom">Custom data source</string>
 </resources>

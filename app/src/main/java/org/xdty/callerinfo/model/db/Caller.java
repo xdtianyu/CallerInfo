@@ -5,6 +5,7 @@ import com.orm.dsl.Ignore;
 import com.orm.dsl.Unique;
 
 import org.xdty.callerinfo.utils.Config;
+import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 
@@ -19,6 +20,7 @@ public class Caller extends SugarRecord implements INumber {
     private String city;
     private long lastUpdate;
     private boolean isOffline = true;
+    private int source = -9999;
 
     @Ignore
     private String contactName;
@@ -34,6 +36,7 @@ public class Caller extends SugarRecord implements INumber {
         this.province = number.getProvince();
         this.city = number.getCity();
         this.operators = number.getProvider();
+        this.source = number.getApiId();
         lastUpdate = System.currentTimeMillis();
     }
 
@@ -93,7 +96,11 @@ public class Caller extends SugarRecord implements INumber {
 
     @Override
     public int getApiId() {
-        return 0;
+        return source;
+    }
+
+    public String getSource() {
+        return Utils.sourceFromId(source);
     }
 
     public String getProvince() {

@@ -47,4 +47,30 @@
         <item>@string/repeated_incoming_fourth</item>
         <item>@string/repeated_incoming_fifth</item>
     </array>
+    <integer-array name="source_keys">
+        <item>-1000</item>
+        <item>-200</item>
+        <item>-150</item>
+        <item>-100</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>8</item>
+        <item>1000</item>
+    </integer-array>
+    <array name="source_values">
+        <item>@string/source_special</item>
+        <item>@string/source_common</item>
+        <item>@string/source_caller</item>
+        <item>@string/source_marked</item>
+        <item>@string/source_offline</item>
+        <item>@string/source_google</item>
+        <item>@string/source_baidu</item>
+        <item>@string/source_juhe</item>
+        <item>@string/source_soguo</item>
+        <item>@string/source_cloud</item>
+        <item>@string/source_custom</item>
+    </array>
 </resources>

@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -36,6 +38,7 @@ public final class Utils {
 
     public static final int NOTIFICATION_MARK = 0x01;
     private static final String TAG = Utils.class.getSimpleName();
+    private static Map<Integer, String> sNumberSourceMap;
 
     private Utils() {
         throw new AssertionError("Utils class is not meant to be instantiated or subclassed.");
@@ -230,5 +233,26 @@ public final class Utils {
         }
         Log.e(TAG, "typeFromString failed: " + type);
         return -1;
+    }
+
+    public static String sourceFromId(int sourceId) {
+
+        if (sNumberSourceMap == null) {
+            sNumberSourceMap = new HashMap<>();
+
+            String[] values = Application.getApplication()
+                    .getResources()
+                    .getStringArray(R.array.source_values);
+            int[] keys = Application.getApplication()
+                    .getResources()
+                    .getIntArray(R.array.source_keys);
+
+            for (int i = 0; i < keys.length; i++) {
+                sNumberSourceMap.put(keys[i], values[i]);
+            }
+        }
+
+        return sNumberSourceMap.get(sourceId);
+
     }
 }

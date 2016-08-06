@@ -173,4 +173,15 @@
     <string name="action_clear_cache">清空缓存</string>
     <string name="clear_cache_message">缓存已清除</string>
     <string name="more">更多</string>
+    <string name="source_baidu">百度电话号码服务</string>
+    <string name="source_caller">来电信息号码数据</string>
+    <string name="source_cloud">云端号码服务</string>
+    <string name="source_common">常用号码</string>
+    <string name="source_custom">自定义数据源</string>
+    <string name="source_google">谷歌离线号码数据</string>
+    <string name="source_juhe">聚合（360）号码服务</string>
+    <string name="source_marked">已标记号码</string>
+    <string name="source_offline">离线号码数据</string>
+    <string name="source_soguo">搜狗号码服务</string>
+    <string name="source_special">特殊号码</string>
 </resources>
