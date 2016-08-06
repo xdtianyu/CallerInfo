@@ -287,6 +287,15 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public void fix() {
+        // fix api type because baidu api is dead
+        int type = mPrefs.getInt(getString(R.string.api_type_key), 1);
+        if (type == 0) {
+            mPrefs.edit().remove(getString(R.string.api_type_key)).apply();
+        }
+    }
+
+    @Override
     public boolean isHidingWhenTouch() {
         return mPrefs.getBoolean(getString(R.string.hide_when_touch_key), false);
     }

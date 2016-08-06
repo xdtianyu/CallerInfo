@@ -125,7 +125,6 @@ public class SettingsActivity extends AppCompatActivity {
             mPoint = new Point();
             display.getSize(mPoint);
 
-            bindPreference(R.string.baidu_api_key, true);
             bindPreference(R.string.juhe_api_key, true);
             bindPreference(R.string.window_text_size_key);
             bindPreference(R.string.window_height_key);
@@ -433,6 +432,11 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         private void showRadioDialog(int keyId, int title, int listId, int defValue) {
+            showRadioDialog(keyId, title, listId, defValue, 0);
+        }
+
+        private void showRadioDialog(int keyId, int title, int listId, int defValue,
+                final int offset) {
             final String key = getString(keyId);
             final List<String> list = Arrays.asList(getResources().getStringArray(listId));
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -452,7 +456,8 @@ public class SettingsActivity extends AppCompatActivity {
             }
 
             RadioButton button =
-                    ((RadioButton) radioGroup.getChildAt(sharedPrefs.getInt(key, defValue)));
+                    ((RadioButton) radioGroup.getChildAt(
+                            sharedPrefs.getInt(key, defValue) - offset));
             button.setChecked(true);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -470,7 +475,7 @@ public class SettingsActivity extends AppCompatActivity {
                         preference.setSummary(list.get(index));
                     }
                     SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putInt(key, index);
+                    editor.putInt(key, index + offset);
                     editor.apply();
                     dialog.dismiss();
                 }
@@ -616,10 +621,6 @@ public class SettingsActivity extends AppCompatActivity {
         public boolean onPreferenceClick(Preference preference) {
             int keyId = getKeyId(preference.getKey());
             switch (keyId) {
-                case R.string.baidu_api_key:
-                    showApiDialog(R.string.baidu_api_key, R.string.custom_bd_api_key,
-                            R.string.baidu_api_url);
-                    break;
                 case R.string.juhe_api_key:
                     showApiDialog(R.string.juhe_api_key, R.string.custom_jh_api_key,
                             R.string.juhe_api_url);
@@ -647,7 +648,8 @@ public class SettingsActivity extends AppCompatActivity {
                             R.string.window_text_padding, R.string.text_padding);
                     break;
                 case R.string.api_type_key:
-                    showRadioDialog(R.string.api_type_key, R.string.api_type, R.array.api_type, 0);
+                    showRadioDialog(R.string.api_type_key, R.string.api_type, R.array.api_type, 1,
+                            1);
                     break;
                 case R.string.ignore_known_contact_key:
                 case R.string.not_mark_contact_key:

@@ -111,4 +111,6 @@ public interface Setting {
     int getReportColor();
 
     boolean isOnlyOffline();
+
+    void fix();
 }
