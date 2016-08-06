@@ -131,7 +131,7 @@ public class SettingsActivity extends AppCompatActivity {
             bindPreferenceList(R.string.window_text_alignment_key, R.array.align_type, 1);
             bindPreference(R.string.window_transparent_key);
             bindPreference(R.string.window_text_padding_key);
-            bindPreferenceList(R.string.api_type_key, R.array.api_type, 0);
+            bindPreferenceList(R.string.api_type_key, R.array.api_type, 0, 1);
             bindPreference(R.string.ignore_known_contact_key);
             bindPreference(R.string.display_on_outgoing_key);
             bindPreference(R.string.catch_crash_key);
@@ -879,11 +879,15 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         private void bindPreferenceList(int keyId, int arrayId, int index) {
+            bindPreferenceList(keyId, arrayId, index, 0);
+        }
+
+        private void bindPreferenceList(int keyId, int arrayId, int defValue, int offset) {
             String key = getString(keyId);
             Preference preference = findPreference(key);
             List<String> apiList = Arrays.asList(getResources().getStringArray(arrayId));
             preference.setOnPreferenceClickListener(this);
-            preference.setSummary(apiList.get(sharedPrefs.getInt(key, index)));
+            preference.setSummary(apiList.get(sharedPrefs.getInt(key, defValue) - offset));
             keyMap.put(key, keyId);
             prefMap.put(key, preference);
         }
