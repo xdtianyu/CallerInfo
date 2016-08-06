@@ -168,4 +168,8 @@ public class Caller extends SugarRecord implements INumber {
     public void setContactName(String contactName) {
         this.contactName = contactName;
     }
+
+    public String getGeo() {
+        return province + " " + city;
+    }
 }

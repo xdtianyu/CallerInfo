@@ -15,37 +15,40 @@
         android:padding="@dimen/activity_horizontal_margin">
 
         <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/more"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
-
-        <TextView
             android:id="@+id/number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:drawableLeft="@drawable/ic_call_white_18dp"
+            android:drawableStart="@drawable/ic_call_white_18dp"
+            style="@style/BottomSheetTextStyle"/>
 
         <TextView
             android:id="@+id/geo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:drawableLeft="@drawable/ic_location_on_white_18dp"
+            android:drawableStart="@drawable/ic_location_on_white_18dp"
+            style="@style/BottomSheetTextStyle"/>
 
         <TextView
             android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:drawableLeft="@drawable/ic_date_range_white_18dp"
+            android:drawableStart="@drawable/ic_date_range_white_18dp"
+            style="@style/BottomSheetTextStyle"/>
 
         <TextView
             android:id="@+id/ring_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:drawableLeft="@drawable/ic_notifications_none_white_18dp"
+            android:drawableStart="@drawable/ic_notifications_none_white_18dp"
+            style="@style/BottomSheetTextStyle"/>
 
         <TextView
             android:id="@+id/duration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:drawableLeft="@drawable/ic_update_white_18dp"
+            android:drawableStart="@drawable/ic_update_white_18dp"
+            style="@style/BottomSheetTextStyle"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:drawableLeft="@drawable/ic_flag_white_18dp"
+            android:drawableStart="@drawable/ic_flag_white_18dp"
+            style="@style/BottomSheetTextStyle"/>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

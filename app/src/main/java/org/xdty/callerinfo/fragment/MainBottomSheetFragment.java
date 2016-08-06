@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.data.CallerDataSource;
+import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.model.setting.Setting;
@@ -30,12 +32,13 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment {
     private InCall mInCall;
     private Caller mCaller;
 
-    private TextView mTitle;
+    private View mBottomSheet;
     private TextView mNumber;
     private TextView mGeo;
     private TextView mTime;
     private TextView mRingTime;
     private TextView mDuration;
+    private TextView mName;
 
     public MainBottomSheetFragment() {
         Application.getAppComponent().inject(this);
@@ -65,19 +68,25 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment {
 
         frameLayout.setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        mTitle = (TextView) dialog.findViewById(R.id.title);
+        mBottomSheet = dialog.findViewById(R.id.bottom_sheet);
         mNumber = (TextView) dialog.findViewById(R.id.number);
         mGeo = (TextView) dialog.findViewById(R.id.geo);
         mTime = (TextView) dialog.findViewById(R.id.time);
         mRingTime = (TextView) dialog.findViewById(R.id.ring_time);
         mDuration = (TextView) dialog.findViewById(R.id.duration);
+        mName = (TextView) dialog.findViewById(R.id.name);
 
         mNumber.setText(mInCall.getNumber());
-        mGeo.setText(mCaller.getProvince() + " " + mCaller.getCity());
-        mTime.setText(Utils.readableDate(mInCall.getTime()) + " " +
-                Utils.readableTime(mInCall.getTime()));
+        mGeo.setText(mCaller.getGeo());
+        mTime.setText(mInCall.getReadableTime());
         mRingTime.setText(Utils.readableTime(mInCall.getRingTime()));
         mDuration.setText(Utils.readableTime(mInCall.getDuration()));
+        mName.setText(mCaller.getName());
+
+        // set bottom sheet background
+        TextColorPair colorPair = TextColorPair.from(mCaller);
+        //noinspection ResourceAsColor
+        mBottomSheet.setBackgroundColor(colorPair.color);
 
         return dialog;
     }

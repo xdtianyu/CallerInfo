@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
+import org.xdty.callerinfo.utils.Utils;
+
 public class InCall extends SugarRecord {
     private String number;
     private long time;
@@ -65,5 +67,9 @@ public class InCall extends SugarRecord {
 
     public void setExpanded(boolean expanded) {
         isExpanded = expanded;
+    }
+
+    public String getReadableTime() {
+        return Utils.readableDate(getTime()) + " " + Utils.readableTime(getTime());
     }
 }
