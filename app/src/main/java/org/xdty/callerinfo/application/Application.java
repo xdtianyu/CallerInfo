@@ -50,6 +50,8 @@ public class Application extends com.orm.SugarApp {
             CustomActivityOnCrash.install(this);
         }
 
+        mSetting.fix();
+
         mAlarm.alarm();
     }
 }
