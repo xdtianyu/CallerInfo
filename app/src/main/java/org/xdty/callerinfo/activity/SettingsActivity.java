@@ -131,7 +131,7 @@ public class SettingsActivity extends AppCompatActivity {
             bindPreferenceList(R.string.window_text_alignment_key, R.array.align_type, 1);
             bindPreference(R.string.window_transparent_key);
             bindPreference(R.string.window_text_padding_key);
-            bindPreferenceList(R.string.api_type_key, R.array.api_type, 0, 1);
+            bindPreferenceList(R.string.api_type_key, R.array.api_type, 1, 1);
             bindPreference(R.string.ignore_known_contact_key);
             bindPreference(R.string.display_on_outgoing_key);
             bindPreference(R.string.catch_crash_key);
