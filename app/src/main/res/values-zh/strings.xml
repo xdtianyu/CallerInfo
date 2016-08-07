@@ -184,4 +184,5 @@
     <string name="source_offline">离线号码数据</string>
     <string name="source_soguo">搜狗号码服务</string>
     <string name="source_special">特殊号码</string>
+    <string name="modify_mark">修改标记</string>
 </resources>

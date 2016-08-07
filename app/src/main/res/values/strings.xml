@@ -223,4 +223,5 @@
     <string name="source_soguo">Sogou data source</string>
     <string name="source_cloud">Cloud data source</string>
     <string name="source_custom">Custom data source</string>
+    <string name="modify_mark">Modify mark</string>
 </resources>
