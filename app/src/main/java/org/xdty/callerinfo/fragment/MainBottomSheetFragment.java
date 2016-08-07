@@ -149,6 +149,7 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
             default:
                 mCustom.setBackgroundResource(R.color.pressed);
                 mCustomText.setVisibility(View.VISIBLE);
+                mCustomText.setText(mCaller.getName() != null ? mCaller.getName() : "");
                 break;
         }
     }
@@ -161,6 +162,7 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
 
         if (view == mCustom) {
             mCustomText.setVisibility(View.VISIBLE);
+            mCustomText.setText(mCaller.getName() != null ? mCaller.getName() : "");
         } else {
             mCustomText.setVisibility(View.GONE);
         }
