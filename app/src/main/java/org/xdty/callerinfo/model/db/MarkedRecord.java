@@ -116,7 +116,7 @@ public class MarkedRecord extends SugarRecord {
         CUSTOM;
 
         public static MarkType fromInt(int value) {
-            if (value > 0 && value < MarkType.values().length) {
+            if (value >= 0 && value < MarkType.values().length) {
                 return MarkType.values()[value];
             }
             return CUSTOM;
