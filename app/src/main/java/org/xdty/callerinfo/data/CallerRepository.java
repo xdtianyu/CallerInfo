@@ -163,12 +163,19 @@ public class CallerRepository implements CallerDataSource {
                     }
 
                     // get online number info
-                    iNumber = mPhoneNumber.getNumber(number);
+                    INumber iOnlineNumber = mPhoneNumber.getNumber(number);
 
-                    if (iNumber != null && iNumber.isValid()) {
-                        subscriber.onNext(handleResponse(iNumber, true));
+                    if (iOnlineNumber != null && iOnlineNumber.isValid()) {
+                        if (!iOnlineNumber.hasGeo() && iNumber != null) {
+                            iOnlineNumber.patch(iNumber);
+                        }
+                        subscriber.onNext(handleResponse(iOnlineNumber, true));
                     } else {
-                        subscriber.onNext(Caller.empty(true));
+                        if (iNumber != null) {
+                            subscriber.onNext(handlePatch(iNumber));
+                        } else {
+                            subscriber.onNext(Caller.empty(true));
+                        }
                     }
                 } while (false);
 
@@ -258,5 +265,13 @@ public class CallerRepository implements CallerDataSource {
             return caller;
         }
         return Caller.empty(isOnline);
+    }
+
+    private Caller handlePatch(INumber number) {
+        Caller caller = Caller.empty(true, number);
+        caller.setOffline(false);
+        caller.setNumber(number.getNumber());
+        mCallerMap.put(caller.getNumber(), caller);
+        return caller;
     }
 }

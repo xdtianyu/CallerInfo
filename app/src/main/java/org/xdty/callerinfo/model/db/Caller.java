@@ -1,5 +1,7 @@
 package org.xdty.callerinfo.model.db;
 
+import android.text.TextUtils;
+
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 import com.orm.dsl.Unique;
@@ -46,8 +48,15 @@ public class Caller extends SugarRecord implements INumber {
     }
 
     public static Caller empty(boolean isOnline) {
+        return empty(isOnline, null);
+    }
+
+    public static Caller empty(boolean isOnline, INumber iNumber) {
         Caller caller = new Caller();
         caller.setOffline(!isOnline);
+        if (iNumber != null) {
+            caller.patch(iNumber);
+        }
         return caller;
     }
 
@@ -90,6 +99,12 @@ public class Caller extends SugarRecord implements INumber {
     }
 
     @Override
+    public boolean hasGeo() {
+        return !TextUtils.isEmpty(getProvince()) || !TextUtils.isEmpty(getCity())
+                || !TextUtils.isEmpty(getProvider());
+    }
+
+    @Override
     public boolean isValid() {
         return false;
     }
@@ -99,12 +114,19 @@ public class Caller extends SugarRecord implements INumber {
         return source;
     }
 
+    @Override
+    public void patch(INumber i) {
+        province = i.getProvince();
+        city = i.getCity();
+        operators = i.getProvider();
+    }
+
     public String getSource() {
         return Utils.sourceFromId(source);
     }
 
     public String getProvince() {
-        return province;
+        return province != null ? province : "";
     }
 
     @Override
@@ -117,11 +139,11 @@ public class Caller extends SugarRecord implements INumber {
     }
 
     public String getOperators() {
-        return operators;
+        return operators != null ? operators : "";
     }
 
     public String getCity() {
-        return city;
+        return city != null ? city : "";
     }
 
     public long getLastUpdate() {
@@ -177,6 +199,10 @@ public class Caller extends SugarRecord implements INumber {
     }
 
     public String getGeo() {
-        return province + " " + city;
+        if (getProvince().equals(city) || getCity().isEmpty()) {
+            return getProvince() + " " + getOperators();
+        } else {
+            return getProvince() + " " + getCity() + " " + getOperators();
+        }
     }
 }
