@@ -215,6 +215,11 @@ public final class Utils {
     }
 
     public static int typeFromString(String type) {
+
+        if (TextUtils.isEmpty(type)) {
+            return -1;
+        }
+
         ArrayList<String> types = new ArrayList<>(
                 Arrays.asList(Application.getApplication()
                         .getResources()
