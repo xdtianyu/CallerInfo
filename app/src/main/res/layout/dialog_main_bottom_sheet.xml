@@ -62,7 +62,7 @@
             android:layout_height="0.5dp"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:background="#90909090"/>
+            android:background="#90ffffff"/>
 
         <TextView
             android:id="@+id/edit"
@@ -71,8 +71,8 @@
             android:drawableStart="@drawable/ic_mode_edit_white_18dp"
             android:text="@string/modify_mark"/>
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <org.apmem.tools.layouts.FlowLayout
+            android:id="@+id/tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp">
@@ -87,10 +87,49 @@
             <Button
                 android:id="@+id/harassment"
                 style="@style/BottomSheetTagButtonStyle"
-                android:drawableLeft="@drawable/ic_money_off_white_18dp"
-                android:drawableStart="@drawable/ic_money_off_white_18dp"
+                android:drawableLeft="@drawable/ic_do_not_disturb_white_18dp"
+                android:drawableStart="@drawable/ic_do_not_disturb_white_18dp"
                 android:text="@string/harassment"/>
-        </LinearLayout>
+
+            <Button
+                android:id="@+id/advertising"
+                style="@style/BottomSheetTagButtonStyle"
+                android:drawableLeft="@drawable/ic_remove_shopping_cart_white_18dp"
+                android:drawableStart="@drawable/ic_remove_shopping_cart_white_18dp"
+                android:text="@string/advertising"/>
+
+            <Button
+                android:id="@+id/express"
+                style="@style/BottomSheetTagButtonStyle"
+                android:drawableLeft="@drawable/ic_local_shipping_white_18dp"
+                android:drawableStart="@drawable/ic_local_shipping_white_18dp"
+                android:text="@string/express_delivery"/>
+
+            <Button
+                android:id="@+id/restaurant"
+                style="@style/BottomSheetTagButtonStyle"
+                android:drawableLeft="@drawable/ic_restaurant_white_18dp"
+                android:drawableStart="@drawable/ic_restaurant_white_18dp"
+                android:text="@string/restaurant_deliver"/>
+
+            <Button
+                android:id="@+id/custom"
+                style="@style/BottomSheetTagButtonStyle"
+                android:drawableLeft="@drawable/ic_bookmark_border_white_18dp"
+                android:drawableStart="@drawable/ic_bookmark_border_white_18dp"
+                android:text="@string/custom"/>
+
+            <EditText
+                android:id="@+id/custom_text"
+                style="@style/BottomSheetTextStyle"
+                android:layout_width="120dp"
+                android:background="@null"
+                android:hint="@string/custom_tag_hint"
+                android:inputType="text"
+                android:textColorHint="@color/white"
+                android:textSize="12sp"
+                android:visibility="gone"/>
+        </org.apmem.tools.layouts.FlowLayout>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

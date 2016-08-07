@@ -185,4 +185,6 @@
     <string name="source_soguo">搜狗号码服务</string>
     <string name="source_special">特殊号码</string>
     <string name="modify_mark">修改标记</string>
+    <string name="custom">自定义</string>
+    <string name="custom_tag_hint">添加自定义标记</string>
 </resources>

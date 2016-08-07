@@ -106,4 +106,20 @@ public class MarkedRecord extends SugarRecord {
     public boolean isIgnore() {
         return type == TYPE_IGNORE;
     }
+
+    public enum MarkType {
+        HARASSMENT,
+        FRAUD,
+        ADVERTISING,
+        EXPRESS_DELIVERY,
+        RESTAURANT_DELIVER,
+        CUSTOM;
+
+        public static MarkType fromInt(int value) {
+            if (value > 0 && value < MarkType.values().length) {
+                return MarkType.values()[value];
+            }
+            return CUSTOM;
+        }
+    }
 }

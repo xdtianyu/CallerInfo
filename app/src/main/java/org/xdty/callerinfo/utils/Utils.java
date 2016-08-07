@@ -224,7 +224,7 @@ public final class Utils {
                 return types.indexOf(t);
             }
 
-            ArrayList<String> ts = new ArrayList<>(Arrays.asList(t.split("|")));
+            ArrayList<String> ts = new ArrayList<>(Arrays.asList(t.split("\\|")));
             for (String s : ts) {
                 if (type.contains(s)) {
                     return types.indexOf(t);

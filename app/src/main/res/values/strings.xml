@@ -224,4 +224,6 @@
     <string name="source_cloud">Cloud data source</string>
     <string name="source_custom">Custom data source</string>
     <string name="modify_mark">Modify mark</string>
+    <string name="custom">Custom</string>
+    <string name="custom_tag_hint">Add custom tag</string>
 </resources>
