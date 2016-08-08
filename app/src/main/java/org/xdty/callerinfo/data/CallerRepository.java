@@ -210,15 +210,10 @@ public class CallerRepository implements CallerDataSource {
             public void call(final Subscriber<? super Map<String, Caller>> subscriber) {
 
                 List<Caller> callers = mDatabase.fetchCallersSync();
-                boolean canReadContact = mPermission.canReadContact();
                 for (Caller caller : callers) {
                     String number = caller.getNumber();
                     if (number != null && !number.isEmpty()) {
-                        if (canReadContact) {
-                            String name = mContact.getName(caller.getNumber());
-                            caller.setContactName(name);
-                        }
-                        mCallerMap.put(caller.getNumber(), caller);
+                        cache(caller);
                     }
                 }
                 subscriber.onNext(mCallerMap);
@@ -260,7 +255,7 @@ public class CallerRepository implements CallerDataSource {
                 }
             }
 
-            mCallerMap.put(caller.getNumber(), caller);
+            cache(caller);
 
             return caller;
         }
@@ -271,7 +266,15 @@ public class CallerRepository implements CallerDataSource {
         Caller caller = Caller.empty(true, number);
         caller.setOffline(false);
         caller.setNumber(number.getNumber());
-        mCallerMap.put(caller.getNumber(), caller);
+        cache(caller);
         return caller;
+    }
+
+    private void cache(Caller caller) {
+        if (mPermission.canReadContact()) {
+            String name = mContact.getName(caller.getNumber());
+            caller.setContactName(name);
+        }
+        mCallerMap.put(caller.getNumber(), caller);
     }
 }
