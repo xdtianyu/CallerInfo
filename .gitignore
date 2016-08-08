@@ -47,3 +47,5 @@ obj/
 release.jks
 signing.properties
 manifest.properties
+
+*.log
