@@ -238,34 +238,21 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
             bindPluginService();
         }
 
-        mDatabase.findCaller(number).subscribe(new Action1<Caller>() {
-            @Override
-            public void call(Caller caller) {
-                if (caller != null) {
-                    if (caller.isUpdated()) {
-                        showNumber(caller);
-                        return;
-                    } else {
-                        mDatabase.removeCaller(caller);
-                    }
-                }
-                mView.showSearching();
+        mView.showSearching();
 
-                mCallerDataSource.getCaller(number, mode == SearchMode.OFFLINE)
-                        .subscribe(new Action1<Caller>() {
-                            @Override
-                            public void call(Caller caller) {
-                                Log.d(TAG, "call: " + number + "->" + caller.getNumber() +
-                                        ", offline: " + caller.isOffline());
-                                if (caller.isEmpty()) {
-                                    showNumber(caller);
-                                } else if (mCallRecord.isActive()) {
-                                    mView.showFailed(!caller.isOffline());
-                                }
-                            }
-                        });
-            }
-        });
+        mCallerDataSource.getCaller(number, mode == SearchMode.OFFLINE)
+                .subscribe(new Action1<Caller>() {
+                    @Override
+                    public void call(Caller caller) {
+                        Log.d(TAG, "call: " + number + "->" + caller.getNumber() +
+                                ", offline: " + caller.isOffline());
+                        if (!caller.isEmpty()) {
+                            showNumber(caller);
+                        } else if (mCallRecord.isActive()) {
+                            mView.showFailed(!caller.isOffline());
+                        }
+                    }
+                });
     }
 
     @Override
