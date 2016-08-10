@@ -11,8 +11,6 @@ import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.callerinfo.utils.Contact;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
-import org.xdty.phone.number.model.caller.CallerNumber;
-import org.xdty.phone.number.model.special.SpecialNumber;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -153,7 +151,8 @@ public class CallerRepository implements CallerDataSource {
                     }
 
                     // stop if the number is special
-                    if (iNumber instanceof SpecialNumber || iNumber instanceof CallerNumber) {
+                    if (iNumber != null && (iNumber.getApiId() == INumber.API_ID_SPECIAL
+                            || iNumber.getApiId() == INumber.API_ID_CALLER)) {
                         break;
                     }
 
@@ -208,6 +207,8 @@ public class CallerRepository implements CallerDataSource {
         return Observable.create(new Observable.OnSubscribe<Map<String, Caller>>() {
             @Override
             public void call(final Subscriber<? super Map<String, Caller>> subscriber) {
+
+                mCallerMap.clear();
 
                 List<Caller> callers = mDatabase.fetchCallersSync();
                 for (Caller caller : callers) {
