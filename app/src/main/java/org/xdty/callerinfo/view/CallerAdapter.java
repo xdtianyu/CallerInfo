@@ -4,6 +4,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +102,11 @@ public class CallerAdapter extends RecyclerView.Adapter<CallerAdapter.ViewHolder
 
             if (caller.isEmpty()) {
                 if (caller.isOffline()) {
-                    text.setText(R.string.loading);
+                    if (caller.hasGeo()) {
+                        text.setText(caller.getGeo());
+                    } else {
+                        text.setText(R.string.loading);
+                    }
                     number.setText(inCall.getNumber());
                     cardView.setCardBackgroundColor(
                             ContextCompat.getColor(cardView.getContext(), R.color.blue_light));

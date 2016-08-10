@@ -61,8 +61,8 @@ public class CallerRepository implements CallerDataSource {
     private OnDataUpdateListener mOnDataUpdateListener;
 
     public CallerRepository() {
-        mCallerMap = new HashMap<>();
-        mErrorCache = new HashMap<>();
+        mCallerMap = Collections.synchronizedMap(new HashMap<String, Caller>());
+        mErrorCache = Collections.synchronizedMap(new HashMap<String, Long>());
         mLoadingCache = Collections.synchronizedSet(new HashSet<String>());
         Application.getAppComponent().inject(this);
     }
@@ -85,7 +85,7 @@ public class CallerRepository implements CallerDataSource {
             caller = mCallerMap.get(number.replace("+86", ""));
         }
 
-        if (caller != null && caller.isUpdated()) {
+        if (caller != null) {
             return caller;
         } else if (fetchIfNotExist) {
             getCaller(number).subscribe(new Action1<Caller>() {
