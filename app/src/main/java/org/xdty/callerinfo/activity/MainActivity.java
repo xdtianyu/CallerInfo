@@ -368,10 +368,24 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     }
 
     private void clearCache() {
-        mPresenter.clearCache();
-        Snackbar.make(mToolbar, R.string.clear_cache_message, Snackbar.LENGTH_LONG)
-                .setAction(getString(R.string.ok), null)
-                .show();
+
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.action_clear_cache));
+        builder.setMessage(getString(R.string.clear_cache_confirm_message));
+        builder.setCancelable(true);
+        builder.setPositiveButton(getString(R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPresenter.clearCache();
+                        Snackbar.make(mToolbar, R.string.clear_cache_message, Snackbar.LENGTH_LONG)
+                                .setAction(getString(R.string.ok), null)
+                                .show();
+                    }
+                });
+        builder.setNegativeButton(getString(R.string.cancel), null);
+        builder.show();
     }
 
     @Override
