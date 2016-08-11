@@ -227,4 +227,5 @@
     <string name="custom">Custom</string>
     <string name="custom_tag_hint">Add custom tag</string>
     <string name="clear_cache_confirm_message">Clear all caller cache?</string>
+    <string name="no_geo">No geo location info</string>
 </resources>
