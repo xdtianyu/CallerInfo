@@ -22,8 +22,6 @@ import org.xdty.phone.number.model.INumber;
 
 import javax.inject.Inject;
 
-import wei.mark.standout.StandOutWindow;
-
 public class IncomingCall extends BroadcastReceiver {
 
     private final static String TAG = IncomingCall.class.getSimpleName();
@@ -108,7 +106,7 @@ public class IncomingCall extends BroadcastReceiver {
         @Override
         public void show(INumber number) {
             isShowing = true;
-            mWindow.showWindow(number, FloatWindow.CALLER_FRONT);
+            mWindow.showWindow(number, Window.Type.CALLER);
         }
 
         @Override
@@ -116,21 +114,21 @@ public class IncomingCall extends BroadcastReceiver {
             isShowing = true;
             if (isOnline) {
                 mWindow.sendData(FloatWindow.WINDOW_ERROR,
-                        R.string.online_failed, FloatWindow.CALLER_FRONT);
+                        R.string.online_failed, Window.Type.CALLER);
             } else {
-                mWindow.showTextWindow(R.string.offline_failed, FloatWindow.CALLER_FRONT);
+                mWindow.showTextWindow(R.string.offline_failed, Window.Type.CALLER);
             }
         }
 
         @Override
         public void showSearching() {
-            mWindow.showTextWindow(R.string.searching, FloatWindow.CALLER_FRONT);
+            mWindow.showTextWindow(R.string.searching, Window.Type.CALLER);
         }
 
         @Override
         public void hide(String incomingNumber) {
             if (isShowing) {
-                StandOutWindow.hide(sContext, FloatWindow.class, FloatWindow.CALLER_FRONT);
+                mWindow.hideWindow();
             }
         }
 
@@ -138,7 +136,7 @@ public class IncomingCall extends BroadcastReceiver {
         public void close(String incomingNumber) {
             if (isShowing) {
                 isShowing = false;
-                StandOutWindow.closeAll(sContext, FloatWindow.class);
+                mWindow.closeWindow();
             }
         }
 

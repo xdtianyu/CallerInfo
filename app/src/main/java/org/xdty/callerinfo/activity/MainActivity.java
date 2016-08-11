@@ -334,8 +334,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 break;
             case R.id.action_float_window:
                 if (FloatWindow.status() == FloatWindow.STATUS_CLOSE) {
-                    mWindow.showTextWindow(R.string.float_window_hint,
-                            FloatWindow.SET_POSITION_FRONT);
+                    mWindow.showTextWindow(R.string.float_window_hint, Window.Type.POSITION);
                 } else {
                     mWindow.closeWindow();
                 }
@@ -417,23 +416,22 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     public void showSearchResult(INumber number) {
         Log.d(TAG, "showSearchResult: " + number.getNumber());
-        mWindow.showWindow(number, FloatWindow.SEARCH_FRONT);
+        mWindow.showWindow(number, Window.Type.SEARCH);
     }
 
     @Override
     public void showSearching() {
         Log.d(TAG, "showSearching");
-        mWindow.showTextWindow(R.string.searching, FloatWindow.SEARCH_FRONT);
+        mWindow.showTextWindow(R.string.searching, Window.Type.SEARCH);
     }
 
     @Override
     public void showSearchFailed(boolean isOnline) {
         Log.d(TAG, "showSearchFailed: isOnline=" + isOnline);
         if (isOnline) {
-            mWindow.sendData(FloatWindow.WINDOW_ERROR, R.string.online_failed,
-                    FloatWindow.SEARCH_FRONT);
+            mWindow.sendData(FloatWindow.WINDOW_ERROR, R.string.online_failed, Window.Type.SEARCH);
         } else {
-            mWindow.showTextWindow(R.string.offline_failed, FloatWindow.SEARCH_FRONT);
+            mWindow.showTextWindow(R.string.offline_failed, Window.Type.SEARCH);
         }
     }
 

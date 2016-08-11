@@ -11,6 +11,8 @@ import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.phone.number.model.INumber;
 
+import wei.mark.standout.StandOutWindow;
+
 public final class Window {
 
     private static final String TAG = Window.class.getSimpleName();
@@ -21,7 +23,8 @@ public final class Window {
         mContext = Application.getApplication();
     }
 
-    public void showTextWindow(int resId, int frontType) {
+    public void showTextWindow(int resId, Type type) {
+        int frontType = type.value();
         Bundle bundle = new Bundle();
         bundle.putString(FloatWindow.NUMBER_INFO, mContext.getString(resId));
         bundle.putInt(FloatWindow.WINDOW_COLOR, ContextCompat.getColor(mContext,
@@ -32,7 +35,8 @@ public final class Window {
                 frontType, 0, bundle, FloatWindow.class, 0);
     }
 
-    public void sendData(String key, int value, int frontType) {
+    public void sendData(String key, int value, Type type) {
+        int frontType = type.value();
         Bundle bundle = new Bundle();
         bundle.putInt(key, value);
         FloatWindow.show(mContext, FloatWindow.class, frontType);
@@ -45,7 +49,8 @@ public final class Window {
         FloatWindow.closeAll(mContext, FloatWindow.class);
     }
 
-    public void showWindow(INumber number, int frontType) {
+    public void showWindow(INumber number, Type type) {
+        int frontType = type.value();
 
         TextColorPair textColor = TextColorPair.from(number);
 
@@ -57,6 +62,28 @@ public final class Window {
                 frontType);
         FloatWindow.sendData(mContext, FloatWindow.class,
                 frontType, 0, bundle, FloatWindow.class, 0);
+    }
+
+    public void hideWindow() {
+        StandOutWindow.hide(mContext, FloatWindow.class, Type.CALLER.value());
+    }
+
+    public enum Type {
+
+        CALLER(FloatWindow.CALLER_FRONT),
+        POSITION(FloatWindow.SET_POSITION_FRONT),
+        SETTING(FloatWindow.SETTING_FRONT),
+        SEARCH(FloatWindow.SEARCH_FRONT);
+
+        private final int mType;
+
+        Type(int type) {
+            mType = type;
+        }
+
+        public int value() {
+            return mType;
+        }
     }
 
 }
