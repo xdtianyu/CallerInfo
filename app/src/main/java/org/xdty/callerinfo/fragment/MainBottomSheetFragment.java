@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.TypedValue;
 import android.view.View;
@@ -56,6 +58,10 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
     private Button mCustom;
     private EditText mCustomText;
 
+    private View mDivider;
+    private TextView mEdit;
+    private FloatingActionButton mFab;
+
     public MainBottomSheetFragment() {
         Application.getAppComponent().inject(this);
     }
@@ -101,6 +107,9 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         mRestaurant = (Button) dialog.findViewById(R.id.restaurant);
         mCustom = (Button) dialog.findViewById(R.id.custom);
         mCustomText = (EditText) dialog.findViewById(R.id.custom_text);
+        mDivider = dialog.findViewById(R.id.divider);
+        mEdit = (TextView) dialog.findViewById(R.id.edit);
+        mFab = (FloatingActionButton) dialog.findViewById(R.id.fab);
 
         mHarassment.setOnClickListener(this);
         mFraud.setOnClickListener(this);
@@ -134,9 +143,21 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         //noinspection ResourceAsColor
         mBottomSheet.setBackgroundColor(colorPair.color);
 
-        selectTag(mCaller.getName());
+        if (canMark()) {
+            mDivider.setVisibility(View.VISIBLE);
+            mEdit.setVisibility(View.VISIBLE);
+            mFlowLayout.setVisibility(View.VISIBLE);
+
+            selectTag(name);
+        } else {
+            BottomSheetBehavior.from(frameLayout).setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
 
         return dialog;
+    }
+
+    private boolean canMark() {
+        return mCaller.isMark() || mCaller.canMark() && mInCall.getDuration() > 0;
     }
 
     private void selectTag(String name) {

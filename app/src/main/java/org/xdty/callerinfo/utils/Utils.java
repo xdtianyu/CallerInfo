@@ -242,6 +242,12 @@ public final class Utils {
 
     public static String sourceFromId(int sourceId) {
 
+        if (sourceId == -9999) {
+            return Application.getApplication()
+                    .getResources()
+                    .getString(R.string.mark);
+        }
+
         if (sNumberSourceMap == null) {
             sNumberSourceMap = new HashMap<>();
 

@@ -9,7 +9,7 @@
         android:id="@+id/bottom_sheet"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:background="@color/white"
         android:padding="@dimen/activity_horizontal_margin">
@@ -62,20 +62,23 @@
             android:layout_height="0.5dp"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:background="#90ffffff"/>
+            android:background="#90ffffff"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/edit"
             style="@style/BottomSheetTextStyle"
             android:drawableLeft="@drawable/ic_mode_edit_white_18dp"
             android:drawableStart="@drawable/ic_mode_edit_white_18dp"
-            android:text="@string/modify_mark"/>
+            android:text="@string/modify_mark"
+            android:visibility="gone"/>
 
         <org.apmem.tools.layouts.FlowLayout
             android:id="@+id/tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp">
+            android:padding="5dp"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/fraud"
@@ -138,6 +141,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:visibility="gone"
         app:layout_anchor="@id/bottom_sheet"
         app:layout_anchorGravity="top|end"/>
 </FrameLayout>

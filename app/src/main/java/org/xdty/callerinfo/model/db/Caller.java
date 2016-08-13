@@ -209,4 +209,13 @@ public class Caller extends SugarRecord implements INumber {
             return getProvince() + " " + getCity() + " " + getOperators();
         }
     }
+
+    public boolean canMark() {
+        return (getName() == null || getName().isEmpty()) && isOffline() ||
+                getApiId() < 0 && getApiId() != INumber.API_ID_CALLER;
+    }
+
+    public boolean isMark() {
+        return getApiId() == -9999;
+    }
 }
