@@ -188,5 +188,6 @@
     <string name="custom">自定义</string>
     <string name="custom_tag_hint">添加自定义标记</string>
     <string name="clear_cache_confirm_message">清除号码缓存数据？</string>
-    <string name="no_geo">无位置数据</string>
+    <string name="no_geo">中国</string>
+    <string name="no_marked_name">无标记数据</string>
 </resources>

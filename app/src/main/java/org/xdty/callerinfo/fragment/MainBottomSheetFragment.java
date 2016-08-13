@@ -120,7 +120,13 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         mTime.setText(mInCall.getReadableTime());
         mRingTime.setText(Utils.readableTime(mInCall.getRingTime()));
         mDuration.setText(Utils.readableTime(mInCall.getDuration()));
-        mName.setText(mCaller.getName());
+
+        String name = mCaller.getName();
+        if (name == null || name.isEmpty()) {
+            name = getResources().getString(R.string.no_marked_name);
+        }
+
+        mName.setText(name);
         mSource.setText(mCaller.getSource());
 
         // set bottom sheet background

@@ -267,6 +267,7 @@ public class CallerRepository implements CallerDataSource {
         Caller caller = Caller.empty(true, number);
         caller.setOffline(false);
         caller.setNumber(number.getNumber());
+        caller.setSource(number.getApiId());
         cache(caller);
         return caller;
     }

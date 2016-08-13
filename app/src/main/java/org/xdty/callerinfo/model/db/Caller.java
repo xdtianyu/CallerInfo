@@ -125,6 +125,10 @@ public class Caller extends SugarRecord implements INumber {
         return Utils.sourceFromId(source);
     }
 
+    public void setSource(int source) {
+        this.source = source;
+    }
+
     public String getProvince() {
         return province != null ? province : "";
     }
