@@ -19,7 +19,11 @@ import android.widget.TextView;
 import org.apmem.tools.layouts.FlowLayout;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.application.Application;
-import org.xdty.callerinfo.data.CallerDataSource;
+import org.xdty.callerinfo.contract.MainBottomContact;
+import org.xdty.callerinfo.contract.MainContract;
+import org.xdty.callerinfo.di.DaggerMainBottomComponent;
+import org.xdty.callerinfo.di.modules.AppModule;
+import org.xdty.callerinfo.di.modules.MainBottomModule;
 import org.xdty.callerinfo.model.TextColorPair;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
@@ -30,16 +34,9 @@ import org.xdty.callerinfo.utils.Utils;
 import javax.inject.Inject;
 
 public class MainBottomSheetFragment extends AppCompatDialogFragment
-        implements View.OnClickListener {
+        implements View.OnClickListener, MainBottomContact.View {
 
-    @Inject
-    Setting mSetting;
-    @Inject
-    CallerDataSource mCallerDataSource;
-
-    private InCall mInCall;
-    private Caller mCaller;
-
+    private FrameLayout mFrameLayout;
     private View mBottomSheet;
     private TextView mNumber;
     private TextView mGeo;
@@ -62,8 +59,18 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
     private TextView mEdit;
     private FloatingActionButton mFab;
 
+    @Inject
+    Setting mSetting;
+
+    @Inject
+    MainBottomContact.Presenter mPresenter;
+
     public MainBottomSheetFragment() {
-        Application.getAppComponent().inject(this);
+        DaggerMainBottomComponent.builder()
+                .appModule(new AppModule(Application.getApplication()))
+                .mainBottomModule(new MainBottomModule(this))
+                .build()
+                .inject(this);
     }
 
     public static MainBottomSheetFragment newInstance(InCall inCall) {
@@ -73,8 +80,7 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
     }
 
     private void bindData(InCall inCall) {
-        mInCall = inCall;
-        mCaller = mCallerDataSource.getCallerFromCache(inCall.getNumber());
+        mPresenter.bindData(inCall);
     }
 
     @NonNull
@@ -86,9 +92,9 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         dialog.getWindow().setBackgroundDrawable(
                 new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        final FrameLayout frameLayout = (FrameLayout) dialog.findViewById(R.id.design_bottom_sheet);
+        mFrameLayout = (FrameLayout) dialog.findViewById(R.id.design_bottom_sheet);
 
-        frameLayout.setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        mFrameLayout.setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         mBottomSheet = dialog.findViewById(R.id.bottom_sheet);
         mNumber = (TextView) dialog.findViewById(R.id.number);
@@ -118,55 +124,9 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         mRestaurant.setOnClickListener(this);
         mCustom.setOnClickListener(this);
 
-        mNumber.setText(mInCall.getNumber());
-
-        String geo = mCaller.getGeo().trim();
-        if (geo.isEmpty()) {
-            geo = getResources().getString(R.string.no_geo);
-        }
-
-        mGeo.setText(geo);
-        mTime.setText(mInCall.getReadableTime());
-        mRingTime.setText(Utils.readableTime(mInCall.getRingTime()));
-        mDuration.setText(Utils.readableTime(mInCall.getDuration()));
-
-        String name = mCaller.getName();
-        if (name == null || name.isEmpty()) {
-            name = getResources().getString(R.string.no_marked_name);
-        }
-
-        mName.setText(name);
-        mSource.setText(mCaller.getSource());
-
-        // set bottom sheet background
-        TextColorPair colorPair = TextColorPair.from(mCaller);
-        //noinspection ResourceAsColor
-        mBottomSheet.setBackgroundColor(colorPair.color);
-
-        if (canMark()) {
-            mDivider.setVisibility(View.VISIBLE);
-            mEdit.setVisibility(View.VISIBLE);
-            mFlowLayout.setVisibility(View.VISIBLE);
-            mFab.setVisibility(View.VISIBLE);
-
-            mFab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    BottomSheetBehavior.from(frameLayout)
-                            .setState(BottomSheetBehavior.STATE_EXPANDED);
-                }
-            });
-
-            selectTag(name);
-        } else {
-            BottomSheetBehavior.from(frameLayout).setState(BottomSheetBehavior.STATE_EXPANDED);
-        }
+        mPresenter.start();
 
         return dialog;
-    }
-
-    private boolean canMark() {
-        return mCaller.isMark() || mCaller.canMark() && mInCall.getDuration() > 0;
     }
 
     private void selectTag(String name) {
@@ -189,9 +149,11 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
                 mRestaurant.setBackgroundResource(R.color.pressed);
                 break;
             default:
-                mCustom.setBackgroundResource(R.color.pressed);
-                mCustomText.setVisibility(View.VISIBLE);
-                mCustomText.setText(mCaller.getName() != null ? mCaller.getName() : "");
+                if (name == null || name.isEmpty()) {
+                    mCustom.setBackgroundResource(R.color.pressed);
+                    mCustomText.setVisibility(View.VISIBLE);
+                    mCustomText.setText(name != null ? name : "");
+                }
                 break;
         }
     }
@@ -202,13 +164,6 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         TypedValue normal = new TypedValue();
         getContext().getTheme().resolveAttribute(R.attr.selectableItemBackground, normal, true);
 
-        if (view == mCustom) {
-            mCustomText.setVisibility(View.VISIBLE);
-            mCustomText.setText(mCaller.getName() != null ? mCaller.getName() : "");
-        } else {
-            mCustomText.setVisibility(View.GONE);
-        }
-
         mHarassment.setBackgroundResource(normal.resourceId);
         mFraud.setBackgroundResource(normal.resourceId);
         mAdvertising.setBackgroundResource(normal.resourceId);
@@ -217,6 +172,70 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         mCustom.setBackgroundResource(normal.resourceId);
 
         view.setBackgroundResource(R.color.pressed);
+
+        mPresenter.markClicked(view);
+    }
+
+    @Override
+    public void setPresenter(MainContract.Presenter presenter) {
+
+    }
+
+    @Override
+    public void init(InCall inCall, Caller caller) {
+        mNumber.setText(inCall.getNumber());
+
+        String geo = caller.getGeo().trim();
+        if (geo.isEmpty()) {
+            geo = getResources().getString(R.string.no_geo);
+        }
+
+        mGeo.setText(geo);
+        mTime.setText(inCall.getReadableTime());
+        mRingTime.setText(Utils.readableTime(inCall.getRingTime()));
+        mDuration.setText(Utils.readableTime(inCall.getDuration()));
+
+        String name = caller.getName();
+        if (name == null || name.isEmpty()) {
+            name = getResources().getString(R.string.no_marked_name);
+        }
+
+        mName.setText(name);
+        mSource.setText(caller.getSource());
+
+        // set bottom sheet background
+        TextColorPair colorPair = TextColorPair.from(caller);
+        //noinspection ResourceAsColor
+        mBottomSheet.setBackgroundColor(colorPair.color);
+
+        if (mPresenter.canMark()) {
+            mDivider.setVisibility(View.VISIBLE);
+            mEdit.setVisibility(View.VISIBLE);
+            mFlowLayout.setVisibility(View.VISIBLE);
+            mFab.setVisibility(View.VISIBLE);
+
+            mFab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BottomSheetBehavior.from(mFrameLayout)
+                            .setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+            });
+
+            selectTag(name);
+        } else {
+            BottomSheetBehavior.from(mFrameLayout).setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
+    }
+
+    @Override
+    public void updateMark(View view, Caller caller) {
+        if (view == mCustom) {
+            mCustomText.setVisibility(View.VISIBLE);
+            mCustomText.setText(caller.getName() != null ? caller.getName() : "");
+        } else {
+            mCustomText.setVisibility(View.GONE);
+        }
     }
 
     public class BottomSheetDialog extends android.support.design.widget.BottomSheetDialog {

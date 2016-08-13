@@ -5,7 +5,7 @@ import org.xdty.callerinfo.activity.SettingsActivity;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.data.CallerRepository;
 import org.xdty.callerinfo.di.modules.AppModule;
-import org.xdty.callerinfo.fragment.MainBottomSheetFragment;
+import org.xdty.callerinfo.presenter.MainBottomPresenter;
 import org.xdty.callerinfo.presenter.MainPresenter;
 import org.xdty.callerinfo.presenter.PhoneStatePresenter;
 import org.xdty.callerinfo.service.FloatWindow;
@@ -37,5 +37,5 @@ public interface AppComponent {
 
     void inject(CallerRepository callerRepository);
 
-    void inject(MainBottomSheetFragment mainBottomSheetFragment);
+    void inject(MainBottomPresenter mainBottomPresenter);
 }
