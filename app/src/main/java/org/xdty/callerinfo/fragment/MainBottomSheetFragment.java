@@ -86,7 +86,7 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         dialog.getWindow().setBackgroundDrawable(
                 new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        FrameLayout frameLayout = (FrameLayout) dialog.findViewById(R.id.design_bottom_sheet);
+        final FrameLayout frameLayout = (FrameLayout) dialog.findViewById(R.id.design_bottom_sheet);
 
         frameLayout.setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
@@ -147,6 +147,15 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
             mDivider.setVisibility(View.VISIBLE);
             mEdit.setVisibility(View.VISIBLE);
             mFlowLayout.setVisibility(View.VISIBLE);
+            mFab.setVisibility(View.VISIBLE);
+
+            mFab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BottomSheetBehavior.from(frameLayout)
+                            .setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+            });
 
             selectTag(name);
         } else {

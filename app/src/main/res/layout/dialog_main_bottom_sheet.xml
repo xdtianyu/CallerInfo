@@ -141,7 +141,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:src="@drawable/ic_mode_edit_white_48dp"
         android:visibility="gone"
+        app:backgroundTint="@color/colorAccent"
         app:layout_anchor="@id/bottom_sheet"
         app:layout_anchorGravity="top|end"/>
 </FrameLayout>
