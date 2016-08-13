@@ -4,6 +4,7 @@ import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 import com.orm.dsl.Unique;
 
+import org.xdty.callerinfo.R;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 
 public class MarkedRecord extends SugarRecord {
@@ -108,18 +109,45 @@ public class MarkedRecord extends SugarRecord {
     }
 
     public enum MarkType {
-        HARASSMENT,
-        FRAUD,
-        ADVERTISING,
-        EXPRESS_DELIVERY,
-        RESTAURANT_DELIVER,
-        CUSTOM;
+        HARASSMENT(0),
+        FRAUD(1),
+        ADVERTISING(2),
+        EXPRESS_DELIVERY(3),
+        RESTAURANT_DELIVER(4),
+        CUSTOM(5);
+
+        private int mType;
+
+        MarkType(int type) {
+            mType = type;
+        }
 
         public static MarkType fromInt(int value) {
             if (value >= 0 && value < MarkType.values().length) {
                 return MarkType.values()[value];
             }
             return CUSTOM;
+        }
+
+        public static MarkType fromResourceId(int id) {
+            switch (id) {
+                case R.id.fraud:
+                    return FRAUD;
+                case R.id.harassment:
+                    return HARASSMENT;
+                case R.id.advertising:
+                    return ADVERTISING;
+                case R.id.express:
+                    return EXPRESS_DELIVERY;
+                case R.id.restaurant:
+                    return RESTAURANT_DELIVER;
+                default:
+                    return CUSTOM;
+            }
+        }
+
+        public int toInt() {
+            return mType;
         }
     }
 }

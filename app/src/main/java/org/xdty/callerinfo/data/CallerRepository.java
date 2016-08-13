@@ -5,6 +5,7 @@ import android.util.Log;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.db.Caller;
+import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.utils.Alarm;
@@ -134,6 +135,7 @@ public class CallerRepository implements CallerDataSource {
 
                     if (caller != null) {
                         if (caller.isUpdated()) {
+                            cache(caller);
                             subscriber.onNext(caller);
                             break;
                         } else {
@@ -243,6 +245,21 @@ public class CallerRepository implements CallerDataSource {
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public void updateCaller(String number, int type, String typeText) {
+        mCallerMap.remove(number);
+        MarkedRecord markedRecord = new MarkedRecord();
+        markedRecord.setUid(mSetting.getUid());
+        markedRecord.setNumber(number);
+        markedRecord.setType(type);
+        markedRecord.setTypeName(typeText);
+        mDatabase.updateMarked(markedRecord);
+        mDatabase.updateCaller(markedRecord);
+        mAlarm.alarm();
+
+        mOnDataUpdateListener.onDataUpdate(getCallerFromCache(number));
     }
 
     private Caller handleResponse(INumber number, boolean isOnline) {

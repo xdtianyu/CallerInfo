@@ -20,6 +20,8 @@ public interface CallerDataSource {
 
     Observable<Void> clearCache();
 
+    void updateCaller(String number, int type, String typeText);
+
     interface OnDataUpdateListener {
 
         void onDataUpdate(Caller caller);

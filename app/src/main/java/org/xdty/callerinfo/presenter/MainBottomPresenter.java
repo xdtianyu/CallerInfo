@@ -1,13 +1,15 @@
 package org.xdty.callerinfo.presenter;
 
-import android.view.View;
-
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.MainBottomContact;
 import org.xdty.callerinfo.data.CallerDataSource;
+import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.InCall;
+import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.setting.Setting;
+import org.xdty.callerinfo.utils.Alarm;
+import org.xdty.callerinfo.utils.Utils;
 
 import javax.inject.Inject;
 
@@ -17,6 +19,10 @@ public class MainBottomPresenter implements MainBottomContact.Presenter {
     Setting mSetting;
     @Inject
     CallerDataSource mCallerDataSource;
+    @Inject
+    Database mDatabase;
+    @Inject
+    Alarm mAlarm;
 
     private InCall mInCall;
     private Caller mCaller;
@@ -45,7 +51,22 @@ public class MainBottomPresenter implements MainBottomContact.Presenter {
     }
 
     @Override
-    public void markClicked(View view) {
-        mView.updateMark(view, mCaller);
+    public void markClicked(int viewId) {
+        MarkedRecord.MarkType type = MarkedRecord.MarkType.fromResourceId(viewId);
+
+        if (type != MarkedRecord.MarkType.CUSTOM) {
+            String typeText = Utils.typeFromId(type.toInt());
+            mCallerDataSource.updateCaller(mInCall.getNumber(), type.toInt(), typeText);
+            mView.updateMarkName(typeText);
+        }
+
+        mView.updateMark(viewId, mCaller);
+    }
+
+    @Override
+    public void markCustom(String text) {
+        mCallerDataSource.updateCaller(mInCall.getNumber(), MarkedRecord.MarkType.CUSTOM.toInt(),
+                text);
+        mView.updateMarkName(text);
     }
 }

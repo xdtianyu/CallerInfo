@@ -154,6 +154,18 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
+    public void updateMarked(MarkedRecord markedRecord) {
+        Observable.just(markedRecord)
+                .observeOn(Schedulers.io())
+                .subscribe(new Action1<MarkedRecord>() {
+                    @Override
+                    public void call(MarkedRecord markedRecord) {
+                        markedRecord.update();
+                    }
+                });
+    }
+
+    @Override
     public void updateCaller(MarkedRecord markedRecord) {
         Observable.just(markedRecord)
                 .observeOn(Schedulers.io())

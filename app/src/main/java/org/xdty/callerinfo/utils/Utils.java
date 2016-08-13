@@ -36,7 +36,7 @@ import java.util.UUID;
 
 public final class Utils {
 
-    public static final int NOTIFICATION_MARK = 0x01;
+    private static final int NOTIFICATION_MARK = 0x01;
     private static final String TAG = Utils.class.getSimpleName();
     private static Map<Integer, String> sNumberSourceMap;
 
@@ -265,5 +265,18 @@ public final class Utils {
 
         return sNumberSourceMap.get(sourceId);
 
+    }
+
+    public static String typeFromId(int type) {
+        String[] values = Application.getApplication()
+                .getResources()
+                .getStringArray(R.array.mark_type);
+        if (type >= 0 && type < values.length) {
+            return values[type];
+        } else {
+            return Application.getApplication()
+                    .getResources()
+                    .getString(R.string.custom);
+        }
     }
 }

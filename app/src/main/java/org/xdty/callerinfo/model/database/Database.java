@@ -35,6 +35,8 @@ public interface Database {
 
     void saveMarked(MarkedRecord markedRecord);
 
+    void updateMarked(MarkedRecord markedRecord);
+
     void updateCaller(MarkedRecord markedRecord);
 
     Observable<List<MarkedRecord>> fetchMarkedRecords();

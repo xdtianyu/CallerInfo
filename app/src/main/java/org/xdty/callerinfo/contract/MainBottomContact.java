@@ -8,7 +8,9 @@ public interface MainBottomContact {
 
         void init(InCall inCall, Caller caller);
 
-        void updateMark(android.view.View view, Caller caller);
+        void updateMark(int viewId, Caller caller);
+
+        void updateMarkName(String name);
     }
 
     interface Presenter extends BasePresenter {
@@ -16,6 +18,8 @@ public interface MainBottomContact {
 
         boolean canMark();
 
-        void markClicked(android.view.View view);
+        void markClicked(int viewId);
+
+        void markCustom(String text);
     }
 }

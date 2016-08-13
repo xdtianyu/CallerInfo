@@ -9,8 +9,10 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -36,6 +38,10 @@ import javax.inject.Inject;
 public class MainBottomSheetFragment extends AppCompatDialogFragment
         implements View.OnClickListener, MainBottomContact.View {
 
+    @Inject
+    Setting mSetting;
+    @Inject
+    MainBottomContact.Presenter mPresenter;
     private FrameLayout mFrameLayout;
     private View mBottomSheet;
     private TextView mNumber;
@@ -45,7 +51,6 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
     private TextView mDuration;
     private TextView mName;
     private TextView mSource;
-
     private FlowLayout mFlowLayout;
     private Button mHarassment;
     private Button mFraud;
@@ -54,16 +59,9 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
     private Button mRestaurant;
     private Button mCustom;
     private EditText mCustomText;
-
     private View mDivider;
     private TextView mEdit;
     private FloatingActionButton mFab;
-
-    @Inject
-    Setting mSetting;
-
-    @Inject
-    MainBottomContact.Presenter mPresenter;
 
     public MainBottomSheetFragment() {
         DaggerMainBottomComponent.builder()
@@ -124,6 +122,17 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         mRestaurant.setOnClickListener(this);
         mCustom.setOnClickListener(this);
 
+        mCustomText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    mPresenter.markCustom(textView.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
+
         mPresenter.start();
 
         return dialog;
@@ -173,7 +182,7 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
 
         view.setBackgroundResource(R.color.pressed);
 
-        mPresenter.markClicked(view);
+        mPresenter.markClicked(view.getId());
     }
 
     @Override
@@ -196,11 +205,9 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         mDuration.setText(Utils.readableTime(inCall.getDuration()));
 
         String name = caller.getName();
-        if (name == null || name.isEmpty()) {
-            name = getResources().getString(R.string.no_marked_name);
-        }
 
-        mName.setText(name);
+        updateMarkName(name);
+
         mSource.setText(caller.getSource());
 
         // set bottom sheet background
@@ -229,13 +236,22 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
     }
 
     @Override
-    public void updateMark(View view, Caller caller) {
-        if (view == mCustom) {
+    public void updateMark(int viewId, Caller caller) {
+        if (viewId == mCustom.getId()) {
             mCustomText.setVisibility(View.VISIBLE);
             mCustomText.setText(caller.getName() != null ? caller.getName() : "");
         } else {
             mCustomText.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void updateMarkName(String name) {
+        if (name == null || name.isEmpty()) {
+            name = getResources().getString(R.string.no_marked_name);
+        }
+
+        mName.setText(name);
     }
 
     public class BottomSheetDialog extends android.support.design.widget.BottomSheetDialog {
