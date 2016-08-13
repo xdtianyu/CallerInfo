@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDialogFragment;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,8 +110,12 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         mCustom.setOnClickListener(this);
 
         mNumber.setText(mInCall.getNumber());
-        String geo = TextUtils.isEmpty(mCaller.getGeo()) ? getResources().getString(R.string.no_geo)
-                : mCaller.getGeo();
+
+        String geo = mCaller.getGeo().trim();
+        if (geo.isEmpty()) {
+            geo = getResources().getString(R.string.no_geo);
+        }
+
         mGeo.setText(geo);
         mTime.setText(mInCall.getReadableTime());
         mRingTime.setText(Utils.readableTime(mInCall.getRingTime()));

@@ -35,9 +35,15 @@ public class TextColorPair {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (province == null && city == null && operators == null) {
-            province = context.getResources().getString(R.string.unknown);
+        if (province == null) {
+            province = "";
+        }
+
+        if (city == null) {
             city = "";
+        }
+
+        if (operators == null) {
             operators = "";
         }
 
