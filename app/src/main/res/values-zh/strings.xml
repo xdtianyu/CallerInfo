@@ -22,7 +22,7 @@
     <string name="license">开放源代码许可</string>
     <string name="author" tools:ignore="UnusedResources">作者</string>
     <string name="version">版本</string>
-    <string name="eula_message">此应用使用百度或聚合数据(360)的电话号码服务来查询号码信息。这意味着您的来电号码或您搜索的号码将会被发送给百度或聚合数据(360)。请注意这并不会关联到您的电话号码或其他个人信息。</string>
+    <string name="eula_message">此应用使用第三方的电话号码服务来查询号码信息。这意味着您的来电号码或您搜索的号码将会被发送给第三方服务。请注意这并不会关联到您的电话号码或其他个人信息。</string>
     <string name="eula_title">使用联网的电话号码服务?</string>
     <string name="agree">同意</string>
     <string name="disagree">不同意</string>
@@ -121,7 +121,7 @@
     <string name="mark_window">标记悬浮窗</string>
     <string name="searching">正在查找，请稍等</string>
     <string name="auto_report">自动上报</string>
-    <string name="auto_report_summary">自动上报百度或360的查询结果</string>
+    <string name="auto_report_summary">自动上报第三方服务的查询结果</string>
     <string name="enable_marking">启用主动标记功能</string>
     <string name="enable_marking_summary">电话接听且号码查找失败后弹出标记提示</string>
     <string name="mark_number">标记号码</string>
@@ -143,7 +143,7 @@
     <string name="api_sogou">搜狗号码通服务</string>
     <string name="export_confirm">导出历史数据和配置到文件，此操作会覆盖旧的 CallerInfo.json 文件。</string>
     <string name="import_confirm">从 CallerInfo.json 文件导入历史数据和配置，此操作会覆盖当前的设置并将历史记录增加到主列表中。</string>
-    <string name="auto_report_confirm">打开此设置后会将百度或其他服务查询到的号码信息自动上传到标记服务器，请注意此操作不会上传您的任何个人信息，是否继续？</string>
+    <string name="auto_report_confirm">打开此设置后会将第三方服务查询到的号码信息自动上传到标记服务器，请注意此操作不会上传您的任何个人信息，是否继续？</string>
     <string name="mark_confirm">打开此设置后会在未知来电接听并挂断后弹出标记对话框，然后将您的标记数据上传到标记服务器，请注意此操作不会上传您的任何个人信息，是否继续？</string>
     <string name="ignore">忽略</string>
     <string name="ignore_number">已忽略号码</string>

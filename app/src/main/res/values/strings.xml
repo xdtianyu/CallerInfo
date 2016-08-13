@@ -23,9 +23,9 @@
     <string name="license">License</string>
     <string name="developer">Developer</string>
     <string name="developer_summary" translatable="false">tianyu &lt;xdtianyu@gmail.com&gt;</string>
-    <string name="eula_message">CallerInfo uses services from Baidu and JuHe(360) to query caller
+    <string name="eula_message">CallerInfo uses third part\'s service to query caller
         information. It means that the caller\'s number and any number you search will be sent to
-        Baidu or JuHe(360). Please note that this is not linked to your own phone number or other
+        third part\'s service. Please note that this is not linked to your own phone number or other
         personal information.
     </string>
     <string name="eula_title">Use Online Phone Number Service?</string>
@@ -156,7 +156,7 @@
     <string name="mark_window">Mark window</string>
     <string name="searching">Searching, please wait a second</string>
     <string name="auto_report">Auto report</string>
-    <string name="auto_report_summary">Auto report baidu or 360\'s result.</string>
+    <string name="auto_report_summary">Auto report third part\'s result.</string>
     <string name="enable_marking">Enable custom marking</string>
     <string name="enable_marking_summary">Show mark dialog when phone answered and failed to search</string>
     <string name="mark_number">Mark number</string>
@@ -182,7 +182,7 @@
     <string name="import_succeed">Import succeed.</string>
     <string name="export_confirm">Export history data and settings to file, this operation will overwrite old CallerInfo.json file.</string>
     <string name="import_confirm">Import history data and settings from CallerInfo.json, this operation will overwrite current settings and add history records to main list.</string>
-    <string name="auto_report_confirm">This will auto upload number information searched from baidu or other services to mark service. Please note this operation will not upload any of your private data, continue?</string>
+    <string name="auto_report_confirm">This will auto upload number information searched from third part\'s number services to mark service. Please note this operation will not upload any of your private data, continue?</string>
     <string name="mark_confirm">This will show a mark dialog while incoming call is unknown and answered, and then upload marked information to mark service. Please note this operation will not upload any of your private data, continue?</string>
     <string name="ignore">Ignore</string>
     <string name="ignore_number">Ignore number</string>
