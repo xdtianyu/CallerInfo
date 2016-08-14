@@ -112,6 +112,22 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                // invalidate data update if is scrolling
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        mPresenter.invalidateDataUpdate(false);
+                        break;
+                    case RecyclerView.SCROLL_STATE_DRAGGING:
+                    case RecyclerView.SCROLL_STATE_SETTLING:
+                        mPresenter.invalidateDataUpdate(true);
+                        break;
+                }
+            }
+
+            @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 

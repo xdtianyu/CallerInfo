@@ -1,7 +1,5 @@
 package org.xdty.callerinfo.presenter;
 
-import android.util.Log;
-
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.MainContract;
 import org.xdty.callerinfo.data.CallerDataSource;
@@ -43,6 +41,9 @@ public class MainPresenter implements MainContract.Presenter,
     CallerDataSource mCallerDataSource;
 
     private MainContract.View mView;
+
+    private boolean isInvalidateDataUpdate = false;
+    private boolean isWaitDataUpdate = false;
 
     public MainPresenter(MainContract.View view) {
         mView = view;
@@ -189,6 +190,16 @@ public class MainPresenter implements MainContract.Presenter,
     }
 
     @Override
+    public void invalidateDataUpdate(boolean isInvalidate) {
+        isInvalidateDataUpdate = isInvalidate;
+
+        if (isWaitDataUpdate) {
+            mView.showCallLogs(mInCallList);
+            isWaitDataUpdate = false;
+        }
+    }
+
+    @Override
     public void onCheckResult(Status status) {
         if (status != null) {
             mView.notifyUpdateData(status);
@@ -206,7 +217,12 @@ public class MainPresenter implements MainContract.Presenter,
 
     @Override
     public void onDataUpdate(Caller caller) {
-        Log.e("onDataUpdate", "caller: " + caller.getGeo());
-        mView.showCallLogs(mInCallList);
+
+        isWaitDataUpdate = isInvalidateDataUpdate;
+
+        if (!isWaitDataUpdate) {
+            mView.showCallLogs(mInCallList);
+        }
+
     }
 }

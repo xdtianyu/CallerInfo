@@ -74,5 +74,7 @@ public interface MainContract {
         void clearCache();
 
         void itemOnLongClicked(InCall inCall);
+
+        void invalidateDataUpdate(boolean isInvalidate);
     }
 }
