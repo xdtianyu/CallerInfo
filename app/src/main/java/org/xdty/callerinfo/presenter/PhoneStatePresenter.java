@@ -409,7 +409,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
                 }
 
                 // hang up phone call which number start with keyword
-                String numberKeywords = mSetting.getNumberKeyword();
+                String numberKeywords = mSetting.getNumberKeyword().replaceAll("\\*", "");
                 if (!numberKeywords.isEmpty()) {
                     for (String keyword : numberKeywords.split(" ")) {
                         if (mCallRecord.matchNumber(keyword)) {
