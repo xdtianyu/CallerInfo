@@ -130,7 +130,7 @@ public class Caller extends SugarRecord implements INumber {
     }
 
     public String getProvince() {
-        return province != null ? province : "";
+        return province != null ? province.replace("省", " ").replace("市", " ") : "";
     }
 
     @Override
@@ -152,7 +152,7 @@ public class Caller extends SugarRecord implements INumber {
     }
 
     public String getCity() {
-        return city != null ? city : "";
+        return city != null ? city.replace("市", " ") : "";
     }
 
     public long getLastUpdate() {
