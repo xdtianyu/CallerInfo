@@ -119,16 +119,15 @@ public class CallerRepository implements CallerDataSource {
 
     @Override
     public Observable<Caller> getCaller(String number) {
-
-        number = fixNumber(number);
-
         return getCaller(number, false);
     }
 
     @Override
-    public Observable<Caller> getCaller(final String number, final boolean forceOffline) {
+    public Observable<Caller> getCaller(String numberOrigin, final boolean forceOffline) {
 
-        Log.d(TAG, "getCaller: " + number + ", forceOffline: " + forceOffline);
+        Log.d(TAG, "getCaller: " + numberOrigin + ", forceOffline: " + forceOffline);
+
+        final String number = fixNumber(numberOrigin);
 
         return Observable.create(new Observable.OnSubscribe<Caller>() {
             @Override
