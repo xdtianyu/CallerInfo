@@ -143,8 +143,8 @@
     <string name="disable_notify">Disable notification</string>
     <string name="disable_move">Disable move</string>
     <string name="readable_second">%1$d s</string>
-    <string name="readable_minute">%1$2d m %2$2d s</string>
-    <string name="readable_hour">%1$2d:%2$2d:%3$2d</string>
+    <string name="readable_minute">%1$02d m %2$02d s</string>
+    <string name="readable_hour">%1$02d:%2$02d:%3$02d</string>
     <string name="readable_today">Today</string>
     <string name="readable_yesterday">Yesterday</string>
     <string name="readable_date">MM/dd/yyyy</string>
