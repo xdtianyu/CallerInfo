@@ -22,12 +22,13 @@ import java.util.Arrays;
 public class SettingImpl implements Setting {
 
     private static Gson gson = new Gson();
-    private static Setting sSetting;
     private static Context sContext;
     private final int mScreenWidth;
     private final int mScreenHeight;
     private SharedPreferences mPrefs;
     private SharedPreferences mWindowPrefs;
+
+    private boolean isOutgoing;
 
     private SettingImpl() {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(sContext);
@@ -296,6 +297,16 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public void setOutgoing(boolean isOutgoing) {
+        this.isOutgoing = isOutgoing;
+    }
+
+    @Override
+    public boolean isOutgoingPositionEnabled() {
+        return mPrefs.getBoolean(getString(R.string.outgoing_window_position_key), false);
+    }
+
+    @Override
     public boolean isHidingWhenTouch() {
         return mPrefs.getBoolean(getString(R.string.hide_when_touch_key), false);
     }
@@ -378,19 +389,22 @@ public class SettingImpl implements Setting {
 
     @Override
     public int getWindowX() {
-        return mWindowPrefs.getInt("x", -1);
+        String prefix = isOutgoing && isOutgoingPositionEnabled() ? "out_" : "";
+        return mWindowPrefs.getInt(prefix + "x", -1);
     }
 
     @Override
     public int getWindowY() {
-        return mWindowPrefs.getInt("y", -1);
+        String prefix = isOutgoing && isOutgoingPositionEnabled() ? "out_" : "";
+        return mWindowPrefs.getInt(prefix + "y", -1);
     }
 
     @Override
     public void setWindow(int x, int y) {
+        String prefix = isOutgoing && isOutgoingPositionEnabled() ? "out_" : "";
         SharedPreferences.Editor editor = mWindowPrefs.edit();
-        editor.putInt("x", x);
-        editor.putInt("y", y);
+        editor.putInt(prefix + "x", x);
+        editor.putInt(prefix + "y", y);
         editor.apply();
     }
 

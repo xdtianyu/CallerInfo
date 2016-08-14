@@ -113,4 +113,8 @@ public interface Setting {
     boolean isOnlyOffline();
 
     void fix();
+
+    void setOutgoing(boolean isOutgoing);
+
+    boolean isOutgoingPositionEnabled();
 }

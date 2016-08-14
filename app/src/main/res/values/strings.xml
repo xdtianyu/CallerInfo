@@ -229,4 +229,6 @@
     <string name="clear_cache_confirm_message">Clear all caller cache?</string>
     <string name="no_geo">China</string>
     <string name="no_marked_name">No tag data</string>
+    <string name="outgoing_window_position">Outgoing window position</string>
+    <string name="outgoing_window_position_message">Drag to move window position when outgoing. Float window position is dependent for incoming and outgoing call.</string>
 </resources>

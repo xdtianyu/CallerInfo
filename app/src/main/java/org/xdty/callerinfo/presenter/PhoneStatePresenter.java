@@ -160,6 +160,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
         mAutoHangup = false;
 
         mView.close(number);
+        mSetting.setOutgoing(false);
         unBindPluginService();
     }
 
@@ -258,6 +259,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
     @Override
     public void setOutGoingNumber(String number) {
         mIncomingNumber = number;
+        mSetting.setOutgoing(true);
     }
 
     @Override

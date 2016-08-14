@@ -141,6 +141,7 @@ public class SettingsActivity extends AppCompatActivity {
             bindPreference(R.string.enable_marking_key);
             bindPreference(R.string.not_mark_contact_key);
             bindPreference(R.string.temporary_disable_blacklist_key);
+            bindPreference(R.string.outgoing_window_position_key);
 
             bindDataVersionPreference();
             bindVersionPreference();
@@ -764,6 +765,12 @@ public class SettingsActivity extends AppCompatActivity {
                                 R.string.enable_marking_key);
                     }
                     return false;
+                case R.string.outgoing_window_position_key:
+                    if (sharedPrefs.getBoolean(getString(R.string.outgoing_window_position_key),
+                            false)) {
+                        showTextDialog(R.string.outgoing_window_position, R.string.outgoing_window_position_message);
+                    }
+                    break;
             }
 
             return true;
