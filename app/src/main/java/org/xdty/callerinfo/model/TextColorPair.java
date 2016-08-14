@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.application.Application;
+import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 
@@ -16,7 +17,13 @@ public class TextColorPair {
     public String text = "";
     public int color = R.color.blue_light;
 
-    public TextColorPair() {
+    private TextColorPair() {
+    }
+
+    // generate color from name, has no geo info.
+    public static TextColorPair from(String name) {
+        String type = Utils.markTypeFromName(name).getText();
+        return from(type, "", "", "", name, 0);
     }
 
     public static TextColorPair from(INumber number) {

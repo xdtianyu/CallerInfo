@@ -3,7 +3,7 @@
     <string name="app_name">来电信息</string>
     <string name="text_normal">%1$s %2$s %3$s</string>
     <string name="text_poi">%1$s</string>
-    <string name="text_report">%1$s %2$s %3$s 已被%4$s个用户标记为%5$s</string>
+    <string name="text_report">%1$s %2$s %3$s 已被%4$d个用户标记为%5$s</string>
     <string name="close_float_window">点击以关闭悬浮窗</string>
     <string name="action_float_window">悬浮窗位置</string>
     <string name="action_settings">设置</string>
@@ -107,9 +107,9 @@
     <string name="action_bar_up_description">"转到上一层级"</string>
     <string name="disable_notify">禁用通知提示</string>
     <string name="disable_move">禁用通话时长按拖动</string>
-    <string name="readable_hour">%1$s:%2$s:%3$s</string>
+    <string name="readable_hour">%1$2d:%2$2d:%3$2d</string>
     <string name="readable_minute">%1$2d 分 %2$2d 秒</string>
-    <string name="readable_second">%1$s 秒</string>
+    <string name="readable_second">%1$d 秒</string>
     <string name="readable_today">今天</string>
     <string name="readable_yesterday">昨天</string>
     <string name="readable_date">yyyy年MM月dd日</string>

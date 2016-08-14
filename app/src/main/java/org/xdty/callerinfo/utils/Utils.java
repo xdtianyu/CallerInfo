@@ -19,8 +19,10 @@ import android.util.Log;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.activity.MarkActivity;
 import org.xdty.callerinfo.application.Application;
+import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
+import org.xdty.phone.number.model.Type;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -277,6 +279,20 @@ public final class Utils {
             return Application.getApplication()
                     .getResources()
                     .getString(R.string.custom);
+        }
+    }
+
+    public static Type markTypeFromName(String name) {
+        int type = Utils.typeFromString(name);
+        switch (MarkedRecord.MarkType.fromInt(type)) {
+            case HARASSMENT:
+            case FRAUD:
+            case ADVERTISING:
+                return Type.REPORT;
+            case EXPRESS_DELIVERY:
+            case RESTAURANT_DELIVER:
+            default:
+                return Type.POI;
         }
     }
 }

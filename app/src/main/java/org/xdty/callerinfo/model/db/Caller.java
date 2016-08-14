@@ -135,6 +135,11 @@ public class Caller extends SugarRecord implements INumber {
 
     @Override
     public Type getType() {
+
+        if (source == -9999) { // get type from type name
+            return Utils.markTypeFromName(name);
+        }
+
         return Type.fromString(type);
     }
 

@@ -87,8 +87,10 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
 
         Dialog dialog = new BottomSheetDialog(getContext());
         dialog.setContentView(R.layout.dialog_main_bottom_sheet);
-        dialog.getWindow().setBackgroundDrawable(
-                new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(
+                    new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
 
         mFrameLayout = (FrameLayout) dialog.findViewById(R.id.design_bottom_sheet);
 
@@ -158,11 +160,9 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
                 mRestaurant.setBackgroundResource(R.color.pressed);
                 break;
             default:
-                if (name == null || name.isEmpty()) {
-                    mCustom.setBackgroundResource(R.color.pressed);
-                    mCustomText.setVisibility(View.VISIBLE);
-                    mCustomText.setText(name != null ? name : "");
-                }
+                mCustom.setBackgroundResource(R.color.pressed);
+                mCustomText.setVisibility(View.VISIBLE);
+                mCustomText.setText(name);
                 break;
         }
     }
@@ -211,9 +211,7 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         mSource.setText(caller.getSource());
 
         // set bottom sheet background
-        TextColorPair colorPair = TextColorPair.from(caller);
-        //noinspection ResourceAsColor
-        mBottomSheet.setBackgroundColor(colorPair.color);
+        updateBackgroundColor(caller.getName());
 
         if (mPresenter.canMark()) {
             mDivider.setVisibility(View.VISIBLE);
@@ -252,6 +250,13 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         }
 
         mName.setText(name);
+        updateBackgroundColor(name);
+    }
+
+    private void updateBackgroundColor(String name) {
+        TextColorPair colorPair = TextColorPair.from(name);
+        //noinspection ResourceAsColor
+        mBottomSheet.setBackgroundColor(colorPair.color);
     }
 
     public class BottomSheetDialog extends android.support.design.widget.BottomSheetDialog {
@@ -267,8 +272,10 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
             int screenHeight = mSetting.getScreenHeight();
             int statusBarHeight = mSetting.getStatusBarHeight();
             int dialogHeight = screenHeight - statusBarHeight;
-            getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                    dialogHeight == 0 ? ViewGroup.LayoutParams.MATCH_PARENT : dialogHeight);
+            if (getWindow() != null) {
+                getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                        dialogHeight == 0 ? ViewGroup.LayoutParams.MATCH_PARENT : dialogHeight);
+            }
         }
     }
 }
