@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">来电信息</string>
     <string name="text_normal">%1$s %2$s %3$s</string>
-    <string name="text_poi">%1$s</string>
+    <string name="text_poi">%1$s %2$s %3$s %4$s</string>
     <string name="text_report">%1$s %2$s %3$s 已被%4$d个用户标记为%5$s</string>
     <string name="close_float_window">点击以关闭悬浮窗</string>
     <string name="action_float_window">悬浮窗位置</string>

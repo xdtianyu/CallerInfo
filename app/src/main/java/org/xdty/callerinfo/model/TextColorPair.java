@@ -59,7 +59,14 @@ public class TextColorPair {
         }
 
         TextColorPair t = new TextColorPair();
-        switch (Type.fromString(type)) {
+
+        Type numberType = Type.fromString(type);
+
+        if (name != null && !name.isEmpty()) {
+            numberType = Utils.markTypeFromName(name);
+        }
+
+        switch (numberType) {
             case NORMAL:
                 t.text = context.getResources().getString(
                         R.string.text_normal, province, city, operators);
@@ -70,13 +77,14 @@ public class TextColorPair {
                 t.color = preferences.getInt("color_poi",
                         ContextCompat.getColor(context, R.color.orange_dark));
                 t.text = context.getResources().getString(
-                        R.string.text_poi, name);
+                        R.string.text_poi, province, city, operators, name);
                 break;
             case REPORT:
                 t.color = preferences.getInt("color_report",
                         ContextCompat.getColor(context, R.color.red_light));
                 if (count == 0) {
-                    t.text = name;
+                    t.text = context.getResources().getString(
+                            R.string.text_poi, province, city, operators, name);
                 } else {
                     t.text = context.getResources().getString(
                             R.string.text_report, province, city, operators,
