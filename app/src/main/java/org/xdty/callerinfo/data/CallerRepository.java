@@ -66,6 +66,23 @@ public class CallerRepository implements CallerDataSource {
         Application.getAppComponent().inject(this);
     }
 
+    public static String fixNumber(String number) {
+        String fixedNumber = number;
+        if (number.startsWith("+86")) {
+            fixedNumber = number.replace("+86", "");
+        }
+
+        if (number.startsWith("86") && number.length() > 9) {
+            fixedNumber = number.replaceFirst("^86", "");
+        }
+
+        if (number.startsWith("+400")) {
+            fixedNumber = number.replace("+", "");
+        }
+
+        return fixedNumber;
+    }
+
     @Override
     public Caller getCallerFromCache(String number) {
 
@@ -102,6 +119,9 @@ public class CallerRepository implements CallerDataSource {
 
     @Override
     public Observable<Caller> getCaller(String number) {
+
+        number = fixNumber(number);
+
         return getCaller(number, false);
     }
 
