@@ -171,6 +171,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                             case DISMISS_EVENT_MANUAL:
                             case DISMISS_EVENT_ACTION:
                                 break;
+                            case DISMISS_EVENT_CONSECUTIVE:
+                            case DISMISS_EVENT_SWIPE:
+                            case DISMISS_EVENT_TIMEOUT:
                             default:
                                 mPresenter.removeInCall(inCall);
                                 break;

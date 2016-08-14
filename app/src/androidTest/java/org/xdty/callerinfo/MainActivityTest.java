@@ -165,6 +165,14 @@ public class MainActivityTest extends ActivityTestBase {
         onView(withText(R.string.action_clear_cache))
                 .perform(click());
 
+        // check confirm dialog and click ok
+        onView(withText(R.string.clear_cache_confirm_message))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.ok))
+                .inRoot(isDialog())
+                .perform(click());
+
         // check snack bar
         onView(allOf(withId(android.support.design.R.id.snackbar_text),
                 withText(R.string.clear_cache_message)))
