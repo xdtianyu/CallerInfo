@@ -70,6 +70,6 @@ public class InCall extends SugarRecord {
     }
 
     public String getReadableTime() {
-        return Utils.readableDate(getTime()) + " " + Utils.readableTime(getTime());
+        return Utils.readableDate(getTime()) + " " + Utils.getTime(getTime());
     }
 }

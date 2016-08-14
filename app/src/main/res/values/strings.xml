@@ -80,7 +80,7 @@
     </string>
     <string name="customactivityoncrash_error_activity_restart_app">Restart app</string>
     <string name="customactivityoncrash_error_activity_unknown_exception">Unknown exception</string>
-    <string name="show_hidden_toast">Tap %1$s more times to show hidden settings</string>
+    <string name="show_hidden_toast">Tap %1$d more times to show hidden settings</string>
     <string name="force_chinese">Use Chinese as app language</string>
     <string name="hide_when_off_hook">Hide after accepting</string>
     <string name="custom_api_url" translatable="false">custom_api_url</string>
@@ -193,7 +193,7 @@
     <string name="offline_data_failed">Offline data update failed, please try again later.</string>
     <string name="offline_data_success">Offline data has been updated to latest</string>
     <string name="offline_data_version">Offline data status</string>
-    <string name="offline_data_version_summary">Version %1$s, count %2$s, updated at %3$s</string>
+    <string name="offline_data_version_summary">Version %1$d, count %2$d, updated at %3$s</string>
     <string name="no_offline_data">No offline data</string>
     <string name="not_mark_contact">Not mark contact</string>
     <string name="not_mark_contact_summary">Don\'t show mark notice if number is in contacts</string>

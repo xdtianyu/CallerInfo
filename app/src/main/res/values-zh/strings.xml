@@ -59,7 +59,7 @@
     <string name="customactivityoncrash_error_activity_error_details_copy">复制到剪切板</string>
     <string name="customactivityoncrash_error_activity_error_details_copied">已复制到剪切板</string>
     <string name="customactivityoncrash_error_activity_error_details_clipboard_label">错误信息</string>
-    <string name="show_hidden_toast">再点击 %1$s 次以显示隐藏设置</string>
+    <string name="show_hidden_toast">再点击 %1$d 次以显示隐藏设置</string>
     <string name="force_chinese">始终显示中文</string>
     <string name="hide_when_off_hook">接听后隐藏</string>
     <string name="custom_api">自定义API</string>
@@ -154,7 +154,7 @@
     <string name="offline_data_failed">离线数据更新失败，请稍后再试。</string>
     <string name="offline_data_success">已更新到最新的离线数据</string>
     <string name="offline_data_version">离线数据状态</string>
-    <string name="offline_data_version_summary">版本 %1$s, 号码数 %2$s, 更新时间 %3$s</string>
+    <string name="offline_data_version_summary">版本 %1$d, 号码数 %2$d, 更新时间 %3$s</string>
     <string name="no_offline_data">无离线数据</string>
     <string name="not_mark_contact">不标记联系人号码</string>
     <string name="not_mark_contact_summary">号码在联系人中时，不弹出标记提示</string>

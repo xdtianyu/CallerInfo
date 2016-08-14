@@ -13,7 +13,7 @@ import android.provider.Settings.Secure;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import org.xdty.callerinfo.R;
@@ -28,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -46,39 +45,39 @@ public final class Utils {
         throw new AssertionError("Utils class is not meant to be instantiated or subclassed.");
     }
 
-    public static String getDate(long time) {
+    public static String getDate(long timestamp) {
         Calendar calendar = Calendar.getInstance();
         TimeZone tz = TimeZone.getDefault();
         calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-        java.util.Date currentTimeZone = new java.util.Date(time);
+        java.util.Date currentTimeZone = new java.util.Date(timestamp);
         return sdf.format(currentTimeZone);
     }
 
-    public static String readableDate(long time) {
-        String result;
-        Context context = Application.getApplication();
-        long current = System.currentTimeMillis();
-        if (current - time < 60 * 60 * 24 * 1000) {
-            result = context.getString(R.string.readable_today);
-        } else if (current - time < 2 * 60 * 60 * 24 * 1000) {
-            result = context.getString(R.string.readable_yesterday);
-        } else {
-            result = DateFormat.format(context.getString(R.string.readable_date),
-                    new Date(time)).toString();
-        }
-        return result;
+    public static String getTime(long timestamp) {
+        Calendar calendar = Calendar.getInstance();
+        TimeZone tz = TimeZone.getDefault();
+        calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.US);
+        java.util.Date currentTimeZone = new java.util.Date(timestamp);
+        return sdf.format(currentTimeZone);
     }
 
-    public static String readableTime(long time) {
+    public static String readableDate(long timestamp) {
+        long current = System.currentTimeMillis();
+        return DateUtils.getRelativeTimeSpanString(timestamp, current, DateUtils.DAY_IN_MILLIS)
+                .toString();
+    }
+
+    public static String readableTime(long duration) {
         String result;
         Context context = Application.getApplication();
-        int seconds = (int) (time / 1000) % 60;
-        int minutes = (int) ((time / (1000 * 60)) % 60);
-        int hours = (int) ((time / (1000 * 60 * 60)) % 24);
-        if (time < 60000) {
+        int seconds = (int) (duration / 1000) % 60;
+        int minutes = (int) ((duration / (1000 * 60)) % 60);
+        int hours = (int) ((duration / (1000 * 60 * 60)) % 24);
+        if (duration < 60000) {
             result = context.getString(R.string.readable_second, seconds);
-        } else if (time < 3600000) {
+        } else if (duration < 3600000) {
             result = context.getString(R.string.readable_minute, minutes, seconds);
         } else {
             result = context.getString(R.string.readable_hour, hours, minutes, seconds);
