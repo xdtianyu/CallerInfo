@@ -80,6 +80,10 @@ public class CallerRepository implements CallerDataSource {
             fixedNumber = number.replace("+", "");
         }
 
+        if (fixedNumber.startsWith("12583")) {
+            fixedNumber = fixedNumber.replaceFirst("^12583", "");
+        }
+
         return fixedNumber;
     }
 
