@@ -12,7 +12,10 @@ public class CallerRepositoryTest {
         assertEquals(CallerRepository.fixNumber("+400123456"), "400123456");
         assertEquals(CallerRepository.fixNumber("+8612345678"), "12345678");
         assertEquals(CallerRepository.fixNumber("8612345678"), "12345678");
-        assertEquals(CallerRepository.fixNumber("861258312345678"), "12345678");
+        assertEquals(CallerRepository.fixNumber("8612583112345678"), "12345678");
+        assertEquals(CallerRepository.fixNumber("8612583212345678"), "12345678");
+        assertEquals(CallerRepository.fixNumber("8612583312345678"), "12345678");
+        assertEquals(CallerRepository.fixNumber("12583312345678"), "12345678");
     }
 
 }
