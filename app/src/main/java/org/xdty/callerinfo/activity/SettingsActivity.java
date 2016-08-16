@@ -273,7 +273,8 @@ public class SettingsActivity extends AppCompatActivity {
 
             AppBarLayout appBarLayout;
 
-            if (Build.VERSION.RELEASE.equals("7.0") || Build.VERSION.RELEASE.equals("N")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                    || Build.VERSION.RELEASE.equals("7.0") || Build.VERSION.RELEASE.equals("N")) {
                 ListView listView = (ListView) dialog.findViewById(android.R.id.list);
                 FrameLayout root = (FrameLayout) listView.getParent();
 
@@ -768,7 +769,8 @@ public class SettingsActivity extends AppCompatActivity {
                 case R.string.outgoing_window_position_key:
                     if (sharedPrefs.getBoolean(getString(R.string.outgoing_window_position_key),
                             false)) {
-                        showTextDialog(R.string.outgoing_window_position, R.string.outgoing_window_position_message);
+                        showTextDialog(R.string.outgoing_window_position,
+                                R.string.outgoing_window_position_message);
                     }
                     break;
             }
