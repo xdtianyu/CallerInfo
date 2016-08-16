@@ -273,7 +273,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             AppBarLayout appBarLayout;
 
-            if (Build.VERSION.RELEASE.equals("N")) {
+            if (Build.VERSION.RELEASE.equals("7.0") || Build.VERSION.RELEASE.equals("N")) {
                 ListView listView = (ListView) dialog.findViewById(android.R.id.list);
                 FrameLayout root = (FrameLayout) listView.getParent();
 
