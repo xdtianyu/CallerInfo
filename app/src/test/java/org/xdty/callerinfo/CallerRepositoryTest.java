@@ -16,6 +16,7 @@ public class CallerRepositoryTest {
         assertEquals(CallerRepository.fixNumber("8612583212345678"), "12345678");
         assertEquals(CallerRepository.fixNumber("8612583312345678"), "12345678");
         assertEquals(CallerRepository.fixNumber("12583312345678"), "12345678");
+        assertEquals(CallerRepository.fixNumber("125902312345678"), "12345678");
     }
 
 }
