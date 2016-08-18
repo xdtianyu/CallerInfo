@@ -123,7 +123,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
         }
 
         boolean saveLog = mSetting.isAddingCallLog();
-        if (isIncoming(mIncomingNumber) && !ignoreContact(mIncomingNumber)) {
+        if (isIncoming(mIncomingNumber) && !mCallerDataSource.isIgnoreContact(mIncomingNumber)) {
             saveInCall();
             mIncomingNumber = null;
             if (isRingOnce()) {
@@ -148,7 +148,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
                     }
                 } else {
                     if (mSetting.isMarkingEnabled() && mCallRecord.isAnswered() &&
-                            !ignoreContact(mCallRecord.getLogNumber()) &&
+                            !mCallerDataSource.isIgnoreContact(mCallRecord.getLogNumber()) &&
                             !isNotMarkContact(mCallRecord.getLogNumber())) {
                         mView.showMark(mCallRecord.getLogNumber());
                     }
@@ -202,25 +202,6 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
     }
 
     @Override
-    public boolean ignoreContact(String number) {
-        return mSetting.isIgnoreKnownContact() && mPermission.canReadContact()
-                && mContact.isExist(number);
-    }
-
-    @Override
-    public SearchMode getSearchMode(String number) {
-        SearchMode mode = SearchMode.ONLINE;
-        if (ignoreContact(number)) {
-            if (mSetting.isShowingContactOffline()) {
-                mode = SearchMode.OFFLINE;
-            } else {
-                mode = SearchMode.IGNORE;
-            }
-        }
-        return mode;
-    }
-
-    @Override
     public void searchNumber(final String number) {
 
         if (TextUtils.isEmpty(number)) {
@@ -228,8 +209,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
             return;
         }
 
-        final String fixedNumber = fixNumber(number);
-        final SearchMode mode = getSearchMode(fixedNumber);
+        final SearchMode mode = mCallerDataSource.getSearchMode(number);
 
         if (mode == SearchMode.IGNORE) {
             return;
@@ -265,18 +245,6 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
     @Override
     public boolean canReadPhoneState() {
         return mPermission.canReadPhoneState();
-    }
-
-    private String fixNumber(String number) {
-        String fixedNumber = number;
-        if (number.startsWith("+86")) {
-            fixedNumber = number.replace("+86", "");
-        }
-
-        if (number.startsWith("86")) {
-            fixedNumber = number.replaceFirst("^86", "");
-        }
-        return fixedNumber;
     }
 
     private void showNumber(INumber number) {

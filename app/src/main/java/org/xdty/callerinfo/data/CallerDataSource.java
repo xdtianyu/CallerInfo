@@ -1,5 +1,6 @@
 package org.xdty.callerinfo.data;
 
+import org.xdty.callerinfo.model.SearchMode;
 import org.xdty.callerinfo.model.db.Caller;
 
 import java.util.Map;
@@ -21,6 +22,10 @@ public interface CallerDataSource {
     Observable<Void> clearCache();
 
     void updateCaller(String number, int type, String typeText);
+
+    boolean isIgnoreContact(String number);
+
+    SearchMode getSearchMode(String number);
 
     interface OnDataUpdateListener {
 

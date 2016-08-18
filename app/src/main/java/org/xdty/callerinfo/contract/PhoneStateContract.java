@@ -2,7 +2,6 @@ package org.xdty.callerinfo.contract;
 
 import android.content.Context;
 
-import org.xdty.callerinfo.model.SearchMode;
 import org.xdty.phone.number.model.INumber;
 
 public interface PhoneStateContract {
@@ -45,10 +44,6 @@ public interface PhoneStateContract {
         void saveInCall();
 
         boolean isRingOnce();
-
-        boolean ignoreContact(String number);
-
-        SearchMode getSearchMode(String number);
 
         void searchNumber(String number);
 

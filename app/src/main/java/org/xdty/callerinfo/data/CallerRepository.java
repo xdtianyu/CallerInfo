@@ -3,6 +3,7 @@ package org.xdty.callerinfo.data;
 import android.util.Log;
 
 import org.xdty.callerinfo.application.Application;
+import org.xdty.callerinfo.model.SearchMode;
 import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.db.Caller;
 import org.xdty.callerinfo.model.db.MarkedRecord;
@@ -322,5 +323,24 @@ public class CallerRepository implements CallerDataSource {
             caller.setContactName(name);
         }
         mCallerMap.put(caller.getNumber(), caller);
+    }
+
+    @Override
+    public SearchMode getSearchMode(String number) {
+        SearchMode mode = SearchMode.ONLINE;
+        if (isIgnoreContact(number)) {
+            if (mSetting.isShowingContactOffline()) {
+                mode = SearchMode.OFFLINE;
+            } else {
+                mode = SearchMode.IGNORE;
+            }
+        }
+        return mode;
+    }
+
+    @Override
+    public boolean isIgnoreContact(String number) {
+        return mSetting.isIgnoreKnownContact() && mPermission.canReadContact()
+                && (mContact.isExist(number) || mContact.isExist(fixNumber(number)));
     }
 }
