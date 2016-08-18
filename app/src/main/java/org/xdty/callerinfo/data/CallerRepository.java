@@ -95,6 +95,8 @@ public class CallerRepository implements CallerDataSource {
     @Override
     public Caller getCallerFromCache(String number) {
 
+        number = fixNumber(number);
+
         // return empty caller if it's in error cache.
         if (mErrorCache.containsKey(number) &&
                 System.currentTimeMillis() - mErrorCache.get(number) < 60 * 1000) {
