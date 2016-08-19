@@ -49,8 +49,6 @@ public class IncomingCall extends BroadcastReceiver {
 
         @Inject Window mWindow;
 
-        private boolean isShowing = false;
-
         private IncomingCallListener() {
             Utils.checkLocale(sContext);
             DaggerPhoneStatusComponent.builder()
@@ -105,13 +103,11 @@ public class IncomingCall extends BroadcastReceiver {
 
         @Override
         public void show(INumber number) {
-            isShowing = true;
             mWindow.showWindow(number, Window.Type.CALLER);
         }
 
         @Override
         public void showFailed(boolean isOnline) {
-            isShowing = true;
             if (isOnline) {
                 mWindow.sendData(FloatWindow.WINDOW_ERROR,
                         R.string.online_failed, Window.Type.CALLER);
@@ -127,22 +123,17 @@ public class IncomingCall extends BroadcastReceiver {
 
         @Override
         public void hide(String incomingNumber) {
-            if (isShowing) {
-                mWindow.hideWindow();
-            }
+            mWindow.hideWindow();
         }
 
         @Override
         public void close(String incomingNumber) {
-            if (isShowing) {
-                isShowing = false;
-                mWindow.closeWindow();
-            }
+            mWindow.closeWindow();
         }
 
         @Override
         public boolean isShowing() {
-            return isShowing;
+            return mWindow.isShowing();
         }
 
         @Override

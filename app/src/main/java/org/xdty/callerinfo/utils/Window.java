@@ -19,11 +19,16 @@ public final class Window {
 
     private Context mContext;
 
+    private boolean isShowing = false;
+
     public Window() {
         mContext = Application.getApplication();
     }
 
     public void showTextWindow(int resId, Type type) {
+
+        isShowing = true;
+
         int frontType = type.value();
         Bundle bundle = new Bundle();
         bundle.putString(FloatWindow.NUMBER_INFO, mContext.getString(resId));
@@ -36,6 +41,9 @@ public final class Window {
     }
 
     public void sendData(String key, int value, Type type) {
+
+        isShowing = true;
+
         int frontType = type.value();
         Bundle bundle = new Bundle();
         bundle.putInt(key, value);
@@ -46,10 +54,16 @@ public final class Window {
 
     public void closeWindow() {
         Log.d(TAG, "closeWindow");
-        FloatWindow.closeAll(mContext, FloatWindow.class);
+        if (isShowing) {
+            isShowing = false;
+            FloatWindow.closeAll(mContext, FloatWindow.class);
+        }
     }
 
     public void showWindow(INumber number, Type type) {
+
+        isShowing = true;
+
         int frontType = type.value();
 
         TextColorPair textColor = TextColorPair.from(number);
@@ -65,7 +79,13 @@ public final class Window {
     }
 
     public void hideWindow() {
-        StandOutWindow.hide(mContext, FloatWindow.class, Type.CALLER.value());
+        if (isShowing) {
+            StandOutWindow.hide(mContext, FloatWindow.class, Type.CALLER.value());
+        }
+    }
+
+    public boolean isShowing() {
+        return isShowing;
     }
 
     public enum Type {
