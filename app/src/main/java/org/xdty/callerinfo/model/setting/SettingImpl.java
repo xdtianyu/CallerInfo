@@ -307,6 +307,11 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public boolean isAddingRingOnceCallLog() {
+        return mPrefs.getBoolean(getString(R.string.ring_once_and_auto_hangup_key), false);
+    }
+
+    @Override
     public boolean isHidingWhenTouch() {
         return mPrefs.getBoolean(getString(R.string.hide_when_touch_key), false);
     }

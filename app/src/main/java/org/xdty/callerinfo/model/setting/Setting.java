@@ -117,4 +117,6 @@ public interface Setting {
     void setOutgoing(boolean isOutgoing);
 
     boolean isOutgoingPositionEnabled();
+
+    boolean isAddingRingOnceCallLog();
 }

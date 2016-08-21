@@ -26,7 +26,6 @@ public final class Window {
     }
 
     public void showTextWindow(int resId, Type type) {
-
         isShowing = true;
 
         int frontType = type.value();
@@ -41,7 +40,7 @@ public final class Window {
     }
 
     public void sendData(String key, int value, Type type) {
-
+        Log.d(TAG, "sendData");
         isShowing = true;
 
         int frontType = type.value();
@@ -61,7 +60,6 @@ public final class Window {
     }
 
     public void showWindow(INumber number, Type type) {
-
         isShowing = true;
 
         int frontType = type.value();
@@ -79,6 +77,7 @@ public final class Window {
     }
 
     public void hideWindow() {
+        Log.d(TAG, "hideWindow");
         if (isShowing) {
             StandOutWindow.hide(mContext, FloatWindow.class, Type.CALLER.value());
         }

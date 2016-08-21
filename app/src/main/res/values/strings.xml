@@ -232,4 +232,5 @@
     <string name="no_marked_name">No tag data</string>
     <string name="outgoing_window_position">Outgoing window position</string>
     <string name="outgoing_window_position_message">Drag to move window position when outgoing. Float window position is dependent for incoming and outgoing call.</string>
+    <string name="add_ring_once_call_log">Add ring once/hangup notice to call log</string>
 </resources>

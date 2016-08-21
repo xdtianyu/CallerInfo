@@ -55,4 +55,5 @@
     <string name="disable_outgoing_blacklist_key" translatable="false">disable_outgoing_blacklist_key</string>
     <string name="repeated_incoming_count_key" translatable="false">repeated_incoming_count_key</string>
     <string name="outgoing_window_position_key" translatable="false">outgoing_window_position_key</string>
+    <string name="ring_once_and_auto_hangup_key" translatable="false">ring_once_and_auto_hangup_key</string>
 </resources>

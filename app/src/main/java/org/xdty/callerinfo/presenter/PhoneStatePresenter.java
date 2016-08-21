@@ -126,14 +126,17 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
         if (isIncoming(mIncomingNumber) && !mCallerDataSource.isIgnoreContact(mIncomingNumber)) {
             saveInCall();
             mIncomingNumber = null;
-            if (isRingOnce()) {
-                saveLog = true;
+            if (isRingOnce() && mSetting.isAddingRingOnceCallLog()) {
                 if (mAutoHangup) {
                     // ring once cased by auto hangup
-                    mCallRecord.appendName(mView.getContext().getString(R.string.auto_hangup));
+                    mCallRecord.setLogName(
+                            mView.getContext().getString(R.string.auto_hangup), saveLog);
+
                 } else {
-                    mCallRecord.appendName(mView.getContext().getString(R.string.ring_once));
+                    mCallRecord.setLogName(mView.getContext().getString(R.string.ring_once),
+                            saveLog);
                 }
+                saveLog = true;
             }
         }
 

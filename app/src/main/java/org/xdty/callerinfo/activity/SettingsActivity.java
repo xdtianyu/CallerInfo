@@ -108,6 +108,7 @@ public class SettingsActivity extends AppCompatActivity {
         private HashMap<String, Integer> keyMap = new HashMap<>();
         private HashMap<String, Preference> prefMap = new HashMap<>();
         private boolean isCheckStorageExport = false;
+        private boolean isCheckRingOnce = false;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -192,6 +193,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 bindPreference(R.string.auto_hangup_key);
                 bindPreference(R.string.add_call_log_key);
+                bindPreference(R.string.ring_once_and_auto_hangup_key);
 
                 bindPreference(R.string.hangup_keyword_key, R.string.hangup_keyword_summary);
                 bindPreference(R.string.hangup_geo_keyword_key,
@@ -720,6 +722,15 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
                 case R.string.add_call_log_key:
                     try {
+                        isCheckRingOnce = false;
+                        mPluginService.checkCallLogPermission();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                case R.string.ring_once_and_auto_hangup_key:
+                    try {
+                        isCheckRingOnce = true;
                         mPluginService.checkCallLogPermission();
                     } catch (RemoteException e) {
                         e.printStackTrace();
@@ -977,7 +988,11 @@ public class SettingsActivity extends AppCompatActivity {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                setChecked(R.string.add_call_log_key, success);
+                                if (isCheckRingOnce) {
+                                    setChecked(R.string.ring_once_and_auto_hangup_key, success);
+                                } else {
+                                    setChecked(R.string.add_call_log_key, success);
+                                }
                             }
                         });
                     }

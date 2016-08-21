@@ -16,16 +16,24 @@ public class CallRecord {
         return mLogName;
     }
 
-    public void setLogName(String mLogName) {
-        this.mLogName = mLogName;
+    public void setLogName(String name) {
+        this.mLogName = name;
+    }
+
+    public void setLogName(String name, boolean append) {
+        if (append) {
+            appendName(name);
+        } else {
+            setLogName(name);
+        }
     }
 
     public String getLogGeo() {
         return mLogGeo;
     }
 
-    public void setLogGeo(String mLogGeo) {
-        this.mLogGeo = mLogGeo;
+    public void setLogGeo(String name) {
+        this.mLogGeo = name;
     }
 
     public void ring() {
