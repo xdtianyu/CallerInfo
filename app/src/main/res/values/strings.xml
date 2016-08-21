@@ -216,6 +216,7 @@
     <string name="source_common">Common number</string>
     <string name="source_caller">CallerInfo number</string>
     <string name="source_marked">Marked number</string>
+    <string name="source_mvno">Mobile virtual network operator</string>
     <string name="source_offline">Offline number</string>
     <string name="source_google">Google offline data</string>
     <string name="source_baidu">Baidu data source</string>

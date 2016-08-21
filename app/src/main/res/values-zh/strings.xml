@@ -192,4 +192,5 @@
     <string name="no_marked_name">无标记数据</string>
     <string name="outgoing_window_position">去电时位置调整</string>
     <string name="outgoing_window_position_message">去电时拖动悬浮窗以调整显示位置。悬浮窗在去电和来电时将使用各自的位置设置。</string>
+    <string name="source_mvno">虚拟运营商离线号码库</string>
 </resources>

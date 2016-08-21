@@ -51,6 +51,7 @@
         <item>-200</item>
         <item>-150</item>
         <item>-100</item>
+        <item>-50</item>
         <item>-2</item>
         <item>-1</item>
         <item>0</item>
@@ -64,6 +65,7 @@
         <item>@string/source_common</item>
         <item>@string/source_caller</item>
         <item>@string/source_marked</item>
+        <item>@string/source_mvno</item>
         <item>@string/source_offline</item>
         <item>@string/source_google</item>
         <item>@string/source_baidu</item>
