@@ -89,6 +89,10 @@ public class CallerRepository implements CallerDataSource {
             fixedNumber = number.replaceFirst("^1259023", "");
         }
 
+        if (fixedNumber.startsWith("1183348")) {
+            fixedNumber = number.replaceFirst("^1183348", "");
+        }
+
         return fixedNumber;
     }
 
