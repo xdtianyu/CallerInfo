@@ -28,7 +28,7 @@ public final class Alarm {
 
     public void alarm() {
         Log.v(TAG, "alarm");
-        if (mSetting.isAutoReportEnabled() || mSetting.isMarkingEnabled()) {
+        if (!mSetting.isAutoReportEnabled() && !mSetting.isMarkingEnabled()) {
             Log.v(TAG, "alarm is not installed");
             return;
         }
