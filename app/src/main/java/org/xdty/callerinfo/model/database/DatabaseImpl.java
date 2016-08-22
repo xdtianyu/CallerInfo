@@ -350,6 +350,17 @@ public class DatabaseImpl implements Database {
         }
     }
 
+    @Override
+    public void removeRecord(MarkedRecord record) {
+        Observable.just(record).observeOn(Schedulers.io()).subscribe(new Action1<MarkedRecord>() {
+            @Override
+            public void call(MarkedRecord record) {
+                record.delete();
+                removeCaller(findCallerSync(record.getNumber()));
+            }
+        });
+    }
+
     private static class SingletonHelper {
         private final static DatabaseImpl INSTANCE = new DatabaseImpl();
     }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.xdty.callerinfo.application.Application;
@@ -95,9 +96,13 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
                 if (!isAutoReport && record.getSource() != MarkedRecord.API_ID_USER_MARKED) {
                     continue;
                 }
-                mPutList.add(record.getNumber());
-                // this put operation is asynchronous
-                mPhoneNumber.put(record.toNumber());
+                if (!TextUtils.isEmpty(record.getTypeName())) {
+                    mPutList.add(record.getNumber());
+                    // this put operation is asynchronous
+                    mPhoneNumber.put(record.toNumber());
+                } else {
+                    mDatabase.removeRecord(record);
+                }
             }
         }
 

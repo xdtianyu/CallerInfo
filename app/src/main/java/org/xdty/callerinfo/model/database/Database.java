@@ -64,4 +64,6 @@ public interface Database {
     void addInCallersSync(List<InCall> inCalls);
 
     void saveMarkedRecord(INumber number, String uid);
+
+    void removeRecord(MarkedRecord record);
 }
