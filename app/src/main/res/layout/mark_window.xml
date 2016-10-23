@@ -32,7 +32,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:padding="@dimen/activity_vertical_margin"
-                    android:text="02988888888 陕西西安"
                     android:textColor="#888888"
                     android:textSize="20sp"
                     android:textStyle="bold"/>

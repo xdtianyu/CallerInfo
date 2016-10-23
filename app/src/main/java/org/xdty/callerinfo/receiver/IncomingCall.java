@@ -4,6 +4,7 @@ import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -143,8 +144,19 @@ public class IncomingCall extends BroadcastReceiver {
 
         @Override
         public void showMark(String number) {
-            if (((KeyguardManager) sContext.getSystemService(
-                    Context.KEYGUARD_SERVICE)).isKeyguardLocked()) {
+
+            KeyguardManager keyguardManager = (KeyguardManager) sContext.getSystemService(
+                    Context.KEYGUARD_SERVICE);
+
+            boolean isKeyguardLocked;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                isKeyguardLocked = keyguardManager.isKeyguardLocked();
+            } else {
+                isKeyguardLocked = keyguardManager.inKeyguardRestrictedInputMode();
+            }
+
+            if (isKeyguardLocked) {
                 Utils.showMarkNotification(sContext, number);
             } else {
                 Utils.startMarkActivity(sContext, number);

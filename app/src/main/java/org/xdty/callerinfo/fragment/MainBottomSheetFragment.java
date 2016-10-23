@@ -2,7 +2,9 @@ package org.xdty.callerinfo.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -89,12 +91,17 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         dialog.setContentView(R.layout.dialog_main_bottom_sheet);
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawable(
-                    new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    new ColorDrawable(Color.TRANSPARENT));
         }
 
         mFrameLayout = (FrameLayout) dialog.findViewById(R.id.design_bottom_sheet);
 
-        mFrameLayout.setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mFrameLayout.setBackground(new ColorDrawable(Color.TRANSPARENT));
+        } else {
+            //noinspection deprecation
+            mFrameLayout.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
 
         mBottomSheet = dialog.findViewById(R.id.bottom_sheet);
         mNumber = (TextView) dialog.findViewById(R.id.number);
