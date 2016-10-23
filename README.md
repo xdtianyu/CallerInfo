@@ -52,6 +52,8 @@
 
 [blueset](https://github.com/blueset) 修复英语翻译
 
+[Soyofuki](https://github.com/Soyofuki) 添加日语翻译
+
 ## 屏幕截图
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/2.png" alt="screenshot" width="300">

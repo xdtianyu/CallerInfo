@@ -32,6 +32,9 @@ An android app to get phone number location and other info. [中文](https://git
 
 [blueset](https://github.com/blueset) Refine on English translation
 
+[Soyofuki](https://github.com/Soyofuki) Add Japanese translation
+
+
 ##Screenshots
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/2.png" alt="screenshot" width="300">
