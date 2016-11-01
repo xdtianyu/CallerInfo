@@ -16,7 +16,7 @@ notifications:
 before_install:
    - touch local.properties
    - source gradle.properties
-   - .travis/env.sh
+   - source .travis/env.sh
    - openssl aes-256-cbc -K $encrypted_75846693d905_key -iv $encrypted_75846693d905_iv -in release.jks.enc -out release.jks -d
 
 script:
