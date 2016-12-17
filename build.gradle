@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -25,7 +25,7 @@ ext {
     minSdkVersion = 14
     targetSdkVersion = 25
 
-    supportVersion = "25.0.0"
+    supportVersion = "25.1.0"
 }
 
 task clean(type: Delete) {
