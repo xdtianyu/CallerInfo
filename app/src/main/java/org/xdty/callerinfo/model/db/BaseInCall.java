@@ -6,12 +6,19 @@ import org.xdty.callerinfo.utils.Utils;
 
 import io.requery.Column;
 import io.requery.Entity;
+import io.requery.Generated;
+import io.requery.Key;
 import io.requery.Table;
 import io.requery.Transient;
 
 @Table(name = "IN_CALL")
 @Entity
 public abstract class BaseInCall {
+
+    @Key
+    @Generated
+    @Column(name = "ID")
+    int id;
 
     @Column(name = "NUMBER")
     String number;

@@ -9,6 +9,8 @@ import org.xdty.phone.number.model.Type;
 
 import io.requery.Column;
 import io.requery.Entity;
+import io.requery.Generated;
+import io.requery.Key;
 import io.requery.Table;
 import io.requery.Transient;
 
@@ -18,6 +20,11 @@ import io.requery.Transient;
 public abstract class BaseCaller implements INumber {
 
     private final static int DEFAULT_SOURCE = -9999;
+
+    @Key
+    @Generated
+    @Column(name = "ID")
+    int id;
 
     @Column(name = "NUMBER", unique = true)
     String number;

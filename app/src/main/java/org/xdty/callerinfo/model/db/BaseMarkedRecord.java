@@ -5,6 +5,8 @@ import org.xdty.phone.number.model.cloud.CloudNumber;
 
 import io.requery.Column;
 import io.requery.Entity;
+import io.requery.Generated;
+import io.requery.Key;
 import io.requery.Table;
 
 @Table(name = "MARKED_RECORD")
@@ -12,6 +14,11 @@ import io.requery.Table;
 public abstract class BaseMarkedRecord {
     public final static int API_ID_USER_MARKED = 8;
     public final static int TYPE_IGNORE = 32;
+
+    @Key
+    @Generated
+    @Column(name = "ID")
+    int id;
 
     @Column(name = "NUMBER", unique = true)
     String number;

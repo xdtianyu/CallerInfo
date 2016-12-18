@@ -141,7 +141,7 @@ public class DatabaseImpl implements Database {
         Observable.just(caller).observeOn(Schedulers.io()).subscribe(new Action1<Caller>() {
             @Override
             public void call(Caller caller) {
-                mDataStore.update(caller);
+                mDataStore.upsert(caller);
             }
         });
     }
@@ -175,7 +175,7 @@ public class DatabaseImpl implements Database {
                 .subscribe(new Action1<MarkedRecord>() {
                     @Override
                     public void call(MarkedRecord markedRecord) {
-                        mDataStore.update(markedRecord);
+                        mDataStore.upsert(markedRecord);
                     }
                 });
     }
@@ -193,7 +193,7 @@ public class DatabaseImpl implements Database {
                         caller.setLastUpdate(markedRecord.getTime());
                         caller.setType("report");
                         caller.setOffline(false);
-                        mDataStore.update(caller);
+                        mDataStore.upsert(caller);
                     }
                 });
     }
@@ -333,12 +333,11 @@ public class DatabaseImpl implements Database {
     @Override
     public int getInCallCount(String number) {
         long time = System.currentTimeMillis() - 24 * 60 * 60 * 1000;
-        return mDataStore.select(InCall.class)
+        return mDataStore.count(InCall.class)
                 .where(InCall.NUMBER.eq(number))
                 .and(InCall.TIME.gt(time))
                 .get()
-                .toList()
-                .size();
+                .value();
     }
 
     @Override
