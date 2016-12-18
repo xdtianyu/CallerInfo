@@ -3,30 +3,60 @@ package org.xdty.callerinfo.model.db;
 import org.xdty.callerinfo.R;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 
-public class MarkedRecord extends MarkedRecordTable {
+import io.requery.Column;
+import io.requery.Entity;
+import io.requery.Table;
+
+@Table(name = "MARKED_RECORD")
+@Entity
+public abstract class BaseMarkedRecord {
     public final static int API_ID_USER_MARKED = 8;
     public final static int TYPE_IGNORE = 32;
 
-    public MarkedRecord() {
-        setSource(API_ID_USER_MARKED);
-        setTime(System.currentTimeMillis());
-        setCount(0);
-        setReported(false);
+    @Column(name = "NUMBER", unique = true)
+    String number;
+
+    @Column(name = "UID")
+    String uid;
+
+    @Column(name = "TYPE")
+    int type;
+
+    @Column(name = "TIME")
+    long time;
+
+    @Column(name = "COUNT")
+    int count;
+
+    @Column(name = "SOURCE")
+    int source;
+
+    @Column(name = "REPORTED")
+    boolean reported;
+
+    @Column(name = "TYPE_NAME")
+    String typeName;
+
+    public BaseMarkedRecord() {
+        this.source = API_ID_USER_MARKED;
+        this.time = System.currentTimeMillis();
+        this.count = 0;
+        this.reported = false;
     }
 
     public CloudNumber toNumber() {
         CloudNumber number = new CloudNumber();
-        number.setNumber(getNumber());
-        number.setCount(getCount());
-        number.setType(getType());
-        number.setFrom(getSource());
-        number.setName(getTypeName());
-        number.setUid(getUid());
+        number.setNumber(this.number);
+        number.setCount(this.count);
+        number.setType(this.type);
+        number.setFrom(this.source);
+        number.setName(this.typeName);
+        number.setUid(this.uid);
         return number;
     }
 
     public boolean isIgnore() {
-        return getType() == TYPE_IGNORE;
+        return this.type == TYPE_IGNORE;
     }
 
     public enum MarkType {
