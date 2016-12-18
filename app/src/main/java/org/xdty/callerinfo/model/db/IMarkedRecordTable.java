@@ -34,6 +34,4 @@ public interface IMarkedRecordTable extends Parcelable{
     @Column(name = "TYPE_NAME")
     String getTypeName();
 
-
-
 }
