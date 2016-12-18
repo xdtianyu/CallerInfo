@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 
-public class Application extends com.orm.SugarApp {
+public class Application extends android.app.Application {
     public final static String TAG = Application.class.getSimpleName();
 
     private static AppComponent sAppComponent;

@@ -320,13 +320,13 @@ public class MainActivityTest extends ActivityTestBase {
     public void testSwipeRefresh() {
         long time = System.currentTimeMillis();
         InCall inCall = new InCall("10000", time, 3553, 35052);
-        inCall.save();
+        mDatabase.saveInCall(inCall);
 
         onView(withId(R.id.swipe_refresh_layout)).perform(swipeDown());
         onView(withId(R.id.history_list)).check(
                 matches(atPosition(0, hasDescendant(withText("中国电信客服")))));
 
-        inCall.delete();
+        mDatabase.removeInCall(inCall);
 
         onView(withId(R.id.swipe_refresh_layout)).perform(swipeDown());
         onView(withId(R.id.history_list)).check(

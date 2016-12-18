@@ -88,7 +88,7 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
     private void runScheduledJobs() {
 
         // 1. upload marked number
-        List<MarkedRecord> records = MarkedRecord.listAll(MarkedRecord.class);
+        List<MarkedRecord> records = mDatabase.fetchMarkedRecordsSync();
         boolean isAutoReport = mSetting.isAutoReportEnabled();
 
         for (MarkedRecord record : records) {

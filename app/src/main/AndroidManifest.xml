@@ -74,18 +74,6 @@
         <meta-data
             android:name="org.xdty.phone.number.LEANCLOUD_APP_KEY"
             android:value="${LEANCLOUD_APP_KEY}"/>
-        <meta-data
-            android:name="DATABASE"
-            android:value="phone_number.db"/>
-        <meta-data
-            android:name="VERSION"
-            android:value="6"/>
-        <meta-data
-            android:name="QUERY_LOG"
-            android:value="true"/>
-        <meta-data
-            android:name="DOMAIN_PACKAGE_NAME"
-            android:value="org.xdty.callerinfo.model.db"/>
     </application>
 
 </manifest>

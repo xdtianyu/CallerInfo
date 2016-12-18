@@ -2,49 +2,35 @@ package org.xdty.callerinfo.model.db;
 
 import android.text.TextUtils;
 
-import com.orm.SugarRecord;
-import com.orm.dsl.Ignore;
-import com.orm.dsl.Unique;
-
 import org.xdty.callerinfo.utils.Config;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 
-public class Caller extends SugarRecord implements INumber {
-    @Unique
-    private String number;
-    private String name;
-    private String type;
-    private int count;
-    private String province;
-    private String operators;
-    private String city;
-    private long lastUpdate;
-    private boolean isOffline = true;
-    private int source = -9999;
+public class Caller extends CallerTable implements INumber {
 
-    @Ignore
+    private final static int DEFAULT_SOURCE = -9999;
     private String contactName;
 
     public Caller() {
+        setCallerSource(DEFAULT_SOURCE);
     }
 
     public Caller(INumber number) {
-        this.number = number.getNumber();
-        this.name = number.getName();
-        this.type = number.getType().getText();
-        this.count = number.getCount();
-        this.province = number.getProvince();
-        this.city = number.getCity();
-        this.operators = number.getProvider();
-        this.source = number.getApiId();
-        lastUpdate = System.currentTimeMillis();
+        setNumber(number.getNumber());
+        setName(number.getName());
+        setType(number.getType().getText());
+        setCount(number.getCount());
+        setProvince(number.getProvince());
+        setCity(number.getCity());
+        setOperators(number.getProvider());
+        setCallerSource(number.getApiId());
+        setLastUpdate(System.currentTimeMillis());
     }
 
     public Caller(INumber number, boolean isOffline) {
         this(number);
-        this.isOffline = isOffline;
+        setOffline(isOffline);
     }
 
     public static Caller empty(boolean isOnline) {
@@ -61,36 +47,12 @@ public class Caller extends SugarRecord implements INumber {
     }
 
     public boolean isEmpty() {
-        return number == null;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
+        return getNumber() == null;
     }
 
     @Override
     public String getProvider() {
-        return operators;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
+        return getOperators();
     }
 
     @Override
@@ -111,92 +73,54 @@ public class Caller extends SugarRecord implements INumber {
 
     @Override
     public int getApiId() {
-        return source;
+        return super.getCallerSource();
     }
 
     @Override
     public void patch(INumber i) {
-        province = i.getProvince();
-        city = i.getCity();
-        operators = i.getProvider();
+        setProvince(i.getProvince());
+        setCity(i.getCity());
+        setOperators(i.getProvider());
     }
 
     public String getSource() {
-        return Utils.sourceFromId(source);
+        return Utils.sourceFromId(super.getCallerSource());
     }
 
-    public void setSource(int source) {
-        this.source = source;
+    public void setSource(int apiId) {
+        setCallerSource(apiId);
     }
 
     public String getProvince() {
+        String province = super.getProvince();
         return province != null ? province.replace("省", " ").replace("市", " ") : "";
     }
 
     @Override
     public Type getType() {
 
-        if (source == -9999) { // get type from type name
-            return Utils.markTypeFromName(name);
+        if (getCallerSource() == DEFAULT_SOURCE) { // get type from type name
+            return Utils.markTypeFromName(getName());
         }
 
-        return Type.fromString(type);
+        return Type.fromString(getCallerType());
     }
 
     public void setType(String type) {
-        this.type = type;
+        setCallerType(type);
     }
 
     public String getOperators() {
-        return operators != null ? operators : "";
+        return super.getOperators() != null ? super.getOperators() : "";
     }
 
     public String getCity() {
-        return city != null ? city.replace("市", " ") : "";
-    }
-
-    public long getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(long lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
-    public String toString() {
-        String s = "";
-
-        s += number;
-        if (name != null) {
-            s += "-" + name;
-        }
-
-        if (count != 0) {
-            s += "-" + count;
-        }
-
-        if (province != null) {
-            s += "-" + province;
-        }
-        if (city != null) {
-            s += "-" + city;
-        }
-        if (operators != null) {
-            s += "-" + operators;
-        }
-        return s;
-    }
-
-    public boolean isOffline() {
-        return isOffline;
-    }
-
-    public void setOffline(boolean isOffline) {
-        this.isOffline = isOffline;
+        return super.getCity() != null ? super.getCity().replace("市", " ") : "";
     }
 
     public boolean isUpdated() {
-        return !isOffline && lastUpdate - System.currentTimeMillis() < Config.MAX_UPDATE_CIRCLE;
+        return !isOffline() && getLastUpdate() - System.currentTimeMillis() <
+                Config.MAX_UPDATE_CIRCLE;
     }
 
     public String getContactName() {
@@ -208,7 +132,7 @@ public class Caller extends SugarRecord implements INumber {
     }
 
     public String getGeo() {
-        if (getProvince().equals(city) || getCity().isEmpty()) {
+        if (getProvince().equals(super.getCity()) || getCity().isEmpty()) {
             return getProvince() + " " + getOperators();
         } else {
             return getProvince() + " " + getCity() + " " + getOperators();
