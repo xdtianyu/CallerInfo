@@ -2,7 +2,7 @@
  
 # This script generates environment variables for pull requests and forks.
  
-if [ -n "$encrypted_75846693d905_key" ] ; then
+if [ -z "$encrypted_75846693d905_key" ] ; then
     # It's running from pull requests or forks, set vars.
      
     TEXT="I_AM_PUBLIC_AND_NOT_USED_FOR_RELEASE"
