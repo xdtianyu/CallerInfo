@@ -4,7 +4,7 @@
 [![Google Play](https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/en-play-badge.png)](https://play.google.com/store/apps/details?id=org.xdty.callerinfo)
 
 [![Build Status](https://travis-ci.org/xdtianyu/CallerInfo.svg?branch=master)](https://travis-ci.org/xdtianyu/CallerInfo)
-[![Build Status](https://img.shields.io/jenkins/s/https/jenkins.xdty.org/kindle.svg?label=jenkins)](https://jenkins.xdty.org/job/CallerInfo/buildTimeTrend)
+[![Build Status](https://img.shields.io/jenkins/s/https/jenkins.xdty.org/callerinfo.svg?label=jenkins)](https://jenkins.xdty.org/job/CallerInfo/buildTimeTrend)
 [![Release notes](https://img.shields.io/badge/release-notes-yellowgreen.svg)](https://github.com/xdtianyu/CallerInfo/releases)
 [![Coolapk download](https://img.shields.io/badge/coolapk-download-blue.svg)](http://coolapk.com/apk/org.xdty.callerinfo)
 
