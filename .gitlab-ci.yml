@@ -1,4 +1,9 @@
 image: xdtianyu/openjdk8:latest
+
+before_script:
+  - git submodule sync --recursive
+  - git submodule update --init --recursive
+
 stages:
   - build
 build:
