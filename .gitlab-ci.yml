@@ -1,0 +1,10 @@
+image: xdtianyu/openjdk8:latest
+stages:
+  - build
+build:
+  stage: build
+  script:
+    - ./gradlew assembleDebug
+  artifacts:
+    paths:
+      - "**/build/outputs/**/*.apk"
