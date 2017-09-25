@@ -32,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -278,7 +279,7 @@ public class SettingsActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     || Build.VERSION.RELEASE.equals("7.0") || Build.VERSION.RELEASE.equals("N")) {
                 ListView listView = (ListView) dialog.findViewById(android.R.id.list);
-                FrameLayout root = (FrameLayout) listView.getParent();
+                LinearLayout root = (LinearLayout) listView.getParent();
 
                 appBarLayout = (AppBarLayout) LayoutInflater.from(getActivity()).inflate(
                         R.layout.settings_toolbar, root, false);
