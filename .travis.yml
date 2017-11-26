@@ -21,11 +21,11 @@ before_install:
 
 script:
   - ./gradlew clean assembleDebug
-  - cp app/build/outputs/apk/CallerInfo-v$VERSION_NAME-debug.apk $HOME
-  - cp plugin/build/outputs/apk/CallerInfo-plugin-v$PLUGIN_VERSION_NAME-debug.apk $HOME
+  - cp app/build/outputs/apk/debug/CallerInfo-v$VERSION_NAME-debug.apk $HOME
+  - cp plugin/build/outputs/apk/debug/CallerInfo-plugin-v$PLUGIN_VERSION_NAME-debug.apk $HOME
   - ./gradlew clean assembleRelease
-  - cp app/build/outputs/apk/CallerInfo-v$VERSION_NAME-release.apk $HOME
-  - cp plugin/build/outputs/apk/CallerInfo-plugin-v$PLUGIN_VERSION_NAME-release.apk $HOME
+  - cp app/build/outputs/apk/release/CallerInfo-v$VERSION_NAME-release.apk $HOME
+  - cp plugin/build/outputs/apk/release/CallerInfo-plugin-v$PLUGIN_VERSION_NAME-release.apk $HOME
   - md5sum "$HOME/CallerInfo-v$VERSION_NAME-debug.apk"
   - md5sum "$HOME/CallerInfo-v$VERSION_NAME-release.apk"
   - md5sum "$HOME/CallerInfo-plugin-v$PLUGIN_VERSION_NAME-debug.apk"
