@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -84,16 +83,16 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.2.1'
     compile 'com.google.dagger:dagger:2.7'
-    apt 'com.google.dagger:dagger-compiler:2.7'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
 
     debugCompile 'com.facebook.stetho:stetho:1.4.2'
     compile 'com.pkmmte.view:circularimageview:1.1'
     compile 'com.afollestad.material-dialogs:core:0.8.5.9'
     compile 'org.apmem.tools:layouts:1.10@aar'
 
-    compile 'io.requery:requery:1.1.0'
-    compile 'io.requery:requery-android:1.1.0'
-    apt 'io.requery:requery-processor:1.1.0'
+    compile 'io.requery:requery:1.4.0'
+    compile 'io.requery:requery-android:1.4.0'
+    annotationProcessor 'io.requery:requery-processor:1.4.0'
 }
 
 apply from: '../signing.gradle'

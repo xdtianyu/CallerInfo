@@ -33,6 +33,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    buildToolsVersion '26.0.2'
 }
 
 dependencies {
