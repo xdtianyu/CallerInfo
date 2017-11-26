@@ -37,7 +37,7 @@ script:
 
 deploy:
   provider: releases
-  api-key: $GITHUB_TOKEN
+  api_key: $GITHUB_TOKEN
   file:
     - "$HOME/CallerInfo-v$VERSION_NAME-debug.apk"
     - "$HOME/CallerInfo-v$VERSION_NAME-release.apk"
