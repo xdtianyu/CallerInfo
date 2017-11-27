@@ -38,7 +38,7 @@ public abstract class BaseMarkedRecord {
     @Column(name = "SOURCE")
     int source;
 
-    @Column(name = "REPORTED")
+    @Column(name = "IS_REPORTED")
     boolean reported;
 
     @Column(name = "TYPE_NAME")
