@@ -33,7 +33,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -278,7 +277,7 @@ public class SettingsActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     || Build.VERSION.RELEASE.equals("7.0") || Build.VERSION.RELEASE.equals("N")) {
                 ListView listView = (ListView) dialog.findViewById(android.R.id.list);
-                FrameLayout root = (FrameLayout) listView.getParent();
+                ViewGroup root = (ViewGroup) listView.getParent();
 
                 appBarLayout = (AppBarLayout) LayoutInflater.from(getActivity()).inflate(
                         R.layout.settings_toolbar, root, false);
@@ -716,7 +715,7 @@ public class SettingsActivity extends AppCompatActivity {
                 case R.string.auto_hangup_key:
                     try {
                         mPluginService.checkCallPermission();
-                    } catch (RemoteException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     return false;
@@ -724,7 +723,7 @@ public class SettingsActivity extends AppCompatActivity {
                     try {
                         isCheckRingOnce = false;
                         mPluginService.checkCallLogPermission();
-                    } catch (RemoteException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     return false;
@@ -732,7 +731,7 @@ public class SettingsActivity extends AppCompatActivity {
                     try {
                         isCheckRingOnce = true;
                         mPluginService.checkCallLogPermission();
-                    } catch (RemoteException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     return false;
@@ -799,7 +798,7 @@ public class SettingsActivity extends AppCompatActivity {
                         } else {
                             Log.e(TAG, "PluginService is stopped!!");
                         }
-                    } catch (RemoteException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     break;
@@ -811,7 +810,7 @@ public class SettingsActivity extends AppCompatActivity {
                         } else {
                             Log.e(TAG, "PluginService is stopped!!");
                         }
-                    } catch (RemoteException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     break;
@@ -856,7 +855,7 @@ public class SettingsActivity extends AppCompatActivity {
                 } else {
                     Log.e(TAG, "PluginService is stopped!!");
                 }
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -875,7 +874,7 @@ public class SettingsActivity extends AppCompatActivity {
                             showTextDialog(R.string.export_data,
                                     getString(R.string.export_succeed, res));
                         }
-                    } catch (RemoteException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -1013,7 +1012,7 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 });
                 enablePluginPreference();
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
