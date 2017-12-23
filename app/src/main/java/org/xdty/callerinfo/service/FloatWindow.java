@@ -2,7 +2,12 @@ package org.xdty.callerinfo.service;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -62,6 +67,31 @@ public class FloatWindow extends StandOutWindow {
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
             Application.getAppComponent().inject(this);
+
+
+            if (Build.VERSION.SDK_INT >= 26) {
+
+
+                NotificationManager nm = ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
+                if (nm != null) {
+                    String CHANNEL_ID = getPackageName();
+                    NotificationChannel channel;
+                    try {
+                        channel = nm.getNotificationChannel(CHANNEL_ID);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        channel = new NotificationChannel(CHANNEL_ID, "",
+                                NotificationManager.IMPORTANCE_DEFAULT);
+                        nm.createNotificationChannel(channel);
+                    }
+
+                    Notification notification = new Notification.Builder(this, CHANNEL_ID)
+                            .setContentTitle("")
+                            .setContentText("").build();
+                    startForeground(1, notification);
+                }
+            }
+
             return super.onStartCommand(intent, flags, startId);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -112,7 +142,11 @@ public class FloatWindow extends StandOutWindow {
         params.maxWidth = Math.max(mSettings.getScreenWidth(), mSettings.getScreenHeight());
         params.minHeight = mSettings.getDefaultHeight() / 4;
         if (isUnmovable(id)) {
-            params.type = StandOutLayoutParams.TYPE_SYSTEM_OVERLAY;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                params.type = StandOutLayoutParams.TYPE_APPLICATION_OVERLAY;
+            } else {
+                params.type = StandOutLayoutParams.TYPE_PHONE;
+            }
         }
         return params;
     }
