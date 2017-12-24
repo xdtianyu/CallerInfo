@@ -201,7 +201,7 @@ public class MainPresenter implements MainContract.Presenter,
 
     @Override
     public void onCheckResult(Status status) {
-        if (status != null) {
+        if (status != null && status.count > 0) {
             mView.notifyUpdateData(status);
             mSetting.setStatus(status);
         }
