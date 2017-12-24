@@ -234,7 +234,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         private void bindPluginService() {
             try {
-                getActivity().startService(mPluginIntent);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    getActivity().startForegroundService(mPluginIntent);
+                } else {
+                    getActivity().startService(mPluginIntent);
+                }
                 getActivity().bindService(mPluginIntent, this, Context.BIND_AUTO_CREATE);
             } catch (Exception e) {
                 e.printStackTrace();

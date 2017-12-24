@@ -1,6 +1,9 @@
 package org.xdty.callerinfo.plugin;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
@@ -195,6 +198,28 @@ public class PluginService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            NotificationManager nm = ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
+            if (nm != null) {
+                String CHANNEL_ID = getPackageName();
+                NotificationChannel channel;
+                try {
+                    channel = nm.getNotificationChannel(CHANNEL_ID);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    channel = new NotificationChannel(CHANNEL_ID, "",
+                            NotificationManager.IMPORTANCE_DEFAULT);
+                    nm.createNotificationChannel(channel);
+                }
+
+                Notification notification = new Notification.Builder(this, CHANNEL_ID)
+                        .setContentTitle("")
+                        .setContentText("").build();
+                startForeground(1, notification);
+            }
+        }
+
         int res = super.onStartCommand(intent, flags, startId);
         if (mCallback != null) {
             int type = intent.getIntExtra("type", 0);
@@ -237,7 +262,8 @@ public class PluginService extends Service {
             Method methodEndCall = telephonyInterfaceClass.getDeclaredMethod("endCall");
             methodEndCall.invoke(telephonyInterface);
         } catch (Exception e) {
-            Log.d(TAG, "hangupPhoneCall" + e.toString());
+            e.printStackTrace();
+            Log.d(TAG, "hangupPhoneCall: " + e.toString());
             return false;
         }
         return true;

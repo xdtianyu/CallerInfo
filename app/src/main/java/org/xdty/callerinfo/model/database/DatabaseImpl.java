@@ -282,7 +282,7 @@ public class DatabaseImpl implements Database {
                 .subscribe(new Action1<Caller>() {
                     @Override
                     public void call(Caller caller) {
-                        mDataStore.insert(caller);
+                        mDataStore.upsert(caller);
                     }
                 });
     }
@@ -320,7 +320,12 @@ public class DatabaseImpl implements Database {
                 .subscribe(new Action1<MarkedRecord>() {
                     @Override
                     public void call(MarkedRecord record) {
-                        mDataStore.insert(record);
+                        if (mDataStore.count(MarkedRecord.class).where(
+                                MarkedRecord.NUMBER.eq(record.getNumber())).get().value() == 1) {
+                            mDataStore.delete(MarkedRecord.class).where(
+                                    MarkedRecord.NUMBER.eq(record.getNumber()));
+                        }
+                        mDataStore.upsert(record);
                     }
                 });
     }

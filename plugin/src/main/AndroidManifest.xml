@@ -2,13 +2,15 @@
 <manifest
     package="org.xdty.callerinfo.plugin"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:sharedUserId="org.xdty.callerinfo.plugin">
+    android:sharedUserId="org.xdty.callerinfo.plugin"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
