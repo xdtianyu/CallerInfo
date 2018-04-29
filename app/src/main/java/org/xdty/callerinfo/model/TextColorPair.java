@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.application.Application;
+import org.xdty.callerinfo.utils.Resource;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
@@ -76,7 +77,7 @@ public class TextColorPair {
             case POI:
                 t.color = preferences.getInt("color_poi",
                         ContextCompat.getColor(context, R.color.orange_dark));
-                t.text = context.getResources().getString(
+                t.text = Resource.getInstance().getResources().getString(
                         R.string.text_poi, province, city, operators, name);
                 break;
             case REPORT:
@@ -86,7 +87,7 @@ public class TextColorPair {
                     t.text = context.getResources().getString(
                             R.string.text_poi, province, city, operators, name);
                 } else {
-                    t.text = context.getResources().getString(
+                    t.text = Resource.getInstance().getResources().getString(
                             R.string.text_report, province, city, operators,
                             count, name);
                 }
@@ -95,7 +96,8 @@ public class TextColorPair {
 
         t.text = t.text.trim().replaceAll(" +", " ");
 
-        if (t.text.isEmpty() || t.text.contains(context.getString(R.string.baidu_advertising))) {
+        if (t.text.isEmpty() || t.text.contains(
+                Resource.getInstance().getResources().getString(R.string.baidu_advertising))) {
             t.text = context.getString(R.string.unknown);
         }
 

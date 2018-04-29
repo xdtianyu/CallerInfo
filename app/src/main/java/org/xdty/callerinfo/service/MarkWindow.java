@@ -56,16 +56,20 @@ public class MarkWindow extends StandOutWindow {
 
     @Override
     public void createAndAttachView(int id, FrameLayout frame) {
-        Utils.checkLocale(getBaseContext());
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.mark_window, frame, true);
-        
         bindCircleImage(view, R.id.express);
         bindCircleImage(view, R.id.takeout);
         bindCircleImage(view, R.id.selling);
         bindCircleImage(view, R.id.harass);
         bindCircleImage(view, R.id.bilk);
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Context context = Utils.changeLang(newBase);
+        super.attachBaseContext(context);
     }
 
     private void bindCircleImage(View view, int id) {

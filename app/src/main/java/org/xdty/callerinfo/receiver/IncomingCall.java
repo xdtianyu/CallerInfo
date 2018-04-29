@@ -51,7 +51,6 @@ public class IncomingCall extends BroadcastReceiver {
         @Inject Window mWindow;
 
         private IncomingCallListener() {
-            Utils.checkLocale(sContext);
             DaggerPhoneStatusComponent.builder()
                     .appModule(new AppModule(Application.getApplication()))
                     .phoneStatusModule(new PhoneStatusModule(this))

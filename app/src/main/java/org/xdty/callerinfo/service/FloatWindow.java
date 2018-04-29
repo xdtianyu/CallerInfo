@@ -101,6 +101,12 @@ public class FloatWindow extends StandOutWindow {
     }
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        Context context = Utils.changeLang(newBase);
+        super.attachBaseContext(context);
+    }
+
+    @Override
     public String getAppName() {
         return getResources().getString(R.string.app_name);
     }
@@ -112,8 +118,6 @@ public class FloatWindow extends StandOutWindow {
 
     @Override
     public void createAndAttachView(int id, FrameLayout frame) {
-        Utils.checkLocale(getBaseContext());
-
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.float_window, frame, true);
     }

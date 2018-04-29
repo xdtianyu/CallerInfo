@@ -84,6 +84,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Context context = Utils.changeLang(newBase);
+        super.attachBaseContext(context);
+    }
+
     public static class SettingsFragment extends PreferenceFragment
             implements OnPreferenceClickListener, ServiceConnection {
 

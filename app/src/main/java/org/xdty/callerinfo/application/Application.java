@@ -7,6 +7,7 @@ import org.xdty.callerinfo.di.modules.AppModule;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.receiver.IncomingCall.IncomingCallListener;
 import org.xdty.callerinfo.utils.Alarm;
+import org.xdty.callerinfo.utils.Resource;
 import org.xdty.callerinfo.utils.Utils;
 
 import javax.inject.Inject;
@@ -37,14 +38,13 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         sApplication = this;
-
         sAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         sAppComponent.inject(this);
 
+        Resource.getInstance().init(Utils.changeLang(this));
+
         IncomingCallListener.init(this);
-        Utils.checkLocale(getApplicationContext());
 
         if (mSetting.isCatchCrash() || BuildConfig.DEBUG) {
             CustomActivityOnCrash.install(this);

@@ -3,10 +3,13 @@ package org.xdty.callerinfo.utils;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings.Secure;
@@ -18,7 +21,6 @@ import android.util.Log;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.activity.MarkActivity;
-import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
@@ -71,16 +73,21 @@ public final class Utils {
 
     public static String readableTime(long duration) {
         String result;
-        Context context = Application.getApplication();
         int seconds = (int) (duration / 1000) % 60;
         int minutes = (int) ((duration / (1000 * 60)) % 60);
         int hours = (int) ((duration / (1000 * 60 * 60)) % 24);
         if (duration < 60000) {
-            result = context.getString(R.string.readable_second, seconds);
+            result = Resource.getInstance()
+                    .getResources()
+                    .getString(R.string.readable_second, seconds);
         } else if (duration < 3600000) {
-            result = context.getString(R.string.readable_minute, minutes, seconds);
+            result = Resource.getInstance()
+                    .getResources()
+                    .getString(R.string.readable_minute, minutes, seconds);
         } else {
-            result = context.getString(R.string.readable_hour, hours, minutes, seconds);
+            result = Resource.getInstance()
+                    .getResources()
+                    .getString(R.string.readable_hour, hours, minutes, seconds);
         }
         return result;
     }
@@ -89,16 +96,31 @@ public final class Utils {
         return s.replaceAll("([0-9]|[a-f])", "*");
     }
 
-    public static void checkLocale(Context context) {
+    public static ContextWrapper changeLang(Context context) {
 
-        if (SettingImpl.getInstance().isForceChinese()) {
-            Locale locale = new Locale("zh");
-            Locale.setDefault(locale);
-            Configuration config = context.getResources().getConfiguration();
-            config.locale = locale;
-            context.getResources().updateConfiguration(config,
-                    context.getResources().getDisplayMetrics());
+        if (!SettingImpl.getInstance().isForceChinese()) {
+            return new ContextWrapper(context);
         }
+
+        Resources rs = context.getResources();
+        Configuration config = rs.getConfiguration();
+
+        String langCode = "zh";
+        Locale locale = new Locale(langCode);
+        Locale.setDefault(locale);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.setLocale(locale);
+        } else {
+            config.locale = locale;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            context = context.createConfigurationContext(config);
+        } else {
+            context.getResources()
+                    .updateConfiguration(config, context.getResources().getDisplayMetrics());
+        }
+
+        return new ContextWrapper(context);
     }
 
     public static boolean isAppInstalled(Context context, String packageName) {
@@ -222,7 +244,7 @@ public final class Utils {
         }
 
         ArrayList<String> types = new ArrayList<>(
-                Arrays.asList(Application.getApplication()
+                Arrays.asList(Resource.getInstance()
                         .getResources()
                         .getStringArray(R.array.mark_type_source)));
         for (String t : types) {
@@ -244,7 +266,7 @@ public final class Utils {
     public static String sourceFromId(int sourceId) {
 
         if (sourceId == -9999) {
-            return Application.getApplication()
+            return Resource.getInstance()
                     .getResources()
                     .getString(R.string.mark);
         }
@@ -252,10 +274,10 @@ public final class Utils {
         if (sNumberSourceMap == null) {
             sNumberSourceMap = new HashMap<>();
 
-            String[] values = Application.getApplication()
+            String[] values = Resource.getInstance()
                     .getResources()
                     .getStringArray(R.array.source_values);
-            int[] keys = Application.getApplication()
+            int[] keys = Resource.getInstance()
                     .getResources()
                     .getIntArray(R.array.source_keys);
 
@@ -269,13 +291,13 @@ public final class Utils {
     }
 
     public static String typeFromId(int type) {
-        String[] values = Application.getApplication()
+        String[] values = Resource.getInstance()
                 .getResources()
                 .getStringArray(R.array.mark_type);
         if (type >= 0 && type < values.length) {
             return values[type];
         } else {
-            return Application.getApplication()
+            return Resource.getInstance()
                     .getResources()
                     .getString(R.string.custom);
         }

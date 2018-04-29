@@ -30,7 +30,7 @@ public final class Window {
 
         int frontType = type.value();
         Bundle bundle = new Bundle();
-        bundle.putString(FloatWindow.NUMBER_INFO, mContext.getString(resId));
+        bundle.putString(FloatWindow.NUMBER_INFO, Resource.getInstance().getResources().getString(resId));
         bundle.putInt(FloatWindow.WINDOW_COLOR, ContextCompat.getColor(mContext,
                 R.color.colorPrimary));
         Log.d(TAG, "showTextWindow: " + Utils.bundleToString(bundle));
