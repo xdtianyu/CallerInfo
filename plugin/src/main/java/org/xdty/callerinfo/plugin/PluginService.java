@@ -200,21 +200,19 @@ public class PluginService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         if (Build.VERSION.SDK_INT >= 26) {
-            NotificationManager nm = ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
+            NotificationManager nm = ((NotificationManager) getSystemService(
+                    Context.NOTIFICATION_SERVICE));
             if (nm != null) {
                 String CHANNEL_ID = getPackageName();
                 NotificationChannel channel;
-                try {
-                    channel = nm.getNotificationChannel(CHANNEL_ID);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    channel = new NotificationChannel(CHANNEL_ID, "",
-                            NotificationManager.IMPORTANCE_DEFAULT);
-                    nm.createNotificationChannel(channel);
-                }
+                channel = new NotificationChannel(CHANNEL_ID,
+                        getResources().getString(R.string.app_name),
+                        NotificationManager.IMPORTANCE_DEFAULT);
+                nm.createNotificationChannel(channel);
 
                 Notification notification = new Notification.Builder(this, CHANNEL_ID)
                         .setContentTitle("")
+                        .setChannelId(CHANNEL_ID)
                         .setContentText("").build();
                 startForeground(1, notification);
             }
