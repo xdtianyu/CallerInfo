@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:name=".application.Application"
@@ -55,10 +56,16 @@
         <service android:name=".service.MarkWindow"/>
         <service android:name=".service.ScheduleService"/>
 
-        <receiver android:name=".receiver.IncomingCall">
+        <receiver
+            android:name=".receiver.IncomingCall"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter android:priority="999">
                 <action android:name="android.intent.action.PHONE_STATE"/>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </receiver>
 
