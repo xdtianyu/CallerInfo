@@ -170,7 +170,8 @@ public abstract class BaseCaller implements INumber {
     }
 
     public String getGeo() {
-        if (getProvince().equals(this.city) || getCity().isEmpty()) {
+        if (getProvince() != null && getProvince().equals(this.city)
+                || getCity() != null && getCity().isEmpty()) {
             return getProvince() + " " + getProvider();
         } else {
             return getProvince() + " " + getCity() + " " + getProvider();
