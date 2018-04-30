@@ -148,72 +148,76 @@ public class CallerRepository implements CallerDataSource {
             @Override
             public void call(final Subscriber<? super Caller> subscriber) {
 
-                do {
-                    // check loading cache
-                    if (mLoadingCache.contains(number)) {
-                        // return without onCompleted
-                        return;
-                    }
-                    mLoadingCache.add(number);
+                try {
+                    do {
+                        // check loading cache
+                        if (mLoadingCache.contains(number)) {
+                            // return without onCompleted
+                            return;
+                        }
+                        mLoadingCache.add(number);
 
-                    // load from cache
-                    Caller caller = getCallerFromCache(number, false);
+                        // load from cache
+                        Caller caller = getCallerFromCache(number, false);
 
-                    if (caller != null && caller.isUpdated()) {
-                        subscriber.onNext(caller);
-                        break;
-                    }
-
-                    // load from database
-                    caller = mDatabase.findCallerSync(number);
-
-                    if (caller != null) {
-                        if (caller.isUpdated()) {
-                            cache(caller);
+                        if (caller != null && caller.isUpdated()) {
                             subscriber.onNext(caller);
                             break;
+                        }
+
+                        // load from database
+                        caller = mDatabase.findCallerSync(number);
+
+                        if (caller != null) {
+                            if (caller.isUpdated()) {
+                                cache(caller);
+                                subscriber.onNext(caller);
+                                break;
+                            } else {
+                                mDatabase.removeCaller(caller);
+                            }
+                        }
+
+                        // load from phone number library offline data
+                        INumber iNumber = mPhoneNumber.getOfflineNumber(number);
+
+                        if (iNumber != null && iNumber.isValid()) {
+                            subscriber.onNext(handleResponse(iNumber, false));
                         } else {
-                            mDatabase.removeCaller(caller);
+                            subscriber.onNext(Caller.empty(false));
                         }
-                    }
 
-                    // load from phone number library offline data
-                    INumber iNumber = mPhoneNumber.getOfflineNumber(number);
-
-                    if (iNumber != null && iNumber.isValid()) {
-                        subscriber.onNext(handleResponse(iNumber, false));
-                    } else {
-                        subscriber.onNext(Caller.empty(false));
-                    }
-
-                    // stop if the number is special
-                    if (iNumber != null && (iNumber.getApiId() == INumber.API_ID_SPECIAL
-                            || iNumber.getApiId() == INumber.API_ID_CALLER)) {
-                        break;
-                    }
-
-                    // stop if only offline is enabled
-                    if (mSetting.isOnlyOffline() || forceOffline) {
-                        break;
-                    }
-
-                    // get online number info
-                    INumber iOnlineNumber = mPhoneNumber.getNumber(number);
-
-                    if (iOnlineNumber != null && iOnlineNumber.isValid()) {
-                        if (!iOnlineNumber.hasGeo() && iNumber != null) {
-                            iOnlineNumber.patch(iNumber);
+                        // stop if the number is special
+                        if (iNumber != null && (iNumber.getApiId() == INumber.API_ID_SPECIAL
+                                || iNumber.getApiId() == INumber.API_ID_CALLER)) {
+                            break;
                         }
-                        subscriber.onNext(handleResponse(iOnlineNumber, true));
-                    } else {
-                        if (iNumber != null) {
-                            subscriber.onNext(handlePatch(iNumber));
+
+                        // stop if only offline is enabled
+                        if (mSetting.isOnlyOffline() || forceOffline) {
+                            break;
+                        }
+
+                        // get online number info
+                        INumber iOnlineNumber = mPhoneNumber.getNumber(number);
+
+                        if (iOnlineNumber != null && iOnlineNumber.isValid()) {
+                            if (!iOnlineNumber.hasGeo() && iNumber != null) {
+                                iOnlineNumber.patch(iNumber);
+                            }
+                            subscriber.onNext(handleResponse(iOnlineNumber, true));
                         } else {
-                            subscriber.onNext(Caller.empty(true));
+                            if (iNumber != null) {
+                                subscriber.onNext(handlePatch(iNumber));
+                            } else {
+                                subscriber.onNext(Caller.empty(true));
+                            }
                         }
-                    }
-                } while (false);
-
+                    } while (false);
+                } catch (Exception e) {
+                    Log.e(TAG, "getCaller failed: " + e.getMessage());
+                    e.printStackTrace();
+                }
                 subscriber.onCompleted();
             }
         }).doOnNext(new Action1<Caller>() {
