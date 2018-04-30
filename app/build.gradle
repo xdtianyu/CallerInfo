@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+def gitTag = 'git describe --abbrev=0 --tags'
+        .execute([], project.rootDir).text.trim().replaceAll("v", "")
+def gitTagCount = Integer.parseInt('git rev-list --tags --no-walk --count'
+        .execute([], project.rootDir).text.trim())
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -10,8 +16,11 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
-        versionCode project.VERSION_CODE.toInteger()
-        versionName project.VERSION_NAME
+        versionCode gitTagCount
+        versionName gitTag
+
+        buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
+
         setProperty("archivesBaseName", "CallerInfo-v$versionName")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
