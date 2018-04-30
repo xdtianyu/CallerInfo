@@ -141,6 +141,12 @@ public class DatabaseImpl implements Database {
         Observable.just(caller).observeOn(Schedulers.io()).subscribe(new Action1<Caller>() {
             @Override
             public void call(Caller caller) {
+                if (mDataStore.count(Caller.class).where(
+                        Caller.NUMBER.eq(caller.getNumber())).get().value()
+                        == 1) {
+                    mDataStore.delete(Caller.class).where(
+                            Caller.NUMBER.eq(caller.getNumber()));
+                }
                 mDataStore.upsert(caller);
             }
         });
@@ -181,6 +187,12 @@ public class DatabaseImpl implements Database {
                 .subscribe(new Action1<MarkedRecord>() {
                     @Override
                     public void call(MarkedRecord markedRecord) {
+                        if (mDataStore.count(MarkedRecord.class).where(
+                                MarkedRecord.NUMBER.eq(markedRecord.getNumber())).get().value()
+                                == 1) {
+                            mDataStore.delete(MarkedRecord.class).where(
+                                    MarkedRecord.NUMBER.eq(markedRecord.getNumber()));
+                        }
                         mDataStore.upsert(markedRecord);
                     }
                 });
