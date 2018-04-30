@@ -1,7 +1,11 @@
 #!/bin/bash
  
 # This script generates environment variables for pull requests and forks.
- 
+
+VERSION_NAME="$(git describe --abbrev=0 --tags)"
+export VERSION_NAME="${VERSION_NAME//v/}"
+export VERSION_CODE="$(git rev-list --tags --no-walk --count)"
+
 if [ -z "$encrypted_75846693d905_key" ] ; then
     # It's running from pull requests or forks, set vars.
      
