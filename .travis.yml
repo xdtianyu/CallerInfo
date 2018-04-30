@@ -10,6 +10,9 @@ android:
 
 jdk: oraclejdk8
 
+git:
+  depth: 9999999
+
 notifications:
   email: false
 
