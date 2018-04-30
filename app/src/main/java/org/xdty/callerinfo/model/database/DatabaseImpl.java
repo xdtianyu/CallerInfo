@@ -163,7 +163,12 @@ public class DatabaseImpl implements Database {
                 .subscribe(new Action1<MarkedRecord>() {
                     @Override
                     public void call(MarkedRecord markedRecord) {
-                        mDataStore.insert(markedRecord);
+                        if (mDataStore.count(MarkedRecord.class).where(
+                                MarkedRecord.NUMBER.eq(markedRecord.getNumber())).get().value() == 1) {
+                            mDataStore.delete(MarkedRecord.class).where(
+                                    MarkedRecord.NUMBER.eq(markedRecord.getNumber()));
+                        }
+                        mDataStore.upsert(markedRecord);
                     }
                 });
     }
