@@ -164,7 +164,8 @@ public class DatabaseImpl implements Database {
                     @Override
                     public void call(MarkedRecord markedRecord) {
                         if (mDataStore.count(MarkedRecord.class).where(
-                                MarkedRecord.NUMBER.eq(markedRecord.getNumber())).get().value() == 1) {
+                                MarkedRecord.NUMBER.eq(markedRecord.getNumber())).get().value()
+                                == 1) {
                             mDataStore.delete(MarkedRecord.class).where(
                                     MarkedRecord.NUMBER.eq(markedRecord.getNumber()));
                         }
@@ -192,6 +193,12 @@ public class DatabaseImpl implements Database {
                 .subscribe(new Action1<MarkedRecord>() {
                     @Override
                     public void call(MarkedRecord markedRecord) {
+                        if (mDataStore.count(Caller.class).where(
+                                Caller.NUMBER.eq(markedRecord.getNumber())).get().value() == 1) {
+                            mDataStore.delete(Caller.class).where(
+                                    Caller.NUMBER.eq(markedRecord.getNumber()));
+                        }
+
                         Caller caller = new Caller();
                         caller.setNumber(markedRecord.getNumber());
                         caller.setName(markedRecord.getTypeName());
