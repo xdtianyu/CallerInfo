@@ -25,9 +25,9 @@ if [ -z "$encrypted_75846693d905_key" ] ; then
     export LEANCLOUD_APP_ID="$TEXT"
     export LEANCLOUD_APP_KEY="$TEXT"
      
-    # Overlay release.jks.enc
+    # Overlay secrets.tar.enc
      
-    # Travis-ci is using 'openssl aes-256-cbc -K 12CF1B5E0D192628AA922230549EEDFD889E6CF7463933C6DABD9A1300FCA23D -iv 66813CF28D04CD129D57436B78DECBA4 -in public.jks.enc -out public.jks -d' to decrypt the file.
-    mv "public.jks.enc" "release.jks.enc"
+    # Travis-ci is using 'openssl aes-256-cbc -K 12CF1B5E0D192628AA922230549EEDFD889E6CF7463933C6DABD9A1300FCA23D -iv 66813CF28D04CD129D57436B78DECBA4 -in public.tar.enc -out public.tar -d' to decrypt the file.
+    mv "public.tar.enc" "secrets.tar.enc"
 fi
      

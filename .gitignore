@@ -51,3 +51,4 @@ manifest.properties
 *.log
 
 google-services.json
+secrets.tar
