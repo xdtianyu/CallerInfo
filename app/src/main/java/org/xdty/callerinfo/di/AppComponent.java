@@ -12,6 +12,7 @@ import org.xdty.callerinfo.presenter.PhoneStatePresenter;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.service.ScheduleService;
 import org.xdty.callerinfo.utils.Alarm;
+import org.xdty.callerinfo.utils.Contact;
 
 import javax.inject.Singleton;
 
@@ -41,4 +42,6 @@ public interface AppComponent {
     void inject(MainBottomPresenter mainBottomPresenter);
 
     void inject(DatabaseImpl database);
+
+    void inject(Contact contact);
 }

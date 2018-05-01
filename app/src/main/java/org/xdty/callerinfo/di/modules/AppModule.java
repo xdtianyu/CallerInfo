@@ -102,7 +102,7 @@ public class AppModule {
     @Singleton
     @Provides
     public Contact provideContact() {
-        return new Contact();
+        return Contact.getInstance();
     }
 
     @Singleton

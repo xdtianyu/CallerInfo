@@ -76,7 +76,7 @@ public class FloatWindow extends StandOutWindow {
                     String CHANNEL_ID = getPackageName();
                     NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                             getResources().getString(R.string.app_name),
-                            NotificationManager.IMPORTANCE_DEFAULT);
+                            NotificationManager.IMPORTANCE_LOW);
                     nm.createNotificationChannel(channel);
 
                     Notification notification = new Notification.Builder(this, CHANNEL_ID)

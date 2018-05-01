@@ -64,6 +64,7 @@ public class IncomingCall extends BroadcastReceiver {
 
             TelephonyManager telephonyManager = (TelephonyManager) sContext
                     .getSystemService(Context.TELEPHONY_SERVICE);
+            telephonyManager.listen(getInstance(), PhoneStateListener.LISTEN_NONE);
             telephonyManager.listen(getInstance(), PhoneStateListener.LISTEN_CALL_STATE);
         }
 

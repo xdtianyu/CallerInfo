@@ -203,11 +203,11 @@ public class PluginService extends Service {
             NotificationManager nm = ((NotificationManager) getSystemService(
                     Context.NOTIFICATION_SERVICE));
             if (nm != null) {
-                String CHANNEL_ID = getPackageName();
+                String CHANNEL_ID = getPackageName() + "." + getClass().getSimpleName();
                 NotificationChannel channel;
                 channel = new NotificationChannel(CHANNEL_ID,
                         getResources().getString(R.string.app_name),
-                        NotificationManager.IMPORTANCE_DEFAULT);
+                        NotificationManager.IMPORTANCE_LOW);
                 nm.createNotificationChannel(channel);
 
                 Notification notification = new Notification.Builder(this, CHANNEL_ID)
