@@ -1,5 +1,7 @@
 package org.xdty.callerinfo.application;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.di.AppComponent;
 import org.xdty.callerinfo.di.DaggerAppComponent;
@@ -21,6 +23,8 @@ public class Application extends android.app.Application {
 
     private static Application sApplication;
 
+    private FirebaseAnalytics mAnalytics;
+
     @Inject
     Setting mSetting;
 
@@ -41,6 +45,9 @@ public class Application extends android.app.Application {
         sApplication = this;
         sAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         sAppComponent.inject(this);
+
+        mAnalytics = FirebaseAnalytics.getInstance(this);
+        mAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
 
         Resource.getInstance().init(Utils.changeLang(this));
 
