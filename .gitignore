@@ -49,3 +49,5 @@ signing.properties
 manifest.properties
 
 *.log
+
+google-services.json
