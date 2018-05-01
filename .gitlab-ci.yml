@@ -4,7 +4,8 @@ before_script:
   - git submodule update --init --recursive
   - source .travis/env.sh
   - source /opt/setup-android-sdk.sh
-  - openssl aes-256-cbc -K $encrypted_75846693d905_key -iv $encrypted_75846693d905_iv -in release.jks.enc -out release.jks -d
+  - openssl aes-256-cbc -K $encrypted_75846693d905_key -iv $encrypted_75846693d905_iv -in secrets.tar.enc -out secrets.tar -d
+  - tar xvf secrets.tar
 stages:
   - build
 build:
