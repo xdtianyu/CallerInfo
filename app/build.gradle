@@ -95,6 +95,7 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
 
     implementation 'com.google.firebase:firebase-core:15.0.0'
+    implementation 'com.tencent.bugly:crashreport:2.6.6'
 
     debugImplementation 'com.facebook.stetho:stetho:1.4.2'
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'

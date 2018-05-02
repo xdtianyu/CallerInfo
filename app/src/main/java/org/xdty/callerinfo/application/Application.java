@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.application;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.di.AppComponent;
@@ -48,6 +49,8 @@ public class Application extends android.app.Application {
 
         mAnalytics = FirebaseAnalytics.getInstance(this);
         mAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
+
+        CrashReport.initCrashReport(getApplicationContext(), "0eaf845a04", true);
 
         Resource.getInstance().init(Utils.changeLang(this));
 
