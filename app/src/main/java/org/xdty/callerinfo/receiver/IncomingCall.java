@@ -1,11 +1,11 @@
 package org.xdty.callerinfo.receiver;
 
+import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -27,30 +27,53 @@ public class IncomingCall extends BroadcastReceiver {
 
     private final static String TAG = IncomingCall.class.getSimpleName();
 
+    private PhoneStateListener mPhoneStateListener;
+
+    public IncomingCall() {
+        mPhoneStateListener = PhoneStateListener.getInstance();
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
+        mPhoneStateListener.setContext(context);
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "onReceive: " + intent.toString() + " " +
                     Utils.bundleToString(intent.getExtras()));
         }
 
-        if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
-            IncomingCallListener.getInstance().setOutGoingNumber(
-                    intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER));
+        String action = intent.getAction();
+        if (action != null) {
+            switch (action) {
+                case Intent.ACTION_NEW_OUTGOING_CALL:
+                    if (intent.getExtras() != null) {
+                        mPhoneStateListener.setOutGoingNumber(
+                                intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER));
+                    }
+                    break;
+                case TelephonyManager.ACTION_PHONE_STATE_CHANGED:
+                    if (intent.getExtras() != null) {
+                        String state = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
+                        String number = intent.getExtras()
+                                .getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
+                        mPhoneStateListener.onCallStateChanged(state, number);
+                    }
+                    break;
+            }
         }
+
     }
 
-    public static class IncomingCallListener extends PhoneStateListener implements
+    public final static class PhoneStateListener implements
             PhoneStateContract.View {
-
-        private static Context sContext;
 
         @Inject
         PhoneStateContract.Presenter mPresenter;
 
         @Inject Window mWindow;
 
-        private IncomingCallListener() {
+        private Context mContext;
+
+        private PhoneStateListener() {
             DaggerPhoneStatusComponent.builder()
                     .appModule(new AppModule(Application.getApplication()))
                     .phoneStatusModule(new PhoneStatusModule(this))
@@ -59,26 +82,30 @@ public class IncomingCall extends BroadcastReceiver {
             mPresenter.start();
         }
 
-        public static void init(Context context) {
-            sContext = context.getApplicationContext();
-
-            TelephonyManager telephonyManager = (TelephonyManager) sContext
-                    .getSystemService(Context.TELEPHONY_SERVICE);
-            telephonyManager.listen(getInstance(), PhoneStateListener.LISTEN_NONE);
-            telephonyManager.listen(getInstance(), PhoneStateListener.LISTEN_CALL_STATE);
-        }
-
-        public static IncomingCallListener getInstance() {
-            return SingletonHelper.INSTANCE;
+        public void setContext(Context context) {
+            mContext = context.getApplicationContext();
         }
 
         private void setOutGoingNumber(String number) {
             mPresenter.setOutGoingNumber(number);
-            onCallStateChanged(TelephonyManager.CALL_STATE_OFFHOOK, number);
+            onCallStateChanged(TelephonyManager.EXTRA_STATE_OFFHOOK, number);
         }
 
-        @Override
         public void onCallStateChanged(int state, String number) {
+            switch (state) {
+                case TelephonyManager.CALL_STATE_RINGING:
+                    onCallStateChanged(TelephonyManager.EXTRA_STATE_RINGING, number);
+                    break;
+                case TelephonyManager.CALL_STATE_OFFHOOK:
+                    onCallStateChanged(TelephonyManager.EXTRA_STATE_OFFHOOK, number);
+                    break;
+                case TelephonyManager.CALL_STATE_IDLE:
+                    onCallStateChanged(TelephonyManager.EXTRA_STATE_IDLE, number);
+                    break;
+            }
+        }
+
+        public void onCallStateChanged(String state, String number) {
 
             if (BuildConfig.DEBUG) {
                 Log.d(TAG, "onCallStateChanged: " + state + " : " + number);
@@ -90,13 +117,13 @@ public class IncomingCall extends BroadcastReceiver {
             }
 
             switch (state) {
-                case TelephonyManager.CALL_STATE_RINGING:
+                case "RINGING":
                     mPresenter.handleRinging(number);
                     break;
-                case TelephonyManager.CALL_STATE_OFFHOOK:
+                case "OFFHOOK":
                     mPresenter.handleOffHook(number);
                     break;
-                case TelephonyManager.CALL_STATE_IDLE:
+                case "IDLE":
                     mPresenter.handleIdle(number);
                     break;
             }
@@ -139,13 +166,13 @@ public class IncomingCall extends BroadcastReceiver {
 
         @Override
         public Context getContext() {
-            return sContext.getApplicationContext();
+            return mContext;
         }
 
         @Override
         public void showMark(String number) {
 
-            KeyguardManager keyguardManager = (KeyguardManager) sContext.getSystemService(
+            KeyguardManager keyguardManager = (KeyguardManager) getContext().getSystemService(
                     Context.KEYGUARD_SERVICE);
 
             boolean isKeyguardLocked;
@@ -157,14 +184,19 @@ public class IncomingCall extends BroadcastReceiver {
             }
 
             if (isKeyguardLocked) {
-                Utils.showMarkNotification(sContext, number);
+                Utils.showMarkNotification(getContext(), number);
             } else {
-                Utils.startMarkActivity(sContext, number);
+                Utils.startMarkActivity(getContext(), number);
             }
         }
 
-        private static class SingletonHelper {
-            private final static IncomingCallListener INSTANCE = new IncomingCallListener();
+        public static PhoneStateListener getInstance() {
+            return SingletonHelper.sINSTANCE;
+        }
+
+        private final static class SingletonHelper {
+            @SuppressLint("StaticFieldLeak")
+            private final static PhoneStateListener sINSTANCE = new PhoneStateListener();
         }
     }
 }

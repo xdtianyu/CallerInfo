@@ -12,6 +12,6 @@ import dagger.Component;
 @Component(modules = { PhoneStatusModule.class, AppModule.class })
 public interface PhoneStatusComponent {
 
-    void inject(IncomingCall.IncomingCallListener listener);
+    void inject(IncomingCall.PhoneStateListener phoneStateListener);
 
 }

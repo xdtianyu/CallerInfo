@@ -51,12 +51,12 @@ import static org.xdty.callerinfo.TestUtils.withTransparency;
 @LargeTest
 public class SettingsActivityTest extends ActivityTestBase {
 
-    IncomingCall.IncomingCallListener mIncomingCallListener;
+    IncomingCall.PhoneStateListener mIncomingCallListener;
 
     @Override
     public void beforeTest() {
         navigateToSetting();
-        mIncomingCallListener = IncomingCall.IncomingCallListener.getInstance();
+        mIncomingCallListener = IncomingCall.PhoneStateListener.getInstance();
     }
 
     public void navigateToSetting() {

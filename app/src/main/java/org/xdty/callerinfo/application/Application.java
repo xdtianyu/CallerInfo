@@ -8,7 +8,6 @@ import org.xdty.callerinfo.di.AppComponent;
 import org.xdty.callerinfo.di.DaggerAppComponent;
 import org.xdty.callerinfo.di.modules.AppModule;
 import org.xdty.callerinfo.model.setting.Setting;
-import org.xdty.callerinfo.receiver.IncomingCall.IncomingCallListener;
 import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.callerinfo.utils.Resource;
 import org.xdty.callerinfo.utils.Utils;
@@ -51,8 +50,6 @@ public class Application extends android.app.Application {
         mAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
 
         Resource.getInstance().init(Utils.changeLang(this));
-
-        IncomingCallListener.init(this);
 
         if (mSetting.isCatchCrash() || BuildConfig.DEBUG) {
             CustomActivityOnCrash.install(this);
