@@ -147,7 +147,7 @@ public class DatabaseImpl implements Database {
                     mDataStore.delete(Caller.class).where(
                             Caller.NUMBER.eq(caller.getNumber()));
                 }
-                mDataStore.upsert(caller);
+                mDataStore.insert(caller);
             }
         });
     }
@@ -175,7 +175,7 @@ public class DatabaseImpl implements Database {
                             mDataStore.delete(MarkedRecord.class).where(
                                     MarkedRecord.NUMBER.eq(markedRecord.getNumber()));
                         }
-                        mDataStore.upsert(markedRecord);
+                        mDataStore.insert(markedRecord);
                     }
                 });
     }
@@ -193,7 +193,7 @@ public class DatabaseImpl implements Database {
                             mDataStore.delete(MarkedRecord.class).where(
                                     MarkedRecord.NUMBER.eq(markedRecord.getNumber()));
                         }
-                        mDataStore.upsert(markedRecord);
+                        mDataStore.insert(markedRecord);
                     }
                 });
     }
@@ -217,7 +217,7 @@ public class DatabaseImpl implements Database {
                         caller.setLastUpdate(markedRecord.getTime());
                         caller.setType("report");
                         caller.setOffline(false);
-                        mDataStore.upsert(caller);
+                        mDataStore.insert(caller);
                     }
                 });
     }
