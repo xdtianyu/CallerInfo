@@ -50,14 +50,14 @@ public class Application extends android.app.Application {
         mAnalytics = FirebaseAnalytics.getInstance(this);
         mAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
 
-        CrashReport.initCrashReport(getApplicationContext(), "0eaf845a04", true);
-
         Resource.getInstance().init(Utils.changeLang(this));
 
         IncomingCallListener.init(this);
 
         if (mSetting.isCatchCrash() || BuildConfig.DEBUG) {
             CustomActivityOnCrash.install(this);
+        } else {
+            CrashReport.initCrashReport(getApplicationContext(), "0eaf845a04", false);
         }
 
         mSetting.fix();
