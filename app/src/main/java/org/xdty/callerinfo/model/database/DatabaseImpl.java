@@ -143,7 +143,7 @@ public class DatabaseImpl implements Database {
             public void call(Caller caller) {
                 if (mDataStore.count(Caller.class).where(
                         Caller.NUMBER.eq(caller.getNumber())).get().value()
-                        == 1) {
+                        > 0) {
                     mDataStore.delete(Caller.class).where(
                             Caller.NUMBER.eq(caller.getNumber()));
                 }
@@ -171,7 +171,7 @@ public class DatabaseImpl implements Database {
                     public void call(MarkedRecord markedRecord) {
                         if (mDataStore.count(MarkedRecord.class).where(
                                 MarkedRecord.NUMBER.eq(markedRecord.getNumber())).get().value()
-                                == 1) {
+                                > 0) {
                             mDataStore.delete(MarkedRecord.class).where(
                                     MarkedRecord.NUMBER.eq(markedRecord.getNumber()));
                         }
@@ -189,7 +189,7 @@ public class DatabaseImpl implements Database {
                     public void call(MarkedRecord markedRecord) {
                         if (mDataStore.count(MarkedRecord.class).where(
                                 MarkedRecord.NUMBER.eq(markedRecord.getNumber())).get().value()
-                                == 1) {
+                                > 0) {
                             mDataStore.delete(MarkedRecord.class).where(
                                     MarkedRecord.NUMBER.eq(markedRecord.getNumber()));
                         }
@@ -206,7 +206,7 @@ public class DatabaseImpl implements Database {
                     @Override
                     public void call(MarkedRecord markedRecord) {
                         if (mDataStore.count(Caller.class).where(
-                                Caller.NUMBER.eq(markedRecord.getNumber())).get().value() == 1) {
+                                Caller.NUMBER.eq(markedRecord.getNumber())).get().value() > 0) {
                             mDataStore.delete(Caller.class).where(
                                     Caller.NUMBER.eq(markedRecord.getNumber()));
                         }
