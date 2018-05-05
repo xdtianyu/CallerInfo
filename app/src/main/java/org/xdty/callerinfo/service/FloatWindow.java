@@ -64,26 +64,6 @@ public class FloatWindow extends StandOutWindow {
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
             Application.getAppComponent().inject(this);
-
-            //if (Build.VERSION.SDK_INT >= 26) {
-            //
-            //    NotificationManager nm = ((NotificationManager) getSystemService(
-            //            Context.NOTIFICATION_SERVICE));
-            //    if (nm != null) {
-            //        String CHANNEL_ID = getPackageName();
-            //        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-            //                getResources().getString(R.string.app_name),
-            //                NotificationManager.IMPORTANCE_LOW);
-            //        nm.createNotificationChannel(channel);
-            //
-            //        Notification notification = new Notification.Builder(this, CHANNEL_ID)
-            //                .setContentTitle("")
-            //                .setChannelId(CHANNEL_ID)
-            //                .setContentText("").build();
-            //        startForeground(1, notification);
-            //    }
-            //}
-
             return super.onStartCommand(intent, flags, startId);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
