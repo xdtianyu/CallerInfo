@@ -3,7 +3,6 @@ package org.xdty.callerinfo.application;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.tencent.bugly.crashreport.CrashReport;
 
-import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.di.AppComponent;
 import org.xdty.callerinfo.di.DaggerAppComponent;
 import org.xdty.callerinfo.di.modules.AppModule;
@@ -51,7 +50,7 @@ public class Application extends android.app.Application {
 
         Resource.getInstance().init(Utils.changeLang(this));
 
-        if (mSetting.isCatchCrash() || BuildConfig.DEBUG) {
+        if (mSetting.isCatchCrash()) {
             CustomActivityOnCrash.install(this);
         } else {
             CrashReport.initCrashReport(getApplicationContext(), "0eaf845a04", false);
