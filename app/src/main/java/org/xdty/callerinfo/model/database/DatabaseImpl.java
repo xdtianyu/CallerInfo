@@ -141,13 +141,21 @@ public class DatabaseImpl implements Database {
         Observable.just(caller).observeOn(Schedulers.io()).subscribe(new Action1<Caller>() {
             @Override
             public void call(Caller caller) {
-                if (mDataStore.count(Caller.class).where(
-                        Caller.NUMBER.eq(caller.getNumber())).get().value()
-                        > 0) {
-                    mDataStore.delete(Caller.class).where(
-                            Caller.NUMBER.eq(caller.getNumber()));
+                Caller c = mDataStore.select(Caller.class).where(
+                        Caller.NUMBER.eq(caller.getNumber())).get().firstOr(caller);
+                if (c != caller) {
+                    c.setCallerSource(caller.getCallerSource());
+                    c.setCallerType(caller.getCallerType());
+                    c.setCity(caller.getCity());
+                    c.setName(caller.getName());
+                    c.setName(caller.getName());
+                    c.setType(caller.getType().getText());
+                    c.setCount(caller.getCount());
+                    c.setProvince(caller.getProvince());
+                    c.setOperators(caller.getOperators());
+                    c.setLastUpdate(caller.getLastUpdate());
                 }
-                mDataStore.insert(caller);
+                mDataStore.upsert(c);
             }
         });
     }
@@ -164,20 +172,7 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void saveMarked(MarkedRecord markedRecord) {
-        Observable.just(markedRecord)
-                .observeOn(Schedulers.io())
-                .subscribe(new Action1<MarkedRecord>() {
-                    @Override
-                    public void call(MarkedRecord markedRecord) {
-                        if (mDataStore.count(MarkedRecord.class).where(
-                                MarkedRecord.NUMBER.eq(markedRecord.getNumber())).get().value()
-                                > 0) {
-                            mDataStore.delete(MarkedRecord.class).where(
-                                    MarkedRecord.NUMBER.eq(markedRecord.getNumber()));
-                        }
-                        mDataStore.insert(markedRecord);
-                    }
-                });
+        updateMarked(markedRecord);
     }
 
     @Override
@@ -187,13 +182,21 @@ public class DatabaseImpl implements Database {
                 .subscribe(new Action1<MarkedRecord>() {
                     @Override
                     public void call(MarkedRecord markedRecord) {
-                        if (mDataStore.count(MarkedRecord.class).where(
-                                MarkedRecord.NUMBER.eq(markedRecord.getNumber())).get().value()
-                                > 0) {
-                            mDataStore.delete(MarkedRecord.class).where(
-                                    MarkedRecord.NUMBER.eq(markedRecord.getNumber()));
+                        MarkedRecord record = mDataStore.select(MarkedRecord.class)
+                                .where(MarkedRecord.NUMBER.eq(markedRecord.getNumber()))
+                                .get()
+                                .firstOr(markedRecord);
+
+                        if (record != markedRecord) {
+                            record.setCount(markedRecord.getCount());
+                            record.setReported(false);
+                            record.setSource(markedRecord.getSource());
+                            record.setTime(markedRecord.getTime());
+                            record.setType(markedRecord.getType());
+                            record.setTypeName(markedRecord.getTypeName());
                         }
-                        mDataStore.insert(markedRecord);
+
+                        mDataStore.upsert(record);
                     }
                 });
     }
@@ -205,19 +208,18 @@ public class DatabaseImpl implements Database {
                 .subscribe(new Action1<MarkedRecord>() {
                     @Override
                     public void call(MarkedRecord markedRecord) {
-                        if (mDataStore.count(Caller.class).where(
-                                Caller.NUMBER.eq(markedRecord.getNumber())).get().value() > 0) {
-                            mDataStore.delete(Caller.class).where(
-                                    Caller.NUMBER.eq(markedRecord.getNumber()));
-                        }
-
-                        Caller caller = new Caller();
+                        Caller caller = mDataStore.select(Caller.class)
+                                .where(
+                                        Caller.NUMBER.eq(markedRecord.getNumber()))
+                                .get()
+                                .firstOr(new Caller());
                         caller.setNumber(markedRecord.getNumber());
                         caller.setName(markedRecord.getTypeName());
                         caller.setLastUpdate(markedRecord.getTime());
                         caller.setType("report");
                         caller.setOffline(false);
-                        mDataStore.insert(caller);
+
+                        mDataStore.upsert(caller);
                     }
                 });
     }
@@ -343,12 +345,21 @@ public class DatabaseImpl implements Database {
                 })
                 .subscribe(new Action1<MarkedRecord>() {
                     @Override
-                    public void call(MarkedRecord record) {
-                        if (mDataStore.count(MarkedRecord.class).where(
-                                MarkedRecord.NUMBER.eq(record.getNumber())).get().value() == 1) {
-                            mDataStore.delete(MarkedRecord.class).where(
-                                    MarkedRecord.NUMBER.eq(record.getNumber()));
+                    public void call(MarkedRecord markedRecord) {
+                        MarkedRecord record = mDataStore.select(MarkedRecord.class)
+                                .where(MarkedRecord.NUMBER.eq(markedRecord.getNumber()))
+                                .get()
+                                .firstOr(markedRecord);
+
+                        if (record != markedRecord) {
+                            record.setCount(markedRecord.getCount());
+                            record.setReported(false);
+                            record.setSource(markedRecord.getSource());
+                            record.setTime(markedRecord.getTime());
+                            record.setType(markedRecord.getType());
+                            record.setTypeName(markedRecord.getTypeName());
                         }
+
                         mDataStore.upsert(record);
                     }
                 });
