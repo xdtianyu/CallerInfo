@@ -1,5 +1,7 @@
 package org.xdty.callerinfo.presenter;
 
+import android.util.Log;
+
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.MainBottomContact;
 import org.xdty.callerinfo.data.CallerDataSource;
@@ -14,6 +16,8 @@ import org.xdty.callerinfo.utils.Utils;
 import javax.inject.Inject;
 
 public class MainBottomPresenter implements MainBottomContact.Presenter {
+
+    private static final String TAG = MainBottomPresenter.class.getSimpleName();
 
     @Inject
     Setting mSetting;
@@ -36,7 +40,11 @@ public class MainBottomPresenter implements MainBottomContact.Presenter {
 
     @Override
     public void start() {
-        mView.init(mInCall, mCaller);
+        if (mInCall != null) {
+            mView.init(mInCall, mCaller);
+        } else {
+            Log.e(TAG, "mInCall is null");
+        }
     }
 
     @Override

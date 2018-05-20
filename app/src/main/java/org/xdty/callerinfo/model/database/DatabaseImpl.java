@@ -84,7 +84,11 @@ public class DatabaseImpl implements Database {
         Observable.just(inCall).observeOn(Schedulers.io()).subscribe(new Action1<InCall>() {
             @Override
             public void call(InCall inCall) {
-                mDataStore.delete(inCall);
+                try {
+                    mDataStore.delete(inCall);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
