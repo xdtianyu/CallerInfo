@@ -74,8 +74,10 @@ public final class Contact {
                         String number = cursor.getString(
                                 cursor.getColumnIndex(
                                         ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        number = number.replaceAll("[^\\d]", "");
-                        contactsMap.put(number, name);
+                        if (number != null) {
+                            number = number.replaceAll("[^\\d]", "");
+                            contactsMap.put(number, name);
+                        }
                     }
                     cursor.close();
                 }
