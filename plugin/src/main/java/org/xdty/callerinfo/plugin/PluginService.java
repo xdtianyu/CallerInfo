@@ -85,11 +85,15 @@ public class PluginService extends Service {
                         return;
                     }
                     ContentValues content = new ContentValues();
-                    content.put(CallLog.Calls.NUMBER, mName + " (" + mNumber + ")");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        content.put(CallLog.Calls.GEOCODED_LOCATION, mName);
+                    } else {
+                        content.put(CallLog.Calls.NUMBER, mName + " (" + mNumber + ")");
+                    }
                     getContentResolver().update(CallLog.Calls.CONTENT_URI, content,
                             CallLog.Calls.NUMBER + "=?", new String[] { mNumber });
                 }
-            }, 500);
+            }, 1000);
 
         }
 
