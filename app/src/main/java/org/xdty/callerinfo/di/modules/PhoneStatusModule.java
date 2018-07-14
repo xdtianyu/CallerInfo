@@ -3,6 +3,8 @@ package org.xdty.callerinfo.di.modules;
 import org.xdty.callerinfo.contract.PhoneStateContract;
 import org.xdty.callerinfo.presenter.PhoneStatePresenter;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -20,6 +22,7 @@ public class PhoneStatusModule {
         return mView;
     }
 
+    @Singleton
     @Provides
     PhoneStateContract.Presenter providePresenter() {
         return new PhoneStatePresenter(mView);

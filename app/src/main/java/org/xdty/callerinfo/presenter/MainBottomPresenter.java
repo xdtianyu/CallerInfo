@@ -35,7 +35,7 @@ public class MainBottomPresenter implements MainBottomContact.Presenter {
 
     public MainBottomPresenter(MainBottomContact.View view) {
         mView = view;
-        Application.getAppComponent().inject(this);
+        Application.getApplication().getAppComponent().inject(this);
     }
 
     @Override

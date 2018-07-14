@@ -39,7 +39,7 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
     private List<String> mPutList;
 
     public ScheduleService() {
-        Application.getAppComponent().inject(this);
+        Application.getApplication().getAppComponent().inject(this);
     }
 
     @Override

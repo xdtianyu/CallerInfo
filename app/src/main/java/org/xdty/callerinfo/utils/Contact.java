@@ -26,7 +26,7 @@ public final class Contact {
     private long lastUpdateTime;
 
     private Contact() {
-        Application.getAppComponent().inject(this);
+        Application.getApplication().getAppComponent().inject(this);
         loadContactCache();
     }
 

@@ -119,7 +119,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            Application.getAppComponent().inject(this);
+            Application.getApplication().getAppComponent().inject(this);
 
             addPreferencesFromResource(R.xml.settings);
 

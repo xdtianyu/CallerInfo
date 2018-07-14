@@ -32,7 +32,7 @@ import static org.xdty.callerinfo.utils.Constants.DB_VERSION;
 @Module
 public class AppModule {
 
-    private Application app;
+    protected Application app;
 
     public AppModule(Application application) {
         app = application;

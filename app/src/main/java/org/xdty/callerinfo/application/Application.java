@@ -18,9 +18,9 @@ import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 public class Application extends android.app.Application {
     public final static String TAG = Application.class.getSimpleName();
 
-    private static AppComponent sAppComponent;
+    protected AppComponent mAppComponent;
 
-    private static Application sApplication;
+    protected static Application sApplication;
 
     private FirebaseAnalytics mAnalytics;
 
@@ -30,8 +30,8 @@ public class Application extends android.app.Application {
     @Inject
     Alarm mAlarm;
 
-    public static AppComponent getAppComponent() {
-        return sAppComponent;
+    public AppComponent getAppComponent() {
+        return mAppComponent;
     }
 
     public static Application getApplication() {
@@ -42,8 +42,13 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         sApplication = this;
-        sAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
-        sAppComponent.inject(this);
+        init();
+    }
+
+    protected void init() {
+        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
+
+        mAppComponent.inject(this);
 
         mAnalytics = FirebaseAnalytics.getInstance(this);
         mAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);

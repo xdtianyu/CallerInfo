@@ -74,12 +74,17 @@ public class IncomingCall extends BroadcastReceiver {
         private Context mContext;
 
         private PhoneStateListener() {
-            DaggerPhoneStatusComponent.builder()
-                    .appModule(new AppModule(Application.getApplication()))
-                    .phoneStatusModule(new PhoneStatusModule(this))
-                    .build()
-                    .inject(this);
-            mPresenter.start();
+            try {
+
+                DaggerPhoneStatusComponent.builder()
+                        .appModule(new AppModule(Application.getApplication()))
+                        .phoneStatusModule(new PhoneStatusModule(this))
+                        .build()
+                        .inject(this);
+                mPresenter.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         public void setContext(Context context) {

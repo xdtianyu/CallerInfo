@@ -43,7 +43,7 @@ public class MarkActivity extends BaseActivity implements DialogInterface.OnDism
         super.onCreate(savedInstanceState);
         setTitle("");
 
-        Application.getAppComponent().inject(this);
+        Application.getApplication().getAppComponent().inject(this);
     }
 
     @Override

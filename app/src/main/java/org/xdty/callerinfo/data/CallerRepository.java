@@ -64,7 +64,7 @@ public class CallerRepository implements CallerDataSource {
         mCallerMap = Collections.synchronizedMap(new HashMap<String, Caller>());
         mErrorCache = Collections.synchronizedMap(new HashMap<String, Long>());
         mLoadingCache = Collections.synchronizedSet(new HashSet<String>());
-        Application.getAppComponent().inject(this);
+        Application.getApplication().getAppComponent().inject(this);
     }
 
     public static String fixNumber(String number) {

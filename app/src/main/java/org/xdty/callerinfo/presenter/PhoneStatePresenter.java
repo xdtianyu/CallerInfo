@@ -59,7 +59,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
     public PhoneStatePresenter(PhoneStateContract.View view) {
         mView = view;
         mCallRecord = new CallRecord();
-        Application.getAppComponent().inject(this);
+        Application.getApplication().getAppComponent().inject(this);
     }
 
     @Override

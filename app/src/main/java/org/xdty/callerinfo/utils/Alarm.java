@@ -23,7 +23,7 @@ public final class Alarm {
     Application mApplication;
 
     public Alarm() {
-        Application.getAppComponent().inject(this);
+        Application.getApplication().getAppComponent().inject(this);
     }
 
     public void alarm() {

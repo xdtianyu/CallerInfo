@@ -47,7 +47,7 @@ public class MainPresenter implements MainContract.Presenter,
 
     public MainPresenter(MainContract.View view) {
         mView = view;
-        Application.getAppComponent().inject(this);
+        Application.getApplication().getAppComponent().inject(this);
     }
 
     @Override
