@@ -80,8 +80,7 @@ public class PermissionImpl implements Permission {
             int requestCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (context instanceof Activity) {
-                ((Activity) context).requestPermissions(
-                        new String[] { Manifest.permission.READ_PHONE_STATE }, requestCode);
+                ((Activity) context).requestPermissions(permissions, requestCode);
             }
         }
     }

@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -57,6 +59,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     public final static int REQUEST_CODE_OVERLAY_PERMISSION = 1001;
     public final static int REQUEST_CODE_ASK_PERMISSIONS = 1002;
+    public final static int REQUEST_CODE_ASK_CALL_LOG_PERMISSIONS = 1003;
     private final static String TAG = MainActivity.class.getSimpleName();
 
     @Inject
@@ -227,6 +230,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         mPresenter.start();
     }
 
+    @SuppressLint("InlinedApi")
     @Override
     protected void onStart() {
         super.onStart();
@@ -240,6 +244,16 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             mPermission.requestPermissions(this,
                     new String[] { Manifest.permission.READ_PHONE_STATE },
                     REQUEST_CODE_ASK_PERMISSIONS);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            res = mPresenter.checkPermission(Manifest.permission.READ_CALL_LOG);
+
+            if (res != PackageManager.PERMISSION_GRANTED) {
+                mPermission.requestPermissions(this,
+                        new String[] { Manifest.permission.READ_CALL_LOG },
+                        REQUEST_CODE_ASK_CALL_LOG_PERMISSIONS);
+            }
         }
     }
 
@@ -279,12 +293,13 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
+            case REQUEST_CODE_ASK_CALL_LOG_PERMISSIONS:
                 if (grantResults.length == 0) {
                     Log.e(TAG, "grantResults is empty!");
                     return;
                 }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(MainActivity.this, "READ_PHONE_STATE Denied", Toast.LENGTH_SHORT)
+                    Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT)
                             .show();
                 }
                 break;
