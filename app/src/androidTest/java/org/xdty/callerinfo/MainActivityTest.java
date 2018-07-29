@@ -68,12 +68,6 @@ import static org.xdty.callerinfo.TestUtils.swipeUp;
 @SdkSuppress(minSdkVersion = 18)
 public class MainActivityTest extends ActivityTestBase {
 
-    @Before
-    public void setup() {
-        IdlingPolicies.setMasterPolicyTimeout(3, TimeUnit.SECONDS);
-        IdlingPolicies.setIdlingResourceTimeout(3, TimeUnit.SECONDS);
-    }
-
     @Test
     public void testEmptyList() {
         UiObject2 list = mDevice.wait(Until.findObject(By.res(BASIC_PACKAGE, "history_list")), 500);
