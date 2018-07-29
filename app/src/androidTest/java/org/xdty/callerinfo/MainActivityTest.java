@@ -2,6 +2,9 @@ package org.xdty.callerinfo;
 
 import android.content.ComponentName;
 import android.os.SystemClock;
+import android.support.test.espresso.FailureHandler;
+import android.support.test.espresso.IdlingPolicies;
+import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
@@ -12,14 +15,19 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.xdty.callerinfo.activity.SettingsActivity;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.utils.Utils;
+
+import java.util.concurrent.TimeUnit;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -59,6 +67,12 @@ import static org.xdty.callerinfo.TestUtils.swipeUp;
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
 public class MainActivityTest extends ActivityTestBase {
+
+    @Before
+    public void setup() {
+        IdlingPolicies.setMasterPolicyTimeout(3, TimeUnit.SECONDS);
+        IdlingPolicies.setIdlingResourceTimeout(3, TimeUnit.SECONDS);
+    }
 
     @Test
     public void testEmptyList() {
@@ -206,6 +220,13 @@ public class MainActivityTest extends ActivityTestBase {
         onView(isAssignableFrom(ImageButton.class)).perform(click());
         onView(withId(R.id.window_layout)).inRoot(
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .withFailureHandler(
+                        new FailureHandler() {
+                            @Override
+                            public void handle(Throwable error, Matcher<View> viewMatcher) {
+                                assertTrue(error instanceof NoMatchingRootException);
+                            }
+                        })
                 .check(doesNotExist());
         onView(withId(R.id.history_list)).check(matches(isDisplayed()));
     }
@@ -246,6 +267,13 @@ public class MainActivityTest extends ActivityTestBase {
                 .perform(click());
         onView(withId(R.id.window_layout)).inRoot(
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .withFailureHandler(
+                        new FailureHandler() {
+                            @Override
+                            public void handle(Throwable error, Matcher<View> viewMatcher) {
+                                assertTrue(error instanceof NoMatchingRootException);
+                            }
+                        })
                 .check(doesNotExist());
     }
 
@@ -262,7 +290,6 @@ public class MainActivityTest extends ActivityTestBase {
         mDevice.openNotification();
         mDevice.wait(Until.hasObject(By.pkg("com.android.systemui")), 10000);
         UiSelector notificationStackScroller = new UiSelector().packageName("com.android.systemui")
-                .className("android.view.ViewGroup")
                 .resourceId("com.android.systemui:id/notification_stack_scroller");
         UiObject notificationStackScrollerUiObject = mDevice.findObject(notificationStackScroller);
         assertTrue(notificationStackScrollerUiObject.exists());
@@ -271,8 +298,16 @@ public class MainActivityTest extends ActivityTestBase {
         UiObject notify = notificationStackScrollerUiObject.getChild(new UiSelector().text(text));
         assertTrue(notify.exists());
         notify.click();
+        SystemClock.sleep(2000);
         onView(withId(R.id.window_layout)).inRoot(
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .withFailureHandler(
+                        new FailureHandler() {
+                            @Override
+                            public void handle(Throwable error, Matcher<View> viewMatcher) {
+                                assertTrue(error instanceof NoMatchingRootException);
+                            }
+                        })
                 .check(doesNotExist());
     }
 
@@ -323,6 +358,9 @@ public class MainActivityTest extends ActivityTestBase {
         mDatabase.saveInCall(inCall);
 
         onView(withId(R.id.swipe_refresh_layout)).perform(swipeDown());
+
+        SystemClock.sleep(500);
+
         onView(withId(R.id.history_list)).check(
                 matches(atPosition(0, hasDescendant(withText("中国电信客服")))));
 

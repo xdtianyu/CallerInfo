@@ -1,6 +1,8 @@
 package org.xdty.callerinfo;
 
 import android.os.SystemClock;
+import android.support.test.espresso.FailureHandler;
+import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.filters.LargeTest;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
@@ -10,7 +12,9 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
 import android.telephony.TelephonyManager;
+import android.view.View;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.xdty.callerinfo.receiver.IncomingCall;
@@ -403,6 +407,13 @@ public class SettingsActivityTest extends ActivityTestBase {
         mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_OFFHOOK, "10086");
         onView(withId(R.id.window_layout)).inRoot(
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .withFailureHandler(
+                        new FailureHandler() {
+                            @Override
+                            public void handle(Throwable error, Matcher<View> viewMatcher) {
+                                assertTrue(error instanceof NoMatchingRootException);
+                            }
+                        })
                 .check(doesNotExist());
 
         onView(withText(R.string.display_on_outgoing)).perform(click());
@@ -441,6 +452,13 @@ public class SettingsActivityTest extends ActivityTestBase {
         mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_OFFHOOK, "10086");
         onView(withId(R.id.window_layout)).inRoot(
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .withFailureHandler(
+                        new FailureHandler() {
+                            @Override
+                            public void handle(Throwable error, Matcher<View> viewMatcher) {
+                                assertTrue(error instanceof NoMatchingRootException);
+                            }
+                        })
                 .check(doesNotExist());
         mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_IDLE, "10086");
     }
@@ -479,6 +497,13 @@ public class SettingsActivityTest extends ActivityTestBase {
         mDevice.click(500, 500);
         onView(withId(R.id.window_layout)).inRoot(
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .withFailureHandler(
+                        new FailureHandler() {
+                            @Override
+                            public void handle(Throwable error, Matcher<View> viewMatcher) {
+                                assertTrue(error instanceof NoMatchingRootException);
+                            }
+                        })
                 .check(doesNotExist());
 
         mIncomingCallListener.onCallStateChanged(TelephonyManager.CALL_STATE_IDLE, "10086");
