@@ -121,7 +121,7 @@ public class FloatWindow extends StandOutWindow {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 params.type = StandOutLayoutParams.TYPE_APPLICATION_OVERLAY;
             } else {
-                params.type = StandOutLayoutParams.TYPE_PHONE;
+                params.type = StandOutLayoutParams.TYPE_SYSTEM_OVERLAY;
             }
         }
         return params;

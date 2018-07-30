@@ -3,7 +3,6 @@ package org.xdty.callerinfo;
 import android.content.ComponentName;
 import android.os.SystemClock;
 import android.support.test.espresso.FailureHandler;
-import android.support.test.espresso.IdlingPolicies;
 import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.filters.SdkSuppress;
@@ -20,14 +19,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import org.hamcrest.Matcher;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.xdty.callerinfo.activity.SettingsActivity;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.utils.Utils;
-
-import java.util.concurrent.TimeUnit;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
