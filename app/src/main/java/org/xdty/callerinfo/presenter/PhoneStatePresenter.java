@@ -349,6 +349,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
                 String keywords = mSetting.getKeywords();
                 for (String keyword : keywords.split(" ")) {
                     if (mCallRecord.matchName(keyword)) {
+                        Log.d(TAG, "checkAutoHangUp: match keywords");
                         mAutoHangup = true;
                         break;
                     }
@@ -362,19 +363,23 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
                         if (!keyword.startsWith("!")) {
                             // number geo is in black list
                             if (mCallRecord.matchGeo(keyword)) {
+                                Log.d(TAG, "checkAutoHangUp: match geo blacklist");
                                 hangUp = true;
                                 break;
                             }
                         } else if (mCallRecord.matchGeo(keyword.replace("!", ""))) {
                             // number geo is in white list
+                            Log.d(TAG, "checkAutoHangUp: match geo whitelist");
                             hangUp = false;
                             break;
                         } else {
                             // number geo is not in white list
+                            Log.d(TAG, "checkAutoHangUp: match geo is not in white list");
                             hangUp = true;
                         }
                     }
                     if (hangUp) {
+                        Log.d(TAG, "checkAutoHangUp: geo hangup");
                         mAutoHangup = true;
                     }
                 }
@@ -384,6 +389,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
                 if (!numberKeywords.isEmpty()) {
                     for (String keyword : numberKeywords.split(" ")) {
                         if (mCallRecord.matchNumber(keyword)) {
+                            Log.d(TAG, "checkAutoHangUp: match number");
                             mAutoHangup = true;
                         }
                     }
@@ -391,6 +397,7 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
 
                 // hang up phone call
                 if (mAutoHangup && mPluginService != null) {
+                    Log.d(TAG, "hangUpPhoneCall");
                     mPluginService.hangUpPhoneCall();
                 }
             }

@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.provider.CallLog;
+import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -40,6 +41,10 @@ public class PluginService extends Service {
             Log.d(TAG, "checkCallPermission");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 int res = checkSelfPermission(Manifest.permission.CALL_PHONE);
+                if (res == PackageManager.PERMISSION_GRANTED
+                        && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    res = checkSelfPermission(Manifest.permission.ANSWER_PHONE_CALLS);
+                }
                 if (res != PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(PluginService.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -67,6 +72,7 @@ public class PluginService extends Service {
 
         @Override
         public void hangUpPhoneCall() throws RemoteException {
+            checkCallPermission();
             Log.d(TAG, "hangUpPhoneCall: " + killPhoneCall());
         }
 
@@ -253,6 +259,9 @@ public class PluginService extends Service {
 
     private boolean killPhoneCall() {
         try {
+
+            tryEndCall();
+
             TelephonyManager telephonyManager =
                     (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             Class classTelephony = Class.forName(telephonyManager.getClass().getName());
@@ -269,6 +278,22 @@ public class PluginService extends Service {
             return false;
         }
         return true;
+    }
+
+    private void tryEndCall() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            try {
+
+                TelecomManager telecomManager = (TelecomManager) getSystemService(
+                        Context.TELECOM_SERVICE);
+                if (telecomManager != null) {
+                    boolean res = telecomManager.endCall();
+                    Log.d(TAG, "tryEndCall: " + res);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public boolean isExternalStorageWritable() {

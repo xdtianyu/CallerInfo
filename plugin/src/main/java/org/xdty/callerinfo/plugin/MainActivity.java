@@ -25,9 +25,12 @@ public class MainActivity extends AppCompatActivity {
             int type = getIntent().getIntExtra("type", 0);
             switch (type) {
                 case REQUEST_CODE_CALL_PERMISSION:
-                    requestPermissions(
-                            new String[] { Manifest.permission.CALL_PHONE },
-                            REQUEST_CODE_CALL_PERMISSION);
+                    String[] permissions = new String[] { Manifest.permission.CALL_PHONE };
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        permissions = new String[] { Manifest.permission.CALL_PHONE,
+                                Manifest.permission.ANSWER_PHONE_CALLS };
+                    }
+                    requestPermissions(permissions, REQUEST_CODE_CALL_PERMISSION);
                     break;
                 case REQUEST_CODE_CALL_LOG_PERMISSION:
                     requestPermissions(
