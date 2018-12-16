@@ -5,7 +5,7 @@ android:
    - tools
    - platform-tools
    - android-28
-   - build-tools-27.0.3
+   - build-tools-28
    - extra
 
 jdk: oraclejdk8

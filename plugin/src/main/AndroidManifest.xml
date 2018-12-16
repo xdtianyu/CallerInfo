@@ -17,11 +17,11 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <service
             android:name=".PluginService"
             android:enabled="true"
