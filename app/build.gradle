@@ -9,7 +9,6 @@ def gitTagCount = Integer.parseInt('git rev-list --tags --no-walk --count'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "org.xdty.callerinfo"
@@ -95,7 +94,7 @@ dependencies {
     implementation 'com.google.dagger:dagger:2.19'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.19'
 
-    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.tencent.bugly:crashreport:2.6.6'
 
     debugImplementation 'com.facebook.stetho:stetho:1.4.2'
