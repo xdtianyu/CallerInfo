@@ -68,7 +68,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.2'
-    androidTestImplementation ('com.android.support.test.espresso:espresso-contrib:2.2.2') {
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.2.2') {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'design'
@@ -82,6 +82,7 @@ dependencies {
     implementation "com.android.support:cardview-v7:${rootProject.ext.supportVersion}"
     implementation "com.android.support:design:${rootProject.ext.supportVersion}"
     implementation "com.android.support:support-v4:${rootProject.ext.supportVersion}"
+    implementation "com.android.support.constraint:constraint-layout:${rootProject.ext.constraintVersion}"
 
     implementation 'org.xdty.phone.number:phone-number:0.7.18'
     implementation 'org.xdty.preference:color-picker:0.0.4'

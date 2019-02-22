@@ -194,4 +194,6 @@
     <string name="outgoing_window_position_message">去电时拖动悬浮窗以调整显示位置。悬浮窗在去电和来电时将使用各自的位置设置。</string>
     <string name="source_mvno">虚拟运营商离线号码库</string>
     <string name="add_ring_once_call_log">添加响一声和自动挂断提示到通话记录</string>
+    <string name="number_appeal_summary">电话号码标记错误</string>
+    <string name="number_appeal">号码申诉</string>
 </resources>

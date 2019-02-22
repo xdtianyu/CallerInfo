@@ -24,6 +24,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
+        <activity android:name=".activity.AppealActivity">
+            <intent-filter>
+                <action android:name="org.xdty.callerinfo.NUMBER_APPEAL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.MainActivity"
             android:clearTaskOnLaunch="true"
