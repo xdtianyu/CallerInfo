@@ -85,6 +85,7 @@ dependencies {
     implementation "com.android.support:design:${rootProject.ext.supportVersion}"
     implementation "com.android.support:support-v4:${rootProject.ext.supportVersion}"
     implementation "com.android.support.constraint:constraint-layout:${rootProject.ext.constraintVersion}"
+    implementation "com.android.support:customtabs:${rootProject.ext.supportVersion}"
 
     implementation 'org.xdty.phone.number:phone-number:0.7.18'
     implementation 'org.xdty.preference:color-picker:0.0.4'
@@ -110,6 +111,10 @@ dependencies {
     implementation 'io.requery:requery:1.4.0'
     implementation 'io.requery:requery-android:1.4.0'
     annotationProcessor 'io.requery:requery-processor:1.4.0'
+
+    implementation('net.openid:appauth:0.7.1') {
+        exclude group: 'com.android.support', module: 'customtabs'
+    }
 }
 
 apply from: '../signing.gradle'
