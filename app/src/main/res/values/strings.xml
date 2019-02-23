@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">CallerInfo</string>
     <string name="text_normal">%1$s %2$s %3$s</string>
     <string name="text_poi">%1$s %2$s %3$s %4$s</string>
@@ -235,4 +235,8 @@
     <string name="add_ring_once_call_log">Add ring once/hangup notice to call log</string>
     <string name="number_appeal_summary">Phone number is marked incorrectly</string>
     <string name="number_appeal">Number appeal</string>
+    <string name="phone_number">Phone number</string>
+    <string name="description">Short description</string>
+    <string name="number_appeal_description">You can report the wrong number by the number appeal function. The inspector will remove the number in the cloud data after confirming that the number is wrong.</string>
+    <string name="number_appeal_prompt">Submitting data requires authorization from 🔐 id.xdty.org, and you are advised to log in using your social account.</string>
 </resources>

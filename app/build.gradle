@@ -24,6 +24,8 @@ android {
         setProperty("archivesBaseName", "CallerInfo-v$versionName")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     signingConfigs {

@@ -24,12 +24,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name=".activity.AppealActivity">
-            <intent-filter>
-                <action android:name="org.xdty.callerinfo.NUMBER_APPEAL" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".activity.MainActivity"
             android:clearTaskOnLaunch="true"
@@ -62,6 +56,14 @@
             android:noHistory="true"
             android:taskAffinity=".activity.MarkActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog">
+        </activity>
+        <activity
+            android:name=".activity.AppealActivity"
+            android:label="@string/number_appeal">
+            <intent-filter>
+                <action android:name="org.xdty.callerinfo.NUMBER_APPEAL"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
 
         <service android:name=".service.FloatWindow"/>
