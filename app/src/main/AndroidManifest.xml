@@ -15,6 +15,8 @@
         android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions"/>
 
+    <uses-sdk tools:overrideLibrary="android.support.customtabs,net.openid.appauth"/>
+
     <application
         android:name=".application.Application"
         android:allowBackup="true"
@@ -63,6 +65,19 @@
             <intent-filter>
                 <action android:name="org.xdty.callerinfo.NUMBER_APPEAL"/>
                 <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            tools:node="replace">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="org.xdty.callerinfo"/>
             </intent-filter>
         </activity>
 
