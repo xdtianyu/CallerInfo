@@ -10,8 +10,6 @@ import org.xdty.callerinfo.R;
 
 public class AppealActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FloatingActionButton mAddButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,9 +19,9 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        mAddButton = findViewById(R.id.add);
+        FloatingActionButton addButton = findViewById(R.id.add);
 
-        mAddButton.setOnClickListener(this);
+        addButton.setOnClickListener(this);
     }
 
     @Override
@@ -32,6 +30,9 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                break;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -41,6 +42,8 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add:
+                break;
+            default:
                 break;
         }
     }
