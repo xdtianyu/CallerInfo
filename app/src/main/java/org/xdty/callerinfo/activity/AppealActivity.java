@@ -9,10 +9,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import com.google.gson.JsonObject;
 
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -23,7 +26,19 @@ import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.TokenResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xdty.callerinfo.R;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class AppealActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -33,16 +48,21 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
 
     private static final String URL_OAUTH_AUTH = "https://id.xdty.org/auth/realms/xdty.org/protocol/openid-connect/auth";
     private static final String URL_OAUTH_TOKEN = "https://id.xdty.org/auth/realms/xdty.org/protocol/openid-connect/token";
+    private static final String URL_API_APPEAL = "https://backend.xdty.org/api/v1/appeal";
     private static final String OAUTH_CLIENT_ID = "feedback";
     private static final String OAUTH_REDIRECT_URL = "org.xdty.callerinfo://oauth2redirect";
     private static final String PREFERENCE_AUTH = "auth";
     private static final String PREFERENCE_AUTH_KEY = "stateJson";
+
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private FloatingActionButton mFab;
     private EditText mNumber;
     private EditText mDescription;
 
     private AuthorizationService mAuthService;
+
+    private OkHttpClient mHttpClient;
 
     private AuthState mAuthState;
 
@@ -82,6 +102,8 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
         mFab.setOnClickListener(this);
 
         mAuthService = new AuthorizationService(this);
+
+        mHttpClient = new OkHttpClient();
     }
 
     @Override
@@ -156,10 +178,67 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
         String description = mDescription.getText().toString().trim();
 
         // submit data to backend
+        String token = mAuthState.getAccessToken();
 
-        Snackbar.make(mFab, R.string.thanks_feedback, Snackbar.LENGTH_LONG)
+        if (token == null) {
+            Log.e(TAG, "token is null");
+            showSubmitFailed();
+            return;
+        }
+
+        String uid = getUidFromJwt(token);
+
+        JsonObject json = new JsonObject();
+        json.addProperty("number", number);
+        json.addProperty("text", description);
+        json.addProperty("user", uid);
+
+        RequestBody body = RequestBody.create(JSON, json.toString());
+        Request request = new Request.Builder()
+                .url(URL_API_APPEAL)
+                .addHeader("Authorization", "Bearer " + token)
+                .post(body)
+                .build();
+
+        mHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e(TAG, "onFailure: " + e);
+                showSubmitFailed();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.code() == 201) {
+                    Snackbar.make(mFab, R.string.thanks_feedback, Snackbar.LENGTH_LONG)
+                            .setAction(android.R.string.ok, null)
+                            .show();
+                    Log.d(TAG, "submit succeed");
+                } else {
+                    showSubmitFailed();
+                    Log.e(TAG, "onResponse: " + response.code() + ", " + response.message());
+                }
+            }
+        });
+
+    }
+
+    private void showSubmitFailed() {
+        Snackbar.make(mFab, R.string.auth_failed, Snackbar.LENGTH_LONG)
                 .setAction(android.R.string.ok, null)
                 .show();
+    }
+
+    private String getUidFromJwt(String token) {
+        String uid = "";
+        String[] sections = token.split("\\.");
+        try {
+            JSONObject claims = parseJwtSection(sections[1]);
+            uid = claims.getString("sub");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return uid;
     }
 
     private void refreshToken() {
@@ -221,5 +300,11 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
     private void writeAuthState(@NonNull AuthState state) {
         SharedPreferences authPrefs = getSharedPreferences(PREFERENCE_AUTH, MODE_PRIVATE);
         authPrefs.edit().putString(PREFERENCE_AUTH_KEY, state.jsonSerializeString()).apply();
+    }
+
+    private static JSONObject parseJwtSection(String section) throws JSONException {
+        byte[] decodedSection = Base64.decode(section, Base64.URL_SAFE);
+        String jsonString = new String(decodedSection);
+        return new JSONObject(jsonString);
     }
 }
