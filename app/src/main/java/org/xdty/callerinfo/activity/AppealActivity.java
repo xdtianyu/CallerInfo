@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,9 +29,30 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
 
     private static final int RESPONSE_CODE_AUTH = 1000;
 
-    AuthorizationService authService;
+    private static final String URL_OAUTH_AUTH = "https://id.xdty.org/auth/realms/xdty.org/protocol/openid-connect/auth";
+    private static final String URL_OAUTH_TOKEN = "https://id.xdty.org/auth/realms/xdty.org/protocol/openid-connect/token";
+    private static final String OAUTH_CLIENT_ID = "feedback";
+    private static final String OAUTH_REDIRECT_URL = "org.xdty.callerinfo://oauth2redirect";
+    private static final String PREFERENCE_AUTH = "auth";
+    private static final String PREFERENCE_AUTH_KEY = "stateJson";
 
-    AuthState authState;
+    private AuthorizationService mAuthService;
+
+    private AuthState mAuthState;
+
+    private AuthorizationService.TokenResponseCallback mTokenCallback = new AuthorizationService.TokenResponseCallback() {
+        @Override
+        public void onTokenRequestCompleted(@Nullable TokenResponse response,
+                @Nullable AuthorizationException ex) {
+            if (response != null) {
+                mAuthState.update(response, ex);
+                writeAuthState(mAuthState);
+                Log.d(TAG, "token refresh succeed.");
+            } else {
+                Log.e(TAG, "error token response: " + ex);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +66,8 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
         FloatingActionButton addButton = findViewById(R.id.add);
 
         addButton.setOnClickListener(this);
+
+        mAuthService = new AuthorizationService(this);
     }
 
     @Override
@@ -64,40 +88,48 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add:
-                sendNumberRequest();
+                checkAuthState();
                 break;
             default:
                 break;
         }
     }
 
-    private void sendNumberRequest() {
+    private void checkAuthState() {
+        mAuthState = readAuthState();
+        if (mAuthState != null && mAuthState.isAuthorized()) {
 
-        AuthorizationServiceConfiguration configuration = new AuthorizationServiceConfiguration(
-                Uri.parse("https:/id.xdty.org/auth/realms/xdty.org/protocol/openid-connect/auth"),
-                Uri.parse("https:/id.xdty.org/auth/realms/xdty.org/protocol/openid-connect/token")
-        );
+            if (mAuthState.getNeedsTokenRefresh()) {
+                Log.d(TAG, "token need refresh.");
+                refreshToken();
+            } else {
+                Log.d(TAG, "isAuthorized, token is available");
+            }
 
-        authState = readAuthState(configuration);
-
-        if (authState.isAuthorized() && !authState.getNeedsTokenRefresh()) {
-            Log.d(TAG, "isAuthorized");
         } else {
-            auth(configuration);
+            requestAuthorizationCode();
         }
     }
 
-    private void auth(AuthorizationServiceConfiguration configuration) {
-        String clientId = "feedback";
-        Uri redirectUri = Uri.parse("org.xdty.callerinfo:/oauth2redirect");
+    private void refreshToken() {
+        mAuthService.performTokenRequest(mAuthState.createTokenRefreshRequest(), mTokenCallback);
+    }
+
+    private void requestAuthorizationCode() {
+        AuthorizationServiceConfiguration configuration =
+                new AuthorizationServiceConfiguration(Uri.parse(URL_OAUTH_AUTH),
+                        Uri.parse(URL_OAUTH_TOKEN));
+
+        mAuthState = new AuthState(configuration);
+
+        Uri redirectUri = Uri.parse(OAUTH_REDIRECT_URL);
 
         AuthorizationRequest.Builder builder = new AuthorizationRequest.Builder(configuration,
-                clientId, ResponseTypeValues.CODE, redirectUri);
+                OAUTH_CLIENT_ID, ResponseTypeValues.CODE, redirectUri);
 
         AuthorizationRequest authRequest = builder.build();
 
-        authService = new AuthorizationService(this);
-        Intent authIntent = authService.getAuthorizationRequestIntent(authRequest);
+        Intent authIntent = mAuthService.getAuthorizationRequestIntent(authRequest);
         startActivityForResult(authIntent, RESPONSE_CODE_AUTH);
     }
 
@@ -105,45 +137,38 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RESPONSE_CODE_AUTH) {
             AuthorizationResponse response = AuthorizationResponse.fromIntent(data);
+            AuthorizationException ex = AuthorizationException.fromIntent(data);
+
+            mAuthState.update(response, ex);
 
             if (response != null) {
-                authService.performTokenRequest(response.createTokenExchangeRequest(),
-                        new AuthorizationService.TokenResponseCallback() {
-                            @Override
-                            public void onTokenRequestCompleted(TokenResponse response,
-                                    AuthorizationException ex) {
-                                if (response != null) {
-                                    authState.update(response, ex);
-                                    writeAuthState(authState);
-                                } else {
-                                    Log.e(TAG, "error token response: " + ex);
-                                }
-                            }
-                        });
+                exchangeTokenFromAuthCode(response);
             } else {
-                AuthorizationException ex = AuthorizationException.fromIntent(data);
                 if (ex != null) {
-                    Log.e(TAG, "error oauth response: " + ex);
+                    Log.e(TAG, "error oauth code: " + ex);
                 }
             }
         }
     }
 
-    @NonNull
-    public AuthState readAuthState(
-            AuthorizationServiceConfiguration configuration) {
-        SharedPreferences authPrefs = getSharedPreferences("auth", MODE_PRIVATE);
-        String stateJson = authPrefs.getString("stateJson", "");
+    private void exchangeTokenFromAuthCode(AuthorizationResponse response) {
+        mAuthService.performTokenRequest(response.createTokenExchangeRequest(), mTokenCallback);
+    }
+
+    @Nullable
+    private AuthState readAuthState() {
+        SharedPreferences authPrefs = getSharedPreferences(PREFERENCE_AUTH, MODE_PRIVATE);
+        String stateJson = authPrefs.getString(PREFERENCE_AUTH_KEY, "");
         try {
             return AuthState.jsonDeserialize(stateJson);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new AuthState(configuration);
+        return null;
     }
 
-    public void writeAuthState(@NonNull AuthState state) {
-        SharedPreferences authPrefs = getSharedPreferences("auth", MODE_PRIVATE);
-        authPrefs.edit().putString("stateJson", state.jsonSerializeString()).apply();
+    private void writeAuthState(@NonNull AuthState state) {
+        SharedPreferences authPrefs = getSharedPreferences(PREFERENCE_AUTH, MODE_PRIVATE);
+        authPrefs.edit().putString(PREFERENCE_AUTH_KEY, state.jsonSerializeString()).apply();
     }
 }
