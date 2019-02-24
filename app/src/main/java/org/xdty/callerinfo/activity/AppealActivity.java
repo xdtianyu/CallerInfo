@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.google.gson.JsonObject;
 
@@ -59,6 +60,7 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
     private FloatingActionButton mFab;
     private EditText mNumber;
     private EditText mDescription;
+    private ProgressBar mProgress;
 
     private AuthorizationService mAuthService;
 
@@ -79,9 +81,7 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
                 submitNumber();
             } else {
                 Log.e(TAG, "error token response: " + ex);
-                Snackbar.make(mFab, R.string.auth_failed, Snackbar.LENGTH_LONG)
-                        .setAction(android.R.string.ok, null)
-                        .show();
+                showSubmitFailed();
             }
         }
     };
@@ -98,6 +98,7 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
         mFab = findViewById(R.id.add);
         mNumber = findViewById(R.id.number);
         mDescription = findViewById(R.id.description);
+        mProgress = findViewById(R.id.progress);
 
         mFab.setOnClickListener(this);
 
@@ -131,12 +132,23 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.add:
                 if (validateInputs()) {
+                    showProgress();
                     checkAuthState();
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    private void showProgress() {
+        mProgress.setVisibility(View.VISIBLE);
+        mFab.hide();
+    }
+
+    private void hideProgress() {
+        mProgress.setVisibility(View.GONE);
+        mFab.show();
     }
 
     private void checkAuthState() {
@@ -210,9 +222,7 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code() == 201) {
-                    Snackbar.make(mFab, R.string.thanks_feedback, Snackbar.LENGTH_LONG)
-                            .setAction(android.R.string.ok, null)
-                            .show();
+                    showSubmitSucceed();
                     Log.d(TAG, "submit succeed");
                 } else {
                     showSubmitFailed();
@@ -223,10 +233,29 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    private void showSubmitSucceed() {
+        mFab.post(new Runnable() {
+            @Override
+            public void run() {
+                hideProgress();
+                Snackbar.make(mFab, R.string.thanks_feedback, Snackbar.LENGTH_LONG)
+                        .setAction(android.R.string.ok, null)
+                        .show();
+            }
+        });
+    }
+
     private void showSubmitFailed() {
-        Snackbar.make(mFab, R.string.auth_failed, Snackbar.LENGTH_LONG)
-                .setAction(android.R.string.ok, null)
-                .show();
+        mFab.post(new Runnable() {
+            @Override
+            public void run() {
+                hideProgress();
+                Snackbar.make(mFab, R.string.auth_failed, Snackbar.LENGTH_LONG)
+                        .setAction(android.R.string.ok, null)
+                        .show();
+            }
+        });
+
     }
 
     private String getUidFromJwt(String token) {
