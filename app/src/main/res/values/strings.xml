@@ -239,4 +239,7 @@
     <string name="description">Short description</string>
     <string name="number_appeal_description">You can report the wrong number by the number appeal function. The inspector will remove the number in the cloud data after confirming that the number is wrong.</string>
     <string name="number_appeal_prompt">Submitting data requires authorization from 🔐 id.xdty.org, and you are advised to log in using your social account.</string>
+    <string name="thanks_feedback">Submitted, thank you for your feedback</string>
+    <string name="empty_input">Can not be empty</string>
+    <string name="auth_failed">Authorization error, please try again</string>
 </resources>

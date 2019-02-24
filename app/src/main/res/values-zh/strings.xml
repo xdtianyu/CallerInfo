@@ -200,4 +200,7 @@
     <string name="description">简要说明</string>
     <string name="number_appeal_description">您可以通过号码申诉功能上报被错误标记的号码，检验员确认号码为错误标记后会在云端数据中移除该号码。</string>
     <string name="number_appeal_prompt">提交数据需要经过 🔐 id.xdty.org 授权，建议您使用社交账户登陆</string>
+    <string name="thanks_feedback">已提交，感谢您的反馈</string>
+    <string name="empty_input">不能为空</string>
+    <string name="auth_failed">授权出错，请重试</string>
 </resources>
