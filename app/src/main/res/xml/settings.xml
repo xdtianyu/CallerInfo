@@ -183,6 +183,12 @@
             <com.jenzz.materialpreference.Preference
                 android:key="@string/offline_data_version_key"
                 android:title="@string/offline_data_version"/>
+            <com.jenzz.materialpreference.Preference
+                android:key="number_appeal"
+                android:summary="@string/number_appeal_summary"
+                android:title="@string/number_appeal">
+                <intent android:action="org.xdty.callerinfo.NUMBER_APPEAL"/>
+            </com.jenzz.materialpreference.Preference>
         </PreferenceScreen>
         <PreferenceScreen
             android:key="@string/plugin_key"
