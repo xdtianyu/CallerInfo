@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.plugin;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public final static int REQUEST_CODE_STORAGE_PERMISSION = 2003;
 
     private final static String MAIN_PACKAGE_NAME = "org.xdty.callerinfo";
+    private final static String PLUGIN_SETTING = "org.xdty.callerinfo.action.PLUGIN_SETTING";
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -124,6 +127,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.plugin_menu, menu);
+
+        MenuItem setting = menu.findItem(R.id.setting);
+        setting.setVisible(Utils.isAppInstalled(this, MAIN_PACKAGE_NAME));
+
         return true;
     }
 
@@ -135,6 +142,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.license:
                 startActivity(new Intent(LicensesActivity.ACTION_LICENSE));
+                break;
+            case R.id.setting:
+                try {
+                    startActivity(new Intent(PLUGIN_SETTING));
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, R.string.main_app_too_old, Toast.LENGTH_LONG).show();
+                }
                 break;
             default:
                 return super.onOptionsItemSelected(item);

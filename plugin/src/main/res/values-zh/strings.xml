@@ -7,4 +7,6 @@
     <string name="version_code">插件版本号：%1$d</string>
     <string name="install_main_app">来电信息主程序未安装</string>
     <string name="install">安装</string>
+    <string name="setting">设置</string>
+    <string name="main_app_too_old">请更新主应用以支持此操作</string>
 </resources>

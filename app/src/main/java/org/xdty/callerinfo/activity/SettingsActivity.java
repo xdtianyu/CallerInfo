@@ -20,6 +20,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -71,6 +73,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private final static String TAG = SettingsActivity.class.getSimpleName();
 
+    private final static String PLUGIN_SETTING = "org.xdty.callerinfo.action.PLUGIN_SETTING";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +83,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(android.R.id.content, new SettingsFragment())
+                    .add(android.R.id.content, SettingsFragment.newInstance(getIntent()))
                     .commit();
         }
     }
@@ -114,6 +118,18 @@ public class SettingsActivity extends AppCompatActivity {
         private HashMap<String, Preference> prefMap = new HashMap<>();
         private boolean isCheckStorageExport = false;
         private boolean isCheckRingOnce = false;
+
+        private Intent mIntent;
+
+        public static SettingsFragment newInstance(Intent intent) {
+            SettingsFragment fragment = new SettingsFragment();
+            fragment.setStartIntent(intent);
+            return fragment;
+        }
+
+        private void setStartIntent(Intent intent) {
+            mIntent = intent;
+        }
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -152,6 +168,42 @@ public class SettingsActivity extends AppCompatActivity {
             bindDataVersionPreference();
             bindVersionPreference();
             bindPluginPreference();
+        }
+
+        @Override
+        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+
+            if (mIntent != null && mIntent.getAction() != null) {
+                String action = mIntent.getAction();
+
+                switch (action) {
+                    case PLUGIN_SETTING:
+                        view.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                openPreference(getString(R.string.plugin_key));
+                            }
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void openPreference(String key) {
+            PreferenceScreen preferenceScreen = getPreferenceScreen();
+            final ListAdapter listAdapter = preferenceScreen.getRootAdapter();
+
+            final int itemsCount = listAdapter.getCount();
+            int itemNumber;
+            for (itemNumber = 0; itemNumber < itemsCount; ++itemNumber) {
+                if (listAdapter.getItem(itemNumber).equals(findPreference(key))) {
+                    preferenceScreen.onItemClick(null, null, itemNumber, 0);
+                    break;
+                }
+            }
         }
 
         private void bindDataVersionPreference() {
