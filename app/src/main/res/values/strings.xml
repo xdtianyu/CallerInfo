@@ -242,4 +242,5 @@
     <string name="thanks_feedback">Submitted, thank you for your feedback</string>
     <string name="empty_input">Can not be empty</string>
     <string name="auth_failed">Authorization error, please try again</string>
+    <string name="hide_plugin_icon">Hide plugin\'s launcher icon</string>
 </resources>

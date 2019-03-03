@@ -209,6 +209,11 @@
                 android:key="@string/ring_once_and_auto_hangup_key"
                 android:title="@string/add_ring_once_call_log">
             </com.jenzz.materialpreference.SwitchPreference>
+            <com.jenzz.materialpreference.SwitchPreference
+                android:defaultValue="false"
+                android:key="@string/hide_plugin_icon_key"
+                android:title="@string/hide_plugin_icon">
+            </com.jenzz.materialpreference.SwitchPreference>
             <com.jenzz.materialpreference.PreferenceCategory
                 android:dependency="@string/auto_hangup_key"
                 android:title="@string/blacklist">

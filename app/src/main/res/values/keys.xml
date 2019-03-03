@@ -56,4 +56,5 @@
     <string name="repeated_incoming_count_key" translatable="false">repeated_incoming_count_key</string>
     <string name="outgoing_window_position_key" translatable="false">outgoing_window_position_key</string>
     <string name="ring_once_and_auto_hangup_key" translatable="false">ring_once_and_auto_hangup_key</string>
+    <string name="hide_plugin_icon_key" translatable="false">hide_plugin_icon_key</string>
 </resources>

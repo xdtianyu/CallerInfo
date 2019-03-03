@@ -199,6 +199,7 @@ public class SettingsActivity extends AppCompatActivity {
                 bindPreference(R.string.auto_hangup_key);
                 bindPreference(R.string.add_call_log_key);
                 bindPreference(R.string.ring_once_and_auto_hangup_key);
+                bindPreference(R.string.hide_plugin_icon_key);
 
                 bindPreference(R.string.hangup_keyword_key, R.string.hangup_keyword_summary);
                 bindPreference(R.string.hangup_geo_keyword_key,
@@ -209,8 +210,9 @@ public class SettingsActivity extends AppCompatActivity {
                 bindPreference(R.string.import_key);
                 bindPreference(R.string.export_key);
 
-                if (Utils.getVersionCode(getActivity(), getString(R.string.plugin_package_name))
-                        < 3) {
+                String pluginPkg = getString(R.string.plugin_package_name);
+                int pluginVersion = Utils.getVersionCode(getActivity(), pluginPkg);
+                if (pluginVersion < 3) {
                     Preference exportPref = findPreference(getString(R.string.export_key));
                     exportPref.setEnabled(false);
                     exportPref.setSummary(R.string.plugin_too_old);
@@ -218,6 +220,19 @@ public class SettingsActivity extends AppCompatActivity {
                     importPref.setEnabled(false);
                     importPref.setSummary(R.string.plugin_too_old);
                 }
+
+                SwitchPreference iconPref = (SwitchPreference) findPreference(
+                        getString(R.string.hide_plugin_icon_key));
+
+                if (pluginVersion < 10) {
+                    iconPref.setEnabled(false);
+                    iconPref.setSummary(R.string.plugin_too_old);
+                } else {
+                    boolean iconEnabled = Utils.isComponentEnabled(
+                            getActivity().getPackageManager(), pluginPkg, pluginPkg + ".Launcher");
+                    iconPref.setChecked(!iconEnabled);
+                }
+
             } else {
                 removePreference(R.string.advanced_key, R.string.plugin_key);
             }
@@ -741,6 +756,14 @@ public class SettingsActivity extends AppCompatActivity {
                     try {
                         isCheckRingOnce = true;
                         mPluginService.checkCallLogPermission();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                case R.string.hide_plugin_icon_key:
+                    try {
+                        mPluginService.setIconStatus(!sharedPrefs.getBoolean(
+                                getString(R.string.hide_plugin_icon_key), false));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
