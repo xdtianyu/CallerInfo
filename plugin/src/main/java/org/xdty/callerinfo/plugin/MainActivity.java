@@ -3,6 +3,7 @@ package org.xdty.callerinfo.plugin;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,12 +12,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     public final static int REQUEST_CODE_CALL_PERMISSION = 2001;
     public final static int REQUEST_CODE_CALL_LOG_PERMISSION = 2002;
     public final static int REQUEST_CODE_STORAGE_PERMISSION = 2003;
+
+    private final static String MAIN_PACKAGE_NAME = "org.xdty.callerinfo";
+
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -49,6 +56,36 @@ public class MainActivity extends AppCompatActivity {
                 default:
                     break;
             }
+        }
+
+        TextView version = findViewById(R.id.version);
+        TextView versionCode = findViewById(R.id.version_code);
+
+        version.setText(getString(R.string.version, BuildConfig.VERSION_NAME));
+        versionCode.setText(getString(R.string.version_code, BuildConfig.VERSION_CODE));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        TextView installText = findViewById(R.id.install_main_app);
+        Button installButton = findViewById(R.id.install);
+
+        if (Utils.isAppInstalled(this, MAIN_PACKAGE_NAME)) {
+            installText.setVisibility(View.GONE);
+            installButton.setVisibility(View.GONE);
+        } else {
+            installText.setVisibility(View.VISIBLE);
+            installButton.setVisibility(View.VISIBLE);
+            installButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("market://details?id=" + MAIN_PACKAGE_NAME));
+                    startActivity(intent);
+                }
+            });
         }
     }
 
