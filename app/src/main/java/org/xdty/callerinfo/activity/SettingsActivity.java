@@ -179,12 +179,12 @@ public class SettingsActivity extends AppCompatActivity {
 
                 switch (action) {
                     case PLUGIN_SETTING:
-                        view.post(new Runnable() {
+                        view.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 openPreference(getString(R.string.plugin_key));
                             }
-                        });
+                        }, 500);
                         break;
                     default:
                         break;
