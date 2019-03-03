@@ -16,3 +16,4 @@
 #   public *;
 #}
 -dontobfuscate
+-keep class org.xdty.** { *; }

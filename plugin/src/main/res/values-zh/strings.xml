@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">来电信息插件</string>
+    <string name="plugin_privacy">隐私权声明</string>
+    <string name="license">开放源代码许可</string>
 </resources>

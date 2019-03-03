@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CallerInfo Plugin</string>
+    <string name="plugin_privacy">Privacy policy</string>
+    <string name="license">License</string>
 </resources>

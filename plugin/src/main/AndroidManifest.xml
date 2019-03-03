@@ -39,6 +39,14 @@
 
         <activity android:name=".MainActivity">
         </activity>
+        <activity android:name=".LicensesActivity">
+            <intent-filter>
+                <action android:name="org.xdty.callerinfo.plugin.action.VIEW_LICENSES"/>
+                <action android:name="org.xdty.callerinfo.plugin.action.VIEW_PRIVACY"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
