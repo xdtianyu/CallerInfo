@@ -203,4 +203,5 @@
     <string name="thanks_feedback">已提交，感谢您的反馈</string>
     <string name="empty_input">不能为空</string>
     <string name="auth_failed">授权出错，请重试</string>
+    <string name="hide_plugin_icon">隐藏插件桌面图标</string>
 </resources>

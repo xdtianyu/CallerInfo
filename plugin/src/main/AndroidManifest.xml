@@ -17,7 +17,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_plugin_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -28,7 +28,24 @@
             android:exported="true">
         </service>
 
+        <activity-alias
+            android:name=".Launcher"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+
         <activity android:name=".MainActivity">
+        </activity>
+        <activity android:name=".LicensesActivity">
+            <intent-filter>
+                <action android:name="org.xdty.callerinfo.plugin.action.VIEW_LICENSES"/>
+                <action android:name="org.xdty.callerinfo.plugin.action.VIEW_PRIVACY"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
     </application>
 

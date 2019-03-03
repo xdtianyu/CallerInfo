@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">来电信息插件</string>
+    <string name="plugin_privacy">隐私权声明</string>
+    <string name="license">开放源代码许可</string>
+    <string name="version">插件版本：%1$s</string>
+    <string name="version_code">插件版本号：%1$d</string>
+    <string name="install_main_app">来电信息主程序未安装</string>
+    <string name="install">安装</string>
+    <string name="setting">设置</string>
+    <string name="main_app_too_old">请更新主应用以支持此操作</string>
 </resources>

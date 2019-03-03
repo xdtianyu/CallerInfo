@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">CallerInfo Plugin</string>
+    <string name="plugin_privacy">Privacy policy</string>
+    <string name="license">License</string>
+    <string name="version">Plugin Version: %1$s</string>
+    <string name="version_code">Plugin Version code: %1$d</string>
+    <string name="install_main_app">CallerInfo main app is not installed</string>
+    <string name="install">Install</string>
+    <string name="setting">Setting</string>
+    <string name="main_app_too_old">Please update CallerInfo to support this action</string>
 </resources>

@@ -11,4 +11,5 @@ interface IPluginService {
     String exportData(String data);
     String importData();
     void checkStoragePermission();
+    void setIconStatus(boolean enabled);
 }

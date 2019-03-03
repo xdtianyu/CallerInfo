@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/setting"
+        android:title="@string/setting"/>
+    <item
+        android:id="@+id/license"
+        android:title="@string/license"/>
+    <item
+        android:id="@+id/privacy"
+        android:title="@string/plugin_privacy"/>
+</menu>

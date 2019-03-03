@@ -202,6 +202,15 @@ public class PluginService extends Service {
                 mCallback.onStoragePermissionResult(true);
             }
         }
+
+        @Override
+        public void setIconStatus(boolean enabled) throws RemoteException {
+            if (enabled) {
+                Utils.showIcon(PluginService.this);
+            } else {
+                Utils.hideIcon(PluginService.this);
+            }
+        }
     };
 
     public PluginService() {
