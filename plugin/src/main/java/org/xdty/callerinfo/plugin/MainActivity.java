@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private final static String PLUGIN_SETTING = "org.xdty.callerinfo.action.PLUGIN_SETTING";
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private TextView mInstallPlugin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
 
         version.setText(getString(R.string.version, BuildConfig.VERSION_NAME));
         versionCode.setText(getString(R.string.version_code, BuildConfig.VERSION_CODE));
+
+        mInstallPlugin = findViewById(R.id.install_full_plugin);
+        mInstallPlugin.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
@@ -102,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case REQUEST_CODE_CALL_LOG_PERMISSION:
+                if (BuildConfig.VERSION_NAME.endsWith(".lite")) {
+                    mInstallPlugin.setVisibility(View.VISIBLE);
+                    return;
+                }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "onRequestPermissionsResult: call log " + false);
                 }

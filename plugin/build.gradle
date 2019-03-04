@@ -2,9 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-
     defaultConfig {
-        applicationId "org.xdty.callerinfo.plugin"
+        applicationId rootProject.ext.pluginId
 
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
@@ -13,11 +12,9 @@ android {
         versionName project.PLUGIN_VERSION_NAME
         setProperty("archivesBaseName", "CallerInfo-plugin-v$versionName")
     }
-
     signingConfigs {
         release
     }
-
     buildTypes {
         debug {
             minifyEnabled true
@@ -32,10 +29,19 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    flavorDimensions("default")
+
+    productFlavors {
+        google {
+            versionNameSuffix '.lite'
+        }
+        full {}
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportVersion}"
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
