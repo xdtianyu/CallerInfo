@@ -2,12 +2,10 @@ package org.xdty.callerinfo.model.setting;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Point;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
-import android.view.Display;
-import android.view.WindowManager;
 
 import com.google.gson.Gson;
 
@@ -23,8 +21,6 @@ public class SettingImpl implements Setting {
 
     private static Gson gson = new Gson();
     private static Context sContext;
-    private final int mScreenWidth;
-    private final int mScreenHeight;
     private SharedPreferences mPrefs;
     private SharedPreferences mWindowPrefs;
 
@@ -33,14 +29,6 @@ public class SettingImpl implements Setting {
     private SettingImpl() {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(sContext);
         mWindowPrefs = sContext.getSharedPreferences("window", Context.MODE_PRIVATE);
-
-        WindowManager mWindowManager =
-                (WindowManager) sContext.getSystemService(Context.WINDOW_SERVICE);
-        Display display = mWindowManager.getDefaultDisplay();
-        Point point = new Point();
-        display.getSize(point);
-        mScreenWidth = point.x;
-        mScreenHeight = point.y;
     }
 
     public static void init(Context context) {
@@ -56,12 +44,12 @@ public class SettingImpl implements Setting {
 
     @Override
     public int getScreenWidth() {
-        return mScreenWidth;
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
     }
 
     @Override
     public int getScreenHeight() {
-        return mScreenHeight;
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
     @Override
