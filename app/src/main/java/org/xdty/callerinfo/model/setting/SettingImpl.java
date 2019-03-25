@@ -75,7 +75,7 @@ public class SettingImpl implements Setting {
 
     @Override
     public int getDefaultHeight() {
-        return mScreenHeight / 8;
+        return getScreenHeight() / 8;
     }
 
     @Override
