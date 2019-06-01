@@ -153,6 +153,11 @@ public abstract class BaseCaller implements INumber {
     @Override
     public Type getType() {
 
+        if (callerSource == INumber.API_ID_CUSTOM &&
+                (getName() == null || getName().trim().isEmpty())) {
+            return Type.NORMAL;
+        }
+
         // get type from type name
         if (callerSource == DEFAULT_SOURCE || callerSource == INumber.API_ID_CUSTOM) {
             return Utils.markTypeFromName(getName());
