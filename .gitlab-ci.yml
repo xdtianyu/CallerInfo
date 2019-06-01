@@ -12,6 +12,8 @@ build:
   stage: build
   script:
     - ./gradlew assembleDebug
+  after_script:
+    - mkdir -p dist/ && find -name \*.apk -exec cp {} dist/ \;
   artifacts:
     paths:
-      - "**/build/outputs/**/*.apk"
+      - "dist/*.apk"
