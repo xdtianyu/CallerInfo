@@ -19,6 +19,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -159,6 +160,7 @@ public class SettingsActivity extends AppCompatActivity {
             bindPreference(R.string.catch_crash_key);
             bindPreference(R.string.ignore_regex_key, false);
             bindPreference(R.string.custom_api_url);
+            bindPreference(R.string.ignore_battery_optimizations_key);
             bindPreference(R.string.auto_report_key);
             bindPreference(R.string.enable_marking_key);
             bindPreference(R.string.not_mark_contact_key);
@@ -855,6 +857,11 @@ public class SettingsActivity extends AppCompatActivity {
                                 R.string.auto_report_key);
                     }
                     return false;
+                case R.string.ignore_battery_optimizations_key:
+                    showConfirmDialog(R.string.ignore_battery_optimizations,
+                            R.string.ignore_battery_optimizations_description,
+                            R.string.ignore_battery_optimizations_key);
+                    return false;
                 case R.string.enable_marking_key:
                     if (sharedPrefs.getBoolean(getString(R.string.enable_marking_key), false)) {
                         showConfirmDialog(R.string.enable_marking, R.string.mark_confirm,
@@ -899,6 +906,13 @@ public class SettingsActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     break;
+                case R.string.ignore_battery_optimizations_key:
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        Intent intent = new Intent(
+                                Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                        startActivity(intent);
+                    }
+                    break;
             }
         }
 
@@ -911,6 +925,11 @@ public class SettingsActivity extends AppCompatActivity {
                 case R.string.enable_marking_key:
                     ((SwitchPreference) findPreference(
                             getString(R.string.enable_marking_key))).setChecked(false);
+                    break;
+                case R.string.ignore_battery_optimizations_key:
+                    ((SwitchPreference) findPreference(
+                            getString(R.string.ignore_battery_optimizations_key))).setChecked(
+                            Utils.ignoreBatteryOptimization(getActivity()));
                     break;
             }
         }

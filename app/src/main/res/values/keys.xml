@@ -18,6 +18,7 @@
     <string name="developer_key" translatable="false">developer_key</string>
     <string name="show_hidden_setting_key" translatable="false">show_hidden_setting_key</string>
     <string name="force_chinese_key" translatable="false">force_chinese_key</string>
+    <string name="ignore_battery_optimizations_key" translatable="false">ignore_battery_optimizations_key</string>
     <string name="hide_when_off_hook_key" translatable="false">hide_when_off_hook_key</string>
     <string name="float_window_key" translatable="false">float_window_key</string>
     <string name="custom_api_key" translatable="false">custom_api_key</string>
