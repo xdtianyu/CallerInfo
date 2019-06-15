@@ -264,6 +264,11 @@
         </com.jenzz.materialpreference.SwitchPreference>
         <com.jenzz.materialpreference.SwitchPreference
             android:defaultValue="false"
+            android:key="@string/ignore_battery_optimizations_key"
+            android:title="@string/ignore_battery_optimizations">
+        </com.jenzz.materialpreference.SwitchPreference>
+        <com.jenzz.materialpreference.SwitchPreference
+            android:defaultValue="false"
             android:key="@string/catch_crash_key"
             android:title="@string/catch_crash">
         </com.jenzz.materialpreference.SwitchPreference>

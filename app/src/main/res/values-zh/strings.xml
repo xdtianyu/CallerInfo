@@ -204,4 +204,6 @@
     <string name="empty_input">不能为空</string>
     <string name="auth_failed">授权出错，请重试</string>
     <string name="hide_plugin_icon">隐藏插件桌面图标</string>
+    <string name="ignore_battery_optimizations">忽略电池优化</string>
+    <string name="ignore_battery_optimizations_description">您将跳转到系统电池优化选项，请在所有应用列表中找到应用并选择忽略</string>
 </resources>

@@ -243,4 +243,6 @@
     <string name="empty_input">Can not be empty</string>
     <string name="auth_failed">Authorization error, please try again</string>
     <string name="hide_plugin_icon">Hide plugin\'s launcher icon</string>
+    <string name="ignore_battery_optimizations">Ignore battery optimizations</string>
+    <string name="ignore_battery_optimizations_description">" You will be taken to the system battery optimization option, find the app in the All apps list and select Ignore."</string>
 </resources>

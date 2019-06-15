@@ -14,6 +14,8 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
@@ -367,5 +369,20 @@ public final class Utils {
                     return false;
                 }
         }
+    }
+
+    public static boolean ignoreBatteryOptimization(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                PowerManager powerManager = (PowerManager) context.getSystemService(
+                        Context.POWER_SERVICE);
+                if (powerManager != null) {
+                    return powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
     }
 }
