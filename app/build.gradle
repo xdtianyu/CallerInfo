@@ -87,14 +87,11 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:${rootProject.ext.constraintVersion}"
     implementation "com.android.support:customtabs:${rootProject.ext.supportVersion}"
 
-    implementation 'org.xdty.phone.number:phone-number:0.7.18'
     implementation 'org.xdty.preference:color-picker:0.0.4'
     implementation 'com.jenzz:materialpreference:1.3'
     implementation 'com.minimize.library:seekbar-compat:0.2.4'
     implementation 'cat.ereza:customactivityoncrash:1.5.0'
 
-    implementation 'io.reactivex:rxandroid:1.2.1'
-    implementation 'io.reactivex:rxjava:1.2.1'
     implementation 'com.google.dagger:dagger:2.19'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.19'
 
@@ -115,6 +112,22 @@ dependencies {
     implementation('net.openid:appauth:0.7.1') {
         exclude group: 'com.android.support', module: 'customtabs'
     }
+
+    // phone-number
+    implementation project(':phone-number')
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:7.5.2'
+    implementation 'com.googlecode.libphonenumber:geocoder:2.50'
+    implementation 'com.googlecode.libphonenumber:carrier:1.40'
+
+    implementation 'org.jsoup:jsoup:1.12.1'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation "io.reactivex.rxjava2:rxjava:2.2.9"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 }
 
 apply from: '../signing.gradle'

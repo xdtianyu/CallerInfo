@@ -1,5 +1,6 @@
 package org.xdty.callerinfo.data;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import org.xdty.callerinfo.application.Application;
@@ -20,16 +21,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
+@SuppressLint("CheckResult")
 public class CallerRepository implements CallerDataSource {
 
     private static final String TAG = CallerRepository.class.getSimpleName();
@@ -119,9 +124,9 @@ public class CallerRepository implements CallerDataSource {
         if (caller != null) {
             return caller;
         } else if (fetchIfNotExist) {
-            getCaller(number).subscribe(new Action1<Caller>() {
+            getCaller(number).subscribe(new Consumer<Caller>() {
                 @Override
-                public void call(Caller caller) {
+                public void accept(Caller caller) {
                     Log.e(TAG, "call: " + number + "->" + caller.getNumber());
                     if (mOnDataUpdateListener != null) {
                         mOnDataUpdateListener.onDataUpdate(caller);
@@ -144,9 +149,9 @@ public class CallerRepository implements CallerDataSource {
 
         final String number = fixNumber(numberOrigin);
 
-        return Observable.create(new Observable.OnSubscribe<Caller>() {
+        return Observable.create(new ObservableOnSubscribe<Caller>() {
             @Override
-            public void call(final Subscriber<? super Caller> subscriber) {
+            public void subscribe(ObservableEmitter<Caller> emitter) throws Exception {
 
                 try {
                     do {
@@ -161,7 +166,7 @@ public class CallerRepository implements CallerDataSource {
                         Caller caller = getCallerFromCache(number, false);
 
                         if (caller != null && caller.isUpdated()) {
-                            subscriber.onNext(caller);
+                            emitter.onNext(caller);
                             break;
                         }
 
@@ -171,7 +176,7 @@ public class CallerRepository implements CallerDataSource {
                         if (caller != null) {
                             if (caller.isUpdated()) {
                                 cache(caller);
-                                subscriber.onNext(caller);
+                                emitter.onNext(caller);
                                 break;
                             } else {
                                 mDatabase.removeCaller(caller);
@@ -182,9 +187,9 @@ public class CallerRepository implements CallerDataSource {
                         INumber iNumber = mPhoneNumber.getOfflineNumber(number);
 
                         if (iNumber != null && iNumber.isValid()) {
-                            subscriber.onNext(handleResponse(iNumber, false));
+                            emitter.onNext(handleResponse(iNumber, false));
                         } else {
-                            subscriber.onNext(Caller.empty(false));
+                            emitter.onNext(Caller.empty(false));
                         }
 
                         // stop if the number is special
@@ -205,12 +210,12 @@ public class CallerRepository implements CallerDataSource {
                             if (!iOnlineNumber.hasGeo() && iNumber != null) {
                                 iOnlineNumber.patch(iNumber);
                             }
-                            subscriber.onNext(handleResponse(iOnlineNumber, true));
+                            emitter.onNext(handleResponse(iOnlineNumber, true));
                         } else {
                             if (iNumber != null) {
-                                subscriber.onNext(handlePatch(iNumber));
+                                emitter.onNext(handlePatch(iNumber));
                             } else {
-                                subscriber.onNext(Caller.empty(true));
+                                emitter.onNext(Caller.empty(true));
                             }
                         }
                     } while (false);
@@ -218,11 +223,11 @@ public class CallerRepository implements CallerDataSource {
                     Log.e(TAG, "getCaller failed: " + e.getMessage());
                     e.printStackTrace();
                 }
-                subscriber.onCompleted();
+                emitter.onComplete();
             }
-        }).doOnNext(new Action1<Caller>() {
+        }).doOnNext(new Consumer<Caller>() {
             @Override
-            public void call(Caller caller) {
+            public void accept(Caller caller) throws Exception {
                 Log.d(TAG, "doOnNext: " + number);
                 // add number to error cache
                 if (caller.isEmpty()) {
@@ -231,9 +236,9 @@ public class CallerRepository implements CallerDataSource {
                     mErrorCache.remove(number);
                 }
             }
-        }).doOnCompleted(new Action0() {
+        }).doOnComplete(new Action() {
             @Override
-            public void call() {
+            public void run() throws Exception {
                 Log.d(TAG, "doOnCompleted: " + number);
                 // remove number in loading cache
                 mLoadingCache.remove(number);
@@ -244,10 +249,9 @@ public class CallerRepository implements CallerDataSource {
     @Override
     public Observable<Map<String, Caller>> loadCallerMap() {
 
-        return Observable.create(new Observable.OnSubscribe<Map<String, Caller>>() {
+        return Observable.fromCallable(new Callable<Map<String, Caller>>() {
             @Override
-            public void call(final Subscriber<? super Map<String, Caller>> subscriber) {
-
+            public Map<String, Caller> call() throws Exception {
                 mCallerMap.clear();
 
                 List<Caller> callers = mDatabase.fetchCallersSync();
@@ -257,8 +261,7 @@ public class CallerRepository implements CallerDataSource {
                         cache(caller);
                     }
                 }
-                subscriber.onNext(mCallerMap);
-                subscriber.onCompleted();
+                return mCallerMap;
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
@@ -275,12 +278,11 @@ public class CallerRepository implements CallerDataSource {
         mLoadingCache.clear();
         mErrorCache.clear();
 
-        return Observable.create(new Observable.OnSubscribe<Void>() {
+        return Observable.fromCallable(new Callable<Void>() {
             @Override
-            public void call(Subscriber<? super Void> subscriber) {
+            public Void call() throws Exception {
                 mDatabase.clearAllCallerSync();
-                subscriber.onNext(null);
-                subscriber.onCompleted();
+                return null;
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }

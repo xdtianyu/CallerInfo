@@ -1,5 +1,6 @@
 package org.xdty.callerinfo.utils;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
@@ -11,12 +12,15 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
+@SuppressLint("CheckResult")
 public final class Contact {
 
     @Inject
@@ -45,9 +49,9 @@ public final class Contact {
     private void loadContactCache() {
         if (mPermission.canReadContact() && (System.currentTimeMillis() - lastUpdateTime)
                 > Constants.CONTACT_CACHE_INTERVAL) {
-            loadContactMap().subscribe(new Action1<Map<String, String>>() {
+            loadContactMap().subscribe(new Consumer<Map<String, String>>() {
                 @Override
-                public void call(Map<String, String> map) {
+                public void accept(Map<String, String> map) {
                     mContactMap.clear();
                     mContactMap.putAll(map);
                     lastUpdateTime = System.currentTimeMillis();
@@ -58,9 +62,9 @@ public final class Contact {
 
     private Observable<Map<String, String>> loadContactMap() {
 
-        return Observable.create(new Observable.OnSubscribe<Map<String, String>>() {
+        return Observable.create(new ObservableOnSubscribe<Map<String, String>>() {
             @Override
-            public void call(final Subscriber<? super Map<String, String>> subscriber) {
+            public void subscribe(ObservableEmitter<Map<String, String>> emitter) throws Exception {
                 Map<String, String> contactsMap = new HashMap<>();
 
                 Cursor cursor = Application.getApplication()
@@ -82,8 +86,8 @@ public final class Contact {
                     cursor.close();
                 }
 
-                subscriber.onNext(contactsMap);
-                subscriber.onCompleted();
+                emitter.onNext(contactsMap);
+                emitter.onComplete();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }

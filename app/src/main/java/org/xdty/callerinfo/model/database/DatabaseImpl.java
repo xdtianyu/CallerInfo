@@ -1,5 +1,6 @@
 package org.xdty.callerinfo.model.database;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import org.xdty.callerinfo.application.Application;
@@ -11,18 +12,22 @@ import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
+@SuppressLint("CheckResult")
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class DatabaseImpl implements Database {
 
     @Inject
@@ -39,37 +44,37 @@ public class DatabaseImpl implements Database {
     @Override
     public Observable<List<InCall>> fetchInCalls() {
 
-        return Observable.create(new Observable.OnSubscribe<List<InCall>>() {
+        return Observable.create(new ObservableOnSubscribe<List<InCall>>() {
             @Override
-            public void call(Subscriber<? super List<InCall>> subscriber) {
-                subscriber.onNext(mDataStore.select(InCall.class)
+            public void subscribe(ObservableEmitter<List<InCall>> emitter) throws Exception {
+                emitter.onNext(mDataStore.select(InCall.class)
                         .orderBy(InCall.TIME.desc())
                         .get()
                         .toList());
-                subscriber.onCompleted();
+                emitter.onComplete();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
     public Observable<List<Caller>> fetchCallers() {
-        return Observable.create(new Observable.OnSubscribe<List<Caller>>() {
+        return Observable.create(new ObservableOnSubscribe<List<Caller>>() {
             @Override
-            public void call(Subscriber<? super List<Caller>> subscriber) {
-                subscriber.onNext(mDataStore.select(Caller.class).get().toList());
-                subscriber.onCompleted();
+            public void subscribe(ObservableEmitter<List<Caller>> emitter) throws Exception {
+                emitter.onNext(mDataStore.select(Caller.class).get().toList());
+                emitter.onComplete();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
     public Observable<Void> clearAllInCalls() {
-        return Observable.create(new Observable.OnSubscribe<Void>() {
+        return Observable.create(new ObservableOnSubscribe<Void>() {
             @Override
-            public void call(Subscriber<? super Void> subscriber) {
+            public void subscribe(ObservableEmitter<Void> emitter) throws Exception {
                 mDataStore.delete(InCall.class).get().value();
-                subscriber.onNext(null);
-                subscriber.onCompleted();
+                emitter.onNext(null);
+                emitter.onComplete();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
@@ -81,9 +86,9 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void removeInCall(InCall inCall) {
-        Observable.just(inCall).observeOn(Schedulers.io()).subscribe(new Action1<InCall>() {
+        Observable.just(inCall).observeOn(Schedulers.io()).subscribe(new Consumer<InCall>() {
             @Override
-            public void call(InCall inCall) {
+            public void accept(InCall inCall) {
                 try {
                     mDataStore.delete(inCall);
                 } catch (Exception e) {
@@ -95,9 +100,9 @@ public class DatabaseImpl implements Database {
 
     @Override
     public Observable<Caller> findCaller(final String number) {
-        return Observable.create(new Observable.OnSubscribe<Caller>() {
+        return Observable.create(new ObservableOnSubscribe<Caller>() {
             @Override
-            public void call(Subscriber<? super Caller> subscriber) {
+            public void subscribe(ObservableEmitter<Caller> emitter) throws Exception {
                 List<Caller> callers = mDataStore.select(Caller.class)
                         .where(Caller.NUMBER.eq(number))
                         .get()
@@ -106,8 +111,8 @@ public class DatabaseImpl implements Database {
                 if (callers.size() > 0) {
                     caller = callers.get(0);
                 }
-                subscriber.onNext(caller);
-                subscriber.onCompleted();
+                emitter.onNext(caller);
+                emitter.onComplete();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
@@ -127,9 +132,9 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void removeCaller(Caller caller) {
-        Observable.just(caller).observeOn(Schedulers.io()).subscribe(new Action1<Caller>() {
+        Observable.just(caller).observeOn(Schedulers.io()).subscribe(new Consumer<Caller>() {
             @Override
-            public void call(Caller caller) {
+            public void accept(Caller caller) {
                 mDataStore.delete(caller);
             }
         });
@@ -142,9 +147,9 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void updateCaller(Caller caller) {
-        Observable.just(caller).observeOn(Schedulers.io()).subscribe(new Action1<Caller>() {
+        Observable.just(caller).observeOn(Schedulers.io()).subscribe(new Consumer<Caller>() {
             @Override
-            public void call(Caller caller) {
+            public void accept(Caller caller) {
                 Caller c = mDataStore.select(Caller.class).where(
                         Caller.NUMBER.eq(caller.getNumber())).get().firstOr(caller);
                 if (c != caller) {
@@ -166,9 +171,9 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void saveInCall(InCall inCall) {
-        Observable.just(inCall).observeOn(Schedulers.io()).subscribe(new Action1<InCall>() {
+        Observable.just(inCall).observeOn(Schedulers.io()).subscribe(new Consumer<InCall>() {
             @Override
-            public void call(InCall inCall) {
+            public void accept(InCall inCall) {
                 mDataStore.insert(inCall);
             }
         });
@@ -183,9 +188,9 @@ public class DatabaseImpl implements Database {
     public void updateMarked(MarkedRecord markedRecord) {
         Observable.just(markedRecord)
                 .observeOn(Schedulers.io())
-                .subscribe(new Action1<MarkedRecord>() {
+                .subscribe(new Consumer<MarkedRecord>() {
                     @Override
-                    public void call(MarkedRecord markedRecord) {
+                    public void accept(MarkedRecord markedRecord) {
                         MarkedRecord record = mDataStore.select(MarkedRecord.class)
                                 .where(MarkedRecord.NUMBER.eq(markedRecord.getNumber()))
                                 .get()
@@ -209,9 +214,9 @@ public class DatabaseImpl implements Database {
     public void updateCaller(MarkedRecord markedRecord) {
         Observable.just(markedRecord)
                 .observeOn(Schedulers.io())
-                .subscribe(new Action1<MarkedRecord>() {
+                .subscribe(new Consumer<MarkedRecord>() {
                     @Override
-                    public void call(MarkedRecord markedRecord) {
+                    public void accept(MarkedRecord markedRecord) {
                         Caller caller = mDataStore.select(Caller.class)
                                 .where(
                                         Caller.NUMBER.eq(markedRecord.getNumber()))
@@ -230,20 +235,19 @@ public class DatabaseImpl implements Database {
 
     @Override
     public Observable<List<MarkedRecord>> fetchMarkedRecords() {
-        return Observable.create(new Observable.OnSubscribe<List<MarkedRecord>>() {
+        return Observable.fromCallable(new Callable<List<MarkedRecord>>() {
             @Override
-            public void call(Subscriber<? super List<MarkedRecord>> subscriber) {
-                subscriber.onNext(mDataStore.select(MarkedRecord.class).get().toList());
-                subscriber.onCompleted();
+            public List<MarkedRecord> call() throws Exception {
+                return mDataStore.select(MarkedRecord.class).get().toList();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
     public Observable<MarkedRecord> findMarkedRecord(final String number) {
-        return Observable.create(new Observable.OnSubscribe<MarkedRecord>() {
+        return Observable.fromCallable(new Callable<MarkedRecord>() {
             @Override
-            public void call(Subscriber<? super MarkedRecord> subscriber) {
+            public MarkedRecord call() throws Exception {
                 List<MarkedRecord> records = mDataStore.select(MarkedRecord.class)
                         .where(MarkedRecord.NUMBER.eq(number))
                         .get()
@@ -252,8 +256,7 @@ public class DatabaseImpl implements Database {
                 if (records.size() > 0) {
                     record = records.get(0);
                 }
-                subscriber.onNext(record);
-                subscriber.onCompleted();
+                return record;
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
@@ -262,9 +265,9 @@ public class DatabaseImpl implements Database {
     public void updateMarkedRecord(String number) {
         Observable.just(number)
                 .observeOn(Schedulers.io())
-                .subscribe(new Action1<String>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void call(String number) {
+                    public void accept(String number) {
                         List<MarkedRecord> records = mDataStore.select(MarkedRecord.class)
                                 .where(MarkedRecord.NUMBER.eq(number))
                                 .get()
@@ -300,18 +303,18 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void addCallers(List<Caller> callers) {
-        Observable.from(callers)
+        Observable.fromIterable(callers)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .flatMap(new Func1<Caller, Observable<Caller>>() {
+                .flatMap(new Function<Caller, Observable<Caller>>() {
                     @Override
-                    public Observable<Caller> call(Caller caller) {
+                    public Observable<Caller> apply(Caller caller) {
                         return Observable.just(caller);
                     }
                 })
-                .subscribe(new Action1<Caller>() {
+                .subscribe(new Consumer<Caller>() {
                     @Override
-                    public void call(Caller caller) {
+                    public void accept(Caller caller) {
                         mDataStore.upsert(caller);
                     }
                 });
@@ -319,18 +322,18 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void addInCallers(List<InCall> inCalls) {
-        Observable.from(inCalls)
+        Observable.fromIterable(inCalls)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .flatMap(new Func1<InCall, Observable<InCall>>() {
+                .flatMap(new Function<InCall, Observable<InCall>>() {
                     @Override
-                    public Observable<InCall> call(InCall inCall) {
+                    public Observable<InCall> apply(InCall inCall) {
                         return Observable.just(inCall);
                     }
                 })
-                .subscribe(new Action1<InCall>() {
+                .subscribe(new Consumer<InCall>() {
                     @Override
-                    public void call(InCall inCall) {
+                    public void accept(InCall inCall) {
                         mDataStore.insert(inCall);
                     }
                 });
@@ -338,18 +341,18 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void addMarkedRecords(List<MarkedRecord> markedRecords) {
-        Observable.from(markedRecords)
+        Observable.fromIterable(markedRecords)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .flatMap(new Func1<MarkedRecord, Observable<MarkedRecord>>() {
+                .flatMap(new Function<MarkedRecord, Observable<MarkedRecord>>() {
                     @Override
-                    public Observable<MarkedRecord> call(MarkedRecord record) {
+                    public Observable<MarkedRecord> apply(MarkedRecord record) {
                         return Observable.just(record);
                     }
                 })
-                .subscribe(new Action1<MarkedRecord>() {
+                .subscribe(new Consumer<MarkedRecord>() {
                     @Override
-                    public void call(MarkedRecord markedRecord) {
+                    public void accept(MarkedRecord markedRecord) {
                         MarkedRecord record = mDataStore.select(MarkedRecord.class)
                                 .where(MarkedRecord.NUMBER.eq(markedRecord.getNumber()))
                                 .get()
@@ -393,9 +396,9 @@ public class DatabaseImpl implements Database {
 
     public void saveMarkedRecord(final INumber number, final String uid) {
         if (number.getType() == Type.REPORT) {
-            findMarkedRecord(number.getNumber()).subscribe(new Action1<MarkedRecord>() {
+            findMarkedRecord(number.getNumber()).subscribe(new Consumer<MarkedRecord>() {
                 @Override
-                public void call(MarkedRecord record) {
+                public void accept(MarkedRecord record) {
                     if (record == null) {
                         int type = Utils.typeFromString(number.getName());
                         if (type >= 0) {
@@ -416,9 +419,9 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void removeRecord(MarkedRecord record) {
-        Observable.just(record).observeOn(Schedulers.io()).subscribe(new Action1<MarkedRecord>() {
+        Observable.just(record).observeOn(Schedulers.io()).subscribe(new Consumer<MarkedRecord>() {
             @Override
-            public void call(MarkedRecord record) {
+            public void accept(MarkedRecord record) {
                 mDataStore.delete(record);
                 removeCaller(findCallerSync(record.getNumber()));
             }

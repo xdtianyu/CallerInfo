@@ -1,2 +1,4 @@
 include ':app', ':plugin'
 include ':standOut'
+include ':phone-number'
+project(':phone-number').projectDir = new File('PhoneNumber/phone-number')

@@ -1,6 +1,7 @@
 package org.xdty.callerinfo.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -66,7 +67,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
-import rx.functions.Action1;
+import io.reactivex.functions.Consumer;
 
 import static org.xdty.callerinfo.utils.Utils.mask;
 
@@ -95,6 +96,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.attachBaseContext(context);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static class SettingsFragment extends PreferenceFragment
             implements OnPreferenceClickListener, ServiceConnection {
 
@@ -934,6 +936,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
+        @SuppressLint("CheckResult")
         private void importData() {
             try {
                 if (mPluginService != null) {
@@ -943,9 +946,9 @@ public class SettingsActivity extends AppCompatActivity {
                                 getString(R.string.import_failed, data));
                     } else {
                         Exporter exporter = new Exporter(getActivity());
-                        exporter.fromString(data).subscribe(new Action1<String>() {
+                        exporter.fromString(data).subscribe(new Consumer<String>() {
                             @Override
-                            public void call(String s) {
+                            public void accept(String s) {
                                 if (s == null) {
                                     showTextDialog(R.string.import_data,
                                             R.string.import_succeed);
@@ -966,9 +969,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         private void exportData() {
             Exporter exporter = new Exporter(getActivity());
-            exporter.export().subscribe(new Action1<String>() {
+            exporter.export().subscribe(new Consumer<String>() {
                 @Override
-                public void call(String s) {
+                public void accept(String s) {
                     try {
                         String res = mPluginService.exportData(s);
                         if (res.contains("Error")) {

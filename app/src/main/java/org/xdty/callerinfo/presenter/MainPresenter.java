@@ -1,5 +1,7 @@
 package org.xdty.callerinfo.presenter;
 
+import android.annotation.SuppressLint;
+
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.contract.MainContract;
 import org.xdty.callerinfo.data.CallerDataSource;
@@ -19,8 +21,10 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import rx.functions.Action1;
+import io.reactivex.functions.Consumer;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
+@SuppressLint("CheckResult")
 public class MainPresenter implements MainContract.Presenter,
         PhoneNumber.CheckUpdateCallback, CallerDataSource.OnDataUpdateListener {
 
@@ -57,9 +61,9 @@ public class MainPresenter implements MainContract.Presenter,
 
     @Override
     public void loadInCallList() {
-        mDatabase.fetchInCalls().subscribe(new Action1<List<InCall>>() {
+        mDatabase.fetchInCalls().subscribe(new Consumer<List<InCall>>() {
             @Override
-            public void call(List<InCall> inCalls) {
+            public void accept(List<InCall> inCalls) {
                 mInCallList.clear();
                 mInCallList.addAll(inCalls);
 
@@ -77,9 +81,9 @@ public class MainPresenter implements MainContract.Presenter,
 
     @Override
     public void loadCallerMap() {
-        mCallerDataSource.loadCallerMap().subscribe(new Action1<Map<String, Caller>>() {
+        mCallerDataSource.loadCallerMap().subscribe(new Consumer<Map<String, Caller>>() {
             @Override
-            public void call(Map<String, Caller> callerMap) {
+            public void accept(Map<String, Caller> callerMap) {
                 mView.attachCallerMap(callerMap);
             }
         });
@@ -97,9 +101,9 @@ public class MainPresenter implements MainContract.Presenter,
 
     @Override
     public void clearAll() {
-        mDatabase.clearAllInCalls().subscribe(new Action1<Void>() {
+        mDatabase.clearAllInCalls().subscribe(new Consumer<Void>() {
             @Override
-            public void call(Void aVoid) {
+            public void accept(Void aVoid) {
                 loadInCallList();
             }
         });
@@ -113,9 +117,9 @@ public class MainPresenter implements MainContract.Presenter,
 
         mView.showSearching();
 
-        mCallerDataSource.getCaller(number).subscribe(new Action1<Caller>() {
+        mCallerDataSource.getCaller(number).subscribe(new Consumer<Caller>() {
             @Override
-            public void call(Caller caller) {
+            public void accept(Caller caller) {
                 if (caller.getNumber() != null) {
                     mView.showSearchResult(caller);
                 } else {
@@ -176,9 +180,9 @@ public class MainPresenter implements MainContract.Presenter,
 
     @Override
     public void clearCache() {
-        mCallerDataSource.clearCache().subscribe(new Action1<Void>() {
+        mCallerDataSource.clearCache().subscribe(new Consumer<Void>() {
             @Override
-            public void call(Void aVoid) {
+            public void accept(Void aVoid) {
                 loadInCallList();
             }
         });
