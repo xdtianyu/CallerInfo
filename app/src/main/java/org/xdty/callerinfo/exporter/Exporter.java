@@ -18,10 +18,11 @@ import org.xdty.callerinfo.model.db.MarkedRecord;
 import java.util.List;
 import java.util.Map;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public final class Exporter {
 
@@ -40,11 +41,11 @@ public final class Exporter {
     }
 
     public Observable<String> export() {
-        return Observable.create(new Observable.OnSubscribe<String>() {
+        return Observable.create(new ObservableOnSubscribe<String>() {
             @Override
-            public void call(Subscriber<? super String> subscriber) {
-                subscriber.onNext(exportSync());
-                subscriber.onCompleted();
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                emitter.onNext(exportSync());
+                emitter.onComplete();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
@@ -63,11 +64,11 @@ public final class Exporter {
     }
 
     public Observable<String> fromString(final String s) {
-        return Observable.create(new Observable.OnSubscribe<String>() {
+        return Observable.create(new ObservableOnSubscribe<String>() {
             @Override
-            public void call(Subscriber<? super String> subscriber) {
-                subscriber.onNext(fromStringSync(s));
-                subscriber.onCompleted();
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                emitter.onNext(fromStringSync(s));
+                emitter.onComplete();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }

@@ -1,5 +1,6 @@
 package org.xdty.callerinfo.presenter;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -28,7 +29,7 @@ import org.xdty.phone.number.model.INumber;
 
 import javax.inject.Inject;
 
-import rx.functions.Action1;
+import io.reactivex.functions.Consumer;
 
 public class PhoneStatePresenter implements PhoneStateContract.Presenter {
 
@@ -204,6 +205,8 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
         return mDatabase.getInCallCount(number) >= mSetting.getRepeatedCountIndex() + 1;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @SuppressLint("CheckResult")
     @Override
     public void searchNumber(final String number) {
 
@@ -225,9 +228,9 @@ public class PhoneStatePresenter implements PhoneStateContract.Presenter {
         mView.showSearching();
 
         mCallerDataSource.getCaller(number, mode == SearchMode.OFFLINE)
-                .subscribe(new Action1<Caller>() {
+                .subscribe(new Consumer<Caller>() {
                     @Override
-                    public void call(Caller caller) {
+                    public void accept(Caller caller) {
                         Log.d(TAG, "call: " + number + "->" + caller.getNumber() +
                                 ", offline: " + caller.isOffline());
                         if (!caller.isEmpty()) {

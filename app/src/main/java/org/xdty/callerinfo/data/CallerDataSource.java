@@ -5,7 +5,7 @@ import org.xdty.callerinfo.model.db.Caller;
 
 import java.util.Map;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 public interface CallerDataSource {
 

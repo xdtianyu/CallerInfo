@@ -1,16 +1,18 @@
 package org.xdty.callerinfo.application;
 
+import android.annotation.SuppressLint;
 import android.os.StrictMode;
 
 import com.facebook.stetho.Stetho;
 
-import rx.Observable;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Completable;
+import io.reactivex.functions.Action;
+import io.reactivex.schedulers.Schedulers;
 
 public class DebugApplication extends Application {
     public final static String TAG = Application.class.getSimpleName();
 
+    @SuppressLint("CheckResult")
     @Override
     public void onCreate() {
 
@@ -25,9 +27,9 @@ public class DebugApplication extends Application {
                 //.penaltyDeath()
                 .build());
 
-        Observable.<Void>just(null).observeOn(Schedulers.io()).subscribe(new Action1<Void>() {
+        Completable.fromAction(new Action() {
             @Override
-            public void call(Void aVoid) {
+            public void run() throws Exception {
                 Stetho.initialize(
                         Stetho.newInitializerBuilder(DebugApplication.this)
                                 .enableDumpapp(
@@ -36,7 +38,8 @@ public class DebugApplication extends Application {
                                         DebugApplication.this))
                                 .build());
             }
-        });
+        }).subscribeOn(Schedulers.io()).subscribe();
+
         super.onCreate();
     }
 }
