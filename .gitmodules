@@ -3,4 +3,4 @@
 	url = https://github.com/xdtianyu/StandOut.git
 [submodule "PhoneNumber"]
 	path = PhoneNumber
-	url = git@github.com:xdtianyu/PhoneNumber.git
+	url = https://github.com/xdtianyu/PhoneNumber.git

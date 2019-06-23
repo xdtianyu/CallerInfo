@@ -5,8 +5,8 @@ import android.os.StrictMode;
 
 import com.facebook.stetho.Stetho;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
+import io.reactivex.Completable;
+import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
 public class DebugApplication extends Application {
@@ -27,10 +27,9 @@ public class DebugApplication extends Application {
                 //.penaltyDeath()
                 .build());
 
-        //noinspection ConstantConditions,ResultOfMethodCallIgnored
-        Observable.<Void>just(null).observeOn(Schedulers.io()).subscribe(new Consumer<Void>() {
+        Completable.fromAction(new Action() {
             @Override
-            public void accept(Void aVoid) throws Exception {
+            public void run() throws Exception {
                 Stetho.initialize(
                         Stetho.newInitializerBuilder(DebugApplication.this)
                                 .enableDumpapp(
@@ -39,7 +38,8 @@ public class DebugApplication extends Application {
                                         DebugApplication.this))
                                 .build());
             }
-        });
+        }).subscribeOn(Schedulers.io()).subscribe();
+
         super.onCreate();
     }
 }
