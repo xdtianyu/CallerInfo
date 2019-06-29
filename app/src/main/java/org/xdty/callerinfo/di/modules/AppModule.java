@@ -14,7 +14,7 @@ import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.callerinfo.utils.Contact;
 import org.xdty.callerinfo.utils.Window;
-import org.xdty.phone.number.PhoneNumber;
+import org.xdty.phone.number.RxPhoneNumber;
 
 import javax.inject.Singleton;
 
@@ -46,9 +46,8 @@ public class AppModule {
 
     @Singleton
     @Provides
-    public PhoneNumber providePhoneNumber() {
-        PhoneNumber.init(app);
-        return PhoneNumber.getInstance();
+    public RxPhoneNumber providePhoneNumber() {
+        return new RxPhoneNumber(app);
     }
 
     @Singleton

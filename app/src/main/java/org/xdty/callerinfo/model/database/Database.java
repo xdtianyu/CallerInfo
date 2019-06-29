@@ -7,6 +7,8 @@ import org.xdty.phone.number.model.INumber;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 public interface Database {
@@ -15,7 +17,7 @@ public interface Database {
 
     Observable<List<Caller>> fetchCallers();
 
-    Observable<Void> clearAllInCalls();
+    Observable<Integer> clearAllInCalls();
 
     void clearAllInCallSync();
 
@@ -27,7 +29,7 @@ public interface Database {
 
     void removeCaller(Caller caller);
 
-    void clearAllCallerSync();
+    int clearAllCallerSync();
 
     void updateCaller(Caller caller);
 

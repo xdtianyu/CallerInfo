@@ -12,8 +12,9 @@ import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.callerinfo.utils.Contact;
-import org.xdty.phone.number.PhoneNumber;
+import org.xdty.phone.number.RxPhoneNumber;
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.util.Utils;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class CallerRepository implements CallerDataSource {
     Database mDatabase;
 
     @Inject
-    PhoneNumber mPhoneNumber;
+    RxPhoneNumber mPhoneNumber;
 
     @Inject
     Permission mPermission;
@@ -184,7 +185,7 @@ public class CallerRepository implements CallerDataSource {
                         }
 
                         // load from phone number library offline data
-                        INumber iNumber = mPhoneNumber.getOfflineNumber(number);
+                        INumber iNumber = Utils.pathGeo(mPhoneNumber.getOfflineNumber(number).toList().blockingGet());
 
                         if (iNumber != null && iNumber.isValid()) {
                             emitter.onNext(handleResponse(iNumber, false));
@@ -204,7 +205,7 @@ public class CallerRepository implements CallerDataSource {
                         }
 
                         // get online number info
-                        INumber iOnlineNumber = mPhoneNumber.getNumber(number);
+                        INumber iOnlineNumber = Utils.mostCount(mPhoneNumber.getOnlineNumber(number).toList().blockingGet());
 
                         if (iOnlineNumber != null && iOnlineNumber.isValid()) {
                             if (!iOnlineNumber.hasGeo() && iNumber != null) {
@@ -272,17 +273,17 @@ public class CallerRepository implements CallerDataSource {
     }
 
     @Override
-    public Observable<Void> clearCache() {
+    public Observable<Integer> clearCache() {
 
         mCallerMap.clear();
         mLoadingCache.clear();
         mErrorCache.clear();
 
-        return Observable.fromCallable(new Callable<Void>() {
+        return Observable.fromCallable(new Callable<Integer>() {
             @Override
-            public Void call() throws Exception {
-                mDatabase.clearAllCallerSync();
-                return null;
+            public Integer call() throws Exception {
+
+                return mDatabase.clearAllCallerSync();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }

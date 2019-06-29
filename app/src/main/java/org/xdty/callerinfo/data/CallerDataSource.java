@@ -19,7 +19,7 @@ public interface CallerDataSource {
 
     void setOnDataUpdateListener(OnDataUpdateListener listener);
 
-    Observable<Void> clearCache();
+    Observable<Integer> clearCache();
 
     void updateCaller(String number, int type, String typeText);
 

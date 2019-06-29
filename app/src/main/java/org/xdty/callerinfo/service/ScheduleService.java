@@ -1,5 +1,6 @@
 package org.xdty.callerinfo.service;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
@@ -12,7 +13,7 @@ import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.database.Database;
 import org.xdty.callerinfo.model.db.MarkedRecord;
 import org.xdty.callerinfo.model.setting.Setting;
-import org.xdty.phone.number.PhoneNumber;
+import org.xdty.phone.number.RxPhoneNumber;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 
 import java.util.ArrayList;
@@ -21,7 +22,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ScheduleService extends Service implements PhoneNumber.CloudListener {
+import io.reactivex.functions.Consumer;
+
+@SuppressWarnings("ResultOfMethodCallIgnored")
+public class ScheduleService extends Service {
 
     private static final String TAG = ScheduleService.class.getSimpleName();
 
@@ -32,7 +36,7 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
     Setting mSetting;
 
     @Inject
-    PhoneNumber mPhoneNumber;
+    RxPhoneNumber mPhoneNumber;
 
     private Handler mThreadHandler;
     private Handler mMainHandler;
@@ -53,7 +57,6 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
         mMainHandler = new Handler(getMainLooper());
 
         mPutList = Collections.synchronizedList(new ArrayList<String>());
-        mPhoneNumber.addCloudListener(ScheduleService.this);
     }
 
     @Override
@@ -77,7 +80,6 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
 
-        mPhoneNumber.removeCloudListener(ScheduleService.this);
         mThreadHandler.removeCallbacksAndMessages(null);
         mThreadHandler.getLooper().quit();
 
@@ -85,13 +87,14 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
     }
 
     // run in background thread
+    @SuppressLint("CheckResult")
     private void runScheduledJobs() {
 
         // 1. upload marked number
         List<MarkedRecord> records = mDatabase.fetchMarkedRecordsSync();
         boolean isAutoReport = mSetting.isAutoReportEnabled();
 
-        for (MarkedRecord record : records) {
+        for (final MarkedRecord record : records) {
             if (!record.isReported()) {
                 if (!isAutoReport && record.getSource() != MarkedRecord.API_ID_USER_MARKED) {
                     continue;
@@ -99,7 +102,12 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
                 if (!TextUtils.isEmpty(record.getTypeName())) {
                     mPutList.add(record.getNumber());
                     // this put operation is asynchronous
-                    mPhoneNumber.put(record.toNumber());
+                    mPhoneNumber.put(record.toNumber()).subscribe(new Consumer<Boolean>() {
+                        @Override
+                        public void accept(Boolean aBoolean) throws Exception {
+                            onPutResult(record.toNumber(), aBoolean);
+                        }
+                    });
                 } else {
                     mDatabase.removeRecord(record);
                 }
@@ -116,7 +124,6 @@ public class ScheduleService extends Service implements PhoneNumber.CloudListene
         checkStopSelf();
     }
 
-    @Override
     public void onPutResult(CloudNumber number, boolean result) {
         Log.e(TAG, "onPutResult: " + number.getNumber() + ", result: " + result);
         if (result) {

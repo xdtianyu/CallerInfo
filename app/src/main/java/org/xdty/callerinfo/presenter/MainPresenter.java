@@ -12,7 +12,7 @@ import org.xdty.callerinfo.model.permission.Permission;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.callerinfo.utils.Contact;
-import org.xdty.phone.number.PhoneNumber;
+import org.xdty.phone.number.RxPhoneNumber;
 import org.xdty.phone.number.model.caller.Status;
 
 import java.util.ArrayList;
@@ -25,8 +25,7 @@ import io.reactivex.functions.Consumer;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 @SuppressLint("CheckResult")
-public class MainPresenter implements MainContract.Presenter,
-        PhoneNumber.CheckUpdateCallback, CallerDataSource.OnDataUpdateListener {
+public class MainPresenter implements MainContract.Presenter, CallerDataSource.OnDataUpdateListener {
 
     private final List<InCall> mInCallList = new ArrayList<>();
     @Inject
@@ -34,7 +33,7 @@ public class MainPresenter implements MainContract.Presenter,
     @Inject
     Permission mPermission;
     @Inject
-    PhoneNumber mPhoneNumber;
+    RxPhoneNumber mPhoneNumber;
     @Inject
     Database mDatabase;
     @Inject
@@ -101,9 +100,9 @@ public class MainPresenter implements MainContract.Presenter,
 
     @Override
     public void clearAll() {
-        mDatabase.clearAllInCalls().subscribe(new Consumer<Void>() {
+        mDatabase.clearAllInCalls().subscribe(new Consumer<Integer>() {
             @Override
-            public void accept(Void aVoid) {
+            public void accept(Integer integer) {
                 loadInCallList();
             }
         });
@@ -153,12 +152,19 @@ public class MainPresenter implements MainContract.Presenter,
 
     @Override
     public void start() {
-        mPhoneNumber.setCheckUpdateCallback(this);
         mCallerDataSource.setOnDataUpdateListener(this);
         loadCallerMap();
 
         if (System.currentTimeMillis() - mSetting.lastCheckDataUpdateTime() > 6 * 3600 * 1000) {
-            mPhoneNumber.checkUpdate();
+            mPhoneNumber.checkUpdate().subscribe(new Consumer<Status>() {
+                @Override
+                public void accept(Status status) throws Exception {
+                    if (status != null && status.count > 0) {
+                        mView.notifyUpdateData(status);
+                        mSetting.setStatus(status);
+                    }
+                }
+            });
         }
     }
 
@@ -170,7 +176,15 @@ public class MainPresenter implements MainContract.Presenter,
     @Override
     public void dispatchUpdate(Status status) {
         mView.showUpdateData(status);
-        mPhoneNumber.upgradeData();
+        mPhoneNumber.upgradeData().subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean result) throws Exception {
+                mView.updateDataFinished(result);
+                if (result) {
+                    mSetting.updateLastCheckDataUpdateTime(System.currentTimeMillis());
+                }
+            }
+        });
     }
 
     @Override
@@ -180,9 +194,9 @@ public class MainPresenter implements MainContract.Presenter,
 
     @Override
     public void clearCache() {
-        mCallerDataSource.clearCache().subscribe(new Consumer<Void>() {
+        mCallerDataSource.clearCache().subscribe(new Consumer<Integer>() {
             @Override
-            public void accept(Void aVoid) {
+            public void accept(Integer integer) {
                 loadInCallList();
             }
         });
@@ -200,22 +214,6 @@ public class MainPresenter implements MainContract.Presenter,
         if (isWaitDataUpdate) {
             mView.showCallLogs(mInCallList);
             isWaitDataUpdate = false;
-        }
-    }
-
-    @Override
-    public void onCheckResult(Status status) {
-        if (status != null && status.count > 0) {
-            mView.notifyUpdateData(status);
-            mSetting.setStatus(status);
-        }
-    }
-
-    @Override
-    public void onUpgradeData(boolean result) {
-        mView.updateDataFinished(result);
-        if (result) {
-            mSetting.updateLastCheckDataUpdateTime(System.currentTimeMillis());
         }
     }
 

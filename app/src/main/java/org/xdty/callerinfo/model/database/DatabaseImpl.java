@@ -68,13 +68,11 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
-    public Observable<Void> clearAllInCalls() {
-        return Observable.create(new ObservableOnSubscribe<Void>() {
+    public Observable<Integer> clearAllInCalls() {
+        return Observable.fromCallable(new Callable<Integer>() {
             @Override
-            public void subscribe(ObservableEmitter<Void> emitter) throws Exception {
-                mDataStore.delete(InCall.class).get().value();
-                emitter.onNext(null);
-                emitter.onComplete();
+            public Integer call() {
+                return mDataStore.delete(InCall.class).get().value();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
@@ -141,8 +139,8 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
-    public void clearAllCallerSync() {
-        mDataStore.delete(Caller.class).get().value();
+    public int clearAllCallerSync() {
+        return mDataStore.delete(Caller.class).get().value();
     }
 
     @Override
