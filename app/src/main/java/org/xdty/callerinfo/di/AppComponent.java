@@ -1,7 +1,7 @@
 package org.xdty.callerinfo.di;
 
 import org.xdty.callerinfo.activity.MarkActivity;
-import org.xdty.callerinfo.activity.SettingsActivity;
+import org.xdty.callerinfo.fragment.SettingsFragment;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.data.CallerRepository;
 import org.xdty.callerinfo.di.modules.AppModule;
@@ -35,7 +35,7 @@ public interface AppComponent {
 
     void inject(MarkActivity markActivity);
 
-    void inject(SettingsActivity.SettingsFragment settingsFragment);
+    void inject(SettingsFragment settingsFragment);
 
     void inject(CallerRepository callerRepository);
 

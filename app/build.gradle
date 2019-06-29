@@ -88,7 +88,6 @@ dependencies {
     implementation 'androidx.browser:browser:1.0.0'
 
     implementation 'org.xdty.preference:color-picker:0.0.4'
-    implementation 'com.jenzz:materialpreference:1.3'
     implementation 'com.minimize.library:seekbar-compat:0.2.4'
     implementation 'cat.ereza:customactivityoncrash:1.5.0'
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/apk/res-auto">
-    <com.jenzz.materialpreference.PreferenceCategory
+    <PreferenceCategory
         android:title="@string/color">
         <org.xdty.preference.ColorPreference
             android:defaultValue="@color/blue_light"
@@ -21,301 +21,301 @@
             android:title="@string/color_report"
             tools:colors="@array/rainbow"
             tools:columns="5"/>
-    </com.jenzz.materialpreference.PreferenceCategory>
+    </PreferenceCategory>
 
-    <com.jenzz.materialpreference.PreferenceCategory
+    <PreferenceCategory
         android:key="@string/float_window_key"
         android:title="@string/float_window">
 
         <PreferenceScreen
             android:layout="@layout/preference"
             android:title="@string/window_text_style">
-            <com.jenzz.materialpreference.Preference
+            <Preference
                 android:key="@string/window_text_size_key"
                 android:title="@string/window_text_size">
-            </com.jenzz.materialpreference.Preference>
+            </Preference>
 
-            <com.jenzz.materialpreference.Preference
+            <Preference
                 android:key="@string/window_text_alignment_key"
                 android:title="@string/window_text_alignment">
-            </com.jenzz.materialpreference.Preference>
+            </Preference>
 
-            <com.jenzz.materialpreference.Preference
+            <Preference
                 android:key="@string/window_text_padding_key"
                 android:title="@string/window_text_padding">
-            </com.jenzz.materialpreference.Preference>
+            </Preference>
 
-            <com.jenzz.materialpreference.SwitchPreference
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/window_text_color_key"
                 android:title="@string/window_text_color">
-            </com.jenzz.materialpreference.SwitchPreference>
+            </SwitchPreference>
         </PreferenceScreen>
 
-        <com.jenzz.materialpreference.Preference
+        <Preference
             android:key="@string/window_height_key"
             android:title="@string/window_height">
-        </com.jenzz.materialpreference.Preference>
+        </Preference>
 
-        <com.jenzz.materialpreference.Preference
+        <Preference
             android:key="@string/window_transparent_key"
             android:title="@string/window_transparent">
-        </com.jenzz.materialpreference.Preference>
+        </Preference>
 
-        <com.jenzz.materialpreference.SwitchPreference
+        <SwitchPreference
             android:defaultValue="true"
             android:key="@string/window_trans_back_only_key"
             android:title="@string/window_trans_back_only">
-        </com.jenzz.materialpreference.SwitchPreference>
+        </SwitchPreference>
 
         <PreferenceScreen
             android:layout="@layout/preference"
             android:title="@string/window_visibility">
-            <com.jenzz.materialpreference.SwitchPreference
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/ignore_known_contact_key"
                 android:title="@string/ignore_known_contact">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="false"
                 android:dependency="@string/ignore_known_contact_key"
                 android:key="@string/contact_offline_key"
                 android:title="@string/contact_offline">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/display_on_outgoing_key"
                 android:title="@string/display_on_outgoing">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="false"
                 android:dependency="@string/display_on_outgoing_key"
                 android:key="@string/outgoing_window_position_key"
                 android:title="@string/outgoing_window_position">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/hide_when_off_hook_key"
                 android:title="@string/hide_when_off_hook">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/hide_when_touch_key"
                 android:title="@string/hide_when_touch">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="true"
                 android:key="@string/window_close_anim_key"
                 android:title="@string/window_close_anim">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/disable_notify_key"
                 android:title="@string/disable_notify">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/disable_move_key"
                 android:title="@string/disable_move">
-            </com.jenzz.materialpreference.SwitchPreference>
+            </SwitchPreference>
         </PreferenceScreen>
 
-    </com.jenzz.materialpreference.PreferenceCategory>
+    </PreferenceCategory>
 
-    <com.jenzz.materialpreference.PreferenceCategory
+    <PreferenceCategory
         android:key="@string/advanced_key"
         android:title="@string/advanced">
-        <com.jenzz.materialpreference.Preference
+        <Preference
             android:key="@string/api_type_key"
             android:title="@string/api_type">
-        </com.jenzz.materialpreference.Preference>
+        </Preference>
         <PreferenceScreen
             android:key="@string/custom_data_key"
             android:layout="@layout/preference"
             android:title="@string/custom_data">
-            <com.jenzz.materialpreference.PreferenceCategory
+            <PreferenceCategory
                 android:title="@string/data_source">
-                <com.jenzz.materialpreference.Preference
+                <Preference
                     android:key="@string/juhe_api_key"
                     android:title="@string/custom_jh_api_key">
-                </com.jenzz.materialpreference.Preference>
-                <com.jenzz.materialpreference.Preference
+                </Preference>
+                <Preference
                     android:key="@string/custom_api_url"
                     android:title="@string/custom_api">
-                </com.jenzz.materialpreference.Preference>
-                <com.jenzz.materialpreference.SwitchPreference
+                </Preference>
+                <SwitchPreference
                     android:defaultValue="false"
                     android:key="@string/only_offline_key"
                     android:title="@string/only_offline">
-                </com.jenzz.materialpreference.SwitchPreference>
-            </com.jenzz.materialpreference.PreferenceCategory>
-            <com.jenzz.materialpreference.PreferenceCategory
+                </SwitchPreference>
+            </PreferenceCategory>
+            <PreferenceCategory
                 android:title="@string/white_list">
-                <com.jenzz.materialpreference.Preference
+                <Preference
                     android:key="@string/ignore_regex_key"
                     android:title="@string/ignore_regex">
-                </com.jenzz.materialpreference.Preference>
-            </com.jenzz.materialpreference.PreferenceCategory>
+                </Preference>
+            </PreferenceCategory>
         </PreferenceScreen>
         <PreferenceScreen
             android:key="@string/mark_key"
             android:layout="@layout/preference"
             android:title="@string/mark">
-            <com.jenzz.materialpreference.SwitchPreference
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/auto_report_key"
                 android:summary="@string/auto_report_summary"
                 android:title="@string/auto_report">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/enable_marking_key"
                 android:summary="@string/enable_marking_summary"
                 android:title="@string/enable_marking">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="false"
                 android:dependency="@string/enable_marking_key"
                 android:key="@string/not_mark_contact_key"
                 android:summary="@string/not_mark_contact_summary"
                 android:title="@string/not_mark_contact">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.Preference
+            </SwitchPreference>
+            <Preference
                 android:key="@string/offline_data_version_key"
                 android:title="@string/offline_data_version"/>
-            <com.jenzz.materialpreference.Preference
+            <Preference
                 android:key="number_appeal"
                 android:summary="@string/number_appeal_summary"
                 android:title="@string/number_appeal">
                 <intent android:action="org.xdty.callerinfo.NUMBER_APPEAL"/>
-            </com.jenzz.materialpreference.Preference>
+            </Preference>
         </PreferenceScreen>
         <PreferenceScreen
             android:key="@string/plugin_key"
             android:layout="@layout/preference"
             android:title="@string/plugin">
-            <com.jenzz.materialpreference.SwitchPreference
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/auto_hangup_key"
                 android:title="@string/auto_hangup">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/add_call_log_key"
                 android:title="@string/add_call_log">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/ring_once_and_auto_hangup_key"
                 android:title="@string/add_ring_once_call_log">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.SwitchPreference
+            </SwitchPreference>
+            <SwitchPreference
                 android:defaultValue="false"
                 android:key="@string/hide_plugin_icon_key"
                 android:title="@string/hide_plugin_icon">
-            </com.jenzz.materialpreference.SwitchPreference>
-            <com.jenzz.materialpreference.PreferenceCategory
+            </SwitchPreference>
+            <PreferenceCategory
                 android:dependency="@string/auto_hangup_key"
                 android:title="@string/blacklist">
-                <com.jenzz.materialpreference.Preference
+                <Preference
                     android:key="@string/hangup_keyword_key"
                     android:summary="@string/hangup_keyword_summary"
                     android:title="@string/hangup_keyword">
-                </com.jenzz.materialpreference.Preference>
-                <com.jenzz.materialpreference.Preference
+                </Preference>
+                <Preference
                     android:key="@string/hangup_geo_keyword_key"
                     android:summary="@string/hangup_geo_keyword_summary"
                     android:title="@string/hangup_geo_keyword">
-                </com.jenzz.materialpreference.Preference>
-                <com.jenzz.materialpreference.Preference
+                </Preference>
+                <Preference
                     android:key="@string/hangup_number_keyword_key"
                     android:summary="@string/hangup_number_keyword_summary"
                     android:title="@string/hangup_number_keyword">
-                </com.jenzz.materialpreference.Preference>
-                <com.jenzz.materialpreference.SwitchPreference
+                </Preference>
+                <SwitchPreference
                     android:key="@string/disable_outgoing_blacklist_key"
                     android:summary="@string/disable_outgoing_blacklist_summary"
                     android:title="@string/disable_outgoing_blacklist">
-                </com.jenzz.materialpreference.SwitchPreference>
-                <com.jenzz.materialpreference.SwitchPreference
+                </SwitchPreference>
+                <SwitchPreference
                     android:key="@string/temporary_disable_blacklist_key"
                     android:summary="@string/temporary_disable_blacklist_summary"
                     android:title="@string/temporary_disable_blacklist">
-                </com.jenzz.materialpreference.SwitchPreference>
-            </com.jenzz.materialpreference.PreferenceCategory>
-            <com.jenzz.materialpreference.PreferenceCategory
+                </SwitchPreference>
+            </PreferenceCategory>
+            <PreferenceCategory
                 android:title="@string/import_export">
-                <com.jenzz.materialpreference.Preference
+                <Preference
                     android:key="@string/import_key"
                     android:summary="@string/import_summary"
                     android:title="@string/import_data">
-                </com.jenzz.materialpreference.Preference>
-                <com.jenzz.materialpreference.Preference
+                </Preference>
+                <Preference
                     android:key="@string/export_key"
                     android:summary="@string/export_summary"
                     android:title="@string/export_data">
-                </com.jenzz.materialpreference.Preference>
-            </com.jenzz.materialpreference.PreferenceCategory>
+                </Preference>
+            </PreferenceCategory>
         </PreferenceScreen>
-        <com.jenzz.materialpreference.SwitchPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="@string/force_chinese_key"
             android:title="@string/force_chinese">
-        </com.jenzz.materialpreference.SwitchPreference>
-        <com.jenzz.materialpreference.SwitchPreference
+        </SwitchPreference>
+        <SwitchPreference
             android:defaultValue="false"
             android:key="@string/ignore_battery_optimizations_key"
             android:title="@string/ignore_battery_optimizations">
-        </com.jenzz.materialpreference.SwitchPreference>
-        <com.jenzz.materialpreference.SwitchPreference
+        </SwitchPreference>
+        <SwitchPreference
             android:defaultValue="false"
             android:key="@string/catch_crash_key"
             android:title="@string/catch_crash">
-        </com.jenzz.materialpreference.SwitchPreference>
+        </SwitchPreference>
 
-    </com.jenzz.materialpreference.PreferenceCategory>
+    </PreferenceCategory>
 
-    <com.jenzz.materialpreference.PreferenceCategory
+    <PreferenceCategory
         android:key="@string/about_key"
         android:title="@string/about">
 
-        <com.jenzz.materialpreference.Preference
+        <Preference
             android:key="@string/version_key"
             android:title="@string/version"/>
 
-        <com.jenzz.materialpreference.Preference
+        <Preference
             android:key="project"
             android:summary="@string/project_url"
             android:title="@string/project_title">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/project_url"/>
-        </com.jenzz.materialpreference.Preference>
+        </Preference>
 
         <PreferenceScreen
             android:key="@string/about_more_key"
             android:layout="@layout/preference"
             android:title="@string/about_more">
-            <com.jenzz.materialpreference.Preference
+            <Preference
                 android:key="@string/developer_key"
                 android:summary="@string/developer_summary"
                 android:title="@string/developer"/>
-            <com.jenzz.materialpreference.Preference
+            <Preference
                 android:key="feature"
                 android:title="@string/feature_notice">
                 <intent android:action="org.xdty.callerinfo.action.VIEW_FEATURE"/>
-            </com.jenzz.materialpreference.Preference>
-            <com.jenzz.materialpreference.Preference
+            </Preference>
+            <Preference
                 android:key="privacy"
                 android:title="@string/privacy_notice">
                 <intent android:action="org.xdty.callerinfo.action.VIEW_PRIVACY"/>
-            </com.jenzz.materialpreference.Preference>
-            <com.jenzz.materialpreference.Preference
+            </Preference>
+            <Preference
                 android:key="license"
                 android:title="@string/license">
                 <intent android:action="org.xdty.callerinfo.action.VIEW_LICENSES"/>
-            </com.jenzz.materialpreference.Preference>
+            </Preference>
         </PreferenceScreen>
 
-    </com.jenzz.materialpreference.PreferenceCategory>
+    </PreferenceCategory>
 </PreferenceScreen>
