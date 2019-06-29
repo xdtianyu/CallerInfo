@@ -3,7 +3,7 @@ package org.xdty.callerinfo.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 
 import org.xdty.callerinfo.R;

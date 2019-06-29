@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
-import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 

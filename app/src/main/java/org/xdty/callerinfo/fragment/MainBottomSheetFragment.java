@@ -6,10 +6,11 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatDialogFragment;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -266,7 +267,7 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
         mBottomSheet.setBackgroundColor(colorPair.color);
     }
 
-    public class BottomSheetDialog extends android.support.design.widget.BottomSheetDialog {
+    public class BottomSheetDialog extends com.google.android.material.bottomsheet.BottomSheetDialog {
 
         public BottomSheetDialog(@NonNull Context context) {
             super(context);

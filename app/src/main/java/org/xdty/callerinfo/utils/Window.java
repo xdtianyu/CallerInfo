@@ -2,7 +2,7 @@ package org.xdty.callerinfo.utils;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 
 import org.xdty.callerinfo.R;
