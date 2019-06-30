@@ -44,25 +44,23 @@ public class DatabaseImpl implements Database {
     @Override
     public Observable<List<InCall>> fetchInCalls() {
 
-        return Observable.create(new ObservableOnSubscribe<List<InCall>>() {
+        return Observable.fromCallable(new Callable<List<InCall>>() {
             @Override
-            public void subscribe(ObservableEmitter<List<InCall>> emitter) throws Exception {
-                emitter.onNext(mDataStore.select(InCall.class)
+            public List<InCall> call() throws Exception {
+                return mDataStore.select(InCall.class)
                         .orderBy(InCall.TIME.desc())
                         .get()
-                        .toList());
-                emitter.onComplete();
+                        .toList();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
     public Observable<List<Caller>> fetchCallers() {
-        return Observable.create(new ObservableOnSubscribe<List<Caller>>() {
+        return Observable.fromCallable(new Callable<List<Caller>>() {
             @Override
-            public void subscribe(ObservableEmitter<List<Caller>> emitter) throws Exception {
-                emitter.onNext(mDataStore.select(Caller.class).get().toList());
-                emitter.onComplete();
+            public List<Caller> call() throws Exception {
+                return mDataStore.select(Caller.class).get().toList();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
@@ -98,9 +96,9 @@ public class DatabaseImpl implements Database {
 
     @Override
     public Observable<Caller> findCaller(final String number) {
-        return Observable.create(new ObservableOnSubscribe<Caller>() {
+        return Observable.fromCallable(new Callable<Caller>() {
             @Override
-            public void subscribe(ObservableEmitter<Caller> emitter) throws Exception {
+            public Caller call() throws Exception {
                 List<Caller> callers = mDataStore.select(Caller.class)
                         .where(Caller.NUMBER.eq(number))
                         .get()
@@ -109,8 +107,7 @@ public class DatabaseImpl implements Database {
                 if (callers.size() > 0) {
                     caller = callers.get(0);
                 }
-                emitter.onNext(caller);
-                emitter.onComplete();
+                return caller;
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }

@@ -1,5 +1,7 @@
 package org.xdty.callerinfo.application;
 
+import android.util.Log;
+
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -14,6 +16,8 @@ import org.xdty.callerinfo.utils.Utils;
 import javax.inject.Inject;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
+import io.reactivex.functions.Consumer;
+import io.reactivex.plugins.RxJavaPlugins;
 
 public class Application extends android.app.Application {
     public final static String TAG = Application.class.getSimpleName();
@@ -42,6 +46,14 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         sApplication = this;
+
+        RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.e(TAG, Log.getStackTraceString(throwable));
+            }
+        });
+
         init();
     }
 
