@@ -1,12 +1,14 @@
 language: android
 
 android:
-   components:
-   - tools
-   - platform-tools
-   - android-29
-   - build-tools-29.0.1
-   - extra
+  components:
+    - tools
+    - platform-tools
+    - android-29
+    - build-tools-29.0.1
+    - android-28
+    - build-tools-28.0.3
+    - extra
 
 jdk: oraclejdk8
 
@@ -17,10 +19,10 @@ notifications:
   email: false
 
 before_install:
-   - touch local.properties
-   - source .travis/env.sh
-   - openssl aes-256-cbc -K $encrypted_75846693d905_key -iv $encrypted_75846693d905_iv -in secrets.tar.enc -out secrets.tar -d
-   - tar xvf secrets.tar
+  - touch local.properties
+  - source .travis/env.sh
+  - openssl aes-256-cbc -K $encrypted_75846693d905_key -iv $encrypted_75846693d905_iv -in secrets.tar.enc -out secrets.tar -d
+  - tar xvf secrets.tar
 
 script:
   - ./gradlew clean assembleDebug
