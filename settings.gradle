@@ -1,4 +1,7 @@
 include ':app', ':plugin'
 include ':standOut'
 include ':phone-number'
+include ':config'
+
 project(':phone-number').projectDir = new File('PhoneNumber/phone-number')
+project(':config').projectDir = new File('config/config')

@@ -4,3 +4,6 @@
 [submodule "PhoneNumber"]
 	path = PhoneNumber
 	url = https://github.com/xdtianyu/PhoneNumber.git
+[submodule "config"]
+	path = config
+	url = https://github.com/xdtianyu/AppConfig.git

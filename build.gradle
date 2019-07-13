@@ -1,8 +1,26 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    ext {
+        anko_version = '0.10.8'
+        kotlin_version = '1.3.41'
+        coroutines_version = '1.3.0-M2'
 
-    ext.kotlin_version = '1.3.40'
+        compileSdkVersion = 28
+        buildToolsVersion = "28"
+        minSdkVersion = 15
+        targetSdkVersion = 28
+
+        supportVersion = "28.0.0"
+        constraintVersion = "1.1.3"
+
+        kotlinVersion = "1.3.31"
+
+        pluginId = "org.xdty.callerinfo.plugin"
+
+        pluginVersionName = "1.1.7"
+        pluginVersionCode = 11
+    }
 
     repositories {
         jcenter()
@@ -27,23 +45,6 @@ allprojects {
         jcenter()
         google()
     }
-}
-
-ext {
-    compileSdkVersion = 28
-    buildToolsVersion = "28"
-    minSdkVersion = 15
-    targetSdkVersion = 28
-
-    supportVersion = "28.0.0"
-    constraintVersion = "1.1.3"
-
-    kotlinVersion = "1.3.31"
-
-    pluginId = "org.xdty.callerinfo.plugin"
-
-    pluginVersionName = "1.1.7"
-    pluginVersionCode = 11
 }
 
 task clean(type: Delete) {
