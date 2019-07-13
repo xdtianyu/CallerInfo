@@ -41,6 +41,9 @@ ext {
     kotlinVersion = "1.3.31"
 
     pluginId = "org.xdty.callerinfo.plugin"
+
+    pluginVersionName = "1.1.7"
+    pluginVersionCode = 11
 }
 
 task clean(type: Delete) {

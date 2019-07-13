@@ -8,8 +8,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
-        versionCode project.PLUGIN_VERSION_CODE.toInteger()
-        versionName project.PLUGIN_VERSION_NAME
+        versionCode rootProject.ext.pluginVersionCode
+        versionName rootProject.ext.pluginVersionName
         setProperty("archivesBaseName", "CallerInfo-plugin-v$versionName")
     }
     signingConfigs {
