@@ -1,10 +1,10 @@
 package org.xdty.callerinfo.di;
 
 import org.xdty.callerinfo.activity.MarkActivity;
-import org.xdty.callerinfo.fragment.SettingsFragment;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.data.CallerRepository;
 import org.xdty.callerinfo.di.modules.AppModule;
+import org.xdty.callerinfo.fragment.SettingsFragment;
 import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.presenter.MainBottomPresenter;
 import org.xdty.callerinfo.presenter.MainPresenter;
@@ -13,6 +13,7 @@ import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.service.ScheduleService;
 import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.callerinfo.utils.Contact;
+import org.xdty.callerinfo.worker.UpgradeWorker;
 
 import javax.inject.Singleton;
 
@@ -44,4 +45,6 @@ public interface AppComponent {
     void inject(DatabaseImpl database);
 
     void inject(Contact contact);
+
+    void inject(UpgradeWorker upgradeWorker);
 }

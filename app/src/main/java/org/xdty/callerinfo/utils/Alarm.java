@@ -6,9 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.service.ScheduleService;
+import org.xdty.callerinfo.worker.UpgradeWorker;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -41,4 +48,11 @@ public final class Alarm {
         alarm.setRepeating(AlarmManager.RTC_WAKEUP, now + 5 * 1000, 60 * 60 * 1000, pIntent);
     }
 
+    public void enqueueWorkers() {
+        PeriodicWorkRequest.Builder builder =
+                new PeriodicWorkRequest.Builder(UpgradeWorker.class, 6, TimeUnit.HOURS);
+        PeriodicWorkRequest request = builder.build();
+
+        WorkManager.getInstance().enqueueUniquePeriodicWork(TAG, ExistingPeriodicWorkPolicy.KEEP, request);
+    }
 }

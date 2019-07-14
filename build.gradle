@@ -7,7 +7,7 @@ buildscript {
         coroutines_version = '1.3.0-M2'
 
         compileSdkVersion = 29
-        minSdkVersion = 15
+        minSdkVersion = 16
         targetSdkVersion = 29
 
         supportVersion = "28.0.0"
@@ -19,6 +19,11 @@ buildscript {
 
         pluginVersionName = "1.1.7"
         pluginVersionCode = 11
+
+        workVersion = "1.0.1"
+        appcompatVersion = "1.0.2"
+        gsonVersion = "2.8.5"
+        annotationVersion = "1.1.0"
     }
 
     repositories {
@@ -28,13 +33,14 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.0-alpha04'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        classpath 'com.google.gms:google-services:4.2.0'
+        classpath 'com.google.gms:google-services:4.3.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
         classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
 
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
