@@ -80,8 +80,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.7.22'
 
-    androidTestImplementation "androidx.annotation:annotation:$annotationVersion"
-
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     // UiAutomator Testing
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
@@ -107,6 +105,7 @@ dependencies {
     //    compile 'com.github.sherpya:standout:1.0.3'
 
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.annotation:annotation:$annotationVersion"
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

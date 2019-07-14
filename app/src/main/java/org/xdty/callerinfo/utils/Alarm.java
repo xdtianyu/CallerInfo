@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -51,6 +53,12 @@ public final class Alarm {
     public void enqueueWorkers() {
         PeriodicWorkRequest.Builder builder =
                 new PeriodicWorkRequest.Builder(UpgradeWorker.class, 6, TimeUnit.HOURS);
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(true)
+                .setRequiresStorageNotLow(true)
+                .build();
+        builder.setConstraints(constraints);
         PeriodicWorkRequest request = builder.build();
 
         WorkManager.getInstance().enqueueUniquePeriodicWork(TAG, ExistingPeriodicWorkPolicy.KEEP, request);
