@@ -10,32 +10,45 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import org.xdty.callerinfo.R
 import org.xdty.callerinfo.application.Application
+import org.xdty.callerinfo.contract.UpgradeContact
+import org.xdty.callerinfo.di.DaggerUpgradeComponent
+import org.xdty.callerinfo.di.modules.AppModule
+import org.xdty.callerinfo.di.modules.UpgradeModule
 import org.xdty.callerinfo.model.Status
+import org.xdty.callerinfo.model.setting.Setting
 import org.xdty.callerinfo.utils.Constants
-import org.xdty.config.Config
 import javax.inject.Inject
 
-class UpgradeWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class UpgradeWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams), UpgradeContact.View {
 
     @Inject
-    lateinit var mConfig: Config
+    lateinit var mPresenter: UpgradeContact.Presenter
+
+    @Inject
+    lateinit var mSetting: Setting
 
     init {
-        Application.getApplication().appComponent.inject(this)
+        DaggerUpgradeComponent.builder()
+                .appModule(AppModule(Application.getApplication()))
+                .upgradeModule(UpgradeModule(this))
+                .build()
+                .inject(this)
     }
 
     override fun doWork(): Result {
-        try {
-
-            val status = mConfig.get(Status::class.java, "CallerInfo.json")
-
-            makeStatusNotification("Offline data upgraded: $status", applicationContext);
-            return Result.success()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            makeStatusNotification("Background worker failed: ${e.message}", applicationContext)
-        }
         return Result.failure()
+    }
+
+    override fun setPresenter(presenter: UpgradeContact.Presenter) {
+        mPresenter = presenter
+    }
+
+    override fun showSucceedNotification(status: Status) {
+        makeStatusNotification("Offline data upgraded: $status", applicationContext);
+    }
+
+    override fun showFailedNotification(error: Exception) {
+        makeStatusNotification("Background worker failed: ${error.message}", applicationContext)
     }
 
     private fun makeStatusNotification(message: String, context: Context) {

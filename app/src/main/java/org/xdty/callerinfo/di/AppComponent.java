@@ -9,11 +9,11 @@ import org.xdty.callerinfo.model.database.DatabaseImpl;
 import org.xdty.callerinfo.presenter.MainBottomPresenter;
 import org.xdty.callerinfo.presenter.MainPresenter;
 import org.xdty.callerinfo.presenter.PhoneStatePresenter;
+import org.xdty.callerinfo.presenter.UpgradePresenter;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.service.ScheduleService;
 import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.callerinfo.utils.Contact;
-import org.xdty.callerinfo.worker.UpgradeWorker;
 
 import javax.inject.Singleton;
 
@@ -46,5 +46,5 @@ public interface AppComponent {
 
     void inject(Contact contact);
 
-    void inject(UpgradeWorker upgradeWorker);
+    void inject(UpgradePresenter upgradePresenter);
 }
