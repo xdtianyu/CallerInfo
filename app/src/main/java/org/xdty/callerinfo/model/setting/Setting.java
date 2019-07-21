@@ -119,4 +119,6 @@ public interface Setting {
     boolean isOutgoingPositionEnabled();
 
     boolean isAddingRingOnceCallLog();
+
+    boolean isOfflineDataAutoUpgrade();
 }

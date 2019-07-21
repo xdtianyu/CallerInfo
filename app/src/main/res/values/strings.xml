@@ -119,7 +119,7 @@
     <string name="hangup_number_keyword_summary">Hangup when caller number start with keywords
     </string>
     <string name="hangup_number_keyword">Call block number start with keywords</string>
-    <string name="empty_string" translatable="false"/>
+    <string name="empty_string" translatable="false" />
     <string name="baidu_advertising" translatable="false">百度糯米</string>
     <string name="window_text_alignment">Window text alignment</string>
     <string name="align_left">Align left</string>
@@ -196,6 +196,8 @@
     <string name="offline_data_upgrade_success">Offline data has been updated to latest: %s</string>
     <string name="offline_data_upgrade_failed">Offline data upgrade failed: %s</string>
     <string name="offline_data_version_summary">Version %1$d, count %2$d, updated at %3$s</string>
+    <string name="offline_data_auto_upgrade">Automatic offline data update</string>
+    <string name="offline_data_check_now">Update offline data now</string>
     <string name="no_offline_data">No offline data</string>
     <string name="not_mark_contact">Not mark contact</string>
     <string name="not_mark_contact_summary">Don\'t show mark notice if number is in contacts</string>

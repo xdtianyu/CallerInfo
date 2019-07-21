@@ -297,6 +297,11 @@ public class SettingImpl implements Setting {
     }
 
     @Override
+    public boolean isOfflineDataAutoUpgrade() {
+        return mPrefs.getBoolean(getString(R.string.offline_data_auto_upgrade_key), true);
+    }
+
+    @Override
     public boolean isHidingWhenTouch() {
         return mPrefs.getBoolean(getString(R.string.hide_when_touch_key), false);
     }

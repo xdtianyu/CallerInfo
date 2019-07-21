@@ -6,9 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import org.xdty.callerinfo.application.Application;
@@ -49,7 +52,13 @@ public final class Alarm {
         alarm.setRepeating(AlarmManager.RTC_WAKEUP, now + 5 * 1000, 60 * 60 * 1000, pIntent);
     }
 
-    public void enqueueWorkers() {
+    public void enqueueUpgradeWork() {
+
+        if (!mSetting.isOfflineDataAutoUpgrade()) {
+            Log.d(TAG, "Offline data auto upgrade is not enabled.");
+            return;
+        }
+
         PeriodicWorkRequest.Builder builder =
                 new PeriodicWorkRequest.Builder(UpgradeWorker.class, 6, TimeUnit.HOURS);
         Constraints constraints = new Constraints.Builder()
@@ -60,6 +69,18 @@ public final class Alarm {
         builder.setConstraints(constraints);
         PeriodicWorkRequest request = builder.build();
 
-        WorkManager.getInstance().enqueueUniquePeriodicWork(TAG, ExistingPeriodicWorkPolicy.REPLACE, request);
+        WorkManager.getInstance().enqueueUniquePeriodicWork(UpgradeWorker.class.getSimpleName(),
+                ExistingPeriodicWorkPolicy.KEEP, request);
+    }
+
+    public void cancelUpgradeWork() {
+        WorkManager.getInstance().cancelUniqueWork(UpgradeWorker.class.getSimpleName());
+    }
+
+    public LiveData<WorkInfo> runUpgradeWorkOnce() {
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(UpgradeWorker.class).build();
+        WorkManager workManager = WorkManager.getInstance();
+        workManager.enqueue(request);
+        return workManager.getWorkInfoByIdLiveData(request.getId());
     }
 }
