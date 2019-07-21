@@ -51,6 +51,8 @@
     <string name="offline_status_count_key" translatable="false">offline_status_count_key</string>
     <string name="offline_status_new_count_key" translatable="false">offline_status_new_count_key</string>
     <string name="offline_status_timestamp_key" translatable="false">offline_status_timestamp_key</string>
+    <string name="offline_data_auto_upgrade_key" translatable="false">offline_data_auto_upgrade_key</string>
+    <string name="offline_data_check_now_key" translatable="false">offline_data_check_now_key</string>
     <string name="not_mark_contact_key" translatable="false">not_mark_contact_key</string>
     <string name="temporary_disable_blacklist_key" translatable="false">temporary_disable_blacklist_key</string>
     <string name="disable_outgoing_blacklist_key" translatable="false">disable_outgoing_blacklist_key</string>

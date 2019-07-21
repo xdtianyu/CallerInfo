@@ -183,6 +183,14 @@
             <Preference
                 android:key="@string/offline_data_version_key"
                 android:title="@string/offline_data_version"/>
+            <SwitchPreference
+                android:defaultValue="true"
+                android:key="@string/offline_data_auto_upgrade_key"
+                android:title="@string/offline_data_auto_upgrade">
+            </SwitchPreference>
+            <Preference
+                android:key="@string/offline_data_check_now_key"
+                android:title="@string/offline_data_check_now"/>
             <Preference
                 android:key="number_appeal"
                 android:summary="@string/number_appeal_summary"

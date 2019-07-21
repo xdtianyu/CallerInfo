@@ -58,3 +58,6 @@
 
 -keep class org.xdty.** { *; }
 -keep class com.facebook.stetho.** {*;}
+
+# minio
+-keep class io.minio.** { *; }

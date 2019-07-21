@@ -155,17 +155,17 @@ public class MainPresenter implements MainContract.Presenter, CallerDataSource.O
         mCallerDataSource.setOnDataUpdateListener(this);
         loadCallerMap();
 
-        if (System.currentTimeMillis() - mSetting.lastCheckDataUpdateTime() > 6 * 3600 * 1000) {
-            mPhoneNumber.checkUpdate().subscribe(new Consumer<Status>() {
-                @Override
-                public void accept(Status status) throws Exception {
-                    if (status != null && status.count > 0) {
-                        mView.notifyUpdateData(status);
-                        mSetting.setStatus(status);
-                    }
-                }
-            });
-        }
+//        if (System.currentTimeMillis() - mSetting.lastCheckDataUpdateTime() > 6 * 3600 * 1000) {
+//            mPhoneNumber.checkUpdate().subscribe(new Consumer<Status>() {
+//                @Override
+//                public void accept(Status status) throws Exception {
+//                    if (status != null && status.count > 0) {
+//                        mView.notifyUpdateData(status);
+//                        mSetting.setStatus(status);
+//                    }
+//                }
+//            });
+//        }
     }
 
     @Override

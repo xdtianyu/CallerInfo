@@ -44,6 +44,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import com.google.android.material.appbar.AppBarLayout;
 
@@ -51,13 +54,15 @@ import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.exporter.Exporter;
+import org.xdty.callerinfo.model.Status;
+import org.xdty.callerinfo.model.setting.Setting;
 import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.plugin.IPluginService;
 import org.xdty.callerinfo.plugin.IPluginServiceCallback;
 import org.xdty.callerinfo.service.FloatWindow;
+import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.utils.Window;
-import org.xdty.phone.number.model.caller.Status;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -88,6 +93,12 @@ public class SettingsFragment extends PreferenceFragment
 
     @Inject
     Window mWindow;
+
+    @Inject
+    Setting mSetting;
+
+    @Inject
+    Alarm mAlarm;
 
     int versionClickCount;
     Toast toast;
@@ -146,6 +157,8 @@ public class SettingsFragment extends PreferenceFragment
         bindPreference(R.string.not_mark_contact_key);
         bindPreference(R.string.temporary_disable_blacklist_key);
         bindPreference(R.string.outgoing_window_position_key);
+        bindPreference(R.string.offline_data_auto_upgrade_key);
+        bindPreference(R.string.offline_data_check_now_key);
 
         bindDataVersionPreference();
         bindVersionPreference();
@@ -192,9 +205,9 @@ public class SettingsFragment extends PreferenceFragment
         bindPreference(R.string.offline_data_version_key);
         Preference dataVersion = findPreference(getString(R.string.offline_data_version_key));
         Status status = SettingImpl.getInstance().getStatus();
-        String summary = getString(R.string.offline_data_version_summary, status.version,
-                status.count, Utils.getDate(status.timestamp * 1000));
-        if (status.version == 0) {
+        String summary = getString(R.string.offline_data_version_summary, status.getVersion(),
+                status.getCount(), Utils.getDate(status.getTimestamp() * 1000));
+        if (status.getVersion() == 0) {
             summary = getString(R.string.no_offline_data);
         }
         dataVersion.setSummary(summary);
@@ -848,6 +861,12 @@ public class SettingsFragment extends PreferenceFragment
                             R.string.enable_marking_key);
                 }
                 return false;
+            case R.string.offline_data_check_now_key:
+                checkOfflineData();
+                return false;
+            case R.string.offline_data_auto_upgrade_key:
+                resetOfflineDataUpgradeWorker();
+                return false;
             case R.string.outgoing_window_position_key:
                 if (sharedPrefs.getBoolean(getString(R.string.outgoing_window_position_key),
                         false)) {
@@ -858,6 +877,30 @@ public class SettingsFragment extends PreferenceFragment
         }
 
         return true;
+    }
+
+    private void resetOfflineDataUpgradeWorker() {
+        if (!mSetting.isOfflineDataAutoUpgrade()) {
+            mAlarm.cancelUpgradeWork();
+        } else {
+            mAlarm.enqueueUpgradeWork();
+        }
+    }
+
+    private void checkOfflineData() {
+        mAlarm.runUpgradeWorkOnce().observeForever(new Observer<WorkInfo>() {
+            @Override
+            public void onChanged(WorkInfo workInfo) {
+                Log.d(TAG, "onChanged: " + workInfo);
+                if (workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                    Toast.makeText(getActivity(), R.string.offline_data_success, Toast.LENGTH_LONG).show();
+                    bindDataVersionPreference();
+                } else if (workInfo.getState() == WorkInfo.State.FAILED) {
+                    Toast.makeText(getActivity(), R.string.offline_data_failed, Toast.LENGTH_LONG).show();
+                }
+                WorkManager.getInstance().getWorkInfoByIdLiveData(workInfo.getId()).removeObserver(this);
+            }
+        });
     }
 
     private void onConfirmed(int key) {

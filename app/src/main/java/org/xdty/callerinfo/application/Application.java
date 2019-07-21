@@ -76,5 +76,6 @@ public class Application extends android.app.Application {
         mSetting.fix();
 
         mAlarm.alarm();
+        mAlarm.enqueueUpgradeWork();
     }
 }
