@@ -1,5 +1,6 @@
 package org.xdty.callerinfo.contract
 
+import android.content.Context
 import androidx.work.ListenableWorker
 import org.xdty.callerinfo.model.Status
 
@@ -12,6 +13,6 @@ interface UpgradeContact {
     }
 
     interface Presenter : BasePresenter {
-        fun loadConfig(): ListenableWorker.Result
+        fun upgradeOfflineData(context: Context): ListenableWorker.Result
     }
 }

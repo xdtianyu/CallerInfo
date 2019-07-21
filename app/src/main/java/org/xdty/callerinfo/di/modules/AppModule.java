@@ -16,6 +16,7 @@ import org.xdty.callerinfo.utils.Contact;
 import org.xdty.callerinfo.utils.Window;
 import org.xdty.config.Config;
 import org.xdty.phone.number.RxPhoneNumber;
+import org.xdty.phone.number.util.OkHttp;
 
 import javax.inject.Singleton;
 
@@ -26,6 +27,7 @@ import io.requery.android.sqlite.DatabaseSource;
 import io.requery.sql.Configuration;
 import io.requery.sql.ConfigurationBuilder;
 import io.requery.sql.EntityDataStore;
+import okhttp3.OkHttpClient;
 
 import static org.xdty.callerinfo.utils.Constants.DB_NAME;
 import static org.xdty.callerinfo.utils.Constants.DB_VERSION;
@@ -119,6 +121,12 @@ public class AppModule {
                 .accessKey("vAuKLADukB690VXlOr")
                 .secretKey("bSi9tMs8pdWNgGpgYht5lxDWf76SAg5sdR5U")
                 .build();
+    }
+
+    @Singleton
+    @Provides
+    public OkHttpClient provideOkHttp() {
+        return OkHttp.get().client();
     }
 
 }

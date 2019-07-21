@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
@@ -11,8 +12,8 @@ import com.google.gson.Gson;
 
 import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.model.Status;
 import org.xdty.callerinfo.utils.Utils;
-import org.xdty.phone.number.model.caller.Status;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -207,26 +208,22 @@ public class SettingImpl implements Setting {
 
     @Override
     public Status getStatus() {
-        Status status = new Status();
-        status.version = mPrefs.getInt(getString(R.string.offline_status_version_key), 0);
-        status.count = mPrefs.getInt(getString(R.string.offline_status_count_key), 0);
-        status.new_count = mPrefs.getInt(getString(R.string.offline_status_new_count_key), 0);
-        status.timestamp = mPrefs.getLong(getString(R.string.offline_status_timestamp_key), 0);
-        return status;
+        return new Status(
+                mPrefs.getInt(getString(R.string.offline_status_version_key), 0),
+                mPrefs.getInt(getString(R.string.offline_status_count_key), 0),
+                mPrefs.getInt(getString(R.string.offline_status_new_count_key), 0),
+                mPrefs.getLong(getString(R.string.offline_status_timestamp_key), 0),
+                "",
+                ""
+        );
     }
 
     @Override
     public void setStatus(Status status) {
-        mPrefs.edit()
-                .putInt(getString(R.string.offline_status_version_key), status.version)
-                .apply();
-        mPrefs.edit().putInt(getString(R.string.offline_status_count_key), status.count).apply();
-        mPrefs.edit()
-                .putInt(getString(R.string.offline_status_new_count_key), status.new_count)
-                .apply();
-        mPrefs.edit()
-                .putLong(getString(R.string.offline_status_timestamp_key), status.timestamp)
-                .apply();
+        mPrefs.edit().putInt(getString(R.string.offline_status_version_key), status.getVersion()).apply();
+        mPrefs.edit().putInt(getString(R.string.offline_status_count_key), status.getCount()).apply();
+        mPrefs.edit().putInt(getString(R.string.offline_status_new_count_key), status.getNewCount()).apply();
+        mPrefs.edit().putLong(getString(R.string.offline_status_timestamp_key), status.getTimestamp()).apply();
     }
 
     @Override

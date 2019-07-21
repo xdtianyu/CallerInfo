@@ -193,6 +193,8 @@
     <string name="offline_data_failed">Offline data update failed, please try again later.</string>
     <string name="offline_data_success">Offline data has been updated to latest</string>
     <string name="offline_data_version">Offline data status</string>
+    <string name="offline_data_upgrade_success">Offline data has been updated to latest: %s</string>
+    <string name="offline_data_upgrade_failed">Offline data upgrade failed: %s</string>
     <string name="offline_data_version_summary">Version %1$d, count %2$d, updated at %3$s</string>
     <string name="no_offline_data">No offline data</string>
     <string name="not_mark_contact">Not mark contact</string>

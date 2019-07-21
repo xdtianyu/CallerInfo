@@ -51,13 +51,13 @@ import org.xdty.callerinfo.BuildConfig;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.application.Application;
 import org.xdty.callerinfo.exporter.Exporter;
+import org.xdty.callerinfo.model.Status;
 import org.xdty.callerinfo.model.setting.SettingImpl;
 import org.xdty.callerinfo.plugin.IPluginService;
 import org.xdty.callerinfo.plugin.IPluginServiceCallback;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.utils.Window;
-import org.xdty.phone.number.model.caller.Status;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -192,9 +192,9 @@ public class SettingsFragment extends PreferenceFragment
         bindPreference(R.string.offline_data_version_key);
         Preference dataVersion = findPreference(getString(R.string.offline_data_version_key));
         Status status = SettingImpl.getInstance().getStatus();
-        String summary = getString(R.string.offline_data_version_summary, status.version,
-                status.count, Utils.getDate(status.timestamp * 1000));
-        if (status.version == 0) {
+        String summary = getString(R.string.offline_data_version_summary, status.getVersion(),
+                status.getCount(), Utils.getDate(status.getTimestamp() * 1000));
+        if (status.getVersion() == 0) {
             summary = getString(R.string.no_offline_data);
         }
         dataVersion.setSummary(summary);

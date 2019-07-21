@@ -1,6 +1,6 @@
 package org.xdty.callerinfo.model.setting;
 
-import org.xdty.phone.number.model.caller.Status;
+import org.xdty.callerinfo.model.Status;
 
 import java.util.ArrayList;
 
