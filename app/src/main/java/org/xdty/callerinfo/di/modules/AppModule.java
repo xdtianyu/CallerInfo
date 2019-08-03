@@ -117,7 +117,7 @@ public class AppModule {
     @Provides
     public Config provideConfig() {
         return new Config.Builder()
-                .endpoint("https://s3-tx.xdty.org")
+                .endpoint("https://s3-hk.xdty.org")
                 .accessKey("vAuKLADukB690VXlOr")
                 .secretKey("bSi9tMs8pdWNgGpgYht5lxDWf76SAg5sdR5U")
                 .build();
