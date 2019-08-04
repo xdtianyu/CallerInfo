@@ -15,8 +15,8 @@ buildscript {
 
         pluginId = "org.xdty.callerinfo.plugin"
 
-        pluginVersionName = "1.1.7"
-        pluginVersionCode = 11
+        pluginVersionName = "1.1.8"
+        pluginVersionCode = 12
 
         workVersion = "1.0.1"
         appcompatVersion = "1.0.2"
