@@ -32,5 +32,5 @@ git --no-pager log $PREV_TAG...$TAG \
 echo "
 ## changes
 
-- [$PREV_TAG - $TAG](https://github.com/$TRAVIS_REPO_SLUG/compare/$PREV_TAG...$TAG?diff=unified)
+- [$PREV_TAG - $TAG](https://github.com/$TRAVIS_REPO_SLUG/compare/$PREV_TAG...$TAG?diff=split)
 "
