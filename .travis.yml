@@ -45,8 +45,9 @@ deploy:
     tags: true
 
 after_deploy:
-  - export BODY="$(.travis/changelog.sh)"
-  - echo "$BODY"
+  - .travis/changelog.sh > changelog
+  - cat changelog
+  - ruby .travis/github_release.rb -c $GITHUB_TOKEN -r $TRAVIS_REPO_SLUG -c changelog -t $TRAVIS_TAG
 
 env:
   global:
