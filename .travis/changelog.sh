@@ -1,10 +1,14 @@
 #!/bin/bash
 
+set -x
+
 TAG=$(git describe --abbrev=0)
 PREV_TAG=$(git describe --abbrev=0 HEAD^)
 PLUGIN_VERSION=$(cat build.gradle |grep pluginVersionName|cut -d \" -f 2)
 
-MD5_LINE=$(curl -s https://api.travis-ci.org/v3/job/$TRAVIS_BUILD_ID/log.txt | grep -n 'exec md5sum' | cut -d : -f 1 | head -n 1)
+if [ ! -z "$TRAVIS_BUILD_ID" ]; then
+    MD5_LINE=$(curl -s https://api.travis-ci.org/v3/job/$TRAVIS_JOB_ID/log.txt | grep -n 'exec md5sum' | cut -d : -f 1 | head -n 1)
+fi
 
 echo "
 [![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/$TAG/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/$TAG/callerinfo-$TAG-release.apk)

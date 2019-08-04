@@ -34,20 +34,19 @@ script:
   - echo ------ sha1sum ------
   - find $HOME -maxdepth 1 -name \*.apk -exec sha1sum {} \;
 
-before_deploy:
-  - export BODY="$(.travis/changelog.sh)"
-  - echo "$BODY"
-
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
   file_glob: true
   file:
     - "$HOME/*.apk"
-  body: $BODY
   skip_cleanup: true
   on:
     tags: true
+
+after_deploy:
+  - export BODY="$(.travis/changelog.sh)"
+  - echo "$BODY"
 
 env:
   global:
