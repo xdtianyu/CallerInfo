@@ -2,7 +2,9 @@ package org.xdty.callerinfo.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.xdty.callerinfo.R;
@@ -17,6 +19,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         setTitle(R.string.action_settings);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(android.R.id.content, SettingsFragment.newInstance(getIntent()))
@@ -28,6 +35,15 @@ public class SettingsActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         Context context = Utils.changeLang(newBase);
         super.attachBaseContext(context);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+        }
+        return true;
     }
 
 }
