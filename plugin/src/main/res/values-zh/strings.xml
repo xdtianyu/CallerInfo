@@ -10,4 +10,5 @@
     <string name="setting">设置</string>
     <string name="main_app_too_old">请更新主应用以支持此操作</string>
     <string name="install_full_plugin">此版本不支持写入通话记录，建议更新到 <a href="https://github.com/xdtianyu/CallerInfo/releases">完整版本</a></string>
+    <string name="plugin_service_running">插件服务正在运行</string>
 </resources>

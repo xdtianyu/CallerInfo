@@ -15,7 +15,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.provider.CallLog;
+
 import androidx.annotation.RequiresApi;
+
 import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -98,7 +100,7 @@ public class PluginService extends Service {
                         content.put(CallLog.Calls.NUMBER, mName + " (" + mNumber + ")");
                     }
                     getContentResolver().update(CallLog.Calls.CONTENT_URI, content,
-                            CallLog.Calls.NUMBER + "=?", new String[] { mNumber });
+                            CallLog.Calls.NUMBER + "=?", new String[]{mNumber});
                 }
             }, 1000);
 
@@ -219,7 +221,7 @@ public class PluginService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager nm = ((NotificationManager) getSystemService(
                     Context.NOTIFICATION_SERVICE));
             if (nm != null) {
@@ -231,9 +233,10 @@ public class PluginService extends Service {
                 nm.createNotificationChannel(channel);
 
                 Notification notification = new Notification.Builder(this, CHANNEL_ID)
-                        .setContentTitle("")
+                        .setContentTitle(getString(R.string.plugin_service_running))
+                        .setSmallIcon(R.drawable.ic_puzzle_black_24dp)
                         .setChannelId(CHANNEL_ID)
-                        .setContentText("").build();
+                        .build();
                 startForeground(1, notification);
             }
         }

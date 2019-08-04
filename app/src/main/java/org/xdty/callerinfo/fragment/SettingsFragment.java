@@ -302,7 +302,7 @@ public class SettingsFragment extends PreferenceFragment
 
     private void bindPluginService() {
         try {
-            if (Build.VERSION.SDK_INT >= 26) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 getActivity().startForegroundService(mPluginIntent);
             } else {
                 getActivity().startService(mPluginIntent);
@@ -988,6 +988,7 @@ public class SettingsFragment extends PreferenceFragment
         }
     }
 
+    @SuppressLint("CheckResult")
     private void exportData() {
         Exporter exporter = new Exporter(getActivity());
         exporter.export().subscribe(new Consumer<String>() {
