@@ -23,7 +23,7 @@ Release files are generated and deployed by Travis-ci, check sha1 and md5 from *
 
 echo "## commits"
 git --no-pager log $PREV_TAG...$TAG \
-    --pretty=format:' - [%s](https://github.com/$TRAVIS_REPO_SLUG/commit/%H)' \
+    --pretty=format:" - [%s](https://github.com/$TRAVIS_REPO_SLUG/commit/%H)" \
     --reverse | \
     grep -v 'Merge pull request' | \
     grep -v 'build' | \
