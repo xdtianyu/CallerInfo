@@ -83,9 +83,7 @@ class UpgradeWorker(context: Context, workerParams: WorkerParameters) : Worker(c
 
         // Create the notification
         val builder = NotificationCompat.Builder(context, Constants.CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notifications_none_white_18dp)
-                .setContentTitle(context.getString(R.string.app_name))
-                .setContentText(message)
+                .setSmallIcon(R.drawable.ic_call_disconnected_24dp)
                 .setContentIntent(intent)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(message))
