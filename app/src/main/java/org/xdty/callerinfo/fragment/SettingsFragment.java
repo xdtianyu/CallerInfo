@@ -888,6 +888,7 @@ public class SettingsFragment extends PreferenceFragment
     }
 
     private void checkOfflineData() {
+        Toast.makeText(getActivity(), R.string.offline_data_checking, Toast.LENGTH_LONG).show();
         mAlarm.runUpgradeWorkOnce().observeForever(new Observer<WorkInfo>() {
             @Override
             public void onChanged(WorkInfo workInfo) {

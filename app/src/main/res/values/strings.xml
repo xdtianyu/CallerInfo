@@ -198,6 +198,7 @@
     <string name="offline_data_version_summary">Version %1$d, count %2$d, updated at %3$s</string>
     <string name="offline_data_auto_upgrade">Automatic offline data update</string>
     <string name="offline_data_check_now">Update offline data now</string>
+    <string name="offline_data_checking">Checking for updates, please wait a moment</string>
     <string name="no_offline_data">No offline data</string>
     <string name="not_mark_contact">Not mark contact</string>
     <string name="not_mark_contact_summary">Don\'t show mark notice if number is in contacts</string>
