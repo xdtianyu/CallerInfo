@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
@@ -43,7 +42,6 @@ class UpgradeWorker(context: Context, workerParams: WorkerParameters) : Worker(c
     }
 
     override fun doWork(): Result {
-        Log.d(tag, "doWork")
         return mPresenter.upgradeOfflineData(applicationContext)
     }
 
@@ -54,21 +52,21 @@ class UpgradeWorker(context: Context, workerParams: WorkerParameters) : Worker(c
     override fun showSucceedNotification(status: Status) {
         val info = applicationContext.getString(R.string.offline_data_version_summary, status.version,
                 status.count, Utils.getDate(status.timestamp * 1000))
-        showNotification(applicationContext, applicationContext.getString(R.string.offline_data_upgrade_success, info))
+        showNotification(applicationContext, applicationContext.getString(R.string.offline_data_upgrade_success), info)
     }
 
     override fun showFailedNotification(error: Exception) {
-        showNotification(applicationContext, applicationContext.getString(R.string.offline_data_upgrade_failed, error.message))
+        showNotification(applicationContext, applicationContext.getString(R.string.offline_data_upgrade_failed), error.message)
     }
 
-    private fun showNotification(context: Context, message: String) {
+    private fun showNotification(context: Context, title: String, message: String?) {
         // Make a channel if necessary
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
             val name = Constants.VERBOSE_NOTIFICATION_CHANNEL_NAME
             val description = Constants.VERBOSE_NOTIFICATION_CHANNEL_DESCRIPTION
-            val importance = NotificationManager.IMPORTANCE_HIGH
+            val importance = NotificationManager.IMPORTANCE_LOW
             val channel = NotificationChannel(Constants.CHANNEL_ID, name, importance)
             channel.description = description
 
@@ -86,6 +84,7 @@ class UpgradeWorker(context: Context, workerParams: WorkerParameters) : Worker(c
                 .setSmallIcon(R.drawable.ic_call_disconnected_24dp)
                 .setContentIntent(intent)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setContentTitle(title)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(message))
                 .setAutoCancel(true)
                 .setVibrate(LongArray(0))
