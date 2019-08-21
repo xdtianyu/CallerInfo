@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: build
       uses: xdtianyu/actions-android-ci@master
-      run: |
+    - run: |
         git submodule sync --recursive
         git submodule update --init --recursive
         source .travis/env.sh
