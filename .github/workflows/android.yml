@@ -9,8 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Build
-      uses: 'xdtianyu/actions-android-ci@master'
+    - name: build
+      uses: xdtianyu/actions-android-ci@master
       run: |
         git submodule sync --recursive
         git submodule update --init --recursive
