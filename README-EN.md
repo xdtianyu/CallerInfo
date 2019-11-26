@@ -14,7 +14,7 @@ An android app to get phone number location and other info. [中文](https://git
 
 [![Download (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v1.3.3/CallerInfo-plugin-v1.0.1-release.apk.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v1.3.3/CallerInfo-plugin-v1.0.1-release.apk)
 
-##Features
+## Features
 
 1\. Query incoming phone number and show float window with location and extra info.
 
@@ -30,7 +30,7 @@ An android app to get phone number location and other info. [中文](https://git
 
 7\. Auto hangup by number info or geo location, write number info in system call log (plugin function).
 
-##Contributors
+## Contributors
 [tianyu](https://www.xdty.org)
 
 [blueset](https://github.com/blueset) Refine on English translation
@@ -38,7 +38,7 @@ An android app to get phone number location and other info. [中文](https://git
 [Soyofuki](https://github.com/Soyofuki) Add Japanese translation
 
 
-##Screenshots
+## Screenshots
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/2.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/3.png" alt="screenshot" width="300">
@@ -49,7 +49,7 @@ An android app to get phone number location and other info. [中文](https://git
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-2.png" alt="screenshot" width="300">
 
-##Thanks to
+## Thanks to
 
 [PhoneNumber](https://github.com/xdtianyu/PhoneNumber): A library to get phone number location and other info from baidu api.
 
