@@ -17,8 +17,8 @@ git submodule update --init --recursive
 参考 `.travis/env.sh` 文件，首先解码内置的用于公开使用的 `release.jsk` 文件
 
 ```
-openssl aes-256-cbc -K 12CF1B5E0D192628AA922230549EEDFD889E6CF7463933C6DABD9A1300FCA23D -iv 66813CF28D04CD129D57436B78DECBA4 -in public.jks.enc -out public.jks -d
-mv public.jks release.jks
+openssl aes-256-cbc -K 12CF1B5E0D192628AA922230549EEDFD889E6CF7463933C6DABD9A1300FCA23D -iv 66813CF28D04CD129D57436B78DECBA4 -in public.tar.enc -out public.tar -d
+tar xvf public.tar
 ```
 
 导出环境变量，注意修改 `ANDROID_HOME` 为你的 `Android SDK` 目录
