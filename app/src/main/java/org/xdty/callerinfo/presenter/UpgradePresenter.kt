@@ -8,7 +8,8 @@ import android.util.Log
 import androidx.work.ListenableWorker
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okio.Okio
+import okio.buffer
+import okio.sink
 import org.xdty.callerinfo.application.Application
 import org.xdty.callerinfo.contract.UpgradeContact
 import org.xdty.callerinfo.model.Status
@@ -88,10 +89,10 @@ class UpgradePresenter(view: UpgradeContact.View) : UpgradeContact.Presenter {
                 val response = mOkHttpClient.newCall(
                         request.build()).execute()
                 val downloadedFile = File(context.cacheDir, filename)
-                val sink = Okio.buffer(Okio.sink(downloadedFile))
-                sink.writeAll(response.body()!!.source())
+                val sink = downloadedFile.sink().buffer()
+                sink.writeAll(response.body!!.source())
                 sink.close()
-                response.body()!!.close()
+                response.body!!.close()
 
                 // check md5
                 if (!Utils.checkMD5(status.md5, downloadedFile)) {
