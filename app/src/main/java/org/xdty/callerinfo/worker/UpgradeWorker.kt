@@ -20,6 +20,8 @@ import org.xdty.callerinfo.di.modules.UpgradeModule
 import org.xdty.callerinfo.model.Status
 import org.xdty.callerinfo.model.setting.Setting
 import org.xdty.callerinfo.utils.Constants
+import org.xdty.callerinfo.utils.Networks
+import org.xdty.callerinfo.utils.Toasts
 import org.xdty.callerinfo.utils.Utils
 import javax.inject.Inject
 
@@ -42,7 +44,12 @@ class UpgradeWorker(context: Context, workerParams: WorkerParameters) : Worker(c
     }
 
     override fun doWork(): Result {
-        return mPresenter.upgradeOfflineData(applicationContext)
+        return if (Networks.hasNetwork()) {
+            mPresenter.upgradeOfflineData(applicationContext)
+        } else {
+            Toasts.show(applicationContext, R.string.check_offline_no_network)
+            Result.failure()
+        }
     }
 
     override fun setPresenter(presenter: UpgradeContact.Presenter) {

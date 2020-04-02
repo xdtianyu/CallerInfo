@@ -250,4 +250,5 @@
     <string name="hide_plugin_icon">Hide plugin\'s launcher icon</string>
     <string name="ignore_battery_optimizations">Ignore battery optimizations</string>
     <string name="ignore_battery_optimizations_description">" You will be taken to the system battery optimization option, find the app in the All apps list and select Ignore."</string>
+    <string name="check_offline_no_network">Check offline data failed: no network</string>
 </resources>

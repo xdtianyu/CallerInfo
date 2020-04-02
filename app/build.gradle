@@ -145,6 +145,7 @@ dependencies {
     implementation project(':phone-number')
     implementation project(':config')
     implementation project(':standOut')
+    implementation project(':log')
 }
 
 apply from: '../signing.gradle'

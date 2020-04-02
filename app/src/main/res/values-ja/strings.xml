@@ -198,4 +198,5 @@
     <string name="number_appeal_summary">電話番号タグエラー</string>
     <string name="offline_data_check_now">オフラインデータの更新を確認する</string>
     <string name="offline_data_auto_upgrade">今すぐオフラインデータを更新する</string>
+    <string name="check_offline_no_network">アップデートの失敗を確認：ネットワークなし</string>
 </resources>

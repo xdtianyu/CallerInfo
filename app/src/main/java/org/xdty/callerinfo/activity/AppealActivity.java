@@ -4,11 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,6 +11,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonObject;
 
 import net.openid.appauth.AuthState;
@@ -71,7 +72,7 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
     private AuthorizationService.TokenResponseCallback mTokenCallback = new AuthorizationService.TokenResponseCallback() {
         @Override
         public void onTokenRequestCompleted(@Nullable TokenResponse response,
-                @Nullable AuthorizationException ex) {
+                                            @Nullable AuthorizationException ex) {
 
             mAuthState.update(response, ex);
             writeAuthState(mAuthState);
@@ -308,6 +309,7 @@ public class AppealActivity extends AppCompatActivity implements View.OnClickLis
                 }
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void exchangeTokenFromAuthCode(AuthorizationResponse response) {

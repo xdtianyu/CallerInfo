@@ -16,6 +16,7 @@ import org.xdty.callerinfo.model.Status
 import org.xdty.callerinfo.model.setting.Setting
 import org.xdty.callerinfo.utils.Constants.DB_NAME
 import org.xdty.config.Config
+import org.xdty.log.NoLog
 import org.xdty.phone.number.util.Utils
 import java.io.File
 import javax.inject.Inject
@@ -47,7 +48,7 @@ class UpgradePresenter(view: UpgradeContact.View) : UpgradeContact.Presenter {
         var result = true
         try {
             val status = loadConfig()
-            Log.d(tag, "$status")
+            NoLog.d(tag, "$status")
 
             val dbStatus = getDBStatus(context)
 
@@ -58,7 +59,7 @@ class UpgradePresenter(view: UpgradeContact.View) : UpgradeContact.Presenter {
                     mView.showSucceedNotification(status)
                 }
             } else {
-                Log.d(tag, "Offline data is already up to date")
+                NoLog.d(tag, "Offline data is already up to date")
             }
 
         } catch (e: Exception) {

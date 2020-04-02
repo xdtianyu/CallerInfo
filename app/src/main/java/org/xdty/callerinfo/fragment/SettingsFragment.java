@@ -61,6 +61,7 @@ import org.xdty.callerinfo.plugin.IPluginService;
 import org.xdty.callerinfo.plugin.IPluginServiceCallback;
 import org.xdty.callerinfo.service.FloatWindow;
 import org.xdty.callerinfo.utils.Alarm;
+import org.xdty.callerinfo.utils.Toasts;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.utils.Window;
 
@@ -888,16 +889,16 @@ public class SettingsFragment extends PreferenceFragment
     }
 
     private void checkOfflineData() {
-        Toast.makeText(getActivity(), R.string.offline_data_checking, Toast.LENGTH_LONG).show();
+        Toasts.INSTANCE.show(getActivity(), R.string.offline_data_checking);
         mAlarm.runUpgradeWorkOnce().observeForever(new Observer<WorkInfo>() {
             @Override
             public void onChanged(WorkInfo workInfo) {
                 Log.d(TAG, "onChanged: " + workInfo);
                 if (workInfo.getState() == WorkInfo.State.SUCCEEDED) {
-                    Toast.makeText(getActivity(), R.string.offline_data_success, Toast.LENGTH_LONG).show();
+                    Toasts.INSTANCE.show(getActivity(), R.string.offline_data_success);
                     bindDataVersionPreference();
                 } else if (workInfo.getState() == WorkInfo.State.FAILED) {
-                    Toast.makeText(getActivity(), R.string.offline_data_failed, Toast.LENGTH_LONG).show();
+                    Toasts.INSTANCE.show(getActivity(), R.string.offline_data_failed);
                 }
                 WorkManager.getInstance().getWorkInfoByIdLiveData(workInfo.getId()).removeObserver(this);
             }
@@ -1136,8 +1137,7 @@ public class SettingsFragment extends PreferenceFragment
                             importData();
                         }
                     } else {
-                        Toast.makeText(getActivity(), R.string.storage_permission_failed,
-                                Toast.LENGTH_LONG).show();
+                        Toasts.INSTANCE.show(getActivity(), R.string.storage_permission_failed);
                     }
                 }
             });
