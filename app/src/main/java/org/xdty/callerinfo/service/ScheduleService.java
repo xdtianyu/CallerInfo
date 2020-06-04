@@ -43,7 +43,7 @@ public class ScheduleService extends Service {
     private List<String> mPutList;
 
     public ScheduleService() {
-        Application.getApplication().getAppComponent().inject(this);
+        Application.Companion.getAppComponent().inject(this);
     }
 
     @Override

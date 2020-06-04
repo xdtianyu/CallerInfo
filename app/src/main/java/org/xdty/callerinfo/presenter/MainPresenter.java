@@ -50,7 +50,7 @@ public class MainPresenter implements MainContract.Presenter, CallerDataSource.O
 
     public MainPresenter(MainContract.View view) {
         mView = view;
-        Application.getApplication().getAppComponent().inject(this);
+        Application.Companion.getAppComponent().inject(this);
     }
 
     @Override

@@ -3,8 +3,9 @@ package org.xdty.callerinfo.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
+
+import androidx.core.content.ContextCompat;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.application.Application;
@@ -39,7 +40,7 @@ public class TextColorPair {
     private static TextColorPair from(String type, String province,
             String city, String operators, String name, int count) {
 
-        Context context = Application.getApplication();
+        Context context = Application.Companion.getApplication();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 

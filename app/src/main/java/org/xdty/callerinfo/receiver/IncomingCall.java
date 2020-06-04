@@ -77,7 +77,7 @@ public class IncomingCall extends BroadcastReceiver {
             try {
 
                 DaggerPhoneStatusComponent.builder()
-                        .appModule(new AppModule(Application.getApplication()))
+                        .appModule(new AppModule(Application.Companion.getApplication()))
                         .phoneStatusModule(new PhoneStatusModule(this))
                         .build()
                         .inject(this);

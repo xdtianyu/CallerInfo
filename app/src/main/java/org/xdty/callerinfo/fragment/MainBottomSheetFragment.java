@@ -6,11 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.app.AppCompatDialogFragment;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,6 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDialogFragment;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.apmem.tools.layouts.FlowLayout;
 import org.xdty.callerinfo.R;
@@ -68,7 +69,7 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
 
     public MainBottomSheetFragment() {
         DaggerMainBottomComponent.builder()
-                .appModule(new AppModule(Application.getApplication()))
+                .appModule(new AppModule(Application.Companion.getApplication()))
                 .mainBottomModule(new MainBottomModule(this))
                 .build()
                 .inject(this);

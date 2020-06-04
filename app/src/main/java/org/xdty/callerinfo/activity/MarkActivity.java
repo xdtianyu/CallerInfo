@@ -4,11 +4,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.application.Application;
@@ -43,7 +44,7 @@ public class MarkActivity extends BaseActivity implements DialogInterface.OnDism
         super.onCreate(savedInstanceState);
         setTitle("");
 
-        Application.getApplication().getAppComponent().inject(this);
+        Application.Companion.getAppComponent().inject(this);
     }
 
     @Override

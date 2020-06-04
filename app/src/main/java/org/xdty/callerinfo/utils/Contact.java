@@ -30,7 +30,7 @@ public final class Contact {
     private long lastUpdateTime;
 
     private Contact() {
-        Application.getApplication().getAppComponent().inject(this);
+        Application.Companion.getAppComponent().inject(this);
         loadContactCache();
     }
 
@@ -67,7 +67,7 @@ public final class Contact {
             public void subscribe(ObservableEmitter<Map<String, String>> emitter) throws Exception {
                 Map<String, String> contactsMap = new HashMap<>();
 
-                Cursor cursor = Application.getApplication()
+                Cursor cursor = Application.Companion.getApplication()
                         .getContentResolver()
                         .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null,
                                 null);

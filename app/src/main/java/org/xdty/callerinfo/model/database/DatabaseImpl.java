@@ -34,7 +34,7 @@ public class DatabaseImpl implements Database {
     EntityDataStore<Persistable> mDataStore;
 
     private DatabaseImpl() {
-        Application.getApplication().getAppComponent().inject(this);
+        Application.Companion.getAppComponent().inject(this);
     }
 
     public static DatabaseImpl getInstance() {

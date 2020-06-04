@@ -2,8 +2,9 @@ package org.xdty.callerinfo.utils;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
+
+import androidx.core.content.ContextCompat;
 
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.application.Application;
@@ -22,7 +23,7 @@ public final class Window {
     private boolean isShowing = false;
 
     public Window() {
-        mContext = Application.getApplication();
+        mContext = Application.application;
     }
 
     public void showTextWindow(int resId, Type type) {

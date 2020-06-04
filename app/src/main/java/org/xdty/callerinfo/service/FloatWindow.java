@@ -63,7 +63,7 @@ public class FloatWindow extends StandOutWindow {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            Application.getApplication().getAppComponent().inject(this);
+            Application.Companion.getAppComponent().inject(this);
             return super.onStartCommand(intent, flags, startId);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
