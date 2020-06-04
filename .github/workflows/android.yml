@@ -15,8 +15,8 @@ jobs:
     - name: before build
       uses: xdtianyu/actions-android-ci@master
       with:
-        args: 'bash -c "
-        source .travis/env.sh;
+        args: '"
+        . .travis/env.sh;
         openssl aes-256-cbc -K $encrypted_75846693d905_key -iv $encrypted_75846693d905_iv -in secrets.tar.enc -out secrets.tar -d;
         tar xvf secrets.tar;
         touch local.properties
@@ -25,8 +25,8 @@ jobs:
     - name: build
       uses: xdtianyu/actions-android-ci@master
       with:
-        args: 'bash -c "
-        source .travis/env.sh;
-        source /opt/setup-android-sdk.sh;
+        args: '"
+        . .travis/env.sh;
+        . /opt/setup-android-sdk.sh;
         ./gradlew assembleDebug
         "'
