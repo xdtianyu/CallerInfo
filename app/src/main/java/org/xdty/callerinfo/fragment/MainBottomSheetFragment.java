@@ -195,7 +195,7 @@ public class MainBottomSheetFragment extends AppCompatDialogFragment
     }
 
     @Override
-    public void setPresenter(MainContract.Presenter presenter) {
+    public void setPresenter(MainBottomContact.Presenter presenter) {
 
     }
 
