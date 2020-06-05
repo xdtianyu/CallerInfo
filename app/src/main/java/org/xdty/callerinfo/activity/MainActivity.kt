@@ -162,13 +162,10 @@ class MainActivity : BaseActivity(), MainContract.View {
         mSwipeRefreshLayout.setOnRefreshListener { mPresenter.loadCallerMap() }
     }
 
-    override fun getLayoutId(): Int {
-        return R.layout.activity_main
-    }
-
-    override fun getTitleId(): Int {
-        return R.string.app_name
-    }
+    override val layoutId: Int
+        get() = R.layout.activity_main
+    override val titleId: Int
+        get() = R.string.app_name
 
     override fun onResume() {
         super.onResume()
