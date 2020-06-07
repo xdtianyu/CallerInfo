@@ -59,6 +59,6 @@ public abstract class BaseInCall {
     }
 
     public String getReadableTime() {
-        return Utils.readableDate(time) + " " + Utils.getTime(time);
+        return Utils.Companion.readableDate(time) + " " + Utils.Companion.getTime(time);
     }
 }

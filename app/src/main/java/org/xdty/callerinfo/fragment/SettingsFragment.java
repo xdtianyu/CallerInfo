@@ -74,8 +74,6 @@ import javax.inject.Inject;
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
 import io.reactivex.functions.Consumer;
 
-import static org.xdty.callerinfo.utils.Utils.mask;
-
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class SettingsFragment extends PreferenceFragment
         implements Preference.OnPreferenceClickListener, ServiceConnection {
@@ -205,9 +203,9 @@ public class SettingsFragment extends PreferenceFragment
     private void bindDataVersionPreference() {
         bindPreference(R.string.offline_data_version_key);
         Preference dataVersion = findPreference(getString(R.string.offline_data_version_key));
-        Status status = SettingImpl.getInstance().getStatus();
+        Status status = SettingImpl.Companion.getInstance().getStatus();
         String summary = getString(R.string.offline_data_version_summary, status.getVersion(),
-                status.getCount(), Utils.getDate(status.getTimestamp() * 1000));
+                status.getCount(), Utils.Companion.getDate(status.getTimestamp() * 1000));
         if (status.getVersion() == 0) {
             summary = getString(R.string.no_offline_data);
         }
@@ -241,7 +239,7 @@ public class SettingsFragment extends PreferenceFragment
                 (PreferenceScreen) findPreference(getString(R.string.plugin_key));
         pluginPref.setEnabled(false);
         pluginPref.setSummary(getString(R.string.plugin_not_started));
-        if (Utils.isAppInstalled(getActivity(), getString(R.string.plugin_package_name))) {
+        if (Utils.Companion.isAppInstalled(getActivity(), getString(R.string.plugin_package_name))) {
             bindPluginService();
 
             bindPreference(R.string.auto_hangup_key);
@@ -259,7 +257,7 @@ public class SettingsFragment extends PreferenceFragment
             bindPreference(R.string.export_key);
 
             String pluginPkg = getString(R.string.plugin_package_name);
-            int pluginVersion = Utils.getVersionCode(getActivity(), pluginPkg);
+            int pluginVersion = Utils.Companion.getVersionCode(getActivity(), pluginPkg);
             if (pluginVersion < 3) {
                 Preference exportPref = findPreference(getString(R.string.export_key));
                 exportPref.setEnabled(false);
@@ -276,7 +274,7 @@ public class SettingsFragment extends PreferenceFragment
                 iconPref.setEnabled(false);
                 iconPref.setSummary(R.string.plugin_too_old);
             } else {
-                boolean iconEnabled = Utils.isComponentEnabled(
+                boolean iconEnabled = Utils.Companion.isComponentEnabled(
                         getActivity().getPackageManager(), pluginPkg, pluginPkg + ".Launcher");
                 iconPref.setChecked(!iconEnabled);
             }
@@ -295,7 +293,7 @@ public class SettingsFragment extends PreferenceFragment
 
     @Override
     public void onDestroy() {
-        if (Utils.isAppInstalled(getActivity(), getString(R.string.plugin_package_name))) {
+        if (Utils.Companion.isAppInstalled(getActivity(), getString(R.string.plugin_package_name))) {
             unBindPluginService();
         }
         super.onDestroy();
@@ -490,7 +488,7 @@ public class SettingsFragment extends PreferenceFragment
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String value = editText.getText().toString();
-                findPreference(key).setSummary(mask(value));
+                findPreference(key).setSummary(Utils.Companion.mask(value));
                 SharedPreferences.Editor editor = sharedPrefs.edit();
                 editor.putString(key, value);
                 editor.apply();
@@ -954,7 +952,7 @@ public class SettingsFragment extends PreferenceFragment
             case R.string.ignore_battery_optimizations_key:
                 ((SwitchPreference) findPreference(
                         getString(R.string.ignore_battery_optimizations_key))).setChecked(
-                        Utils.ignoreBatteryOptimization(getActivity()));
+                        Utils.Companion.ignoreBatteryOptimization(getActivity()));
                 break;
         }
     }
@@ -1056,7 +1054,7 @@ public class SettingsFragment extends PreferenceFragment
             }
 
             boolean mask = ((summaryFlags & SUMMARY_FLAG_MASK) == SUMMARY_FLAG_MASK);
-            preference.setSummary(mask ? mask(summary) : summary);
+            preference.setSummary(mask ? Utils.Companion.mask(summary) : summary);
         }
         keyMap.put(key, keyId);
         prefMap.put(key, preference);

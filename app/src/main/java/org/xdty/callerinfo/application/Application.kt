@@ -34,7 +34,7 @@ open class Application : android.app.Application() {
         appComponent.inject(this)
         analytics = FirebaseAnalytics.getInstance(this)
         analytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null)
-        Resource.getInstance().init(Utils.changeLang(this))
+        Resource.init(Utils.changeLang(this))
         if (!setting.isCatchCrash) {
             CrashReport.initCrashReport(applicationContext, "0eaf845a04", false)
         }
