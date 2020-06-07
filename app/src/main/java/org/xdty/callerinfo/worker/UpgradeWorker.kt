@@ -37,7 +37,7 @@ class UpgradeWorker(context: Context, workerParams: WorkerParameters) : Worker(c
 
     init {
         DaggerUpgradeComponent.builder()
-                .appModule(AppModule(Application.getApplication()))
+                .appModule(AppModule(Application.application))
                 .upgradeModule(UpgradeModule(this))
                 .build()
                 .inject(this)

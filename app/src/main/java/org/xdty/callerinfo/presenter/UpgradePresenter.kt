@@ -37,7 +37,7 @@ class UpgradePresenter(view: UpgradeContact.View) : UpgradeContact.Presenter {
     private var mView: UpgradeContact.View = view
 
     init {
-        Application.getApplication().appComponent.inject(this)
+        Application.appComponent.inject(this)
     }
 
     override fun start() {

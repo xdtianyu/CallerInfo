@@ -143,7 +143,7 @@ public abstract class BaseCaller implements INumber {
     }
 
     public String getSource() {
-        return Utils.sourceFromId(callerSource);
+        return Utils.Companion.sourceFromId(callerSource);
     }
 
     public void setSource(int apiId) {
@@ -160,7 +160,7 @@ public abstract class BaseCaller implements INumber {
 
         // get type from type name
         if (callerSource == DEFAULT_SOURCE || callerSource == INumber.API_ID_CUSTOM) {
-            return Utils.markTypeFromName(getName());
+            return Utils.Companion.markTypeFromName(getName());
         }
 
         return Type.fromString(callerType);

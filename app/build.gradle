@@ -30,6 +30,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables.useSupportLibrary = true
+
+        multiDexEnabled true
     }
 
     signingConfigs {
@@ -38,8 +40,8 @@ android {
 
     buildTypes {
         debug {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testProguardFile('proguard-test-rules.pro')
             signingConfig signingConfigs.release
@@ -103,6 +105,8 @@ dependencies {
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "androidx.core:core-ktx:$ktx_version"
+
+    implementation "androidx.multidex:multidex:$multidex_version"
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.annotation:annotation:$annotation_version"

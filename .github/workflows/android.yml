@@ -11,12 +11,12 @@ jobs:
     - uses: actions/checkout@v1
     - name: checkout submodule
       run: git submodule sync --recursive && git submodule update --init --recursive
-      
+
     - name: before build
       uses: xdtianyu/actions-android-ci@master
       with:
         args: '"
-        source .travis/env.sh;
+        . .travis/env.sh;
         openssl aes-256-cbc -K $encrypted_75846693d905_key -iv $encrypted_75846693d905_iv -in secrets.tar.enc -out secrets.tar -d;
         tar xvf secrets.tar;
         touch local.properties
@@ -24,9 +24,9 @@ jobs:
 
     - name: build
       uses: xdtianyu/actions-android-ci@master
-      with: 
+      with:
         args: '"
-        source .travis/env.sh;
-        source /opt/setup-android-sdk.sh;
+        . .travis/env.sh;
+        . /opt/setup-android-sdk.sh;
         ./gradlew assembleDebug
         "'
