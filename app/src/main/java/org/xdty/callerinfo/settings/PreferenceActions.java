@@ -1,4 +1,4 @@
-package org.xdty.callerinfo.fragment;
+package org.xdty.callerinfo.settings;
 
 import android.preference.Preference;
 
