@@ -36,6 +36,8 @@ import org.xdty.callerinfo.settings.PluginBinder;
 import org.xdty.callerinfo.settings.PluginStatus;
 import org.xdty.callerinfo.settings.PreferenceActions;
 import org.xdty.callerinfo.settings.PreferenceBinder;
+import org.xdty.callerinfo.settings.PreferenceClicker;
+import org.xdty.callerinfo.settings.PreferenceDelegate;
 import org.xdty.callerinfo.settings.PreferenceDialogs;
 import org.xdty.callerinfo.utils.Alarm;
 import org.xdty.callerinfo.utils.Toasts;
@@ -89,6 +91,13 @@ public class SettingsFragment extends PreferenceFragment implements PreferenceAc
 
         preferenceDialogs = new PreferenceDialogs(getActivity(), sharedPrefs, mWindow, this);
         pluginBinder = new PluginBinder(getActivity(), preferenceDialogs, this);
+
+        PreferenceDelegate delegate = new PreferenceDelegate();
+        PreferenceClicker clicker = new PreferenceClicker(getActivity(), sharedPrefs, preferenceDialogs, pluginBinder, this);
+
+        delegate.setActions(this);
+        delegate.setClicker(clicker);
+        delegate.setDialogs(preferenceDialogs);
 
         preferenceBinder = new PreferenceBinder(getActivity(), sharedPrefs, preferenceDialogs, pluginBinder, this);
         preferenceBinder.bind();
