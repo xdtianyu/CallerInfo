@@ -1,6 +1,6 @@
-package org.xdty.callerinfo.settings;
+package org.xdty.callerinfo.settings
 
-public class PluginStatus {
-    public static boolean isCheckStorageExport = false;
-    public static boolean isCheckRingOnce = false;
+object PluginStatus {
+    var isCheckStorageExport = false
+    var isCheckRingOnce = false
 }
