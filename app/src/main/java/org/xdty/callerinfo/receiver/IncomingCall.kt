@@ -78,7 +78,12 @@ class IncomingCall : BroadcastReceiver() {
                 Log.d(TAG, "onCallStateChanged: $state : $number")
                 Log.d(TAG, "onCallStateChanged: permission -> " + mPresenter.canReadPhoneState())
             }
-            if (mPresenter.matchIgnore(number!!)) {
+            if (number == null || number.isEmpty())  {
+                Log.e(TAG, "number is empty")
+                return
+            }
+
+            if (mPresenter.matchIgnore(number)) {
                 return
             }
             when (state) {
