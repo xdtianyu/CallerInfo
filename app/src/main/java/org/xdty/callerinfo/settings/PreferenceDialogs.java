@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.Preference;
-import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -18,6 +17,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.settings.dialog.EditDialog;
+import org.xdty.callerinfo.settings.dialog.SettingsDialog;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.utils.Window;
 
@@ -264,46 +265,27 @@ public class PreferenceDialogs {
 
     public void showEditDialog(int keyId, int title, final int defaultText, int hint,
                                final int help, final int helpText) {
-        final String key = context.getString(keyId);
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(title));
-        View layout = View.inflate(context, R.layout.dialog_edit, null);
-        builder.setView(layout);
+        String key = context.getString(keyId);
+        SettingsDialog dialog = new EditDialog(context, sharedPrefs)
+                .key(key)
+                .title(title)
+                .hint(hint)
+                .help(helpText)
+                .defaultText(defaultText);
 
-        final EditText editText = layout.findViewById(R.id.text);
-        editText.setText(sharedPrefs.getString(key, context.getString(defaultText)));
-        editText.setInputType(InputType.TYPE_CLASS_TEXT);
-        if (hint > 0) {
-            editText.setHint(hint);
-        }
-
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        dialog.listen(new SettingsDialog.Listener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String value = editText.getText().toString();
-                if (value.isEmpty()) {
-                    value = context.getString(defaultText);
-                }
+            public void onConfirm(String value) {
                 preferenceActions.findPreference(key).setSummary(value);
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putString(key, value);
-                editor.apply();
+            }
+
+            @Override
+            public void onHelp() {
+                showTextDialog(help, helpText);
             }
         });
-        builder.setNegativeButton(R.string.cancel, null);
 
-        if (help != 0) {
-            builder.setNeutralButton(help, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    showTextDialog(help, helpText);
-                }
-            });
-        }
-
-        builder.setCancelable(true);
-        builder.show();
+        dialog.show();
     }
 
 }
