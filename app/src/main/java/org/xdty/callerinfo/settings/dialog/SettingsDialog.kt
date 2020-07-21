@@ -16,7 +16,8 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
 
     protected var hint = 0
     protected var defaultText = 0
-    private var help = 0
+    protected var help = 0
+    protected var text = ""
 
     private var listener: Listener? = null
 
@@ -45,6 +46,11 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
         return this
     }
 
+    fun text(text: String): SettingsDialog {
+        this.text = text
+        return this
+    }
+
     fun help(help: Int): SettingsDialog {
         this.help = help
         return this
@@ -56,13 +62,29 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
 
     fun show() {
         bindViews()
-        builder.setPositiveButton(R.string.ok) { _: DialogInterface?, _: Int -> onConfirm() }
-        builder.setNegativeButton(R.string.cancel) { _: DialogInterface?, _: Int -> onCancel() }
+        if (positive()) {
+            builder.setPositiveButton(R.string.ok) { _: DialogInterface?, _: Int -> onConfirm() }
+        } else {
+            builder.setPositiveButton(R.string.ok, null)
+        }
+
+        if (negative()) {
+            builder.setNegativeButton(R.string.cancel) { _: DialogInterface?, _: Int -> onCancel() }
+        }
+
         if (help != 0) {
             builder.setNeutralButton(help) { _: DialogInterface?, _: Int -> onHelp() }
         }
         builder.setCancelable(true)
         builder.show()
+    }
+
+    open fun positive(): Boolean {
+        return true
+    }
+
+    open fun negative(): Boolean {
+        return true
     }
 
     protected abstract fun bindViews()

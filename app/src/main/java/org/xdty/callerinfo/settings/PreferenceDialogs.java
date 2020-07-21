@@ -19,6 +19,7 @@ import androidx.appcompat.app.AlertDialog;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.settings.dialog.EditDialog;
 import org.xdty.callerinfo.settings.dialog.SettingsDialog;
+import org.xdty.callerinfo.settings.dialog.TextDialog;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.utils.Window;
 
@@ -184,17 +185,10 @@ public class PreferenceDialogs {
     }
 
     public void showTextDialog(int title, String text) {
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(title));
-        View layout = View.inflate(context, R.layout.dialog_text, null);
-        builder.setView(layout);
-
-        TextView textView = layout.findViewById(R.id.text);
-        textView.setText(text);
-
-        builder.setPositiveButton(R.string.ok, null);
-        builder.show();
+        new TextDialog(context, sharedPrefs)
+                .title(title)
+                .text(text)
+                .show();
     }
 
     public void showConfirmDialog(int title, int text, final int key) {
