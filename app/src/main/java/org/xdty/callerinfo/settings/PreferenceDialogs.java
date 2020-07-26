@@ -1,7 +1,6 @@
 package org.xdty.callerinfo.settings;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -152,27 +150,22 @@ public class PreferenceDialogs {
     }
 
     public void showConfirmDialog(int title, int text, final int key) {
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(title));
-        View layout = View.inflate(context, R.layout.dialog_text, null);
-        builder.setView(layout);
-
-        TextView textView = layout.findViewById(R.id.text);
-        textView.setText(context.getString(text));
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                preferenceActions.onConfirmCanceled(key);
-            }
-        });
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                preferenceActions.onConfirmed(key);
-            }
-        });
-        builder.show();
+        new TextDialog(context, sharedPrefs)
+                .title(title)
+                .text(text)
+                .cancel(new SettingsDialog.CancelListener() {
+                    @Override
+                    public void onCancel() {
+                        preferenceActions.onConfirmCanceled(key);
+                    }
+                })
+                .confirm(new SettingsDialog.ConfirmListener() {
+                    @Override
+                    public void onConfirm(@Nullable String value) {
+                        preferenceActions.onConfirmed(key);
+                    }
+                })
+                .show();
     }
 
     public void showCustomApiDialog() {

@@ -50,6 +50,11 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
         return this
     }
 
+    fun text(text: Int): SettingsDialog {
+        this.text = context.getString(text)
+        return this
+    }
+
     fun text(text: String): SettingsDialog {
         this.text = text
         return this
