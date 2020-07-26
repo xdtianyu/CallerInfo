@@ -3,7 +3,6 @@ package org.xdty.callerinfo.settings.dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import org.xdty.callerinfo.R
 
@@ -23,6 +22,8 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
     private var confirmListener: ConfirmListener? = null
     private var cancelListener: CancelListener? = null
     private var helpListener: HelpListener? = null
+
+    private var dismiss: DialogInterface.OnDismissListener? = null
 
     fun key(keyId: Int): SettingsDialog {
         key = context.getString(keyId)
@@ -77,7 +78,12 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
     fun cancel(cancel: Int, listener: CancelListener?): SettingsDialog {
         this.cancelListener = listener
         this.cancelListener?.dialog = this
-        this.cancel = cancel;
+        this.cancel = cancel
+        return this
+    }
+
+    fun dismiss(dismiss: DialogInterface.OnDismissListener): SettingsDialog {
+        this.dismiss = dismiss
         return this
     }
 
@@ -104,6 +110,11 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
         if (help != 0) {
             builder.setNeutralButton(help, helpListener?.clickListener)
         }
+
+        if (dismiss != null) {
+            builder.setOnDismissListener(dismiss)
+        }
+
         builder.setCancelable(true)
         builder.show()
     }

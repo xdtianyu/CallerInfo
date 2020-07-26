@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -19,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.settings.dialog.CustomApiDialog;
 import org.xdty.callerinfo.settings.dialog.EditDialog;
+import org.xdty.callerinfo.settings.dialog.SeekBarDialog;
 import org.xdty.callerinfo.settings.dialog.SettingsDialog;
 import org.xdty.callerinfo.settings.dialog.TextDialog;
 import org.xdty.callerinfo.utils.Utils;
@@ -26,8 +26,6 @@ import org.xdty.callerinfo.utils.Window;
 
 import java.util.Arrays;
 import java.util.List;
-
-import app.minimize.com.seek_bar_compat.SeekBarCompat;
 
 public class PreferenceDialogs {
 
@@ -45,54 +43,25 @@ public class PreferenceDialogs {
 
     public void showSeekBarDialog(int keyId, final String bundleKey, int defaultValue,
                                   int max, int title, int textRes) {
-        final String key = context.getString(keyId);
-        int value = sharedPrefs.getInt(key, defaultValue);
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(title));
-        View layout = View.inflate(context, R.layout.dialog_seek, null);
-        builder.setView(layout);
 
-        final SeekBarCompat seekBar = layout.findViewById(R.id.seek_bar);
-        seekBar.setMax(max);
-        seekBar.setProgress(value);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress == 0) {
-                    progress = 1;
-                }
-                window.sendData(bundleKey, progress, Window.Type.SETTING);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                int value = seekBar.getProgress();
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putInt(key, value);
-                editor.apply();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                window.closeWindow();
-            }
-        });
-        builder.show();
+        new SeekBarDialog(context, sharedPrefs)
+                .max(max)
+                .defaultValue(defaultValue)
+                .seek(new SeekBarDialog.SeekListener() {
+                    @Override
+                    public void onSeek(int progress) {
+                        if (progress == 0) {
+                            progress = 1;
+                        }
+                        window.sendData(bundleKey, progress, Window.Type.SETTING);
+                    }
+                })
+                .title(title)
+                .key(keyId)
+                .confirm(new SettingsDialog.ConfirmListener())
+                .cancel(R.string.cancel, null)
+                .dismiss(dialog -> window.closeWindow())
+                .show();
 
         window.showTextWindow(textRes, Window.Type.SETTING);
     }
