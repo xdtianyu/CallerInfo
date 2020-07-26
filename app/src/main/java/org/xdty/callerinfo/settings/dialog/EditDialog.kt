@@ -15,7 +15,11 @@ class EditDialog(context: Context, sharedPreferences: SharedPreferences) : Setti
         val layout = View.inflate(context, R.layout.dialog_edit, null)
         builder.setView(layout)
         editText = layout.findViewById(R.id.text)
-        editText.setText(sharedPrefs.getString(key, context.getString(defaultText)))
+        if (defaultText > 0) {
+            editText.setText(sharedPrefs.getString(key, context.getString(defaultText)))
+        } else {
+            editText.setText(sharedPrefs.getString(key, ""))
+        }
         editText.setInputType(InputType.TYPE_CLASS_TEXT)
         if (hint > 0) {
             editText.setHint(hint)
@@ -25,7 +29,7 @@ class EditDialog(context: Context, sharedPreferences: SharedPreferences) : Setti
     override fun onConfirm() {
         var value = editText.text.toString()
 
-        if (value.isEmpty()) {
+        if (value.isEmpty() && defaultText != 0) {
             value = context.getString(defaultText)
         }
 

@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.Preference;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -99,35 +98,25 @@ public class PreferenceDialogs {
     }
 
     public void showApiDialog(int keyId, int title, final int url) {
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(title));
-        View layout = View.inflate(context, R.layout.dialog_edit, null);
-        builder.setView(layout);
-
         final String key = context.getString(keyId);
-        final EditText editText = layout.findViewById(R.id.text);
-        editText.setText(sharedPrefs.getString(key, ""));
 
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String value = editText.getText().toString();
-                preferenceActions.findPreference(key).setSummary(Utils.Companion.mask(value));
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putString(key, value);
-                editor.apply();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.setNeutralButton(R.string.fetch, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(url))));
-            }
-        });
-        builder.setCancelable(false);
-        builder.show();
+        new EditDialog(context, sharedPrefs)
+                .key(key)
+                .title(title)
+                .confirm(new SettingsDialog.ConfirmListener() {
+                    @Override
+                    public void onConfirm(String value) {
+                        preferenceActions.findPreference(key).setSummary(Utils.Companion.mask(value));
+                    }
+                })
+                .cancel(R.string.cancel, null)
+                .help(R.string.fetch, new SettingsDialog.HelpListener() {
+                    @Override
+                    public void onHelp() {
+                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(url))));
+                    }
+                })
+                .show();
     }
 
     public void showRadioDialog(int keyId, int title, int listId, int defValue) {
@@ -254,7 +243,7 @@ public class PreferenceDialogs {
                 .defaultText(defaultText)
                 .confirm(new SettingsDialog.ConfirmListener() {
                     @Override
-                    public void onConfirm(@Nullable String value) {
+                    public void onConfirm(String value) {
                         preferenceActions.findPreference(key).setSummary(value);
                     }
                 })

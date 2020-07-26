@@ -112,7 +112,7 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
 
     protected abstract fun onConfirm()
 
-    protected fun onConfirm(value: String?) {
+    protected fun onConfirm(value: String) {
         confirmListener?.onConfirm(value)
     }
 
