@@ -30,7 +30,7 @@ class PreferenceDialogs(private val context: Context, private val sharedPrefs: S
         EditDialog(context, sharedPrefs)
                 .key(key)
                 .title(title)
-                .confirm { value -> preferenceActions.findPreference(key).summary = mask(value!!) }
+                .confirm { value -> preferenceActions.findPreference(key)?.summary = mask(value!!) }
                 .cancel(R.string.cancel, null)
                 .help(R.string.fetch) { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(url)))) }
                 .show()
@@ -80,7 +80,7 @@ class PreferenceDialogs(private val context: Context, private val sharedPrefs: S
         CustomApiDialog(context, sharedPrefs)
                 .title(R.string.custom_api)
                 .key(key)
-                .confirm { value -> preferenceActions.findPreference(key).summary = value }
+                .confirm { value -> preferenceActions.findPreference(key)?.summary = value }
                 .cancel(R.string.cancel, null)
                 .help(R.string.document) {
                     context.startActivity(Intent(Intent.ACTION_VIEW,
@@ -98,7 +98,7 @@ class PreferenceDialogs(private val context: Context, private val sharedPrefs: S
                 .title(title)
                 .hint(hint)
                 .defaultText(defaultText)
-                .confirm { value -> preferenceActions.findPreference(key).summary = value }
+                .confirm { value -> preferenceActions.findPreference(key)?.summary = value }
                 .help(helpText) { showTextDialog(help, helpText) }
                 .show()
     }
