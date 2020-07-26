@@ -6,7 +6,7 @@
 [![Build Status](https://travis-ci.org/xdtianyu/CallerInfo.svg?branch=master)](https://travis-ci.org/xdtianyu/CallerInfo)
 [![Build status](https://ci.appveyor.com/api/projects/status/0iyva2apl5nxopxo?svg=true)](https://ci.appveyor.com/project/xdtianyu/callerinfo)
 [![Build Status](https://img.shields.io/jenkins/s/https/jenkins.xdty.org/callerinfo.svg?label=jenkins)](https://jenkins.xdty.org/job/CallerInfo/buildTimeTrend)
-[![build status](https://git.xdty.org/tianyu/CallerInfo/badges/master/build.svg)](https://git.xdty.org/tianyu/CallerInfo/commits/master)
+[![pipeline status](https://git.xdty.org/tianyu/CallerInfo/badges/master/pipeline.svg)](https://git.xdty.org/tianyu/CallerInfo/-/commits/master)
 [![Release notes](https://img.shields.io/badge/release-notes-yellowgreen.svg)](https://github.com/xdtianyu/CallerInfo/releases)
 [![Coolapk download](https://img.shields.io/badge/coolapk-download-blue.svg)](http://coolapk.com/apk/org.xdty.callerinfo)
 
