@@ -9,6 +9,7 @@ import org.xdty.callerinfo.R
 abstract class SettingsDialog(protected var context: Context, protected var sharedPrefs: SharedPreferences) {
 
     protected var builder: AlertDialog.Builder = AlertDialog.Builder(context)
+    protected lateinit var dialog: AlertDialog
 
     protected lateinit var key: String
 
@@ -121,7 +122,8 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
         }
 
         builder.setCancelable(true)
-        builder.show()
+        dialog = builder.create()
+        dialog.show()
     }
 
     protected abstract fun bindViews()

@@ -5,25 +5,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.Preference;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
-import androidx.appcompat.app.AlertDialog;
-
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.settings.dialog.CustomApiDialog;
 import org.xdty.callerinfo.settings.dialog.EditDialog;
+import org.xdty.callerinfo.settings.dialog.RadioDialog;
 import org.xdty.callerinfo.settings.dialog.SeekBarDialog;
 import org.xdty.callerinfo.settings.dialog.SettingsDialog;
 import org.xdty.callerinfo.settings.dialog.TextDialog;
 import org.xdty.callerinfo.utils.Utils;
 import org.xdty.callerinfo.utils.Window;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class PreferenceDialogs {
 
@@ -93,49 +86,23 @@ public class PreferenceDialogs {
     public void showRadioDialog(int keyId, int title, int listId, int defValue,
                                 final int offset) {
         final String key = context.getString(keyId);
-        final List<String> list = Arrays.asList(context.getResources().getStringArray(listId));
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(title));
-        View layout = View.inflate(context, R.layout.dialog_radio, null);
-        builder.setView(layout);
-        final AlertDialog dialog = builder.create();
 
-        final RadioGroup radioGroup = layout.findViewById(R.id.radio);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        for (String s : list) {
-            RadioButton radioButton = new RadioButton(context);
-            radioButton.setText(s);
-            radioGroup.addView(radioButton, layoutParams);
-        }
-
-        RadioButton button =
-                ((RadioButton) radioGroup.getChildAt(
-                        sharedPrefs.getInt(key, defValue) - offset));
-        button.setChecked(true);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int index = group.indexOfChild(group.findViewById(checkedId));
-                Preference preference = preferenceActions.findPreference(key);
-                if (preference != null) {
-                    preference.setSummary(list.get(index));
-                }
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putInt(key, index + offset);
-                editor.apply();
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+        new RadioDialog(context, sharedPrefs)
+                .listId(listId)
+                .offset(offset)
+                .defaultValue(defValue)
+                .check(new RadioDialog.CheckedListener() {
+                    @Override
+                    public void onChecked(@NotNull String value) {
+                        Preference preference = preferenceActions.findPreference(key);
+                        if (preference != null) {
+                            preference.setSummary(value);
+                        }
+                    }
+                })
+                .key(key)
+                .title(title)
+                .show();
     }
 
     public void showTextDialog(int title, int text) {
