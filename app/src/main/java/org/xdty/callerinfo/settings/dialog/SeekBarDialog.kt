@@ -43,7 +43,11 @@ class SeekBarDialog(context: Context, sharedPreferences: SharedPreferences) :
         seekBar.progress = value
         seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, progress: Int, p2: Boolean) {
-                listener.onSeek(progress)
+                var fixed = progress
+                if (fixed == 0) {
+                    fixed = 1
+                }
+                listener.onSeek(fixed)
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {}
