@@ -12,7 +12,7 @@ class EditDialog(context: Context, sharedPreferences: SharedPreferences) : Setti
     private lateinit var editText: EditText
 
     override fun bindViews() {
-        layout = View.inflate(context, R.layout.dialog_edit, null)
+        val layout = View.inflate(context, R.layout.dialog_edit, null)
         builder.setView(layout)
         editText = layout.findViewById(R.id.text)
         editText.setText(sharedPrefs.getString(key, context.getString(defaultText)))

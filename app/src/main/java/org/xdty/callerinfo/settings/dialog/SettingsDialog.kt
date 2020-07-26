@@ -12,11 +12,12 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
     protected var builder: AlertDialog.Builder = AlertDialog.Builder(context)
 
     protected lateinit var key: String
-    protected lateinit var layout: View
 
     protected var hint = 0
     protected var defaultText = 0
     protected var help = 0
+    protected var cancel = 0
+    protected var confirm = R.string.ok
     protected var text = ""
 
     private var confirmListener: ConfirmListener? = null
@@ -59,37 +60,56 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
     }
 
     fun confirm(listener: ConfirmListener?): SettingsDialog {
+        return confirm(R.string.ok, listener)
+    }
+
+    fun confirm(confirm: Int, listener: ConfirmListener?): SettingsDialog {
         this.confirmListener = listener
+        this.confirmListener?.dialog = this
+        this.confirm = confirm
         return this
     }
 
     fun cancel(listener: CancelListener?): SettingsDialog {
+        return cancel(R.string.cancel, listener)
+    }
+
+    fun cancel(cancel: Int, listener: CancelListener?): SettingsDialog {
         this.cancelListener = listener
+        this.cancelListener?.dialog = this
+        this.cancel = cancel;
         return this
     }
 
     fun help(listener: HelpListener?): SettingsDialog {
+        return help(R.string.document, listener)
+    }
+
+    fun help(help: Int, listener: HelpListener?): SettingsDialog {
         this.helpListener = listener
+        this.helpListener?.dialog = this
+        this.help = help
         return this
     }
 
     fun show() {
         bindViews()
 
-        builder.setPositiveButton(R.string.ok, confirmListener)
+        builder.setPositiveButton(confirm, confirmListener?.clickListener)
 
-        if (cancelListener != null) {
-            builder.setNegativeButton(R.string.cancel, cancelListener)
+        if (cancel != 0) {
+            builder.setNegativeButton(cancel, cancelListener?.clickListener)
         }
 
         if (help != 0) {
-            builder.setNeutralButton(help) { _: DialogInterface?, _: Int -> onHelp() }
+            builder.setNeutralButton(help, helpListener?.clickListener)
         }
         builder.setCancelable(true)
         builder.show()
     }
 
     protected abstract fun bindViews()
+
     protected abstract fun onConfirm()
 
     protected fun onConfirm(value: String?) {
@@ -105,9 +125,14 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
         helpListener?.onHelp()
     }
 
-    open class Listener : DialogInterface.OnClickListener {
-        override fun onClick(dialog: DialogInterface?, id: Int) {
-
+    open class Listener {
+        lateinit var dialog: SettingsDialog
+        val clickListener = DialogInterface.OnClickListener { _, _ ->
+            when (this) {
+                is ConfirmListener -> dialog.onConfirm()
+                is CancelListener -> dialog.onCancel()
+                is HelpListener -> dialog.onHelp()
+            }
         }
     }
 

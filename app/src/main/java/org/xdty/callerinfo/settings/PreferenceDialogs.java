@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import org.jetbrains.annotations.Nullable;
 import org.xdty.callerinfo.R;
+import org.xdty.callerinfo.settings.dialog.CustomApiDialog;
 import org.xdty.callerinfo.settings.dialog.EditDialog;
 import org.xdty.callerinfo.settings.dialog.SettingsDialog;
 import org.xdty.callerinfo.settings.dialog.TextDialog;
@@ -217,40 +218,25 @@ public class PreferenceDialogs {
     }
 
     public void showCustomApiDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(R.string.custom_api));
-        View layout = View.inflate(context, R.layout.dialog_custom_api, null);
-        builder.setView(layout);
-
-        final EditText apiUri = layout.findViewById(R.id.api_uri);
-        final EditText apiKey = layout.findViewById(R.id.api_key);
-        final String customApiKey = context.getString(R.string.custom_api_key);
-        final String customApiUrl = context.getString(R.string.custom_api_url);
-        apiUri.setText(sharedPrefs.getString(customApiUrl, ""));
-        apiKey.setText(sharedPrefs.getString(customApiKey, ""));
-
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String value = apiUri.getText().toString();
-                String key = apiKey.getText().toString();
-                preferenceActions.findPreference(customApiUrl).setSummary(value);
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putString(customApiUrl, value);
-                editor.putString(customApiKey, key);
-                editor.apply();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.setNeutralButton(R.string.document, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                context.startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(context.getString(R.string.api_document_url))));
-            }
-        });
-        builder.setCancelable(false);
-        builder.show();
+        String key = context.getString(R.string.custom_api_url);
+        new CustomApiDialog(context, sharedPrefs)
+                .title(R.string.custom_api)
+                .key(key)
+                .confirm(new SettingsDialog.ConfirmListener() {
+                    @Override
+                    public void onConfirm(@Nullable String value) {
+                        preferenceActions.findPreference(key).setSummary(value);
+                    }
+                })
+                .cancel(R.string.cancel, null)
+                .help(R.string.document, new SettingsDialog.HelpListener() {
+                    @Override
+                    public void onHelp() {
+                        context.startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(context.getString(R.string.api_document_url))));
+                    }
+                })
+                .show();
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -265,19 +251,20 @@ public class PreferenceDialogs {
                 .key(key)
                 .title(title)
                 .hint(hint)
-                .help(helpText)
                 .defaultText(defaultText)
                 .confirm(new SettingsDialog.ConfirmListener() {
                     @Override
                     public void onConfirm(@Nullable String value) {
                         preferenceActions.findPreference(key).setSummary(value);
                     }
-                }).help(new SettingsDialog.HelpListener() {
-            @Override
-            public void onHelp() {
-                showTextDialog(help, helpText);
-            }
-        }).show();
+                })
+                .help(helpText, new SettingsDialog.HelpListener() {
+                    @Override
+                    public void onHelp() {
+                        showTextDialog(help, helpText);
+                    }
+                })
+                .show();
     }
 
 }
