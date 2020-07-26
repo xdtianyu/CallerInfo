@@ -19,7 +19,9 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
     protected var help = 0
     protected var text = ""
 
-    private var listener: Listener? = null
+    private var confirmListener: ConfirmListener? = null
+    private var cancelListener: CancelListener? = null
+    private var helpListener: HelpListener? = null
 
     fun key(keyId: Int): SettingsDialog {
         key = context.getString(keyId)
@@ -56,20 +58,28 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
         return this
     }
 
-    fun listen(listener: Listener?) {
-        this.listener = listener
+    fun confirm(listener: ConfirmListener?): SettingsDialog {
+        this.confirmListener = listener
+        return this
+    }
+
+    fun cancel(listener: CancelListener?): SettingsDialog {
+        this.cancelListener = listener
+        return this
+    }
+
+    fun help(listener: HelpListener?): SettingsDialog {
+        this.helpListener = listener
+        return this
     }
 
     fun show() {
         bindViews()
-        if (positive()) {
-            builder.setPositiveButton(R.string.ok) { _: DialogInterface?, _: Int -> onConfirm() }
-        } else {
-            builder.setPositiveButton(R.string.ok, null)
-        }
 
-        if (negative()) {
-            builder.setNegativeButton(R.string.cancel) { _: DialogInterface?, _: Int -> onCancel() }
+        builder.setPositiveButton(R.string.ok, confirmListener)
+
+        if (cancelListener != null) {
+            builder.setNegativeButton(R.string.cancel, cancelListener)
         }
 
         if (help != 0) {
@@ -79,38 +89,37 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
         builder.show()
     }
 
-    open fun positive(): Boolean {
-        return true
-    }
-
-    open fun negative(): Boolean {
-        return true
-    }
-
     protected abstract fun bindViews()
     protected abstract fun onConfirm()
+
     protected fun onConfirm(value: String?) {
-        if (listener != null) {
-            listener!!.onConfirm(value)
-        }
+        confirmListener?.onConfirm(value)
     }
 
     protected fun onCancel() {
-        if (listener != null) {
-            listener!!.onCancel()
-        }
+        cancelListener?.onCancel()
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     protected fun onHelp() {
-        if (listener != null) {
-            listener!!.onHelp()
+        helpListener?.onHelp()
+    }
+
+    open class Listener : DialogInterface.OnClickListener {
+        override fun onClick(dialog: DialogInterface?, id: Int) {
+
         }
     }
 
-    open class Listener {
+    open class ConfirmListener : Listener() {
         open fun onConfirm(value: String?) {}
-        fun onCancel() {}
+    }
+
+    open class CancelListener : Listener() {
+        open fun onCancel() {}
+    }
+
+    open class HelpListener : Listener() {
         open fun onHelp() {}
     }
-
 }

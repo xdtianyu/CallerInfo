@@ -19,12 +19,4 @@ class TextDialog(context: Context, sharedPrefs: SharedPreferences) : SettingsDia
     override fun onConfirm() {
 
     }
-
-    override fun positive(): Boolean {
-        return false
-    }
-
-    override fun negative(): Boolean {
-        return false
-    }
 }

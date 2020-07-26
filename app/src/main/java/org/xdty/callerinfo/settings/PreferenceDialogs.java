@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
+import org.jetbrains.annotations.Nullable;
 import org.xdty.callerinfo.R;
 import org.xdty.callerinfo.settings.dialog.EditDialog;
 import org.xdty.callerinfo.settings.dialog.SettingsDialog;
@@ -260,26 +261,23 @@ public class PreferenceDialogs {
     public void showEditDialog(int keyId, int title, final int defaultText, int hint,
                                final int help, final int helpText) {
         String key = context.getString(keyId);
-        SettingsDialog dialog = new EditDialog(context, sharedPrefs)
+        new EditDialog(context, sharedPrefs)
                 .key(key)
                 .title(title)
                 .hint(hint)
                 .help(helpText)
-                .defaultText(defaultText);
-
-        dialog.listen(new SettingsDialog.Listener() {
-            @Override
-            public void onConfirm(String value) {
-                preferenceActions.findPreference(key).setSummary(value);
-            }
-
+                .defaultText(defaultText)
+                .confirm(new SettingsDialog.ConfirmListener() {
+                    @Override
+                    public void onConfirm(@Nullable String value) {
+                        preferenceActions.findPreference(key).setSummary(value);
+                    }
+                }).help(new SettingsDialog.HelpListener() {
             @Override
             public void onHelp() {
                 showTextDialog(help, helpText);
             }
-        });
-
-        dialog.show();
+        }).show();
     }
 
 }
