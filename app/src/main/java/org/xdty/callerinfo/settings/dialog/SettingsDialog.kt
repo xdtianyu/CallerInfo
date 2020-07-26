@@ -117,8 +117,10 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
             builder.setNeutralButton(help, helpListener?.clickListener)
         }
 
-        if (dismiss != null) {
-            builder.setOnDismissListener(dismiss)
+
+        builder.setOnDismissListener {
+            this.dismiss?.onDismiss(it)
+            Listener.dialogs.values.removeAll { dialog -> dialog == this@SettingsDialog }
         }
 
         builder.setCancelable(true)
@@ -145,7 +147,7 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
 
     interface Listener {
         companion object {
-            lateinit var dialogs: MutableMap<Any?, SettingsDialog>
+            var dialogs: MutableMap<Any?, SettingsDialog> = HashMap()
         }
 
         val clickListener: DialogInterface.OnClickListener
