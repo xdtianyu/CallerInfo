@@ -63,7 +63,7 @@ class SeekBarDialog(context: Context, sharedPreferences: SharedPreferences) :
         editor.apply()
     }
 
-    abstract class SeekListener {
-        abstract fun onSeek(progress: Int)
+    fun interface SeekListener {
+        fun onSeek(progress: Int)
     }
 }

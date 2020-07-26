@@ -72,7 +72,7 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
 
     fun confirm(confirm: Int, listener: ConfirmListener?): SettingsDialog {
         this.confirmListener = listener
-        this.confirmListener?.dialog = this
+        Listener.dialogs[listener] = this
         this.confirm = confirm
         return this
     }
@@ -82,8 +82,8 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
     }
 
     fun cancel(cancel: Int, listener: CancelListener?): SettingsDialog {
+        Listener.dialogs[listener] = this
         this.cancelListener = listener
-        this.cancelListener?.dialog = this
         this.cancel = cancel
         return this
     }
@@ -99,7 +99,7 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
 
     fun help(help: Int, listener: HelpListener?): SettingsDialog {
         this.helpListener = listener
-        this.helpListener?.dialog = this
+        Listener.dialogs[listener] = this
         this.help = help
         return this
     }
@@ -143,26 +143,30 @@ abstract class SettingsDialog(protected var context: Context, protected var shar
         helpListener?.onHelp()
     }
 
-    open class Listener {
-        lateinit var dialog: SettingsDialog
-        val clickListener = DialogInterface.OnClickListener { _, _ ->
-            when (this) {
-                is ConfirmListener -> dialog.onConfirm()
-                is CancelListener -> dialog.onCancel()
-                is HelpListener -> dialog.onHelp()
-            }
+    interface Listener {
+        companion object {
+            lateinit var dialogs: MutableMap<Any?, SettingsDialog>
         }
+
+        val clickListener: DialogInterface.OnClickListener
+            get() = DialogInterface.OnClickListener { _, _ ->
+                when (this) {
+                    is ConfirmListener -> dialogs[this]?.onConfirm()
+                    is CancelListener -> dialogs[this]?.onCancel()
+                    is HelpListener -> dialogs[this]?.onHelp()
+                }
+            }
     }
 
-    open class ConfirmListener : Listener() {
-        open fun onConfirm(value: String?) {}
+    fun interface ConfirmListener : Listener {
+        fun onConfirm(value: String?)
     }
 
-    open class CancelListener : Listener() {
-        open fun onCancel() {}
+    fun interface CancelListener : Listener {
+        fun onCancel()
     }
 
-    open class HelpListener : Listener() {
-        open fun onHelp() {}
+    fun interface HelpListener : Listener {
+        fun onHelp()
     }
 }

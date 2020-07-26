@@ -76,7 +76,7 @@ class RadioDialog(context: Context, sharedPrefs: SharedPreferences) : SettingsDi
         return this
     }
 
-    abstract class CheckedListener {
-        abstract fun onChecked(value: String)
+    fun interface CheckedListener {
+        fun onChecked(value: String)
     }
 }
