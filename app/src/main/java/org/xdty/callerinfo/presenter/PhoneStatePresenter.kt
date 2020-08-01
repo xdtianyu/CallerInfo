@@ -84,7 +84,7 @@ class PhoneStatePresenter(private val mView: View) : Presenter {
                 if (TextUtils.isEmpty(number)) {
                     Log.d(TAG, "number is null. " + TextUtils.isEmpty(mIncomingNumber))
                     number = mIncomingNumber
-                    mCallRecord.logNumber = number
+                    mCallRecord.logNumber = number!!
                     mIncomingNumber = null
                 }
                 searchNumber(number!!)
@@ -123,9 +123,9 @@ class PhoneStatePresenter(private val mView: View) : Presenter {
                     }
                 } else {
                     if (mSetting.isMarkingEnabled && mCallRecord.isAnswered &&
-                            !mCallerDataSource.isIgnoreContact(mCallRecord.logNumber!!) &&
+                            !mCallerDataSource.isIgnoreContact(mCallRecord.logNumber) &&
                             !isNotMarkContact(mCallRecord.logNumber)) {
-                        mView.showMark(mCallRecord.logNumber!!)
+                        mView.showMark(mCallRecord.logNumber)
                     }
                 }
             }

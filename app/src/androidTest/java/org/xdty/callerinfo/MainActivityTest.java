@@ -2,21 +2,22 @@ package org.xdty.callerinfo;
 
 import android.content.ComponentName;
 import android.os.SystemClock;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+
 import androidx.test.espresso.FailureHandler;
 import androidx.test.espresso.NoMatchingRootException;
 import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SdkSuppress;
-import android.support.test.runner.AndroidJUnit4;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
@@ -25,7 +26,7 @@ import org.xdty.callerinfo.activity.SettingsActivity;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.utils.Utils;
 
-import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static androidx.test.InstrumentationRegistry.getTargetContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -89,7 +90,7 @@ public class MainActivityTest extends ActivityTestBase {
     @Test
     public void testRecyclerViewItemClick() {
 
-        String text = Utils.readableTime(mInCalls.get(0).getDuration());
+        String text = Utils.Companion.readableTime(mInCalls.get(0).getDuration());
 
         onView(withId(R.id.history_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0,
                 clickChildViewWithId(R.id.card_view)));
@@ -178,7 +179,7 @@ public class MainActivityTest extends ActivityTestBase {
                 .perform(click());
 
         // check snack bar
-        onView(allOf(withId(android.support.design.R.id.snackbar_text),
+        onView(allOf(withId(R.id.snackbar_text),
                 withText(R.string.clear_cache_message)))
                 .check(matches(isDisplayed()));
 
@@ -319,7 +320,7 @@ public class MainActivityTest extends ActivityTestBase {
                 .perform(RecyclerViewActions.actionOnItemAtPosition(1, swipeLeft()));
         onView(withId(R.id.history_list))
                 .check(itemsCountIs(3));
-        onView(allOf(withId(android.support.design.R.id.snackbar_text), withText(R.string.deleted)))
+        onView(allOf(withId(R.id.snackbar_text), withText(R.string.deleted)))
                 .perform(swipeRight());
         onView(withId(R.id.history_list))
                 .check(itemsCountIs(3));

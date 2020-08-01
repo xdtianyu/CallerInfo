@@ -7,9 +7,27 @@ class CallRecord {
     private var idle: Long = -1
     private var ringDuration: Long = -1
     private var callDuration: Long = -1
-    var logNumber: String? = null
-    var logName: String? = null
-    var logGeo: String? = null
+    var logNumber: String = ""
+    var logName: String = ""
+    var logGeo: String = ""
+
+    val isIncoming: Boolean
+        get() = ring != -1L
+
+    val isValid: Boolean
+        get() = logNumber.isNotEmpty()
+
+    val isNameValid: Boolean
+        get() = logName.isNotEmpty()
+
+    val isGeoValid: Boolean
+        get() = logGeo.isNotEmpty()
+
+    val isActive: Boolean
+        get() = ring != -1L || hook != -1L || idle != -1L
+
+    val isAnswered: Boolean
+        get() = isIncoming && callDuration > 0
 
     fun setLogName(name: String, append: Boolean) {
         if (append) {
@@ -43,9 +61,6 @@ class CallRecord {
         }
     }
 
-    val isIncoming: Boolean
-        get() = ring != -1L
-
     fun ringDuration(): Long {
         return ringDuration
     }
@@ -60,51 +75,32 @@ class CallRecord {
         idle = -1
         ringDuration = -1
         callDuration = -1
-        logNumber = null
-        logGeo = null
-        logName = null
+        logNumber = ""
+        logGeo = ""
+        logName = ""
     }
 
     fun time(): Long {
         return if (ring != -1L) ring else hook
     }
 
-    fun appendName(s: String) {
-        if (logName == null || logName!!.isEmpty()) {
-            logName = ""
-        }
+    private fun appendName(s: String) {
         logName += " $s"
     }
 
-    val isValid: Boolean
-        get() = logNumber != null && !logNumber!!.isEmpty()
-
-    val isNameValid: Boolean
-        get() = logName != null && !logName!!.isEmpty()
-
-    val isGeoValid: Boolean
-        get() = logGeo != null && !logGeo!!.isEmpty()
-
     fun matchName(keyword: String?): Boolean {
-        return logName != null && logName!!.contains(keyword!!)
+        return logName.contains(keyword!!)
     }
 
     fun matchGeo(keyword: String?): Boolean {
-        return logGeo!!.contains(keyword!!)
+        return logGeo.contains(keyword!!)
     }
 
     fun matchNumber(keyword: String?): Boolean {
-        return logNumber != null && logNumber!!.startsWith(keyword!!)
+        return logNumber.startsWith(keyword!!)
     }
 
-    val isActive: Boolean
-        get() = ring != -1L || hook != -1L || idle != -1L
-
-    val isAnswered: Boolean
-        get() = isIncoming && callDuration > 0
-
     fun isEqual(number: String?): Boolean {
-        return (logNumber == null && number == null
-                || logNumber != null && number != null && logNumber == number)
+        return (number == null || logNumber == number)
     }
 }

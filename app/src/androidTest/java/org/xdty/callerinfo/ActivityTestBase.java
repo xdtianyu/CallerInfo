@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.support.test.InstrumentationRegistry;
+
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.Until;
@@ -22,7 +23,6 @@ import org.xdty.callerinfo.model.setting.SettingImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -46,9 +46,9 @@ public class ActivityTestBase {
     }
 
     private void init() {
-        SettingImpl.init(getTargetContext());
-        mSetting = SettingImpl.getInstance();
-        mDatabase = DatabaseImpl.getInstance();
+        SettingImpl.Companion.init(getContext());
+        mSetting = SettingImpl.Companion.getInstance();
+        mDatabase = DatabaseImpl.Companion.getInstance();
 
         mSetting.clear();
         mSetting.setEula();
@@ -82,7 +82,7 @@ public class ActivityTestBase {
         mDevice.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
 
         // Launch the blueprint app
-        Context context = InstrumentationRegistry.getContext();
+        Context context = getContext();
         final Intent intent = context.getPackageManager().getLaunchIntentForPackage(BASIC_PACKAGE);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);    // Clear out any previous instances
         context.startActivity(intent);
@@ -108,9 +108,13 @@ public class ActivityTestBase {
         intent.addCategory(Intent.CATEGORY_HOME);
 
         // Use PackageManager to get the launcher package name
-        PackageManager pm = InstrumentationRegistry.getContext().getPackageManager();
+        PackageManager pm = getContext().getPackageManager();
         ResolveInfo resolveInfo = pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return resolveInfo.activityInfo.packageName;
+    }
+
+    protected Context getContext() {
+        return InstrumentationRegistry.getInstrumentation().getTargetContext();
     }
 
 }

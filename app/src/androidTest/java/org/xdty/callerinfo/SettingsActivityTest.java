@@ -1,18 +1,19 @@
 package org.xdty.callerinfo;
 
 import android.os.SystemClock;
+import android.telephony.TelephonyManager;
+import android.view.View;
+
 import androidx.test.espresso.FailureHandler;
 import androidx.test.espresso.NoMatchingRootException;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.filters.SdkSuppress;
-import android.support.test.runner.AndroidJUnit4;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
-import android.telephony.TelephonyManager;
-import android.view.View;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
@@ -20,7 +21,7 @@ import org.junit.runner.RunWith;
 import org.xdty.callerinfo.receiver.IncomingCall;
 import org.xdty.callerinfo.service.FloatWindow;
 
-import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static androidx.test.InstrumentationRegistry.getTargetContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.Espresso.pressBack;
@@ -60,11 +61,11 @@ public class SettingsActivityTest extends ActivityTestBase {
     @Override
     public void beforeTest() {
         navigateToSetting();
-        mIncomingCallListener = IncomingCall.PhoneStateListener.getInstance();
+        mIncomingCallListener = IncomingCall.PhoneStateListener.Companion.getInstance();
     }
 
     public void navigateToSetting() {
-        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        openActionBarOverflowOrOptionsMenu(getContext());
         onView(withText(R.string.action_settings)).perform(click());
         SystemClock.sleep(1000);
     }
