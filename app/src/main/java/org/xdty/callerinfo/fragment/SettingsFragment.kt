@@ -32,6 +32,7 @@ import org.xdty.callerinfo.utils.Utils.Companion.isAppInstalled
 import org.xdty.callerinfo.utils.Window
 import javax.inject.Inject
 
+@Suppress("DEPRECATION")
 class SettingsFragment : PreferenceFragment(), PreferenceActions {
 
     @Inject
@@ -116,11 +117,12 @@ class SettingsFragment : PreferenceFragment(), PreferenceActions {
         return pref!!
     }
 
-    fun setUpNestedScreen(preferenceScreen: PreferenceScreen) {
+    private fun setUpNestedScreen(preferenceScreen: PreferenceScreen) {
         val dialog = preferenceScreen.dialog
+        val listView = dialog.findViewById<ListView>(android.R.id.list)
+
         val appBarLayout: AppBarLayout
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || Build.VERSION.RELEASE == "7.0" || Build.VERSION.RELEASE == "N") {
-            val listView = dialog.findViewById<ListView>(android.R.id.list)
             val root = listView.parent as ViewGroup
             appBarLayout = LayoutInflater.from(activity).inflate(
                     R.layout.settings_toolbar, root, false) as AppBarLayout
@@ -135,7 +137,7 @@ class SettingsFragment : PreferenceFragment(), PreferenceActions {
             listView.setPadding(0, height, 0, 0)
             root.addView(appBarLayout, 0)
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            val root = dialog.findViewById<View>(android.R.id.list).parent as LinearLayout
+            val root = listView.parent as LinearLayout
             appBarLayout = LayoutInflater.from(activity).inflate(
                     R.layout.settings_toolbar, root, false) as AppBarLayout
             root.addView(appBarLayout, 0)
@@ -165,9 +167,12 @@ class SettingsFragment : PreferenceFragment(), PreferenceActions {
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
-            R.string.ignore_known_contact_key, R.string.not_mark_contact_key, R.string.display_on_outgoing_key -> if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                setChecked(requestCode, false)
-            }
+            R.string.ignore_known_contact_key,
+            R.string.not_mark_contact_key,
+            R.string.display_on_outgoing_key ->
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    setChecked(requestCode, false)
+                }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
