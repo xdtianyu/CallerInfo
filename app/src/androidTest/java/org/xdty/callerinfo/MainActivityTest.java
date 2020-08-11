@@ -26,7 +26,6 @@ import org.xdty.callerinfo.activity.SettingsActivity;
 import org.xdty.callerinfo.model.db.InCall;
 import org.xdty.callerinfo.utils.Utils;
 
-import static androidx.test.InstrumentationRegistry.getTargetContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -81,9 +80,9 @@ public class MainActivityTest extends ActivityTestBase {
 
     @Test
     public void testActionSetting() {
-        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        openActionBarOverflowOrOptionsMenu(getContext());
         onView(withText(R.string.action_settings)).perform(click());
-        intended(hasComponent(new ComponentName(getTargetContext(), SettingsActivity.class)));
+        intended(hasComponent(new ComponentName(getContext(), SettingsActivity.class)));
         //pressBack();
     }
 
@@ -124,7 +123,7 @@ public class MainActivityTest extends ActivityTestBase {
         onView(withId(R.id.history_list)).check(matches(isDisplayed()));
         onView(withId(R.id.empty_text)).check(matches(not(isDisplayed())));
 
-        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        openActionBarOverflowOrOptionsMenu(getContext());
         onView(withText(R.string.action_clear_history))
                 .perform(click());
 
@@ -140,7 +139,7 @@ public class MainActivityTest extends ActivityTestBase {
         onView(withId(R.id.history_list)).check(matches(isDisplayed()));
         onView(withId(R.id.empty_text)).check(matches(not(isDisplayed())));
 
-        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        openActionBarOverflowOrOptionsMenu(getContext());
         onView(withText(R.string.action_clear_history))
                 .perform(click());
 
@@ -166,7 +165,7 @@ public class MainActivityTest extends ActivityTestBase {
         onView(withId(R.id.history_list)).check(matches(isDisplayed()));
         onView(withId(R.id.empty_text)).check(matches(not(isDisplayed())));
 
-        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        openActionBarOverflowOrOptionsMenu(getContext());
         onView(withText(R.string.action_clear_cache))
                 .perform(click());
 
@@ -226,7 +225,7 @@ public class MainActivityTest extends ActivityTestBase {
     public void testActionMoveWindowPosition() {
 
         // click move window menu and check window visibility
-        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        openActionBarOverflowOrOptionsMenu(getContext());
         onView(withText(R.string.action_float_window))
                 .perform(click());
         onView(withId(R.id.window_layout)).inRoot(
@@ -253,7 +252,7 @@ public class MainActivityTest extends ActivityTestBase {
                 .check(matches(isWindowAtPosition(mSetting.getWindowX(), mSetting.getWindowY())));
 
         // click close window menu and check window visibility
-        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        openActionBarOverflowOrOptionsMenu(getContext());
         onView(withText(R.string.close_window))
                 .perform(click());
         onView(withId(R.id.window_layout)).inRoot(
@@ -271,7 +270,7 @@ public class MainActivityTest extends ActivityTestBase {
     @Test
     public void testNotificationClick() throws UiObjectNotFoundException {
         // click move window menu and check notification
-        openActionBarOverflowOrOptionsMenu(getTargetContext());
+        openActionBarOverflowOrOptionsMenu(getContext());
         onView(withText(R.string.action_float_window))
                 .perform(click());
         onView(withId(R.id.window_layout)).inRoot(
@@ -285,7 +284,7 @@ public class MainActivityTest extends ActivityTestBase {
         UiObject notificationStackScrollerUiObject = mDevice.findObject(notificationStackScroller);
         assertTrue(notificationStackScrollerUiObject.exists());
 
-        String text = getTargetContext().getString(R.string.app_name);
+        String text = getContext().getString(R.string.app_name);
         UiObject notify = notificationStackScrollerUiObject.getChild(new UiSelector().text(text));
         assertTrue(notify.exists());
         notify.click();
