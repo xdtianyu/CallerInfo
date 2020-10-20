@@ -8,12 +8,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: checkout submodule
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Checkout submodule
       run: git submodule sync --recursive && git submodule update --init --recursive
 
-    - name: before build
+    - name: Before build
       uses: xdtianyu/actions-android-ci@master
+      #env:
+        #ENCRYPTED_KEY: ${{ secrets.ENCRYPTED_KEY }}
+        #ENCRYPTED_IV: ${{ secrets.ENCRYPTED_IV }}
       with:
         args: '"
         . .travis/env.sh;
@@ -22,7 +27,28 @@ jobs:
         touch local.properties
         "'
 
-    - name: build
+    - name: Cache gradle and sdk
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-gradle-and-sdk
+      with:
+        path: |
+          ${{ github.workspace }}/.opt/cache/gradle/wrapper
+          ${{ github.workspace }}/.opt/cache/gradle/caches
+          ${{ github.workspace }}/.opt/sdk
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/wrapper/gradle-wrapper.properties', '**/build.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+
+    - name: Build
+      #env:
+      #  ENCRYPTED_KEY: ${{ secrets.ENCRYPTED_KEY }}
+      #  ENCRYPTED_IV: ${{ secrets.ENCRYPTED_IV }}
+      #  ALIAS: ${{ secrets.ALIAS }}
+      #  ALIAS_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
+      #  KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
       uses: xdtianyu/actions-android-ci@master
       with:
         args: '"
@@ -30,3 +56,11 @@ jobs:
         . /opt/setup-android-sdk.sh;
         ./gradlew assembleDebug
         "'
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: artifacts
+        path: |
+          app/**/apk/release/*
+          app/**/mapping/release/mapping.txt
