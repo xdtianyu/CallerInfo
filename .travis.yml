@@ -13,7 +13,7 @@ android:
 jdk: oraclejdk8
 
 git:
-  depth: 9999999
+  depth: 3
 
 notifications:
   email: false
