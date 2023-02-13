@@ -1,5 +1,5 @@
-# 来电信息
-一个获取来电归属地和其他信息(如推销、诈骗)的安卓应用。[Beta 测试及交流社群](https://plus.google.com/communities/109266984412695150545) [English](https://github.com/xdtianyu/CallerInfo/blob/master/README-EN.md) [开发者文档](https://github.com/xdtianyu/CallerInfo/blob/master/DEVELOPMENT-CN.md) [Telegram 交流群](https://t.me/callerinfo)
+# CallerInfo
+一An Android app that captures call attribution and other information (e.g. spam, scam). [Beta testing and exchange community](https://plus.google.com/communities/109266984412695150545) [English](https://github.com/xdtianyu/CallerInfo/blob/master/README-EN.md) [Developer documentation](https://github.com/xdtianyu/CallerInfo/blob/master/DEVELOPMENT-CN.md) [Telegram exchange group](https://t.me/callerinfo)
 
 [![Google Play](https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/en-play-badge.png)](https://play.google.com/store/apps/details?id=org.xdty.callerinfo)
 
@@ -10,54 +10,54 @@
 [![Release notes](https://img.shields.io/badge/release-notes-yellowgreen.svg)](https://github.com/xdtianyu/CallerInfo/releases)
 [![Coolapk download](https://img.shields.io/badge/coolapk-download-blue.svg)](http://coolapk.com/apk/org.xdty.callerinfo)
 
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v2.5.2/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v2.5.2/callerinfo-v2.5.2-release.apk)
+[![Download Link (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v2.5.2/total.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v2.5.2/callerinfo-v2.5.2-release.apk)
 
-[![下载地址 (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v2.5.1/CallerInfo-plugin-v1.1.2-release.apk.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v2.5.1/CallerInfo-plugin-v1.1.2-release.apk)
+[![Download Link (github release)](https://img.shields.io/github/downloads/xdtianyu/CallerInfo/v2.5.1/CallerInfo-plugin-v1.1.2-release.apk.svg)](https://github.com/xdtianyu/CallerInfo/releases/download/v2.5.1/CallerInfo-plugin-v1.1.2-release.apk)
 
-## 功能
+## Function
 
-1\. 查询来电号码并显示悬浮窗，显示位置和其他号码信息。
+1\. Query the incoming call number and display the floating window, displaying the location and other number information.
  
-2\. 主界面显示最近来电列表(不会导入已有的系统通讯录)。
+2\. The main interface displays the list of recent incoming calls (the existing system address book will not be imported).
  
-3\. 在主界面可以查询任意电话号码信息。
+3\. In the main interface, you can query any phone number information.
  
-4\. 自定义设置卡片及悬浮窗的颜色。
+4\. Customize the color of the card and floating window.
  
-5\. 自定义悬浮窗, 如文字大小、透明度、位置。可以自定义显示与隐藏，如忽略已存在的联系人、去电时显示、接听后隐藏。
+5\. Customize the floating window, such as text size, transparency, position. You can customize the display and hiding, such as ignoring existing contacts, displaying when an outgoing call is made, and hiding after answering.
  
-6\. 离线查询。优先从本地的离线归属地及历史记录中查询数据并显示，没有查询到标记数据且有网络(有 WIFI 或手机未掉网)时会联网查询。
+6\. Offline query. Prioritize the query and display of data from the local offline attribution and historical records. When there is no marked data and there is a network (with WIFI or the mobile phone is not disconnected), it will query online.
  
-**隐藏功能 (点击七次版本后出现)**
+**Hidden features (appears after seven clicks on the version)**
  
-1\. 自定义数据源。可以自定义百度、聚合数据(360)的 API 密钥，可以自定义 API (用于适配客户信息系统)。可以设置忽略号码段来忽略查询，可以强制使用本地离线数据。
+1\. Custom data sources. You can customize the API key of Baidu and aggregated data (360), and you can customize the API (for adapting to the customer information system). You can set the ignore number segment to ignore the query, and you can force the use of local offline data.。
  
-**插件功能(安装插件后出现)**
+**Plug-in function (appears after installing the plug-in)**
  
-1\. 自动挂断。可以自动挂断匹配的标记关键字(诈骗、广告等)、归属地、起始号码(400*)。归属地可逆向匹配，如 "!西安 !咸阳" 将挂断所有除 "西安" "咸阳" 的来电。起始号码关键字添加完整号码并以空格分隔可以实现 "黑名单" 的功能。
+1\. Automatically hang up. It can automatically hang up matching tagged keywords (fraud, advertisement, etc.), attribution, and starting number (400*). The attribution can be matched in reverse, such as "!Xi'an !Xianyang" will hang up all incoming calls except "Xi'an" and "Xianyang". The start number keyword can be added to the complete number and separated by spaces to achieve the "blacklist" function.
  
-2\. 添加号码信息到系统通话记录。会添加诈骗、骚扰、广告、响一声、自动挂断等信息到系统通话记录。
+2\. Add number information to the system call log. Information such as fraud, harassment, advertisement, beep, and automatic hangup will be added to the system call log.
 
-## 说明
+## Illustrate
  
-1\. “来电信息” 的不断改进和完善离不开社区的反馈，非常感谢所有在 Play 市场、V站、酷市场留言及发送邮件反馈的朋友。
+1\. The continuous improvement and improvement of "Incoming Call Information" is inseparable from the feedback of the community. I am very grateful to all the friends who leave messages and send email feedback in the Play Market, Station V, Cool Market.
  
-2\. 应用开源免费无广告，请放心使用。APK 文件通过 Travis CI 自动生成并上传，用户可在每个 [GitHub 版本发行](https://github.com/xdtianyu/CallerInfo/releases) 中找到编译日志来校验文件 sha1 及 md5。
+2\. The application is open source, free of charge and has no advertisements, please feel free to use it. The APK file is automatically generated and uploaded by Travis CI, and users can find the compilation log in each [GitHub release](https://github.com/xdtianyu/CallerInfo/releases) to verify the file sha1 and md5.
  
-3\. 请避免限制主应用及插件请求的权限。如出现来电时不显示悬浮窗，请先检查权限设置、权限管理类型应用的设置。如果安装了插件，请确保插件和主应用没有进入管理类软件的黑名单或优化项目。
+3\. Please avoid restricting the permissions requested by the main application and plugins. If the floating window is not displayed when there is an incoming call, please check the permission setting and the setting of the permission management type application first. If a plug-in is installed, please make sure that the plug-in and the main application are not blacklisted or optimized for management software.
  
-4\. 如果对此开源应用有任何不满、问题或建议，请在 [GitHub](https://github.com/xdtianyu/CallerInfo/issues) 提交问题单或发送问题到作者邮件。非常欢迎大家反馈，来和作者一起完善这个应用。
+4\. If you have any dissatisfaction, questions or suggestions about this open source application, please submit a ticket on [GitHub](https://github.com/xdtianyu/CallerInfo/issues) or send the question to the author's email. Feedback is very welcome, come and improve this application together with the author.
  
-5\. 如果您觉得这个应用做的不错，欢迎在 [GitHub](https://github.com/xdtianyu/CallerInfo) star、在 [Play 市场](https://play.google.com/store/apps/details?id=org.xdty.callerinfo) 及 [酷市场](http://coolapk.com/apk/org.xdty.callerinfo) 五星好评，欢迎您将此应用通过推特、微博、朋友圈等社交网络推广给更多的人。
+5\. If you think this app is doing well, welcome to [GitHub](https://github.com/xdtianyu/CallerInfo) star, [Play Market](https://play.google.com/store/ apps/details?id=org.xdty.callerinfo) and [Cool Market](http://coolapk.com/apk/org.xdty.callerinfo) five-star praise, you are welcome to use this app on Twitter, Weibo, friends Circle and other social networks to promote to more people.
 
-## 贡献者
-[tianyu](https://www.xdty.org) 
+## Contributor
+[tianyu](https://www.xdty.org) Main contributor
 
-[blueset](https://github.com/blueset) 修复英语翻译
+[blueset](https://github.com/blueset) fix english translation
 
-[Soyofuki](https://github.com/Soyofuki) 添加日语翻译
+[Soyofuki](https://github.com/Soyofuki) add Japanese translation
 
-## 屏幕截图
+## Screenshots
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/2.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/3.png" alt="screenshot" width="300">
@@ -68,7 +68,7 @@
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-2.png" alt="screenshot" width="300">
 
-## 感谢
+## Appreciations
 
 [PhoneNumber](https://github.com/xdtianyu/PhoneNumber): A library to get phone number location and other info from baidu api.
 
@@ -84,7 +84,7 @@
 
 [CustomActivityOnCrash](https://github.com/Ereza/CustomActivityOnCrash): An android library that allows launching a custom activity when your app crashes.
 
-## [许可证](https://github.com/xdtianyu/CallerInfo/blob/master/LICENSE.md)
+## [License](https://github.com/xdtianyu/CallerInfo/blob/master/LICENSE.md)
 
 ```
                     GNU GENERAL PUBLIC LICENSE
