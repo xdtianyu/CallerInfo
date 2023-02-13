@@ -38,7 +38,7 @@
  
 2\. Add number information to the system call log. Information such as fraud, harassment, advertisement, beep, and automatic hangup will be added to the system call log.
 
-## illustrate
+## Illustrate
  
 1\. The continuous improvement and improvement of "Incoming Call Information" is inseparable from the feedback of the community. I am very grateful to all the friends who leave messages and send email feedback in the Play Market, Station V, Cool Market.
  
@@ -51,7 +51,7 @@
 5\. If you think this app is doing well, welcome to [GitHub](https://github.com/xdtianyu/CallerInfo) star, [Play Market](https://play.google.com/store/ apps/details?id=org.xdty.callerinfo) and [Cool Market](http://coolapk.com/apk/org.xdty.callerinfo) five-star praise, you are welcome to use this app on Twitter, Weibo, friends Circle and other social networks to promote to more people.
 
 ## Contributor
-[tianyu](https://www.xdty.org) 
+[tianyu](https://www.xdty.org) Main contributor
 
 [blueset](https://github.com/blueset) fix english translation
 
@@ -68,7 +68,7 @@
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-1.png" alt="screenshot" width="300">
 <img src="https://raw.githubusercontent.com/xdtianyu/CallerInfo/master/screenshots/p-2.png" alt="screenshot" width="300">
 
-## Appreciation
+## Appreciations
 
 [PhoneNumber](https://github.com/xdtianyu/PhoneNumber): A library to get phone number location and other info from baidu api.
 
